@@ -443,44 +443,27 @@ if prompt:
 {prompt}
 """
 
-    # 실시간 스트리밍
-    stream_placeholder = st.empty()
-    full_text = ""
+    # 일반 안정 방식 답변 생성
+    response_placeholder = st.empty()
 
     try:
-        response_stream = gemini_client.models.generate_content_stream(
+        response = gemini_client.models.generate_content(
             model="gemini-3.5-flash-lite",
             contents=rag_prompt
         )
-
-        loading_placeholder.empty()
-
-        for chunk in response_stream:
-            if chunk.text:
-                full_text += chunk.text
-                stream_placeholder.markdown(f"""
-                <div class="bubble-wrapper bubble-bot-wrap">
-                    <div class="bubble-bot">{full_text}▌</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-        final_html = format_citations_to_interactive_popovers(full_text, sources)
-        stream_placeholder.markdown(f"""
-        <div class="bubble-wrapper bubble-bot-wrap">
-            <div class="bubble-bot">{final_html}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        ai_answer = full_text
-
+        ai_answer = response.text
     except Exception as e:
-        loading_placeholder.empty()
         ai_answer = f"답변 생성 중 오류가 발생했습니다: {e}"
-        stream_placeholder.markdown(f"""
-        <div class="bubble-wrapper bubble-bot-wrap">
-            <div class="bubble-bot">{ai_answer}</div>
-        </div>
-        """, unsafe_allow_html=True)
+
+    loading_placeholder.empty()
+
+    # 답변 렌더링 (팝오버 치환)
+    final_html = format_citations_to_interactive_popovers(ai_answer, sources)
+    response_placeholder.markdown(f"""
+    <div class="bubble-wrapper bubble-bot-wrap">
+        <div class="bubble-bot">{final_html}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.session_state.messages.append({
         "role": "assistant",
