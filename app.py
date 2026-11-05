@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 2. 미니멀 메신저 + 인터랙티브 출처 팝오버 CSS
+# 2. 미니멀 메신저 + 바깥 클릭 시 자동 닫히는 CSS 포커스 팝오버
 st.markdown("""
 <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -26,7 +26,7 @@ st.markdown("""
         color: #191f28;
     }
 
-    /* 기본 Streamlit 아바타 및 헤더 여백 숨기기 */
+    /* 기본 Streamlit 아바타 숨기기 */
     [data-testid="stChatMessageAvatarUser"],
     [data-testid="stChatMessageAvatarAssistant"] {
         display: none !important;
@@ -37,7 +37,7 @@ st.markdown("""
         margin-bottom: 0.8rem !important;
     }
 
-    /* 메신저 상단 프로필 헤더 바 */
+    /* 메신저 상단 바 */
     .messenger-header {
         display: flex;
         align-items: center;
@@ -103,18 +103,19 @@ st.markdown("""
         word-break: break-word;
     }
 
-    /* HTML 인터랙티브 출처 각주 칩 (Details/Summary 기반 경량 팝업) */
-    .cite-wrap {
+    /* ========================================================
+       바깥 클릭 시 100% 자동 닫힘 (CSS :focus-within 기반 팝오버)
+       ======================================================== */
+    .cite-popover-container {
         display: inline-block;
         position: relative;
         vertical-align: 4px;
         margin: 0 1px;
+        outline: none;
     }
-    .cite-details {
-        display: inline;
-    }
-    .cite-summary {
-        list-style: none;
+    
+    /* 출처 번호 버튼 칩 */
+    .cite-trigger-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -128,46 +129,50 @@ st.markdown("""
         padding: 0 3px;
         cursor: pointer;
         user-select: none;
+        border: none;
+        outline: none;
         transition: background-color 0.15s ease;
     }
-    .cite-summary::-webkit-details-marker {
-        display: none;
-    }
-    .cite-summary:hover {
+    .cite-trigger-btn:hover {
         background-color: #d1d6db;
     }
-    /* 팝오버 카드 */
-    .cite-popover {
+
+    /* 평소에는 숨김 */
+    .cite-content-box {
+        display: none;
         position: absolute;
         bottom: 22px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 1000;
-        width: 260px;
-        max-width: 80vw;
+        width: 270px;
+        max-width: 82vw;
         background: #ffffff;
         border: 1px solid #dadce0;
         border-radius: 10px;
         padding: 10px 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
         font-size: 0.8rem;
         color: #333d4b;
         line-height: 1.45;
         text-align: left;
         white-space: normal;
     }
+
+    /* 포커스 중일 때(클릭했을 때)만 보임! 바깥을 터치하면 포커스가 풀리며 즉시 닫힘! */
+    .cite-popover-container:focus-within .cite-content-box {
+        display: block;
+    }
+
     .cite-popover-title {
         font-weight: 700;
         color: #191f28;
         font-size: 0.78rem;
         margin-bottom: 6px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         border-bottom: 1px solid #f2f4f6;
         padding-bottom: 4px;
     }
-    .cite-popover img {
+    .cite-content-box img {
         width: 100%;
         border-radius: 6px;
         margin-top: 6px;
@@ -200,61 +205,19 @@ st.markdown("""
         color: #191f28 !important;
     }
 
-    /* 입력창 하단 고정 느낌 */
+    /* 입력창 */
     .stChatInputContainer {
         border-radius: 20px !important;
         border: 1px solid #e5e8eb !important;
         background-color: #f9fafb !important;
     }
 </style>
-
-<script>
-    // 팝오버 외부 클릭 시 자동 닫기 핸들러 (Streamlit iframe 및 부모 DOM 모두 대응)
-    (function setupClickOutside() {
-        function closeAllPopovers(target) {
-            const openDetails = (window.parent || window).document.querySelectorAll('.cite-details[open]');
-            openDetails.forEach(function(el) {
-                if (!target || !el.contains(target)) {
-                    el.removeAttribute('open');
-                }
-            });
-            // 현재 프레임 내 처리
-            document.querySelectorAll('.cite-details[open]').forEach(function(el) {
-                if (!target || !el.contains(target)) {
-                    el.removeAttribute('open');
-                }
-            });
-        }
-
-        window.addEventListener('click', function(e) {
-            if (!e.target.closest('.cite-details')) {
-                closeAllPopovers(null);
-            } else {
-                closeAllPopovers(e.target);
-            }
-        }, true);
-
-        try {
-            if (window.parent && window.parent !== window) {
-                window.parent.addEventListener('click', function(e) {
-                    if (!e.target.closest('.cite-details')) {
-                        closeAllPopovers(null);
-                    } else {
-                        closeAllPopovers(e.target);
-                    }
-                }, true);
-            }
-        } catch(err) {}
-    })();
-</script>
-
 """, unsafe_allow_html=True)
 
 # 3. 서비스 초기화
 @st.cache_resource
 def init_services():
     load_dotenv()
-    # 로컬 .env 또는 Streamlit Cloud Secrets에서 API 키 로드
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key and hasattr(st, "secrets") and "GEMINI_API_KEY" in st.secrets:
         api_key = st.secrets["GEMINI_API_KEY"]
@@ -322,7 +285,7 @@ def search_similar_docs(query_text: str, n_results: int = 4):
 
 def get_image_base64(image_path: str) -> str:
     """이미지를 base64로 인코딩하여 HTML 팝오버에 직접 삽입"""
-    if os.path.exists(image_path):
+    if image_path and os.path.exists(image_path):
         with open(image_path, "rb") as f:
             encoded = base64.b64encode(f.read()).decode("utf-8")
             return f"data:image/png;base64,{encoded}"
@@ -330,8 +293,8 @@ def get_image_base64(image_path: str) -> str:
 
 def format_citations_to_interactive_popovers(text: str, sources: list) -> str:
     """
-    [1], [2] 각주 번호를 클릭 시 즉시 말풍선 위에 열리는 
-    경량 HTML 팝오버(Popover)로 변환!
+    [1], [2]를 순수 CSS :focus-within 기반 자동 닫힘 팝오버로 변환!
+    (바깥 클릭/터치 시 100% 자동 닫힘)
     """
     source_map = {str(s["id"]): s for s in sources}
 
@@ -339,7 +302,7 @@ def format_citations_to_interactive_popovers(text: str, sources: list) -> str:
         cid = match.group(1)
         src = source_map.get(cid)
         if not src:
-            return f'<span class="cite-summary">{cid}</span>'
+            return f'<span class="cite-trigger-btn">{cid}</span>'
 
         if src["subject_name"] == "선택과목 FAQ":
             pop_header = f"💡 FAQ · Q{src['page']}"
@@ -352,15 +315,13 @@ def format_citations_to_interactive_popovers(text: str, sources: list) -> str:
             else:
                 pop_body = f"<div style='font-size:0.75rem; color:#4e5968;'>{src['text'][:100]}...</div>"
 
-        # HTML <details>/<summary> 기반 팝오버
-        return f"""<span class="cite-wrap">
-            <details class="cite-details">
-                <summary class="cite-summary">{cid}</summary>
-                <div class="cite-popover">
-                    <div class="cite-popover-title"><span>{pop_header}</span></div>
-                    {pop_body}
-                </div>
-            </details>
+        # tabindex="0"으로 포커스 가능하게 구성 -> 바깥 클릭 시 blur되며 자동 닫힘!
+        return f"""<span class="cite-popover-container" tabindex="0">
+            <span class="cite-trigger-btn">{cid}</span>
+            <div class="cite-content-box">
+                <div class="cite-popover-title">{pop_header}</div>
+                {pop_body}
+            </div>
         </span>"""
 
     return re.sub(r'\[(\d+)\]', replace_citation, text)
@@ -422,7 +383,7 @@ elif q4: selected_prompt = "공통영어1 교과서의 주요 단원 구성과 �
 user_input = st.chat_input("메시지를 입력하세요")
 prompt = user_input or selected_prompt
 
-# 8. 질문 처리 및 실시간 응답
+# 8. 질문 처리 및 실시간 스트리밍
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt, "sources": []})
     st.markdown(f"""
@@ -482,7 +443,7 @@ if prompt:
 {prompt}
 """
 
-    # 실시간 스트리밍 답변 생성 (Streaming Response)
+    # 실시간 스트리밍
     stream_placeholder = st.empty()
     full_text = ""
 
@@ -497,14 +458,12 @@ if prompt:
         for chunk in response_stream:
             if chunk.text:
                 full_text += chunk.text
-                # 실시간으로 타이핑 효과 렌더링
                 stream_placeholder.markdown(f"""
                 <div class="bubble-wrapper bubble-bot-wrap">
                     <div class="bubble-bot">{full_text}▌</div>
                 </div>
                 """, unsafe_allow_html=True)
 
-        # 스트리밍 완료 후 커서(▌)를 제거하고 최종 인터랙티브 팝오버로 치환
         final_html = format_citations_to_interactive_popovers(full_text, sources)
         stream_placeholder.markdown(f"""
         <div class="bubble-wrapper bubble-bot-wrap">
