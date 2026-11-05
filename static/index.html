@@ -6,6 +6,7 @@
   <title>영어과 선택과목 상담</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -88,11 +89,71 @@
       background: var(--bubble-user);
       color: var(--white);
       border-radius: 18px 18px 4px 18px;
+      white-space: pre-wrap;
     }
     .bubble.bot {
       background: var(--bubble-bot);
       color: var(--text);
       border-radius: 18px 18px 18px 4px;
+      white-space: normal;
+    }
+    .bubble.bot p {
+      margin-bottom: 0.5rem;
+    }
+    .bubble.bot p:last-child {
+      margin-bottom: 0;
+    }
+    .bubble.bot ul, .bubble.bot ol {
+      margin-left: 1.25rem;
+      margin-bottom: 0.5rem;
+      padding-left: 0;
+    }
+    .bubble.bot ul:last-child, .bubble.bot ol:last-child {
+      margin-bottom: 0;
+    }
+    .bubble.bot li {
+      margin-bottom: 0.3rem;
+      line-height: 1.55;
+    }
+    .bubble.bot strong {
+      font-weight: 700;
+      color: #111;
+    }
+    .bubble.bot code {
+      background: #e2e8f0;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-family: monospace;
+    }
+    .bubble.bot pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+    .bubble.bot table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0.5rem 0;
+      font-size: 0.82rem;
+    }
+    .bubble.bot th, .bubble.bot td {
+      border: 1px solid #d1d5db;
+      padding: 5px 8px;
+      text-align: left;
+    }
+    .bubble.bot th {
+      background: #e5e8eb;
+      font-weight: 600;
+    }
+    .bubble.bot blockquote {
+      border-left: 3px solid var(--blue);
+      margin: 0.5rem 0;
+      padding-left: 0.75rem;
+      color: #4b5563;
     }
 
     /* ── 로딩 점 ── */
@@ -337,20 +398,23 @@
     []
   );
 
-  /* ── 텍스트에서 [N] → 출처 칩으로 변환 ── */
+  /* ── marked 마크다운 파서 설정 ── */
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({
+      breaks: true,
+      gfm: true
+    });
+  }
+
+  /* ── 텍스트에서 Markdown 변환 + [N] 출처 칩 변환 ── */
   function renderAnswer(text, sources, msgId) {
-    // sources 저장
     sourcesStore[msgId] = sources;
 
-    // [N] 치환
-    const escaped = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    let html = (typeof marked !== 'undefined') ? marked.parse(text) : text;
 
-    return escaped.replace(/\[(\d+)\]/g, (_, n) => {
+    return html.replace(/\[(\d+)\]/g, (match, n) => {
       const idx = parseInt(n) - 1;
-      if (idx < 0 || idx >= sources.length) return `[${n}]`;
+      if (idx < 0 || idx >= sources.length) return match;
       return `<button class="cite-chip" data-msg="${msgId}" data-src="${idx}" aria-label="출처 ${n}">${n}</button>`;
     });
   }
@@ -413,7 +477,7 @@
 
     if (isFAQ) {
       modalTitle.textContent = `💡 FAQ · Q${src.page}  ${src.topic || ''}`;
-      modalBody.innerHTML = `<div>${escapeHtml(src.text)}</div>`;
+      modalBody.innerHTML = (typeof marked !== 'undefined') ? marked.parse(src.text) : `<div>${escapeHtml(src.text)}</div>`;
     } else {
       modalTitle.textContent = `📘 ${src.subject_name} · p.${src.page}`;
       if (src.image_url) {
