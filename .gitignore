@@ -3,12 +3,8 @@
 .env.local
 *.env
 
-# 2. 대용량 교과서 PDF (GitHub 100MB 용량 제한 및 저작권 보호)
+# 2. 대용량 원본 PDF (100MB 초과)
 data/*.pdf
-
-# 3. 로컬 벡터 데이터베이스 및 캐시 (빌드 스크립트로 재생성 가능)
-chroma_db/
-pages_cache/
 
 # 3. 파이썬 임시 파일 및 캐시
 __pycache__/
@@ -25,4 +21,3 @@ ENV/
 Thumbs.db
 .vscode/
 .idea/
-

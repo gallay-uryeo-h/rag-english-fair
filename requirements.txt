@@ -1,8 +1,9 @@
 google-genai
 chromadb
-streamlit
+fastapi
+uvicorn
 pymupdf
 pillow
 python-dotenv
 numpy
-
+streamlit

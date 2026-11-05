@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>영어과 선택과목 상담</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #3182f6;
+      --bg: #f2f4f6;
+      --text: #191f28;
+      --sub: #8b95a1;
+      --border: #e5e8eb;
+      --white: #ffffff;
+      --bubble-user: #3182f6;
+      --bubble-bot: #f2f4f6;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── 레이아웃 ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--white);
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      background: var(--blue);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .bot-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
+    .bot-status { font-size: 0.76rem; color: var(--sub); margin-left: 4px; }
+
+    /* ── 채팅 영역 ── */
+    #chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── 말풍선 ── */
+    .bubble-row {
+      display: flex;
+      width: 100%;
+    }
+    .bubble-row.user { justify-content: flex-end; }
+    .bubble-row.bot  { justify-content: flex-start; }
+
+    .bubble {
+      max-width: 85%;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .bubble.user {
+      background: var(--bubble-user);
+      color: var(--white);
+      border-radius: 18px 18px 4px 18px;
+    }
+    .bubble.bot {
+      background: var(--bubble-bot);
+      color: var(--text);
+      border-radius: 18px 18px 18px 4px;
+    }
+
+    /* ── 로딩 점 ── */
+    .loading-bubble {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--bubble-bot);
+      border-radius: 18px 18px 18px 4px;
+    }
+    .dot {
+      width: 7px; height: 7px;
+      background: var(--sub);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-6px); }
+    }
+
+    /* ── 출처 칩 ── */
+    .cite-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      background: #dce8fd;
+      color: var(--blue);
+      border-radius: 4px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0 3px;
+      cursor: pointer;
+      vertical-align: middle;
+      margin: 0 1px;
+      position: relative;
+      top: -1px;
+      border: none;
+      outline: none;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cite-chip:hover { background: #bcd4fb; }
+
+    /* ── 출처 모달 ── */
+    #source-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+    }
+    #source-modal.open { display: flex; align-items: flex-end; justify-content: center; }
+
+    #modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    #modal-sheet {
+      position: relative;
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 600px;
+      max-height: 70dvh;
+      overflow-y: auto;
+      padding: 20px 20px 32px;
+      z-index: 1;
+      animation: slideUp 0.22s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    #modal-handle {
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    #modal-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--sub);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    #modal-body {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    #modal-body img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── 빠른 질문 ── */
+    #quick-area {
+      padding: 8px 12px 4px;
+      flex-shrink: 0;
+    }
+    .quick-label {
+      font-size: 0.72rem;
+      color: var(--sub);
+      font-weight: 600;
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .quick-btn {
+      background: var(--white);
+      color: #4e5968;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 0.78rem;
+      font-family: inherit;
+      padding: 5px 11px;
+      cursor: pointer;
+      transition: background 0.1s, border-color 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .quick-btn:hover { background: #f9fafb; border-color: #b0b8c1; }
+
+    /* ── 입력창 ── */
+    #input-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      flex-shrink: 0;
+    }
+    #user-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 9px 14px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #f9fafb;
+      outline: none;
+      resize: none;
+      max-height: 120px;
+      line-height: 1.4;
+      color: var(--text);
+      -webkit-appearance: none;
+    }
+    #user-input:focus { border-color: #90b8f8; background: var(--white); }
+    #send-btn {
+      width: 38px; height: 38px;
+      background: var(--blue);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #send-btn:hover { background: #2272e3; }
+    #send-btn svg { width: 18px; height: 18px; fill: var(--white); }
+    #send-btn:disabled { background: var(--border); cursor: default; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 헤더 -->
+  <header>
+    <div class="status-dot"></div>
+    <div>
+      <span class="bot-name">영어과 선택과목 상담</span>
+      <span class="bot-status">상담 가능</span>
+    </div>
+  </header>
+
+  <!-- 채팅 영역 -->
+  <div id="chat-area"></div>
+
+  <!-- 빠른 질문 -->
+  <div id="quick-area">
+    <div class="quick-label">자주 묻는 질문</div>
+    <div class="quick-chips">
+      <button class="quick-btn" data-q="2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.">내신 5등급제 산출 방식</button>
+      <button class="quick-btn" data-q="학생부 세특에 어떤 내용을 기록할 수 있나요?">학생부 세특 기록 연계 방안</button>
+      <button class="quick-btn" data-q="의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.">의령여고 영어 선택과목 체계</button>
+      <button class="quick-btn" data-q="공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?">공통영어1 주요 단원 구성</button>
+    </div>
+  </div>
+
+  <!-- 입력창 -->
+  <div id="input-area">
+    <textarea id="user-input" placeholder="메시지를 입력하세요" rows="1"></textarea>
+    <button id="send-btn" aria-label="전송">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<!-- 출처 모달 -->
+<div id="source-modal" role="dialog" aria-modal="true">
+  <div id="modal-backdrop"></div>
+  <div id="modal-sheet">
+    <div id="modal-handle"></div>
+    <div id="modal-title"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  /* ── 전역 상태 ── */
+  let sourcesStore = {};   // msgId → sources 배열
+  let msgCounter   = 0;
+  let isLoading    = false;
+
+  const chatArea   = document.getElementById('chat-area');
+  const userInput  = document.getElementById('user-input');
+  const sendBtn    = document.getElementById('send-btn');
+  const modal      = document.getElementById('source-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBody  = document.getElementById('modal-body');
+
+  /* ── 초기 인사 메시지 ── */
+  appendBotBubble(
+    '안녕하십니까. 영어과 선택과목 안내 챗봇입니다.\n교육과정 규정이나 교과서에 대해 궁금한 점을 남겨주시면 안내해 드립니다.',
+    []
+  );
+
+  /* ── 텍스트에서 [N] → 출처 칩으로 변환 ── */
+  function renderAnswer(text, sources, msgId) {
+    // sources 저장
+    sourcesStore[msgId] = sources;
+
+    // [N] 치환
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    return escaped.replace(/\[(\d+)\]/g, (_, n) => {
+      const idx = parseInt(n) - 1;
+      if (idx < 0 || idx >= sources.length) return `[${n}]`;
+      return `<button class="cite-chip" data-msg="${msgId}" data-src="${idx}" aria-label="출처 ${n}">${n}</button>`;
+    });
+  }
+
+  /* ── 봇 버블 추가 ── */
+  function appendBotBubble(text, sources) {
+    const id = ++msgCounter;
+    const row = document.createElement('div');
+    row.className = 'bubble-row bot';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble bot';
+    bubble.innerHTML = renderAnswer(text, sources, id);
+
+    row.appendChild(bubble);
+    chatArea.appendChild(row);
+    scrollToBottom();
+    return row;
+  }
+
+  /* ── 사용자 버블 추가 ── */
+  function appendUserBubble(text) {
+    const row = document.createElement('div');
+    row.className = 'bubble-row user';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble user';
+    bubble.textContent = text;
+
+    row.appendChild(bubble);
+    chatArea.appendChild(row);
+    scrollToBottom();
+  }
+
+  /* ── 로딩 버블 ── */
+  function showLoading() {
+    const row = document.createElement('div');
+    row.className = 'bubble-row bot';
+    row.id = 'loading-row';
+    row.innerHTML = `<div class="loading-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    chatArea.appendChild(row);
+    scrollToBottom();
+  }
+  function hideLoading() {
+    const el = document.getElementById('loading-row');
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  /* ── 출처 모달 열기 ── */
+  function openModal(msgId, srcIdx) {
+    const sources = sourcesStore[msgId];
+    if (!sources || !sources[srcIdx]) return;
+
+    const src = sources[srcIdx];
+    const isFAQ = src.subject_name === '선택과목 FAQ';
+
+    if (isFAQ) {
+      modalTitle.textContent = `💡 FAQ · Q${src.page}  ${src.topic || ''}`;
+      modalBody.innerHTML = `<div>${escapeHtml(src.text)}</div>`;
+    } else {
+      modalTitle.textContent = `📘 ${src.subject_name} · p.${src.page}`;
+      if (src.image_url) {
+        modalBody.innerHTML = `<div style="font-size:0.78rem;color:var(--sub);margin-bottom:4px;">교과서 원본 사진</div><img src="${src.image_url}" alt="교과서 원본" loading="lazy" />`;
+      } else {
+        modalBody.innerHTML = `<div>${escapeHtml(src.text.slice(0, 200))}…</div>`;
+      }
+    }
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  /* ── 모달 닫기 이벤트 ── */
+  document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ── 출처 칩 클릭 (이벤트 위임) ── */
+  chatArea.addEventListener('click', e => {
+    const chip = e.target.closest('.cite-chip');
+    if (chip) {
+      e.stopPropagation();
+      const msgId = parseInt(chip.dataset.msg);
+      const srcIdx = parseInt(chip.dataset.src);
+      openModal(msgId, srcIdx);
+    }
+  });
+
+  /* ── 질문 전송 ── */
+  async function sendMessage(query) {
+    if (isLoading || !query.trim()) return;
+    isLoading = true;
+    sendBtn.disabled = true;
+    userInput.value = '';
+    userInput.style.height = 'auto';
+
+    appendUserBubble(query);
+    showLoading();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+      const data = await res.json();
+      hideLoading();
+
+      if (data.error) {
+        appendBotBubble(`오류: ${data.error}`, []);
+      } else {
+        appendBotBubble(data.answer, data.sources || []);
+      }
+    } catch (err) {
+      hideLoading();
+      appendBotBubble(`네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주십시오.`, []);
+    }
+
+    isLoading = false;
+    sendBtn.disabled = false;
+    userInput.focus();
+  }
+
+  /* ── 전송 버튼 ── */
+  sendBtn.addEventListener('click', () => sendMessage(userInput.value.trim()));
+
+  /* ── Enter 전송 (Shift+Enter = 줄바꿈) ── */
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(userInput.value.trim());
+    }
+  });
+
+  /* ── textarea 자동 높이 ── */
+  userInput.addEventListener('input', () => {
+    userInput.style.height = 'auto';
+    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
+  });
+
+  /* ── 빠른 질문 버튼 ── */
+  document.querySelectorAll('.quick-btn').forEach(btn => {
+    btn.addEventListener('click', () => sendMessage(btn.dataset.q));
+  });
+</script>
+</body>
+</html>
+
