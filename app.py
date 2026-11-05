@@ -254,9 +254,13 @@ st.markdown("""
 @st.cache_resource
 def init_services():
     load_dotenv()
+    # 로컬 .env 또는 Streamlit Cloud Secrets에서 API 키 로드
     api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key and hasattr(st, "secrets") and "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+
     if not api_key:
-        st.error(".env 파일에 GEMINI_API_KEY가 없습니다.")
+        st.error("GEMINI_API_KEY가 설정되지 않았습니다.")
         st.stop()
     
     gemini_client = genai.Client(api_key=api_key)
@@ -265,6 +269,38 @@ def init_services():
         name="english_textbooks",
         metadata={"hnsw:space": "cosine"}
     )
+
+    # 클라우드 배포 시 DB가 비어있다면 data/FAQ.txt 자동 인덱싱
+    if collection.count() == 0 and os.path.exists("data/FAQ.txt"):
+        with open("data/FAQ.txt", "r", encoding="utf-8-sig") as f:
+            lines = [l.strip() for l in f if l.strip()]
+        for line in lines[1:]:
+            parts = line.split("\t")
+            if len(parts) >= 6:
+                q_num, target, main_topic, sub_topic, question, answer = parts[:6]
+                doc_text = f"[{main_topic} > {sub_topic}] (대상: {target})\n질문: {question}\n답변: {answer}"
+                embed_text = f"과목안내 및 교육과정 질의응답: {question} {answer}"
+                try:
+                    resp = gemini_client.models.embed_content(
+                        model="gemini-embedding-2",
+                        contents=f"title: 선택과목 FAQ | text: {embed_text}"
+                    )
+                    collection.add(
+                        ids=[f"FAQ_{q_num}"],
+                        embeddings=[resp.embeddings[0].values],
+                        documents=[doc_text],
+                        metadatas=[{
+                            "subject_name": "선택과목 FAQ",
+                            "file_name": "FAQ.txt",
+                            "page": int(q_num),
+                            "image_path": "",
+                            "topic": f"{main_topic} - {sub_topic}",
+                            "target": target
+                        }]
+                    )
+                except Exception:
+                    pass
+
     return gemini_client, collection
 
 gemini_client, collection = init_services()
