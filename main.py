@@ -37,17 +37,28 @@ collection = chroma_client.get_or_create_collection(
 )
 
 # ── RAG 검색 ─────────────────────────────────────────────────
-def search_similar_docs(query_text: str, n_results: int = 4):
+def search_similar_docs(query_text: str, target_db: str = "all", n_results: int = 4):
     formatted_query = f"task: question answering | query: {query_text}"
     response = gemini_client.models.embed_content(
         model="gemini-embedding-001",
         contents=formatted_query
     )
     query_vector = response.embeddings[0].values
-    results = collection.query(
-        query_embeddings=[query_vector],
-        n_results=n_results
-    )
+
+    where_filter = None
+    if target_db == "textbook":
+        where_filter = {"subject_name": {"$ne": "선택과목 FAQ"}}
+    elif target_db == "faq":
+        where_filter = {"subject_name": "선택과목 FAQ"}
+
+    query_kwargs = {
+        "query_embeddings": [query_vector],
+        "n_results": n_results
+    }
+    if where_filter:
+        query_kwargs["where"] = where_filter
+
+    results = collection.query(**query_kwargs)
     return results
 
 SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과의 공식 모바일 챗봇입니다.
@@ -63,6 +74,7 @@ SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과�
 # ── API 모델 ─────────────────────────────────────────────────
 class ChatRequest(BaseModel):
     query: str
+    target_db: str = "all"  # "all", "textbook", "faq"
 
 # ── 라우트 ───────────────────────────────────────────────────
 @app.get("/")
@@ -86,9 +98,11 @@ def chat(req: ChatRequest):
     if not query:
         return JSONResponse({"error": "질문이 비어있습니다."}, status_code=400)
 
+    target_db = req.target_db if req.target_db in ["all", "textbook", "faq"] else "all"
+
     # 1. 검색
     try:
-        search_res = search_similar_docs(query, n_results=4)
+        search_res = search_similar_docs(query, target_db=target_db, n_results=4)
     except Exception as e:
         return JSONResponse({"error": f"검색 오류: {e}"}, status_code=500)
 
@@ -106,8 +120,9 @@ def chat(req: ChatRequest):
             topic = m.get("topic", "")
             image_path = m.get("image_path", "")
 
+            label = f"Q{page}" if subject == "선택과목 FAQ" else f"p.{page}"
             context_blocks.append(
-                f"[{cid}] 출처: {subject} (p.{page})\n내용: {d}"
+                f"[{cid}] 출처: {subject} ({label})\n내용: {d}"
             )
             sources.append({
                 "id": cid,

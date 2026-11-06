@@ -57,6 +57,44 @@
     .bot-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
     .bot-status { font-size: 0.76rem; color: var(--sub); margin-left: 4px; }
 
+    /* ── DB 선택 탭 ── */
+    #db-selector {
+      display: flex;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .db-tab {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: #64748b;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .db-tab:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .db-tab.active {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+      box-shadow: 0 2px 6px rgba(49, 130, 246, 0.22);
+    }
+
     /* ── 채팅 영역 ── */
     #chat-area {
       flex: 1;
@@ -345,17 +383,24 @@
     </div>
   </header>
 
+  <!-- 검색 대상 DB 선택 탭 -->
+  <div id="db-selector">
+    <button class="db-tab active" data-db="all">🌐 전체 (교과서+FAQ)</button>
+    <button class="db-tab" data-db="textbook">📘 교과서만</button>
+    <button class="db-tab" data-db="faq">💡 FAQ만</button>
+  </div>
+
   <!-- 채팅 영역 -->
   <div id="chat-area"></div>
 
   <!-- 빠른 질문 -->
   <div id="quick-area">
     <div class="quick-label">자주 묻는 질문</div>
-    <div class="quick-chips">
+    <div class="quick-chips" id="quick-chips">
       <button class="quick-btn" data-q="공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?">공통영어1 단원 구성</button>
+      <button class="quick-btn" data-q="2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.">내신 5등급제 산출</button>
       <button class="quick-btn" data-q="세계 문화와 영어 교과서에서는 어떤 국가나 문화를 배우나요?">세계 문화와 영어 주제</button>
-      <button class="quick-btn" data-q="영어독해와작문 교과서에는 어떤 본문 지문이 수록되어 있나요?">영어독해와작문 지문 내용</button>
-      <button class="quick-btn" data-q="공통영어2 교과서의 1단원 주요 내용과 활동은 무엇인가요?">공통영어2 1단원 내용</button>
+      <button class="quick-btn" data-q="의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.">의령여고 영어 선택과목</button>
     </div>
   </div>
 
@@ -381,6 +426,7 @@
 
 <script>
   /* ── 전역 상태 ── */
+  let currentTargetDb = 'all';
   let sourcesStore = {};   // msgId → sources 배열
   let msgCounter   = 0;
   let isLoading    = false;
@@ -391,10 +437,57 @@
   const modal      = document.getElementById('source-modal');
   const modalTitle = document.getElementById('modal-title');
   const modalBody  = document.getElementById('modal-body');
+  const quickChipsContainer = document.getElementById('quick-chips');
+
+  /* ── DB 모드별 추천 질문 ── */
+  const quickQuestionsByMode = {
+    all: [
+      { label: '공통영어1 단원 구성', q: '공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?' },
+      { label: '내신 5등급제 산출', q: '2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.' },
+      { label: '세계 문화와 영어 주제', q: '세계 문화와 영어 교과서에서는 어떤 국가나 문화를 배우나요?' },
+      { label: '의령여고 영어 선택과목', q: '의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.' }
+    ],
+    textbook: [
+      { label: '공통영어1 단원 구성', q: '공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?' },
+      { label: '세계 문화와 영어 주제', q: '세계 문화와 영어 교과서에서는 어떤 국가나 문화를 배우나요?' },
+      { label: '영어독해와작문 지문 내용', q: '영어독해와작문 교과서에는 어떤 본문 지문이 수록되어 있나요?' },
+      { label: '공통영어2 1단원 내용', q: '공통영어2 교과서의 1단원 주요 내용과 활동은 무엇인가요?' }
+    ],
+    faq: [
+      { label: '내신 5등급제 산출 방식', q: '2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.' },
+      { label: '학생부 세특 기록 연계 방안', q: '영어과 선택과목 수업을 통해 학생부 세특에 어떤 내용을 기록할 수 있나요?' },
+      { label: '의령여고 영어 선택과목 체계', q: '의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.' },
+      { label: '진로·융합선택 평가 차이', q: '일반선택, 진로선택, 융합선택 과목의 성적 산출 및 평가 방식 차이를 알려주세요.' }
+    ]
+  };
+
+  function renderQuickQuestions(mode) {
+    if (!quickChipsContainer) return;
+    const list = quickQuestionsByMode[mode] || quickQuestionsByMode.all;
+    quickChipsContainer.innerHTML = '';
+    list.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'quick-btn';
+      btn.dataset.q = item.q;
+      btn.textContent = item.label;
+      btn.addEventListener('click', () => sendMessage(item.q));
+      quickChipsContainer.appendChild(btn);
+    });
+  }
+
+  // DB 선택 탭 클릭 이벤트 바인딩
+  document.querySelectorAll('.db-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.db-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentTargetDb = tab.dataset.db;
+      renderQuickQuestions(currentTargetDb);
+    });
+  });
 
   /* ── 초기 인사 메시지 ── */
   appendBotBubble(
-    '안녕하십니까. 영어과 선택과목 안내 챗봇입니다.\n교육과정 규정이나 교과서에 대해 궁금한 점을 남겨주시면 안내해 드립니다.',
+    '안녕하십니까. 영어과 선택과목 안내 챗봇입니다.\n상단의 검색 범위를 선택하여 교육과정 규정이나 교과서에 대해 질문해 주시면 안내해 드립니다.',
     []
   );
 
@@ -530,7 +623,7 @@
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ query, target_db: currentTargetDb })
       });
       const data = await res.json();
       hideLoading();
@@ -567,10 +660,8 @@
     userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
   });
 
-  /* ── 빠른 질문 버튼 ── */
-  document.querySelectorAll('.quick-btn').forEach(btn => {
-    btn.addEventListener('click', () => sendMessage(btn.dataset.q));
-  });
+  /* ── 초기 빠른 질문 버튼 렌더링 ── */
+  renderQuickQuestions('all');
 </script>
 </body>
 </html>
