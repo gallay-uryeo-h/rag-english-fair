@@ -2,12 +2,15 @@ import os
 import sys
 import glob
 import time
-import pymupdf  # 최신 PyMuPDF
+import re
+import shutil
+import pymupdf
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 import chromadb
 
-# Windows 콘솔 utf-8 설정
+# Windows 콘솔 UTF-8 설정
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -16,171 +19,252 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError(".env 파일에 GEMINI_API_KEY가 없습니다!")
 
-# 1. Gemini 클라이언트 및 ChromaDB 영구 저장 클라이언트 초기화
 client = genai.Client(api_key=api_key)
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
 
-# 컬렉션 생성 (코사인 유사도 적용)
+# ── 1. ChromaDB 초기화 ───────────────────────────────────────
+os.makedirs("./pages_cache", exist_ok=True)
+os.makedirs("./chroma_db", exist_ok=True)
+
+chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(
     name="english_textbooks",
     metadata={"hnsw:space": "cosine"}
 )
+print(f"현재 ChromaDB 등록 청크 수: {collection.count()}", flush=True)
 
-def get_embedding(subject_name: str, text: str) -> list:
-    """gemini-embedding-2를 이용한 문서 임베딩 함수 (Rate Limit 자동 재시도)"""
-    content = f"title: {subject_name} | text: {text}"
-    for attempt in range(5):
+# ── 2. 배치 임베딩 함수 (안정적인 재시도 및 Rate Limit 제어) ──
+def get_batch_embeddings(contents_list: list, max_retries: int = 8) -> list:
+    """
+    contents_list: list of strings
+    returns: list of embedding vectors
+    """
+    if not contents_list:
+        return []
+
+    formatted_contents = [
+        types.Content(parts=[types.Part.from_text(text=txt)])
+        for txt in contents_list
+    ]
+
+    for attempt in range(max_retries):
         try:
             response = client.models.embed_content(
-                model="gemini-embedding-2",
-                contents=content
+                model="gemini-embedding-001",
+                contents=formatted_contents
             )
-            return response.embeddings[0].values
+            return [e.values for e in response.embeddings]
         except Exception as e:
-            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
-                print(f"    ⏳ Rate limit 도달, 15초 대기 후 재시도 중... (시도 {attempt+1}/5)")
-                time.sleep(15)
+            err_msg = str(e)
+            if "429" in err_msg or "RESOURCE_EXHAUSTED" in err_msg:
+                wait_sec = 25 * (attempt + 1)
+                print(f"    ⏳ API Rate Limit 도달, {wait_sec}초 대기 후 재시도... (시도 {attempt+1}/{max_retries})", flush=True)
+                time.sleep(wait_sec)
             else:
-                raise e
-    raise RuntimeError("임베딩 최대 재시도 횟수 초과")
+                print(f"    ❌ 오류 발생: {e}, 10초 대기...", flush=True)
+                time.sleep(10)
 
-def render_page_image(page, output_path: str):
-    """PDF 페이지를 고화질 이미지(PNG)로 저장 (스마트폰 뷰어용)"""
-    zoom = 2.0
-    mat = pymupdf.Matrix(zoom, zoom)
-    pix = page.get_pixmap(matrix=mat)
-    pix.save(output_path)
+    raise RuntimeError(f"배치 임베딩 재시도 초과 ({len(contents_list)}건)")
 
-def process_pdf(pdf_path: str):
-    file_name = os.path.basename(pdf_path)
-    subject_name = os.path.splitext(file_name)[0]  # 예: "공통영어1"
-    
-    print(f"\n📂 [과목명: {subject_name}] ({file_name}) 분석 시작...")
+def add_batch_to_chroma(batch_ids, batch_embeddings, batch_docs, batch_metas):
+    if batch_ids:
+        collection.add(
+            ids=batch_ids,
+            embeddings=batch_embeddings,
+            documents=batch_docs,
+            metadatas=batch_metas
+        )
 
-    doc = pymupdf.open(pdf_path)
-    total_pages = len(doc)
-    print(f"총 {total_pages} 페이지 발견")
+# ── 3. 파일명 파서 ───────────────────────────────────────────
+def parse_pdf_info(filename: str):
+    name = os.path.splitext(filename)[0]
+    # 패턴: 22개정 교과서 (학년) (학기) (교과명) (출판사) (저자)
+    m = re.match(r'22개정\s*교과서\s*(\d학년)\s*(\d학기)\s*(.+?)\s+([가-힣a-zA-Z]+)\s+([가-힣a-zA-Z]+)$', name)
+    if m:
+        grade, sem, subj, pub, author = m.groups()
+        if subj == "세계 문화와":
+            subj = "세계 문화와 영어"
+        display_title = f"{subj} ({grade} {sem} · {pub} {author})"
+        short_id = f"{grade}_{sem}_{subj}_{pub}".replace(" ", "_")
+        return {
+            "display_title": display_title,
+            "short_id": short_id,
+            "subject": subj,
+            "grade": grade,
+            "semester": sem,
+            "publisher": pub,
+            "author": author
+        }
+    else:
+        clean_name = name.replace("22개정 교과서 ", "").strip()
+        return {
+            "display_title": clean_name,
+            "short_id": clean_name.replace(" ", "_"),
+            "subject": clean_name,
+            "grade": "",
+            "semester": "",
+            "publisher": "",
+            "author": ""
+        }
 
-    for page_num in range(total_pages):
-        page = doc[page_num]
-        actual_page_no = page_num + 1
+# ── 4. 교과서 PDF 처리 및 인덱싱 ──────────────────────────────
+def index_all_textbooks():
+    pdf_files = sorted(glob.glob("data/*.pdf"))
+    print(f"\n📚 총 {len(pdf_files)}권의 교과서 PDF 인덱싱 준비 완료.", flush=True)
 
-        # 1. 페이지 텍스트 추출
-        text = page.get_text("text").strip()
-        if not text:
+    for pdf_path in pdf_files:
+        file_name = os.path.basename(pdf_path)
+        meta_info = parse_pdf_info(file_name)
+        display_title = meta_info["display_title"]
+        short_id = meta_info["short_id"]
+
+        print(f"\n📘 [{display_title}] 검사 중...", flush=True)
+        doc = pymupdf.open(pdf_path)
+        total_pages = len(doc)
+
+        pending_items = []
+
+        for page_num in range(total_pages):
+            actual_page_no = page_num + 1
+
+            # 1. 페이지 이미지 저장 (없을 때만 저장)
+            img_filename = f"{short_id}_p{actual_page_no}.jpg"
+            img_rel_path = os.path.join("pages_cache", img_filename)
+            if not os.path.exists(img_rel_path):
+                page = doc[page_num]
+                mat = pymupdf.Matrix(1.3, 1.3)
+                pix = page.get_pixmap(matrix=mat)
+                pix.save(img_rel_path, jpg_quality=82)
+
+            # 2. 텍스트 추출 및 청크 생성
+            page = doc[page_num]
+            text = page.get_text("text").strip()
+            if not text or len(text) < 15:
+                continue
+
+            paragraphs = [p.strip() for p in text.split("\n\n") if len(p.strip()) > 30]
+            if not paragraphs:
+                paragraphs = [text]
+
+            for chunk_idx, chunk_text in enumerate(paragraphs):
+                chunk_id = f"{short_id}_p{actual_page_no}_c{chunk_idx}"
+
+                # 이미 인덱싱된 청크인지 확인 (이어하기 지원)
+                existing = collection.get(ids=[chunk_id])
+                if existing and existing["ids"]:
+                    continue
+
+                embed_text = f"title: {display_title} (p.{actual_page_no}) | text: {chunk_text}"
+                pending_items.append({
+                    "id": chunk_id,
+                    "embed_text": embed_text,
+                    "doc": chunk_text,
+                    "metadata": {
+                        "subject_name": display_title,
+                        "file_name": file_name,
+                        "page": actual_page_no,
+                        "image_path": img_rel_path,
+                        "topic": meta_info["subject"],
+                        "grade": meta_info["grade"],
+                        "semester": meta_info["semester"],
+                        "publisher": meta_info["publisher"],
+                        "author": meta_info["author"]
+                    }
+                })
+
+        doc.close()
+
+        if not pending_items:
+            print(f"  -> 이미 모든 청크가 인덱싱되어 있습니다. 건너뜁니다.", flush=True)
             continue
 
-        # 2. 해당 페이지를 스마트폰에서 볼 수 있도록 이미지로 저장
-        img_filename = f"{subject_name}_p{actual_page_no}.png"
-        img_rel_path = os.path.join("pages_cache", img_filename)
-        if not os.path.exists(img_rel_path):
-            render_page_image(page, img_rel_path)
+        print(f"  -> 신규 {len(pending_items)}개 청크 생성. 배치 임베딩 시작...", flush=True)
 
-        # 3. 텍스트 분할 (단락 단위 또는 일정 길이 단위)
-        paragraphs = [p.strip() for p in text.split("\n\n") if len(p.strip()) > 30]
-        if not paragraphs:
-            paragraphs = [text]
+        # 50개씩 배치 전송
+        batch_size = 50
+        for i in range(0, len(pending_items), batch_size):
+            batch = pending_items[i:i + batch_size]
+            embed_texts = [item["embed_text"] for item in batch]
 
-        for chunk_idx, chunk_text in enumerate(paragraphs):
-            chunk_id = f"{subject_name}_p{actual_page_no}_c{chunk_idx}"
+            embeddings = get_batch_embeddings(embed_texts)
+
+            add_batch_to_chroma(
+                batch_ids=[item["id"] for item in batch],
+                batch_embeddings=embeddings,
+                batch_docs=[item["doc"] for item in batch],
+                batch_metas=[item["metadata"] for item in batch]
+            )
+            print(f"    진행: {min(i + batch_size, len(pending_items))}/{len(pending_items)} 청크 완료", flush=True)
+            time.sleep(2.0)  # Rate Limit 방지를 위한 2초 딜레이
+
+# ── 5. FAQ.txt 처리 및 인덱싱 ─────────────────────────────────
+def index_faq():
+    faq_path = "data/FAQ.txt"
+    if not os.path.exists(faq_path):
+        print("⚠️ FAQ.txt 파일이 없습니다.", flush=True)
+        return
+
+    print("\n💡 [선택과목 FAQ.txt] 검사 중...", flush=True)
+    with open(faq_path, "r", encoding="utf-8-sig") as f:
+        lines = [l.strip() for l in f if l.strip()]
+
+    pending_faq = []
+    for line in lines[1:]:
+        parts = line.split("\t")
+        if len(parts) >= 6:
+            q_num, target, main_topic, sub_topic, question, answer = parts[:6]
+            chunk_id = f"FAQ_{q_num}"
 
             # 중복 체크
             existing = collection.get(ids=[chunk_id])
             if existing and existing["ids"]:
                 continue
 
-            print(f" -> 임베딩 중: [{subject_name}] (p.{actual_page_no}, 조각 {chunk_idx + 1}/{len(paragraphs)})")
-            
-            try:
-                emb = get_embedding(subject_name, chunk_text)
-                
-                collection.add(
-                    ids=[chunk_id],
-                    embeddings=[emb],
-                    documents=[chunk_text],
-                    metadatas=[{
-                        "subject_name": subject_name,
-                        "file_name": file_name,
-                        "page": actual_page_no,
-                        "image_path": img_rel_path
-                    }]
-                )
-            except Exception as e:
-                print(f"  [에러 발생] {chunk_id}: {e}")
+            doc_text = f"[{main_topic} > {sub_topic}] (대상: {target})\n질문: {question}\n답변: {answer}"
+            embed_text = f"title: 선택과목 FAQ | text: 과목안내 및 교육과정 질의응답: {question} {answer}"
 
-    doc.close()
-    print(f"✅ [{subject_name}] 인덱싱 완료!")
-
-def process_faq(faq_path: str):
-    """FAQ.txt 파일을 UTF-8로 읽어 각 Q&A를 독립 청크로 ChromaDB에 저장"""
-    if not os.path.exists(faq_path):
-        return
-
-    print(f"\n📂 [FAQ 데이터 분석 시작] ({faq_path})...")
-    with open(faq_path, "r", encoding="utf-8-sig") as f:
-        lines = [line.strip() for line in f if line.strip()]
-
-    header = lines[0].split("\t")
-    count = 0
-
-    for line in lines[1:]:
-        parts = line.split("\t")
-        if len(parts) < 6:
-            continue
-
-        q_num, target, main_topic, sub_topic, question, answer = parts[:6]
-        chunk_id = f"FAQ_{q_num}"
-
-        # 중복 체크
-        existing = collection.get(ids=[chunk_id])
-        if existing and existing["ids"]:
-            continue
-
-        # 검색 텍스트 (질문과 핵심 내용을 명확히 구조화)
-        doc_text = f"[{main_topic} > {sub_topic}] (대상: {target})\n질문: {question}\n답변: {answer}"
-        embed_text = f"과목안내 및 교육과정 질의응답: {question} {answer}"
-
-        try:
-            emb = get_embedding("선택과목 FAQ", embed_text)
-
-            collection.add(
-                ids=[chunk_id],
-                embeddings=[emb],
-                documents=[doc_text],
-                metadatas=[{
+            pending_faq.append({
+                "id": chunk_id,
+                "embed_text": embed_text,
+                "doc": doc_text,
+                "metadata": {
                     "subject_name": "선택과목 FAQ",
                     "file_name": "FAQ.txt",
                     "page": int(q_num),
                     "image_path": "",
                     "topic": f"{main_topic} - {sub_topic}",
                     "target": target
-                }]
-            )
-            count += 1
-            if count % 20 == 0:
-                print(f" -> FAQ {count}개 정상 저장 완료...")
-        except Exception as e:
-            print(f"  [에러 발생] {chunk_id}: {e}")
+                }
+            })
 
-    print(f"✅ [선택과목 FAQ] 총 {count}개 항목 인덱싱 완료!")
+    if not pending_faq:
+        print("  -> FAQ 청크가 이미 모두 등록되어 있습니다.", flush=True)
+        return
 
-def main():
-    # 1. FAQ 텍스트 처리
-    faq_file = os.path.join("data", "FAQ.txt")
-    if os.path.exists(faq_file):
-        process_faq(faq_file)
+    print(f"  -> FAQ 신규 {len(pending_faq)}개 질문 배치 임베딩 시작...", flush=True)
 
-    # 2. PDF 교과서 처리
-    pdf_files = glob.glob("data/*.pdf")
-    if not pdf_files:
-        print("⚠️ 'data' 폴더에 분석할 PDF 파일이 없습니다.")
-    else:
-        print(f"\n총 {len(pdf_files)}개의 교과서 PDF를 인덱싱합니다.")
-        for pdf_path in pdf_files:
-            process_pdf(pdf_path)
+    batch_size = 50
+    for i in range(0, len(pending_faq), batch_size):
+        batch = pending_faq[i:i + batch_size]
+        embed_texts = [item["embed_text"] for item in batch]
 
-    print("\n🎉 모든 교과서 및 FAQ 문서의 벡터 DB 저장이 완료되었습니다!")
-    print(f"저장된 총 청크 수: {collection.count()}개")
+        embeddings = get_batch_embeddings(embed_texts)
 
+        add_batch_to_chroma(
+            batch_ids=[item["id"] for item in batch],
+            batch_embeddings=embeddings,
+            batch_docs=[item["doc"] for item in batch],
+            batch_metas=[item["metadata"] for item in batch]
+        )
+        print(f"    FAQ 진행: {min(i + batch_size, len(pending_faq))}/{len(pending_faq)} 완료", flush=True)
+        time.sleep(2.0)
+
+# ── 실행 메인 ────────────────────────────────────────────────
 if __name__ == "__main__":
-    main()
+    start_time = time.time()
+
+    index_all_textbooks()
+    index_faq()
+
+    elapsed = round(time.time() - start_time, 1)
+    total_count = collection.count()
+    print(f"\n🎉 전체 인덱싱 완료! 총 {total_count}개 청크가 ChromaDB에 저장되었습니다. (소요시간: {elapsed}초)", flush=True)

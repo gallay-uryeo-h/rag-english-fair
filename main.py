@@ -49,7 +49,7 @@ if collection.count() == 0 and os.path.exists("data/FAQ.txt") and gemini_client:
             embed_text = f"과목안내 및 교육과정 질의응답: {question} {answer}"
             try:
                 resp = gemini_client.models.embed_content(
-                    model="gemini-embedding-2",
+                    model="gemini-embedding-001",
                     contents=f"title: 선택과목 FAQ | text: {embed_text}"
                 )
                 collection.add(
@@ -73,7 +73,7 @@ if collection.count() == 0 and os.path.exists("data/FAQ.txt") and gemini_client:
 def search_similar_docs(query_text: str, n_results: int = 4):
     formatted_query = f"task: question answering | query: {query_text}"
     response = gemini_client.models.embed_content(
-        model="gemini-embedding-2",
+        model="gemini-embedding-001",
         contents=formatted_query
     )
     query_vector = response.embeddings[0].values
@@ -106,7 +106,8 @@ def root():
 def get_page_image(filename: str):
     path = os.path.join("pages_cache", filename)
     if os.path.exists(path):
-        return FileResponse(path, media_type="image/png")
+        media_type = "image/jpeg" if filename.lower().endswith((".jpg", ".jpeg")) else "image/png"
+        return FileResponse(path, media_type=media_type)
     return JSONResponse({"error": "not found"}, status_code=404)
 
 @app.post("/api/chat")
