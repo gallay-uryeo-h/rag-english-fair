@@ -36,39 +36,6 @@ collection = chroma_client.get_or_create_collection(
     metadata={"hnsw:space": "cosine"}
 )
 
-# 클라우드 배포 시 DB가 비어있으면 FAQ.txt 자동 인덱싱
-if collection.count() == 0 and os.path.exists("data/FAQ.txt") and gemini_client:
-    print("ChromaDB가 비어있습니다. FAQ.txt를 자동 인덱싱합니다...")
-    with open("data/FAQ.txt", "r", encoding="utf-8-sig") as f:
-        lines = [l.strip() for l in f if l.strip()]
-    for line in lines[1:]:
-        parts = line.split("\t")
-        if len(parts) >= 6:
-            q_num, target, main_topic, sub_topic, question, answer = parts[:6]
-            doc_text = f"[{main_topic} > {sub_topic}] (대상: {target})\n질문: {question}\n답변: {answer}"
-            embed_text = f"과목안내 및 교육과정 질의응답: {question} {answer}"
-            try:
-                resp = gemini_client.models.embed_content(
-                    model="gemini-embedding-001",
-                    contents=f"title: 선택과목 FAQ | text: {embed_text}"
-                )
-                collection.add(
-                    ids=[f"FAQ_{q_num}"],
-                    embeddings=[resp.embeddings[0].values],
-                    documents=[doc_text],
-                    metadatas=[{
-                        "subject_name": "선택과목 FAQ",
-                        "file_name": "FAQ.txt",
-                        "page": int(q_num),
-                        "image_path": "",
-                        "topic": f"{main_topic} - {sub_topic}",
-                        "target": target
-                    }]
-                )
-            except Exception as e:
-                print(f"FAQ 인덱싱 오류 (Q{q_num}): {e}")
-    print(f"FAQ 인덱싱 완료. 총 {collection.count()}개 청크.")
-
 # ── RAG 검색 ─────────────────────────────────────────────────
 def search_similar_docs(query_text: str, n_results: int = 4):
     formatted_query = f"task: question answering | query: {query_text}"
@@ -140,7 +107,7 @@ def chat(req: ChatRequest):
             image_path = m.get("image_path", "")
 
             context_blocks.append(
-                f"[{cid}] 출처: {subject} ({'Q' + str(page) if subject == '선택과목 FAQ' else 'p.' + str(page)})\n내용: {d}"
+                f"[{cid}] 출처: {subject} (p.{page})\n내용: {d}"
             )
             sources.append({
                 "id": cid,
