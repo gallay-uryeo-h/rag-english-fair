@@ -89,8 +89,8 @@ def search_recommended_passages(query_text: str, grade_filter: str = "전체", n
         where=where_cond
     )
 
-    # ── 중복 제거: 동일 교과서 내 ±10 페이지는 같은 본문으로 간주 ──
-    seen: list[tuple[str, int]] = []   # (subject_name, page)
+    # ── 중복 제거: passage_id 기준 (같은 본문 단위는 최고 유사도 청크 1개만) ──
+    seen_passages: set[str] = set()
     dedup_ids, dedup_docs, dedup_metas, dedup_dists = [], [], [], []
 
     ids    = raw["ids"][0] if raw["ids"] else []
@@ -99,18 +99,14 @@ def search_recommended_passages(query_text: str, grade_filter: str = "전체", n
     dists  = raw["distances"][0] if raw.get("distances") else [0.0] * len(ids)
 
     for cid, doc, meta, dist in zip(ids, docs, metas, dists):
-        subj = meta.get("subject_name", "")
-        page = int(meta.get("page", 0))
+        # passage_id가 있으면 그것으로, 없으면 "subject_name__p{page}" 폴백
+        passage_id = meta.get("passage_id") or \
+                     f"{meta.get('subject_name','')}__p{meta.get('page', 0)}"
 
-        # 같은 교과서에서 이미 선택한 항목과 10쪽 이내이면 skip
-        is_dup = any(
-            s == subj and abs(p - page) <= 10
-            for s, p in seen
-        )
-        if is_dup:
-            continue
+        if passage_id in seen_passages:
+            continue   # 같은 본문에서 이미 더 유사한 청크를 선택했으므로 skip
 
-        seen.append((subj, page))
+        seen_passages.add(passage_id)
         dedup_ids.append(cid)
         dedup_docs.append(doc)
         dedup_metas.append(meta)
