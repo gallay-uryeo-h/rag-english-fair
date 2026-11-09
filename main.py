@@ -69,10 +69,17 @@ def search_recommended_passages(query_text: str, grade_filter: str = "전체", n
     )
     query_vector = response.embeddings[0].values
 
+    # section: reading 으로만 필터링 (본문 지문만)
     if grade_filter in ["1학년", "2학년", "3학년"]:
-        where_cond = {"grade": grade_filter}
+        where_cond = {"$and": [
+            {"section": "reading"},
+            {"grade": grade_filter}
+        ]}
     else:
-        where_cond = {"grade": {"$in": ["1학년", "2학년", "3학년"]}}
+        where_cond = {"$and": [
+            {"section": "reading"},
+            {"grade": {"$in": ["1학년", "2학년", "3학년"]}}
+        ]}
 
     results = collection.query(
         query_embeddings=[query_vector],
