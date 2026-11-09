@@ -541,6 +541,252 @@
       border: 1px solid var(--border);
       margin-top: 8px;
     }
+    /* ── 3개년 문법 로드맵 스타일 ── */
+    #grammar-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .grammar-notice-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .grammar-notice-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1d4ed8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .grammar-notice-desc {
+      font-size: 0.80rem;
+      color: #1e40af;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .grammar-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .grammar-grade-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .g-tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--sub);
+      border-radius: 10px;
+      font-size: 0.80rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .g-tab-btn:hover { background: #f8fafc; color: var(--text); }
+    .g-tab-btn.active {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+      box-shadow: 0 2px 6px rgba(49, 130, 246, 0.25);
+    }
+    .grammar-search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .grammar-search-input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease;
+      background: #f8fafc;
+    }
+    .grammar-search-input:focus {
+      border-color: var(--blue);
+      background: var(--white);
+    }
+    .grammar-search-icon {
+      position: absolute;
+      left: 11px;
+      width: 15px;
+      height: 15px;
+      fill: var(--sub);
+      pointer-events: none;
+    }
+    .grammar-subject-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .grammar-subject-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .grammar-subject-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .g-badge-grade {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+    .g-badge-type {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+    .grammar-subject-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .grammar-subject-summary {
+      font-size: 0.81rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+    .grammar-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .grammar-unit-block {
+      background: #f8fafc;
+      border: 1px solid #edf2f7;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .grammar-unit-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .grammar-unit-theme {
+      font-size: 0.76rem;
+      color: #64748b;
+      font-weight: normal;
+    }
+    .grammar-point-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .grammar-point-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .g-point-badge {
+      background: #3b82f6;
+      color: var(--white);
+      font-size: 0.70rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+    .g-tag-badge {
+      background: #eff6ff;
+      color: #2563eb;
+      font-size: 0.70rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid #dbeafe;
+    }
+    .g-page-badge {
+      font-size: 0.72rem;
+      color: var(--sub);
+      font-weight: 600;
+      margin-left: auto;
+    }
+    .grammar-point-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .grammar-point-quote {
+      background: #f8fafc;
+      border-left: 3px solid var(--blue);
+      padding: 7px 10px;
+      font-size: 0.80rem;
+      color: #1e293b;
+      font-style: italic;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.45;
+    }
+    .grammar-point-desc {
+      font-size: 0.80rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .grammar-view-img-btn {
+      align-self: flex-start;
+      margin-top: 4px;
+      padding: 5px 10px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: #334155;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .grammar-view-img-btn:hover {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: #bfdbfe;
+    }
   </style>
 </head>
 <body>
@@ -555,10 +801,11 @@
     </div>
   </header>
 
-  <!-- 메인 상단 탭 (상담 vs 본문 찾기) -->
+  <!-- 메인 상단 탭 (상담 vs 본문 찾기 vs 문법 로드맵) -->
   <nav id="main-nav">
     <button class="nav-tab active" data-tab="chat">선택과목 상담</button>
     <button class="nav-tab" data-tab="recommend">맞춤 본문 찾기</button>
+    <button class="nav-tab" data-tab="grammar">3개년 문법 로드맵</button>
   </nav>
 
   <!-- [VIEW 1] 선택과목 상담 챗봇 -->
@@ -632,6 +879,41 @@
       </div>
     </div>
   </div>
+
+  <!-- [VIEW 3] 3개년 영어 문법 로드맵 -->
+  <div id="grammar-view" class="view-container hidden">
+    <div id="grammar-area">
+      <!-- 안내 멘트 상자 -->
+      <div class="grammar-notice-box">
+        <div class="grammar-notice-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d4ed8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          고등학교 3개년 문법 로드맵 안내
+        </div>
+        <div class="grammar-notice-desc">
+          교과서 문법 파트(Structures / Grammar in Reading)에 나오는 순서대로 정리되었으며 실제 수업과는 차이가 있을 수 있습니다.
+        </div>
+      </div>
+
+      <!-- 학년 필터 & 검색창 -->
+      <div class="grammar-controls">
+        <div class="grammar-grade-tabs">
+          <button class="g-tab-btn active" data-grade="all">전체 (3개년)</button>
+          <button class="g-tab-btn" data-grade="1학년">1학년 (공통영어)</button>
+          <button class="g-tab-btn" data-grade="2학년">2학년 (영어Ⅰ·독해작문)</button>
+          <button class="g-tab-btn" data-grade="3학년">3학년 (영어Ⅱ·세계문화)</button>
+        </div>
+        <div class="grammar-search-box">
+          <svg class="grammar-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="grammar-search-input" class="grammar-search-input" placeholder="문법 개념 검색 (예: 가정법, 분사구문, 관계사, 5형식, 도치...)" />
+        </div>
+      </div>
+
+      <!-- 로드맵 카드 렌더링 컨테이너 -->
+      <div id="grammar-roadmap-container">
+        <div style="text-align:center; padding: 30px 0; color: var(--sub);">문법 로드맵 데이터를 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 출처 / 이미지 바텀시트 모달 -->
@@ -660,6 +942,10 @@
 
   const chatView = document.getElementById('chat-view');
   const recommendView = document.getElementById('recommend-view');
+  const grammarView = document.getElementById('grammar-view');
+  const grammarRoadmapContainer = document.getElementById('grammar-roadmap-container');
+  const grammarSearchInput = document.getElementById('grammar-search-input');
+
   const recTextarea = document.getElementById('rec-textarea');
   const recGradeSelect = document.getElementById('rec-grade-select');
   const recSubmitBtn = document.getElementById('rec-submit-btn');
@@ -668,7 +954,7 @@
   const recReportContent = document.getElementById('rec-report-content');
   const recCandidatesList = document.getElementById('rec-candidates-list');
 
-  /* ── 메인 상단 탭 전환 (상담 vs 본문 찾기) ── */
+  /* ── 메인 상단 탭 전환 (상담 vs 본문 찾기 vs 문법 로드맵) ── */
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -678,9 +964,18 @@
       if (targetTab === 'chat') {
         chatView.classList.remove('hidden');
         recommendView.classList.add('hidden');
-      } else {
+        grammarView.classList.add('hidden');
+      } else if (targetTab === 'recommend') {
         chatView.classList.add('hidden');
         recommendView.classList.remove('hidden');
+        grammarView.classList.add('hidden');
+      } else if (targetTab === 'grammar') {
+        chatView.classList.add('hidden');
+        recommendView.classList.add('hidden');
+        grammarView.classList.remove('hidden');
+        if (!grammarDataLoaded) {
+          loadGrammarRoadmap();
+        }
       }
     });
   });
@@ -930,6 +1225,147 @@
     userInput.style.height = 'auto';
     userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
   });
+
+  /* ── 3개년 문법 로드맵 데이터 및 렌더링 ── */
+  let grammarDataLoaded = false;
+  let grammarSubjects = [];
+  let currentGradeFilter = 'all';
+
+  async function loadGrammarRoadmap() {
+    try {
+      const res = await fetch('/api/grammar-roadmap');
+      const data = await res.json();
+      grammarSubjects = data.subjects || [];
+      grammarDataLoaded = true;
+      renderGrammarRoadmap();
+    } catch (err) {
+      if (grammarRoadmapContainer) {
+        grammarRoadmapContainer.innerHTML = `<div style="text-align:center; padding: 30px; color: #ef4444;">문법 로드맵을 불러오지 못했습니다: ${escapeHtml(err.message || String(err))}</div>`;
+      }
+    }
+  }
+
+  function renderGrammarRoadmap() {
+    if (!grammarRoadmapContainer) return;
+    const query = (grammarSearchInput ? grammarSearchInput.value : '').trim().toLowerCase();
+    grammarRoadmapContainer.innerHTML = '';
+
+    const filtered = grammarSubjects.filter(subj => {
+      if (currentGradeFilter !== 'all' && subj.grade !== currentGradeFilter) {
+        return false;
+      }
+      return true;
+    });
+
+    let matchedCount = 0;
+
+    filtered.forEach(subj => {
+      // 키워드 검색 시 단원 및 포인트 필터링
+      const matchedUnits = [];
+      (subj.units || []).forEach(u => {
+        const matchedPoints = (u.points || []).filter(p => {
+          if (!query) return true;
+          const searchSource = `${p.title} ${p.tag} ${p.key_sentence} ${p.explanation} ${u.unit_title} ${subj.subject}`.toLowerCase();
+          return searchSource.includes(query);
+        });
+        if (matchedPoints.length > 0) {
+          matchedUnits.push({ ...u, points: matchedPoints });
+        }
+      });
+
+      if (query && matchedUnits.length === 0) return;
+
+      matchedCount++;
+      const card = document.createElement('div');
+      card.className = 'grammar-subject-card';
+
+      let unitsHtml = '';
+      matchedUnits.forEach(u => {
+        let pointsHtml = '';
+        u.points.forEach(p => {
+          pointsHtml += `
+            <div class="grammar-point-card">
+              <div class="grammar-point-top">
+                <span class="g-point-badge">Point ${p.point_num}</span>
+                <span class="g-tag-badge">#${escapeHtml(p.tag)}</span>
+                <span class="g-page-badge">p.${p.page}</span>
+              </div>
+              <div class="grammar-point-name">${escapeHtml(p.title)}</div>
+              <div class="grammar-point-quote">“${escapeHtml(p.key_sentence)}”</div>
+              <div class="grammar-point-desc">${escapeHtml(p.explanation)}</div>
+              ${p.image_path ? `
+                <button class="grammar-view-img-btn" data-img="/${p.image_path}" data-title="${escapeHtml(subj.subject)} · p.${p.page} 교과서 문법 원본">
+                  교과서 문법 원본 페이지 확인 (p.${p.page})
+                </button>
+              ` : ''}
+            </div>
+          `;
+        });
+
+        unitsHtml += `
+          <div class="grammar-unit-block">
+            <div class="grammar-unit-title">
+              <span>Unit ${u.unit_number}. ${escapeHtml(u.unit_title)}</span>
+              ${u.theme ? `<span class="grammar-unit-theme">(${escapeHtml(u.theme)})</span>` : ''}
+            </div>
+            ${pointsHtml}
+          </div>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="grammar-subject-header">
+          <div class="grammar-subject-meta">
+            <span class="g-badge-grade">${escapeHtml(subj.grade)} ${escapeHtml(subj.semester)}</span>
+            <span class="g-badge-type">${escapeHtml(subj.curriculum_type)}</span>
+            <span style="font-size:0.74rem; color:var(--sub); margin-left:auto;">${escapeHtml(subj.publisher)}</span>
+          </div>
+          <div class="grammar-subject-title">${escapeHtml(subj.subject)}</div>
+          <div class="grammar-subject-summary">${escapeHtml(subj.summary)}</div>
+        </div>
+        <div class="grammar-units-list">
+          ${unitsHtml}
+        </div>
+      `;
+
+      grammarRoadmapContainer.appendChild(card);
+    });
+
+    if (matchedCount === 0) {
+      grammarRoadmapContainer.innerHTML = `
+        <div style="text-align:center; padding: 40px 20px; color: var(--sub);">
+          검색 조건에 일치하는 문법 항목이 없습니다. 다른 키워드로 검색해 보세요.
+        </div>
+      `;
+    }
+
+    // 모달 이미지 팝업 이벤트 바인딩
+    grammarRoadmapContainer.querySelectorAll('.grammar-view-img-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalTitle.textContent = btn.dataset.title;
+        modalBody.innerHTML = `<img src="${btn.dataset.img}" alt="교과서 문법 원본 사진" loading="lazy" />`;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+  }
+
+  // 학년 필터 버튼 클릭 이벤트
+  document.querySelectorAll('.g-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.g-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentGradeFilter = btn.dataset.grade;
+      renderGrammarRoadmap();
+    });
+  });
+
+  // 문법 키워드 검색 이벤트
+  if (grammarSearchInput) {
+    grammarSearchInput.addEventListener('input', () => {
+      renderGrammarRoadmap();
+    });
+  }
 
   renderQuickQuestions();
 </script>

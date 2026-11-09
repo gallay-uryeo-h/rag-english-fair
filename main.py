@@ -143,6 +143,8 @@ class RecommendRequest(BaseModel):
 def root():
     return FileResponse("static/index.html")
 
+from grammar_roadmap_data import GRAMMAR_ROADMAP_DATA, NOTICE_MESSAGE
+
 @app.get("/pages_cache/{filename}")
 def get_page_image(filename: str):
     path = os.path.join("pages_cache", filename)
@@ -150,6 +152,13 @@ def get_page_image(filename: str):
         media_type = "image/jpeg" if filename.lower().endswith((".jpg", ".jpeg")) else "image/png"
         return FileResponse(path, media_type=media_type)
     return JSONResponse({"error": "not found"}, status_code=404)
+
+@app.get("/api/grammar-roadmap")
+def get_grammar_roadmap():
+    return {
+        "notice": NOTICE_MESSAGE,
+        "subjects": GRAMMAR_ROADMAP_DATA
+    }
 
 @app.post("/api/chat")
 def chat(req: ChatRequest):
