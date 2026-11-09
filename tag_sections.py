@@ -202,3 +202,4 @@ for doc, meta in zip(samples["documents"], samples["metadatas"]):
     print(f"  [{meta.get('subject_name','')} p.{meta.get('page','')}] {doc[:80]}...")
 
 print("\n태깅 완료!")
+

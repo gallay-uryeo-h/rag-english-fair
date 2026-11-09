@@ -284,3 +284,4 @@ for i in range(0, len(temp_items), BATCH):
     print(f"  [{min(i+BATCH, len(temp_items))}/{len(temp_items)}] 업데이트 완료")
 
 print("\n🎉 모든 교과서 데이터의 체계적인 트리 구조 메타데이터 구축이 완료되었습니다!")
+

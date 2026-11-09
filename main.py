@@ -36,8 +36,8 @@ collection = chroma_client.get_or_create_collection(
     metadata={"hnsw:space": "cosine"}
 )
 
-# ── RAG 검색 ─────────────────────────────────────────────────
-def search_similar_docs(query_text: str, target_db: str = "all", n_results: int = 4):
+# ── RAG 검색 (선택과목 FAQ 전용) ──────────────────────────────
+def search_similar_docs(query_text: str, n_results: int = 4):
     formatted_query = f"task: question answering | query: {query_text}"
     response = gemini_client.models.embed_content(
         model="gemini-embedding-001",
@@ -45,18 +45,14 @@ def search_similar_docs(query_text: str, target_db: str = "all", n_results: int 
     )
     query_vector = response.embeddings[0].values
 
-    where_filter = None
-    if target_db == "textbook":
-        where_filter = {"subject_name": {"$ne": "선택과목 FAQ"}}
-    elif target_db == "faq":
-        where_filter = {"subject_name": "선택과목 FAQ"}
+    # 선택과목 상담 챗봇은 항상 FAQ 데이터베이스만 참조
+    where_filter = {"subject_name": "선택과목 FAQ"}
 
     query_kwargs = {
         "query_embeddings": [query_vector],
-        "n_results": n_results
+        "n_results": n_results,
+        "where": where_filter
     }
-    if where_filter:
-        query_kwargs["where"] = where_filter
 
     results = collection.query(**query_kwargs)
     return results
@@ -136,7 +132,7 @@ SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과�
 # ── API 모델 ─────────────────────────────────────────────────
 class ChatRequest(BaseModel):
     query: str
-    target_db: str = "all"  # "all", "textbook", "faq"
+    target_db: str = "faq"  # 선택과목 상담은 FAQ 전용
 
 class RecommendRequest(BaseModel):
     interest: str
@@ -164,11 +160,9 @@ def chat(req: ChatRequest):
     if not query:
         return JSONResponse({"error": "질문이 비어있습니다."}, status_code=400)
 
-    target_db = req.target_db if req.target_db in ["all", "textbook", "faq"] else "all"
-
-    # 1. 검색
+    # 1. FAQ 검색 (선택과목 상담 전용)
     try:
-        search_res = search_similar_docs(query, target_db=target_db, n_results=4)
+        search_res = search_similar_docs(query, n_results=4)
     except Exception as e:
         return JSONResponse({"error": f"검색 오류: {e}"}, status_code=500)
 
