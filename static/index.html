@@ -58,26 +58,30 @@
     .bot-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
     .bot-status { font-size: 0.76rem; color: var(--sub); margin-left: 4px; }
 
-    /* ── 메인 내비게이션 탭 (상담 vs 본문 찾기) ── */
+    /* ── 메인 내비게이션 탭 (상담 vs 본문 찾기 vs 로드맵) ── */
     #main-nav {
       display: flex;
-      gap: 6px;
-      padding: 8px 12px;
+      gap: 4px;
+      padding: 8px 10px;
       background: var(--white);
       border-bottom: 2px solid #f2f4f6;
       flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    #main-nav::-webkit-scrollbar { display: none; }
     .nav-tab {
-      flex: 1;
+      flex: 1 0 auto;
       padding: 8px 10px;
       border: none;
       background: transparent;
       color: var(--sub);
       border-radius: 10px;
-      font-size: 0.86rem;
+      font-size: 0.82rem;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.15s ease;
       display: flex;
       align-items: center;
@@ -787,6 +791,270 @@
       color: var(--blue);
       border-color: #bfdbfe;
     }
+    /* ── 한눈에 보는 비주얼 로드맵 스타일 ── */
+    #visual-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .visual-mode-switch {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+    }
+    .v-mode-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .v-mode-btn.active {
+      background: var(--white);
+      color: var(--blue);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .visual-timeline-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .v-step-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+    .v-step-card.grade1 { border-left: 5px solid #3b82f6; }
+    .v-step-card.grade2 { border-left: 5px solid #10b981; }
+    .v-step-card.grade3 { border-left: 5px solid #8b5cf6; }
+    .v-step-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .v-step-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .grade1 .v-step-badge { background: #eff6ff; color: #2563eb; }
+    .grade2 .v-step-badge { background: #ecfdf5; color: #059669; }
+    .grade3 .v-step-badge { background: #f5f3ff; color: #7c3aed; }
+    .v-step-eval {
+      font-size: 0.72rem;
+      color: #64748b;
+      background: #f8fafc;
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid #e2e8f0;
+    }
+    .v-step-title {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .v-step-desc {
+      font-size: 0.80rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+    .v-step-box {
+      background: #f8fafc;
+      border: 1px solid #edf2f7;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .v-step-subname {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .v-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .v-chip {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+    .v-chip.rel { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .v-chip.part { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .v-chip.str { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .v-chip.spec { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+    .v-chip.proj { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
+    .v-chip:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      filter: brightness(0.96);
+    }
+    .v-flow-arrow {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.80rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 2px 0;
+    }
+    .v-flow-arrow svg {
+      width: 16px;
+      height: 16px;
+      fill: #94a3b8;
+    }
+    /* ── 계통도(Tree) 스타일 ── */
+    .v-tree-category {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .v-tree-cat-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .v-tree-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+    .v-tree-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .v-tree-subtitle {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+    .v-tree-pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      padding-left: 14px;
+      border-left: 2px dashed #cbd5e1;
+      margin-left: 8px;
+    }
+    .v-tree-node {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 9px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .v-tree-node::before {
+      content: '';
+      position: absolute;
+      left: -19px;
+      top: 14px;
+      width: 10px;
+      height: 2px;
+      background: #cbd5e1;
+    }
+    .v-tree-node:hover {
+      background: var(--white);
+      border-color: var(--blue);
+      box-shadow: 0 2px 8px rgba(49, 130, 246, 0.12);
+    }
+    .v-tree-node-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .v-tree-stage {
+      font-size: 0.70rem;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .v-tree-page {
+      font-size: 0.70rem;
+      color: #94a3b8;
+    }
+    .v-tree-node-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .v-tree-node-example {
+      font-size: 0.76rem;
+      color: #475569;
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .v-tree-node-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.72rem;
+      color: var(--blue);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -801,11 +1069,12 @@
     </div>
   </header>
 
-  <!-- 메인 상단 탭 (상담 vs 본문 찾기 vs 문법 로드맵) -->
+  <!-- 메인 상단 탭 (상담 vs 본문 찾기 vs 한눈에 보는 로드맵 vs 문법 상세) -->
   <nav id="main-nav">
     <button class="nav-tab active" data-tab="chat">선택과목 상담</button>
     <button class="nav-tab" data-tab="recommend">맞춤 본문 찾기</button>
-    <button class="nav-tab" data-tab="grammar">3개년 문법 로드맵</button>
+    <button class="nav-tab" data-tab="visual">한눈에 보는 로드맵</button>
+    <button class="nav-tab" data-tab="grammar">단원별 문법 상세</button>
   </nav>
 
   <!-- [VIEW 1] 선택과목 상담 챗봇 -->
@@ -880,7 +1149,412 @@
     </div>
   </div>
 
-  <!-- [VIEW 3] 3개년 영어 문법 로드맵 -->
+  <!-- [VIEW 3] 한눈에 보는 3개년 비주얼 로드맵 -->
+  <div id="visual-view" class="view-container hidden">
+    <div id="visual-area">
+      <!-- 안내 멘트 상자 -->
+      <div class="grammar-notice-box">
+        <div class="grammar-notice-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d4ed8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          고등학교 3개년 시각적 로드맵 안내
+        </div>
+        <div class="grammar-notice-desc">
+          교과서 문법 파트(Structures / Grammar in Reading)에 나오는 순서대로 정리되었으며 실제 수업과는 차이가 있을 수 있습니다.
+        </div>
+      </div>
+
+      <!-- 모드 전환 (교육과정 연계도 vs 문법 4대 계통도) -->
+      <div class="visual-mode-switch">
+        <button class="v-mode-btn active" data-vmode="flow">🗺️ 3개년 교육과정 연계도</button>
+        <button class="v-mode-btn" data-vmode="tree">🌳 문법 4대 핵심 계통도</button>
+      </div>
+
+      <!-- [모드 1] 3개년 교육과정 연계도 영역 -->
+      <div id="v-flow-container" class="visual-timeline-flow">
+        <!-- STEP 1: 1학년 공통 -->
+        <div class="v-step-card grade1">
+          <div class="v-step-top">
+            <span class="v-step-badge">1단계 · 1학년 필수 (공통)</span>
+            <span class="v-step-eval">내신 5등급제 상대평가</span>
+          </div>
+          <div class="v-step-title">1학년: 공통영어1 (1학기) ➔ 공통영어2 (2학기)</div>
+          <div class="v-step-desc">고교 영어의 기본기를 다지는 단계로, 관계대명사와 분사구문, 5형식 문형, 가정법 및 과거완료 등 필수 통사 체계를 완성합니다. (미래엔 김선영)</div>
+          
+          <div class="v-step-box">
+            <div class="v-step-subname">📘 공통영어1 (1학년 1학기)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip rel" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p26.jpg" data-title="공통영어1 · U1 관계대명사 (p.26)">U1 관계대명사(who/which/that)</span>
+              <span class="v-chip part" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p27.jpg" data-title="공통영어1 · U1 분사구문 (p.27)">U1 분사구문(현재/과거분사)</span>
+              <span class="v-chip spec" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p48.jpg" data-title="공통영어1 · U2 as if 가정법 (p.48)">U2 as if 가정법</span>
+              <span class="v-chip str" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p48.jpg" data-title="공통영어1 · U2 how 간접의문문 (p.48)">U2 how 간접의문 어순</span>
+              <span class="v-chip spec" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p70.jpg" data-title="공통영어1 · U3 부정어 도치 (p.70)">U3 부정어·장소부사구 도치</span>
+              <span class="v-chip str" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p71.jpg" data-title="공통영어1 · U3 가주어-진주어 (p.71)">U3 가주어 It ~ for ~ to부정사</span>
+              <span class="v-chip part" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p92.jpg" data-title="공통영어1 · U4 with 부대상황 (p.92)">U4 with + 명사 + 분사</span>
+              <span class="v-chip str" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p93.jpg" data-title="공통영어1 · U4 상관접속사 (p.93)">U4 상관접속사(neither/not A but B)</span>
+            </div>
+          </div>
+
+          <div class="v-step-box">
+            <div class="v-step-subname">📗 공통영어2 (1학년 2학기)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip str" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p26.jpg" data-title="공통영어2 · U1 5형식 to-v (p.26)">U1 5형식 목적격보어 to-v</span>
+              <span class="v-chip spec" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p27.jpg" data-title="공통영어2 · U1 과거완료 시제 (p.27)">U1 과거완료 시제(had p.p.)</span>
+              <span class="v-chip spec" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p48.jpg" data-title="공통영어2 · U2 조동사 have p.p. (p.48)">U2 조동사 + have p.p.(추측/후회)</span>
+              <span class="v-chip spec" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p49.jpg" data-title="공통영어2 · U2 당위성 that절 (p.49)">U2 주장·제안 that절 (should) 원형</span>
+              <span class="v-chip str" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p70.jpg" data-title="공통영어2 · U3 접속사 vs 전치사 (p.70)">U3 접속사 vs 전치사(because/while)</span>
+              <span class="v-chip rel" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p71.jpg" data-title="공통영어2 · U3 계속적 관계사 (p.71)">U3 계속적 관계대명사(, which)</span>
+              <span class="v-chip str" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p92.jpg" data-title="공통영어2 · U4 가목적어-진목적어 (p.92)">U4 가목적어 it ~ 진목적어 to-v</span>
+              <span class="v-chip rel" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p93.jpg" data-title="공통영어2 · U4 동격 that절 (p.93)">U4 동격의 접속사 that</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 연결 화살표 -->
+        <div class="v-flow-arrow">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          <span>2학년 일반선택 심화 독해 및 에세이 영작문으로 확장</span>
+        </div>
+
+        <!-- STEP 2: 2학년 일반선택 -->
+        <div class="v-step-card grade2">
+          <div class="v-step-top">
+            <span class="v-step-badge">2단계 · 2학년 선택 (일반선택)</span>
+            <span class="v-step-eval">내신 5등급제 상대평가</span>
+          </div>
+          <div class="v-step-title">2학년: 영어Ⅰ (1학기) ➔ 영어 독해와 작문 (2학기)</div>
+          <div class="v-step-desc">수능 및 학술 영어의 기초를 닦고, 수동태·분사 후치수식·It is that 강조·양보절 등 긴 호흡의 학술 지문 독해와 영작문(Writing) 능력을 체계화합니다.</div>
+          
+          <div class="v-step-box">
+            <div class="v-step-subname">📙 영어Ⅰ (2학년 1학기 · 엔이능률 오선영)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p25.jpg" data-title="영어Ⅰ · U1 5형식 to-v (p.25)">U1 5형식 to-v(advise/expect)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p25.jpg" data-title="영어Ⅰ · U1 so that 결과 (p.25)">U1 so ~ that 결과 구문</span>
+              <span class="v-chip spec" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p51.jpg" data-title="영어Ⅰ · U2 조건절 시제 (p.51)">U2 조건 부사절 시제(현재 대용)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p51.jpg" data-title="영어Ⅰ · U2 of ~ing 동명사 (p.51)">U2 관용적 전치사+동명사(of ~ing)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p77.jpg" data-title="영어Ⅰ · U3 의문사+to-v (p.77)">U3 의문사 + to부정사 명사구</span>
+              <span class="v-chip rel" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p77.jpg" data-title="영어Ⅰ · U3 who/that 수식절 (p.77)">U3 한정적 관계대명사(who/that)</span>
+              <span class="v-chip part" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p103.jpg" data-title="영어Ⅰ · U4 접속사 남은 분사구문 (p.103)">U4 접속사 남은 분사구문(when asked)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p103.jpg" data-title="영어Ⅰ · U4 대동사 do so (p.103)">U4 대동사(do so / doing so)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p129.jpg" data-title="영어Ⅰ · U5 준사역동사 help (p.129)">U5 준사역동사 help + (to)원형</span>
+              <span class="v-chip spec" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p129.jpg" data-title="영어Ⅰ · U5 간접화법 ask if (p.129)">U5 의문사 없는 간접화법(ask if/whether)</span>
+            </div>
+          </div>
+
+          <div class="v-step-box">
+            <div class="v-step-subname">📕 영어 독해와 작문 (2학년 2학기 · 미래엔 김대진)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip str" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p26.jpg" data-title="영독작 · U1 원인 5형식 (p.26)">U1 원인 5형식(cause/allow + to-v)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p26.jpg" data-title="영독작 · U1 양보/조건 접속사 (p.26)">U1 양보/조건 접속사(even though/unless)</span>
+              <span class="v-chip rel" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p50.jpg" data-title="영독작 · U2 동격 that절 (p.50)">U2 동격의 접속사 that</span>
+              <span class="v-chip part" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p50.jpg" data-title="영독작 · U2 후치수식 분사구 (p.50)">U2 명사 후치수식 분사구(~ing/p.p.)</span>
+              <span class="v-chip spec" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p74.jpg" data-title="영독작 · U3 현재완료 수동태 (p.74)">U3 현재완료 수동태(have been p.p.)</span>
+              <span class="v-chip part" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p74.jpg" data-title="영독작 · U3 결과 분사구문 (p.74)">U3 결과/동시동작 분사구문(~ing)</span>
+              <span class="v-chip rel" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p98.jpg" data-title="영독작 · U4 계속적 관계사 (p.98)">U4 계속적 관계사(, who / , which)</span>
+              <span class="v-chip spec" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p98.jpg" data-title="영독작 · U4 It is that 강조 (p.98)">U4 It is ~ that 강조 구문</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p122.jpg" data-title="영독작 · U5 의문사+to-v (p.122)">U5 전치사 목적어 의문사+to-v</span>
+              <span class="v-chip spec" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p122.jpg" data-title="영독작 · U5 should have p.p. (p.122)">U5 조동사 have p.p.(should/must have)</span>
+              <span class="v-chip str" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p146.jpg" data-title="영독작 · U6 상관접속사 병렬 (p.146)">U6 상관접속사 병렬(either/not only)</span>
+              <span class="v-chip rel" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p146.jpg" data-title="영독작 · U6 whether/if 명사절 (p.146)">U6 명사절 접속사 whether / if</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 연결 화살표 -->
+        <div class="v-flow-arrow">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+          <span>3학년 진로·융합 고난도 실전 및 글로벌 프로젝트로 완성</span>
+        </div>
+
+        <!-- STEP 3: 3학년 진로·융합 -->
+        <div class="v-step-card grade3">
+          <div class="v-step-top">
+            <span class="v-step-badge">3단계 · 3학년 선택 (일반/진로/융합)</span>
+            <span class="v-step-eval">일반선택 5등급제 / 진로선택 A·B·C 성취평가</span>
+          </div>
+          <div class="v-step-title">3학년: 영어Ⅱ (1학기) & 세계 문화와 영어 (1학기)</div>
+          <div class="v-step-desc">수능 최고난도 어법 문항을 완벽히 정복하고, 3개년 동안 습득한 영어 역량을 바탕으로 글로벌 문화 비교 탐구 및 영문 프로젝트를 수행합니다.</div>
+          
+          <div class="v-step-box">
+            <div class="v-step-subname">📘 영어Ⅱ (3학년 1학기 · 엔이능률 오선영)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p25.jpg" data-title="영어Ⅱ · U1 과거완료 수동태 (p.25)">U1 과거완료 수동태(had been p.p.)</span>
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p25.jpg" data-title="영어Ⅱ · U1 시제 일치 (p.25)">U1 주절-종속절 시제 일치</span>
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p51.jpg" data-title="영어Ⅱ · U2 전치사구 수단 강조 (p.51)">U2 전치사구/수단 강조(It is by ~ that)</span>
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p51.jpg" data-title="영어Ⅱ · U2 부사구 강조 (p.51)">U2 장소·시간 부사구 강조</span>
+              <span class="v-chip rel" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p77.jpg" data-title="영어Ⅱ · U3 복합관계사 (p.77)">U3 복합관계사(whoever/whatever)</span>
+              <span class="v-chip rel" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p77.jpg" data-title="영어Ⅱ · U3 전치사+관계사 (p.77)">U3 전치사 + 관계대명사 구조</span>
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p103.jpg" data-title="영어Ⅱ · U4 당위성 that절 (p.103)">U4 제안·요구 that절 (should) 원형</span>
+              <span class="v-chip spec" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p103.jpg" data-title="영어Ⅱ · U4 당위 vs 사실 비교 (p.103)">U4 당위성 vs 사실 주장 판단</span>
+              <span class="v-chip rel" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p129.jpg" data-title="영어Ⅱ · U5 동격 that절 (p.129)">U5 동격의 접속사 that</span>
+              <span class="v-chip rel" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p129.jpg" data-title="영어Ⅱ · U5 전치사 잔류 생략 (p.129)">U5 전치사 잔류 관계사 생략</span>
+            </div>
+          </div>
+
+          <div class="v-step-box">
+            <div class="v-step-subname">🌍 세계 문화와 영어 (3학년 1학기 · 비상 권혁승)</div>
+            <div class="v-chips-grid">
+              <span class="v-chip proj" data-img="/pages_cache/3학년_1학기_세계_문화와_영어_비상_p8.jpg" data-title="세계 문화와 영어 · World Englishes (p.8)">World Englishes 상호문화 의사소통</span>
+              <span class="v-chip proj" data-img="/pages_cache/3학년_1학기_세계_문화와_영어_비상_p6.jpg" data-title="세계 문화와 영어 · 인포그래픽 프로젝트 (p.6)">대륙별 문화 비교 인포그래픽 프로젝트</span>
+              <span class="v-chip proj" data-img="/pages_cache/3학년_1학기_세계_문화와_영어_비상_p2.jpg" data-title="세계 문화와 영어 · 글로벌 프로젝트 (p.2)">실생활 영문 기획서·보고서 탐구</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [모드 2] 문법 4대 핵심 계통도 영역 -->
+      <div id="v-tree-container" class="visual-timeline-flow hidden">
+        <!-- 계통 1: 관계사 체계 -->
+        <div class="v-tree-category">
+          <div class="v-tree-cat-header">
+            <div class="v-tree-icon" style="background:#eff6ff; color:#2563eb;">🔗</div>
+            <div>
+              <div class="v-tree-title">1. 관계사(Relative Clauses) 발전 계통</div>
+              <div class="v-tree-subtitle">기본 격 구별 ➔ 계속적 용법 ➔ 복합관계사 ➔ 전치사 결합으로 진화</div>
+            </div>
+          </div>
+          <div class="v-tree-pipeline">
+            <div class="v-tree-node" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p26.jpg" data-title="공통영어1 · U1 관계대명사 (p.26)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">1단계 (고1 1학기)</span>
+                <span class="v-tree-page">공통영어1 p.26</span>
+              </div>
+              <div class="v-tree-node-name">주격·목적격 관계대명사 (who, which, that)</div>
+              <div class="v-tree-node-example">“The athlete who broke the world record has inspired other players.”</div>
+              <div class="v-tree-node-action"><span>선행사 종류와 문장 내 역할에 따른 격 결정 및 목적격 생략</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p71.jpg" data-title="공통영어2 · U3 계속적 관계사 (p.71)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">2단계 (고1 2학기)</span>
+                <span class="v-tree-page">공통영어2 p.71</span>
+              </div>
+              <div class="v-tree-node-name">관계대명사 계속적 용법 (, which)</div>
+              <div class="v-tree-node-example">“Sarah hosted a personal gallery with her photographs, which was her dream.”</div>
+              <div class="v-tree-node-action"><span>콤마 뒤 앞 문장 전체나 선행사에 부가 설명 덧붙이기 (that 불가)</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p98.jpg" data-title="영독작 · U4 계속적 관계사 심화 (p.98)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">3단계 (고2 2학기)</span>
+                <span class="v-tree-page">영독작 p.98</span>
+              </div>
+              <div class="v-tree-node-name">계속적 용법 심화 (, who / , which)</div>
+              <div class="v-tree-node-example">“R. J. Palacio’s novel Wonder is a touching story about August, who looks different...”</div>
+              <div class="v-tree-node-action"><span>인물 및 사물 대상 학술 에세이에서의 유려한 계속적 수식 확장</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p77.jpg" data-title="영어Ⅱ · U3 복합관계사 (p.77)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">4단계 (고3 1학기)</span>
+                <span class="v-tree-page">영어Ⅱ p.77</span>
+              </div>
+              <div class="v-tree-node-name">복합관계대명사 (whoever / whatever)</div>
+              <div class="v-tree-node-example">“Whoever wants to cut down on sugar will love this menu. (= Anyone who wants to)”</div>
+              <div class="v-tree-node-action"><span>선행사를 자체에 포함하여 명사절·양보부사절을 이끄는 고급 구조</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p129.jpg" data-title="영어Ⅱ · U5 전치사 잔류 생략 (p.129)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">5단계 (고3 1학기)</span>
+                <span class="v-tree-page">영어Ⅱ p.129</span>
+              </div>
+              <div class="v-tree-node-name">전치사가 뒤에 남는 관계사 생략 & 전치사+관계사</div>
+              <div class="v-tree-node-example">“The position you applied for has already been filled. (= for which you applied)”</div>
+              <div class="v-tree-node-action"><span>수능 고난도 어법 빈출: 전치사 잔류 생략 vs 전치사 전진 배치</span> <span>확인 📖</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 계통 2: 분사 및 준동사 체계 -->
+        <div class="v-tree-category">
+          <div class="v-tree-cat-header">
+            <div class="v-tree-icon" style="background:#ecfdf5; color:#059669;">🌊</div>
+            <div>
+              <div class="v-tree-title">2. 분사·준동사(Participles) 발전 계통</div>
+              <div class="v-tree-subtitle">기본 분사구문 ➔ with 부대상황 ➔ 후치 수식 ➔ 결과 분사구문으로 심화</div>
+            </div>
+          </div>
+          <div class="v-tree-pipeline">
+            <div class="v-tree-node" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p27.jpg" data-title="공통영어1 · U1 분사구문 (p.27)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">1단계 (고1 1학기)</span>
+                <span class="v-tree-page">공통영어1 p.27</span>
+              </div>
+              <div class="v-tree-node-name">현재분사(~ing)와 과거분사(p.p.) 분사구문</div>
+              <div class="v-tree-node-example">“Powered by electricity, this car produces fewer pollutants than a gasoline one.”</div>
+              <div class="v-tree-node-action"><span>접속사·주어를 생략하고 동사를 분사로 축약하여 시간·이유·부대상황 표현</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p92.jpg" data-title="공통영어1 · U4 with 부대상황 (p.92)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">2단계 (고1 1학기)</span>
+                <span class="v-tree-page">공통영어1 p.92</span>
+              </div>
+              <div class="v-tree-node-name">with + 명사 + 분사 (동시동작 / 부대상황)</div>
+              <div class="v-tree-node-example">“On Sports Day, I ran as fast as I could, with all my classmates encouraging me.”</div>
+              <div class="v-tree-node-action"><span>명사와 분사의 능동(~ing)·수동(p.p.) 관계에 따른 동시 상태 묘사</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p103.jpg" data-title="영어Ⅰ · U4 접속사 남은 분사구문 (p.103)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">3단계 (고2 1학기)</span>
+                <span class="v-tree-page">영어Ⅰ p.103</span>
+              </div>
+              <div class="v-tree-node-name">접속사가 생략되지 않은 분사구문 (when asked)</div>
+              <div class="v-tree-node-example">“Please cooperate with our flight attendants when asked to do something.”</div>
+              <div class="v-tree-node-action"><span>시간/조건의 의미를 명확히 밝히기 위해 접속사를 분사 앞에 유지</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p50.jpg" data-title="영독작 · U2 후치수식 분사구 (p.50)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">4단계 (고2 2학기)</span>
+                <span class="v-tree-page">영독작 p.50</span>
+              </div>
+              <div class="v-tree-node-name">명사를 뒤에서 수식하는 분사구 (후치 수식)</div>
+              <div class="v-tree-node-example">“The boy injured in the accident / The woman giving first aid will take him...”</div>
+              <div class="v-tree-node-action"><span>관계대명사+be동사 축약으로 명사 뒤에서 직접 수식하는 학술 구문</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p74.jpg" data-title="영독작 · U3 결과 분사구문 (p.74)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">5단계 (고2 2학기)</span>
+                <span class="v-tree-page">영독작 p.74</span>
+              </div>
+              <div class="v-tree-node-name">결과 및 파급 효과 분사구문 (~ing)</div>
+              <div class="v-tree-node-example">“These images pose considerable risks, raising concerns about their potential misuse.”</div>
+              <div class="v-tree-node-action"><span>앞 절 전체 내용에 따른 결과·영향을 콤마 뒤 ~ing로 세련되게 도출</span> <span>확인 📖</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 계통 3: 5형식 및 문형 체계 -->
+        <div class="v-tree-category">
+          <div class="v-tree-cat-header">
+            <div class="v-tree-icon" style="background:#fef3c7; color:#b45309;">⚖️</div>
+            <div>
+              <div class="v-tree-title">3. 5형식 문형(Sentence Structures) 발전 계통</div>
+              <div class="v-tree-subtitle">기본 to부정사 목적격보어 ➔ 가목적어 ➔ 준사역동사 ➔ 원인·유도 구문으로 확장</div>
+            </div>
+          </div>
+          <div class="v-tree-pipeline">
+            <div class="v-tree-node" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p26.jpg" data-title="공통영어2 · U1 5형식 to-v (p.26)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">1단계 (고1 2학기)</span>
+                <span class="v-tree-page">공통영어2 p.26</span>
+              </div>
+              <div class="v-tree-node-name">목적격 보어로 to부정사를 취하는 동사</div>
+              <div class="v-tree-node-example">“His friends encouraged him to attend the music festival.”</div>
+              <div class="v-tree-node-action"><span>encourage, advise, allow, ask, expect 등 타인의 행동 유도 동사</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p92.jpg" data-title="공통영어2 · U4 가목적어-진목적어 (p.92)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">2단계 (고1 2학기)</span>
+                <span class="v-tree-page">공통영어2 p.92</span>
+              </div>
+              <div class="v-tree-node-name">가목적어-진목적어 구문 (find/consider it ... to-v)</div>
+              <div class="v-tree-node-example">“Our team members consider it important to arrive on time for meetings.”</div>
+              <div class="v-tree-node-action"><span>긴 to부정사/that절 목적어를 it으로 대신하고 문장 끝으로 후치</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p129.jpg" data-title="영어Ⅰ · U5 준사역동사 help (p.129)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">3단계 (고2 1학기)</span>
+                <span class="v-tree-page">영어Ⅰ p.129</span>
+              </div>
+              <div class="v-tree-node-name">준사역동사 help + 목적어 + (to) 동사원형</div>
+              <div class="v-tree-node-example">“This brand-new product will help your clothes regain their original brightness.”</div>
+              <div class="v-tree-node-action"><span>목적격 보어로 원형부정사와 to부정사를 모두 취하는 특성 마스터</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p26.jpg" data-title="영독작 · U1 원인 5형식 (p.26)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">4단계 (고2 2학기)</span>
+                <span class="v-tree-page">영독작 p.26</span>
+              </div>
+              <div class="v-tree-node-name">원인·유발 5형식 구문 (cause/allow/persuade + O + to-v)</div>
+              <div class="v-tree-node-example">“Prime Minister Smith’s health condition caused him to resign.”</div>
+              <div class="v-tree-node-action"><span>사물 주어가 원인이 되어 결과를 낳는 물주구문과 5형식의 결합</span> <span>확인 📖</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 계통 4: 특수구문 체계 -->
+        <div class="v-tree-category">
+          <div class="v-tree-cat-header">
+            <div class="v-tree-icon" style="background:#f5f3ff; color:#7c3aed;">⚡</div>
+            <div>
+              <div class="v-tree-title">4. 특수구문·강조·시제 발전 계통</div>
+              <div class="v-tree-subtitle">가정법/도치 ➔ 조동사 완료 ➔ 강조 구문 ➔ 당위성 동사원형 및 시제 일치</div>
+            </div>
+          </div>
+          <div class="v-tree-pipeline">
+            <div class="v-tree-node" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p48.jpg" data-title="공통영어1 · U2 as if 가정법 (p.48)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">1단계 (고1 1학기)</span>
+                <span class="v-tree-page">공통영어1 p.48</span>
+              </div>
+              <div class="v-tree-node-name">as if 가정법 과거 / 과거완료</div>
+              <div class="v-tree-node-example">“He even starts to think as if he were a dog.”</div>
+              <div class="v-tree-node-action"><span>현재 사실과 반대되는 가정을 '마치 ~인 것처럼' 표현</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/1학년_1학기_공통영어1_미래엔_p70.jpg" data-title="공통영어1 · U3 부정어 도치 (p.70)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">2단계 (고1 1학기)</span>
+                <span class="v-tree-page">공통영어1 p.70</span>
+              </div>
+              <div class="v-tree-node-name">부정어구 & 장소부사구 도치</div>
+              <div class="v-tree-node-example">“Never did she dream of becoming the world’s most popular movie star.”</div>
+              <div class="v-tree-node-action"><span>Never, Rarely 등 부정어 문두 진출 시 조동사+주어+본동사 도치</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/1학년_2학기_공통영어2_미래엔_p48.jpg" data-title="공통영어2 · U2 조동사 have p.p. (p.48)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">3단계 (고1 2학기)</span>
+                <span class="v-tree-page">공통영어2 p.48</span>
+              </div>
+              <div class="v-tree-node-name">조동사 + have p.p. (과거에 대한 추측·후회)</div>
+              <div class="v-tree-node-example">“The company must have been sure / should have asked Maori translators...”</div>
+              <div class="v-tree-node-action"><span>must have(~했음에 틀림없다) vs should have(~했어야 했는데) 구별</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/2학년_2학기_영어독해와작문_미래엔_p98.jpg" data-title="영독작 · U4 It is that 강조 (p.98)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">4단계 (고2 2학기)</span>
+                <span class="v-tree-page">영독작 p.98</span>
+              </div>
+              <div class="v-tree-node-name">It is ~ that 강조 구문 (명사/부사 강조)</div>
+              <div class="v-tree-node-example">“It is kindness that connects people together in our school community.”</div>
+              <div class="v-tree-node-action"><span>주어, 목적어, 부사구를 It is와 that 사이에 배치하여 강렬한 인상 부여</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p51.jpg" data-title="영어Ⅱ · U2 전치사구 수단 강조 (p.51)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">5단계 (고3 1학기)</span>
+                <span class="v-tree-page">영어Ⅱ p.51</span>
+              </div>
+              <div class="v-tree-node-name">전치사구/수단 강조 구문 (It is by ~ that ...)</div>
+              <div class="v-tree-node-example">“It is by working together that we can create a sustainable future!”</div>
+              <div class="v-tree-node-action"><span>방법·수단을 나타내는 전치사구를 문두에서 강조하는 고난도 어법</span> <span>확인 📖</span></div>
+            </div>
+
+            <div class="v-tree-node" data-img="/pages_cache/3학년_1학기_영어Ⅱ_능률_p103.jpg" data-title="영어Ⅱ · U4 당위성 should 동사원형 (p.103)">
+              <div class="v-tree-node-top">
+                <span class="v-tree-stage">6단계 (고3 1학기)</span>
+                <span class="v-tree-page">영어Ⅱ p.103</span>
+              </div>
+              <div class="v-tree-node-name">요구·제안 that절 (should) 동사원형 vs 직설법 사실 비교</div>
+              <div class="v-tree-node-example">“The guard requested that I (should) show my ID / insisted that everyone attend...”</div>
+              <div class="v-tree-node-action"><span>주절 과거 시제에도 that절에 should 생략 원형을 쓰는 수능 최고 빈출</span> <span>확인 📖</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [VIEW 4] 단원별 문법 상세 로드맵 -->
   <div id="grammar-view" class="view-container hidden">
     <div id="grammar-area">
       <!-- 안내 멘트 상자 -->
@@ -942,6 +1616,7 @@
 
   const chatView = document.getElementById('chat-view');
   const recommendView = document.getElementById('recommend-view');
+  const visualView = document.getElementById('visual-view');
   const grammarView = document.getElementById('grammar-view');
   const grammarRoadmapContainer = document.getElementById('grammar-roadmap-container');
   const grammarSearchInput = document.getElementById('grammar-search-input');
@@ -954,7 +1629,7 @@
   const recReportContent = document.getElementById('rec-report-content');
   const recCandidatesList = document.getElementById('rec-candidates-list');
 
-  /* ── 메인 상단 탭 전환 (상담 vs 본문 찾기 vs 문법 로드맵) ── */
+  /* ── 메인 상단 탭 전환 (상담 vs 본문 찾기 vs 한눈에 보는 로드맵 vs 문법 상세) ── */
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -964,18 +1639,55 @@
       if (targetTab === 'chat') {
         chatView.classList.remove('hidden');
         recommendView.classList.add('hidden');
+        visualView.classList.add('hidden');
         grammarView.classList.add('hidden');
       } else if (targetTab === 'recommend') {
         chatView.classList.add('hidden');
         recommendView.classList.remove('hidden');
+        visualView.classList.add('hidden');
+        grammarView.classList.add('hidden');
+      } else if (targetTab === 'visual') {
+        chatView.classList.add('hidden');
+        recommendView.classList.add('hidden');
+        visualView.classList.remove('hidden');
         grammarView.classList.add('hidden');
       } else if (targetTab === 'grammar') {
         chatView.classList.add('hidden');
         recommendView.classList.add('hidden');
+        visualView.classList.add('hidden');
         grammarView.classList.remove('hidden');
         if (!grammarDataLoaded) {
           loadGrammarRoadmap();
         }
+      }
+    });
+  });
+
+  /* ── 비주얼 로드맵 모드 전환 (연계도 vs 계통도) 및 모달 바인딩 ── */
+  const vFlowContainer = document.getElementById('v-flow-container');
+  const vTreeContainer = document.getElementById('v-tree-container');
+  document.querySelectorAll('.v-mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.v-mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.dataset.vmode;
+      if (mode === 'flow') {
+        if (vFlowContainer) vFlowContainer.classList.remove('hidden');
+        if (vTreeContainer) vTreeContainer.classList.add('hidden');
+      } else {
+        if (vFlowContainer) vFlowContainer.classList.add('hidden');
+        if (vTreeContainer) vTreeContainer.classList.remove('hidden');
+      }
+    });
+  });
+
+  document.querySelectorAll('.v-chip, .v-tree-node').forEach(el => {
+    el.addEventListener('click', () => {
+      if (el.dataset.img) {
+        modalTitle.textContent = el.dataset.title || '교과서 문법 원본 페이지';
+        modalBody.innerHTML = `<img src="${el.dataset.img}" alt="교과서 문법 원본 사진" loading="lazy" />`;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
     });
   });
