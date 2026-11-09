@@ -779,11 +779,15 @@
         data.candidates.forEach((c, idx) => {
           const card = document.createElement('div');
           card.className = 'rec-card-item';
+          const pLabel = c.page_label || `p.${c.page}`;
+          const uTitle = c.unit_title ? `[${c.unit_title}] ` : '';
+          const passTitle = c.passage_title ? ` <span style="font-weight:normal;color:var(--text);font-size:0.88rem;">- ${escapeHtml(c.passage_title)}</span>` : '';
+
           card.innerHTML = `
-            <div class="rec-card-badge">${c.grade || '전체'} · ${c.subject} (p.${c.page})</div>
-            <div class="rec-card-title">${idx + 1}. ${c.subject} · ${c.topic || ''}</div>
-            <div class="rec-card-quote">${escapeHtml(c.text.slice(0, 200))}...</div>
-            ${c.image_url ? `<button class="rec-view-img-btn" data-img="${c.image_url}" data-title="${c.subject} · p.${c.page}">교과서 원본 페이지 확인</button>` : ''}
+            <div class="rec-card-badge">${c.grade || '전체'} · ${c.subject} (${pLabel} 본문 시작)</div>
+            <div class="rec-card-title">${idx + 1}. ${uTitle}${c.subject}${passTitle}</div>
+            <div class="rec-card-quote">${escapeHtml(c.text.slice(0, 220))}...</div>
+            ${c.image_url ? `<button class="rec-view-img-btn" data-img="${c.image_url}" data-title="${c.subject} · ${pLabel} 본문 원문">교과서 본문 원문 시작 페이지 (${pLabel}) 확인</button>` : ''}
           `;
           recCandidatesList.appendChild(card);
         });

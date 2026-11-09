@@ -251,16 +251,24 @@ def recommend(req: RecommendRequest):
     candidates = []
     if rec_results and rec_results["documents"] and rec_results["documents"][0]:
         for d, m in zip(rec_results["documents"][0], rec_results["metadatas"][0]):
-            ip = m.get("image_path", "")
-            filename = os.path.basename(ip.replace("\\", "/")) if ip else ""
+            # 본문 원문 시작 페이지 및 대표 이미지 우선 적용
+            start_page = m.get("passage_start_page") or m.get("page", "?")
+            end_page = m.get("passage_end_page")
+            page_label = f"p.{start_page}~{end_page}" if end_page and end_page != start_page else f"p.{start_page}"
+
+            cover_img = m.get("passage_cover_image") or m.get("image_path", "")
+            filename = os.path.basename(cover_img.replace("\\", "/")) if cover_img else ""
             img_url = f"/pages_cache/{filename}" if filename else ""
+
             candidates.append({
                 "subject": m.get("subject_name", "영어 교과서"),
                 "unit_number": m.get("unit_number", 0),
                 "unit_title": m.get("unit_title", ""),
+                "passage_title": m.get("passage_title", ""),
                 "grade": m.get("grade", ""),
                 "semester": m.get("semester", ""),
-                "page": m.get("page", "?"),
+                "page": start_page,
+                "page_label": page_label,
                 "publisher": m.get("publisher", ""),
                 "topic": m.get("topic", ""),
                 "text": d,
@@ -280,9 +288,10 @@ def recommend(req: RecommendRequest):
 """
     for idx, c in enumerate(candidates):
         u_info = f"[{c['unit_title']}]" if c.get('unit_title') else ""
+        p_title = f" <{c['passage_title']}>" if c.get('passage_title') else ""
         prompt_for_ai += f"""
 --- 후보 {idx+1} ---
-- 교과서: {c['subject']} {u_info} (p.{c['page']})
+- 교과서: {c['subject']} {u_info}{p_title} ({c['page_label']})
 - 내용 발췌: {c['text'][:300]}
 """
 
