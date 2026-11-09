@@ -81,12 +81,51 @@ def search_recommended_passages(query_text: str, grade_filter: str = "전체", n
             {"grade": {"$in": ["1학년", "2학년", "3학년"]}}
         ]}
 
-    results = collection.query(
+    # 넉넉하게 fetch → 중복 제거 후 n_results개 반환
+    fetch_n = max(n_results * 6, 20)
+    raw = collection.query(
         query_embeddings=[query_vector],
-        n_results=n_results,
+        n_results=fetch_n,
         where=where_cond
     )
-    return results
+
+    # ── 중복 제거: 동일 교과서 내 ±10 페이지는 같은 본문으로 간주 ──
+    seen: list[tuple[str, int]] = []   # (subject_name, page)
+    dedup_ids, dedup_docs, dedup_metas, dedup_dists = [], [], [], []
+
+    ids    = raw["ids"][0] if raw["ids"] else []
+    docs   = raw["documents"][0] if raw["documents"] else []
+    metas  = raw["metadatas"][0] if raw["metadatas"] else []
+    dists  = raw["distances"][0] if raw.get("distances") else [0.0] * len(ids)
+
+    for cid, doc, meta, dist in zip(ids, docs, metas, dists):
+        subj = meta.get("subject_name", "")
+        page = int(meta.get("page", 0))
+
+        # 같은 교과서에서 이미 선택한 항목과 10쪽 이내이면 skip
+        is_dup = any(
+            s == subj and abs(p - page) <= 10
+            for s, p in seen
+        )
+        if is_dup:
+            continue
+
+        seen.append((subj, page))
+        dedup_ids.append(cid)
+        dedup_docs.append(doc)
+        dedup_metas.append(meta)
+        dedup_dists.append(dist)
+
+        if len(dedup_ids) >= n_results:
+            break
+
+    # ChromaDB query 반환 형태로 맞춰서 반환
+    return {
+        "ids": [dedup_ids],
+        "documents": [dedup_docs],
+        "metadatas": [dedup_metas],
+        "distances": [dedup_dists],
+    }
 
 SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과의 공식 모바일 챗봇입니다.
 
