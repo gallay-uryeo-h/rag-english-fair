@@ -182,8 +182,7 @@ def chat(req: ChatRequest):
     for src in sources:
         ip = src.get("image_path", "")
         if ip:
-            # pages_cache\공통영어1_p5.png → /pages_cache/공통영어1_p5.png
-            filename = os.path.basename(ip)
+            filename = os.path.basename(ip.replace("\\", "/"))
             src["image_url"] = f"/pages_cache/{filename}"
         else:
             src["image_url"] = ""
@@ -211,7 +210,8 @@ def recommend(req: RecommendRequest):
     if rec_results and rec_results["documents"] and rec_results["documents"][0]:
         for d, m in zip(rec_results["documents"][0], rec_results["metadatas"][0]):
             ip = m.get("image_path", "")
-            img_url = f"/pages_cache/{os.path.basename(ip)}" if ip else ""
+            filename = os.path.basename(ip.replace("\\", "/")) if ip else ""
+            img_url = f"/pages_cache/{filename}" if filename else ""
             candidates.append({
                 "subject": m.get("subject_name", "영어 교과서"),
                 "grade": m.get("grade", ""),
