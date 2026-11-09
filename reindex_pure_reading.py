@@ -51,13 +51,13 @@ PURE_READING_PASSAGES = [
     ("영어Ⅱ (3학년 1학기 · 능률 오선영)", 5, "Lesson 5: Open Your Mind, Defeat Your Biases", "The Colorful Truth of Ancient Statues", 119, 125),
     ("영어Ⅱ (3학년 1학기 · 능률 오선영)", 6, "Special Lesson: The Model Millionaire", "The Model Millionaire (by Oscar Wilde)", 139, 148),
 
-    # 5. 영어독해와작문 (미래엔 김대진)
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 1, "Lesson 1: Discover Who You Are", "Embrace Failure, Unlock Success (Maya Angelou)", 15, 21),
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 2, "Lesson 2: Embrace the Earth", "Upcycling for a Sustainable Future", 39, 45),
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 3, "Lesson 3: Think Critically", "The Decoy Effect in Everyday Decisions", 63, 69),
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 4, "Lesson 4: Appreciate Art", "Astronomy: How Science Solved an Art Mystery (Monet)", 87, 93),
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 5, "Lesson 5: Money in Our Lives", "The Diderot Effect: Why We Buy Things We Don't Need", 111, 117),
-    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 6, "Lesson 6: Explore the Future", "Imagine Living with AI: Robotics, Asimov & Klara and the Sun", 135, 141),
+    # 5. 영어독해와작문 (미래엔 김대진) - 본문 원문은 Building Vocabulary 다음 페이지(짝수 페이지)부터 시작
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 1, "Lesson 1: Discover Who You Are", "Embrace Failure, Unlock Success (Maya Angelou)", 16, 21),
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 2, "Lesson 2: Embrace the Earth", "Upcycling for a Sustainable Future", 40, 45),
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 3, "Lesson 3: Think Critically", "The Decoy Effect in Everyday Decisions", 64, 69),
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 4, "Lesson 4: Appreciate Art", "Astronomy: How Science Solved an Art Mystery (Monet)", 88, 93),
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 5, "Lesson 5: Money in Our Lives", "The Diderot Effect: Why We Buy Things We Don't Need", 112, 117),
+    ("영어독해와작문 (2학년 2학기 · 미래엔 김대진)", 6, "Lesson 6: Explore the Future", "Imagine Living with AI: Robotics, Asimov & Klara and the Sun", 136, 141),
 
     # 6. 세계 문화와 영어 (비상 권혁승)
     ("세계 문화와 영어 (3학년 1학기 · 비상 권혁승)", 0, "Prologue: Intercultural Communication", "History of English & World Englishes", 10, 15),
@@ -152,3 +152,4 @@ for i in range(0, len(ids), BATCH):
     print(f"  [{min(i+BATCH, len(ids))}/{len(ids)}] 업데이트 완료")
 
 print("\n🎉 모든 교과서의 순수 본문(Reading) 및 원문 시작 페이지 매핑 완료!")
+
