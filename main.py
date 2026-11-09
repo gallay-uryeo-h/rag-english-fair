@@ -256,6 +256,8 @@ def recommend(req: RecommendRequest):
             img_url = f"/pages_cache/{filename}" if filename else ""
             candidates.append({
                 "subject": m.get("subject_name", "영어 교과서"),
+                "unit_number": m.get("unit_number", 0),
+                "unit_title": m.get("unit_title", ""),
                 "grade": m.get("grade", ""),
                 "semester": m.get("semester", ""),
                 "page": m.get("page", "?"),
@@ -277,9 +279,10 @@ def recommend(req: RecommendRequest):
 [검색된 교과서 후보 지문들]:
 """
     for idx, c in enumerate(candidates):
+        u_info = f"[{c['unit_title']}]" if c.get('unit_title') else ""
         prompt_for_ai += f"""
 --- 후보 {idx+1} ---
-- 교과서: {c['subject']} (p.{c['page']})
+- 교과서: {c['subject']} {u_info} (p.{c['page']})
 - 내용 발췌: {c['text'][:300]}
 """
 
