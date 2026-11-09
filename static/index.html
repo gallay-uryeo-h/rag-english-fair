@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>영어과 선택과목 상담</title>
+  <title>영어과 선택과목 상담 & 맞춤 본문 찾기</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -12,6 +12,7 @@
 
     :root {
       --blue: #3182f6;
+      --blue-light: #e8f3ff;
       --bg: #f2f4f6;
       --text: #191f28;
       --sub: #8b95a1;
@@ -43,7 +44,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
       background: var(--white);
@@ -57,7 +58,55 @@
     .bot-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
     .bot-status { font-size: 0.76rem; color: var(--sub); margin-left: 4px; }
 
-    /* ── DB 선택 탭 ── */
+    /* ── 메인 내비게이션 탭 (상담 vs 본문 찾기) ── */
+    #main-nav {
+      display: flex;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--white);
+      border-bottom: 2px solid #f2f4f6;
+      flex-shrink: 0;
+    }
+    .nav-tab {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      background: transparent;
+      color: var(--sub);
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-tab:hover {
+      background: #f8fafc;
+      color: var(--text);
+    }
+    .nav-tab.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    /* ── 뷰 컨테이너 ── */
+    .view-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+    .view-container.hidden {
+      display: none !important;
+    }
+
+    /* ── DB 선택 탭 (챗봇 모드 내부) ── */
     #db-selector {
       display: flex;
       gap: 6px;
@@ -73,7 +122,7 @@
       background: var(--white);
       color: #64748b;
       border-radius: 10px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
@@ -121,7 +170,6 @@
       line-height: 1.6;
       letter-spacing: -0.01em;
       word-break: break-word;
-      white-space: pre-wrap;
     }
     .bubble.user {
       background: var(--bubble-user);
@@ -135,245 +183,381 @@
       border-radius: 18px 18px 18px 4px;
       white-space: normal;
     }
-    .bubble.bot p {
-      margin-bottom: 0.5rem;
-    }
-    .bubble.bot p:last-child {
-      margin-bottom: 0;
-    }
-    .bubble.bot ul, .bubble.bot ol {
-      margin-left: 1.25rem;
-      margin-bottom: 0.5rem;
-      padding-left: 0;
-    }
-    .bubble.bot ul:last-child, .bubble.bot ol:last-child {
-      margin-bottom: 0;
-    }
-    .bubble.bot li {
-      margin-bottom: 0.3rem;
-      line-height: 1.55;
-    }
-    .bubble.bot strong {
+    .bubble.bot p { margin-bottom: 0.5rem; }
+    .bubble.bot p:last-child { margin-bottom: 0; }
+    .bubble.bot ul, .bubble.bot ol { margin-left: 1.25rem; margin-bottom: 0.5rem; }
+    .bubble.bot li { margin-bottom: 0.3rem; line-height: 1.55; }
+    .bubble.bot strong { font-weight: 700; color: #111; }
+
+    /* 출처 번호 칩 */
+    .cite-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 15px;
+      height: 15px;
+      background: #dbeafe;
+      color: var(--blue);
+      border-radius: 3px;
+      font-size: 0.58rem;
       font-weight: 700;
-      color: #111;
+      padding: 0 3px;
+      cursor: pointer;
+      user-select: none;
+      vertical-align: 4px;
+      margin: 0 1px;
+      transition: background 0.15s ease;
     }
-    .bubble.bot code {
-      background: #e2e8f0;
-      padding: 1px 4px;
-      border-radius: 4px;
-      font-size: 0.85em;
-      font-family: monospace;
+    .cite-chip:hover { background: #bfdbfe; }
+
+    /* ── 빠른 질문 영역 ── */
+    #quick-area {
+      padding: 8px 12px;
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      flex-shrink: 0;
     }
-    .bubble.bot pre {
-      background: #1e293b;
-      color: #f8fafc;
-      padding: 10px;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 0.5rem 0;
-    }
-    .bubble.bot table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 0.5rem 0;
-      font-size: 0.82rem;
-    }
-    .bubble.bot th, .bubble.bot td {
-      border: 1px solid #d1d5db;
-      padding: 5px 8px;
-      text-align: left;
-    }
-    .bubble.bot th {
-      background: #e5e8eb;
+    .quick-label {
+      font-size: 0.72rem;
       font-weight: 600;
+      color: var(--sub);
+      margin-bottom: 6px;
     }
-    .bubble.bot blockquote {
-      border-left: 3px solid var(--blue);
-      margin: 0.5rem 0;
-      padding-left: 0.75rem;
-      color: #4b5563;
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+    .quick-chips::-webkit-scrollbar { display: none; }
+    .quick-btn {
+      flex-shrink: 0;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: #4e5968;
+      border-radius: 14px;
+      font-size: 0.76rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.12s ease;
+    }
+    .quick-btn:hover {
+      background: #f9fafb;
+      border-color: var(--blue);
+      color: var(--blue);
     }
 
-    /* ── 로딩 점 ── */
-    .loading-bubble {
+    /* ── 입력창 ── */
+    #input-area {
       display: flex;
-      gap: 5px;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 8px 12px 14px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    #user-input {
+      flex: 1;
+      min-height: 38px;
+      max-height: 110px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #f9fafb;
+      color: var(--text);
+      outline: none;
+      resize: none;
+      line-height: 1.4;
+      transition: border-color 0.15s ease;
+    }
+    #user-input:focus { border-color: var(--blue); background: var(--white); }
+    #send-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
       align-items: center;
-      padding: 12px 16px;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+    #send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    #send-btn svg { width: 17px; height: 17px; fill: currentColor; }
+
+    /* ── [TAB 2] 맞춤 본문 찾기 전용 스타일 ── */
+    #recommend-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .rec-intro-box {
+      background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+      border: 1px solid #d4e7fe;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+    .rec-intro-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+    }
+    .rec-intro-desc {
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .rec-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .rec-chip-btn {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.12s ease;
+      font-family: inherit;
+    }
+    .rec-chip-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #f8fafc;
+    }
+    .rec-input-box {
+      margin-bottom: 14px;
+    }
+    .rec-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--sub);
+      margin-bottom: 6px;
+      display: block;
+    }
+    #rec-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background: #f9fafb;
+      color: var(--text);
+      outline: none;
+      resize: vertical;
+      line-height: 1.45;
+    }
+    #rec-textarea:focus { border-color: var(--blue); background: var(--white); }
+    .rec-filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    #rec-grade-select {
+      flex: 1;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 0 10px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      background: var(--white);
+      color: var(--text);
+      outline: none;
+    }
+    #rec-submit-btn {
+      flex: 1.2;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.88rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    #rec-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* 리포트 카드 */
+    #rec-result-area {
+      margin-top: 16px;
+      display: none;
+    }
+    .rec-report-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      line-height: 1.6;
+      font-size: 0.88rem;
+    }
+    .rec-report-card h3 { font-size: 1rem; color: #1e3a8a; margin-bottom: 10px; }
+    .rec-report-card p { margin-bottom: 8px; }
+    .rec-report-card strong { color: #111; }
+    .rec-card-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .rec-card-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0284c7;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .rec-card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .rec-card-quote {
+      font-size: 0.82rem;
+      color: #475569;
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-radius: 8px;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      border-left: 3px solid #94a3b8;
+    }
+    .rec-view-img-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--white);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s ease;
+    }
+    .rec-view-img-btn:hover { background: var(--blue-light); }
+
+    /* ── 로딩 애니메이션 ── */
+    .loading-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 14px;
       background: var(--bubble-bot);
       border-radius: 18px 18px 18px 4px;
     }
     .dot {
-      width: 7px; height: 7px;
-      background: var(--sub);
+      width: 6px; height: 6px;
       border-radius: 50%;
+      background: var(--sub);
       animation: bounce 1.2s infinite ease-in-out;
     }
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-6px); }
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+      40% { transform: translateY(-5px); opacity: 1; }
     }
 
-    /* ── 출처 칩 ── */
-    .cite-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 16px;
-      height: 16px;
-      background: #dce8fd;
-      color: var(--blue);
-      border-radius: 4px;
-      font-size: 0.6rem;
-      font-weight: 700;
-      padding: 0 3px;
-      cursor: pointer;
-      vertical-align: middle;
-      margin: 0 1px;
-      position: relative;
-      top: -1px;
-      border: none;
-      outline: none;
-      transition: background 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .cite-chip:hover { background: #bcd4fb; }
-
-    /* ── 출처 모달 ── */
+    /* ── 출처 바텀시트 모달 ── */
     #source-modal {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 2000;
+      z-index: 9999;
     }
-    #source-modal.open { display: flex; align-items: flex-end; justify-content: center; }
-
+    #source-modal.open { display: block; }
     #modal-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(2px);
     }
     #modal-sheet {
-      position: relative;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      max-height: 82dvh;
       background: var(--white);
       border-radius: 20px 20px 0 0;
-      width: 100%;
-      max-width: 600px;
-      max-height: 70dvh;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.18);
+      animation: slideUp 0.25s ease-out;
       overflow-y: auto;
-      padding: 20px 20px 32px;
-      z-index: 1;
-      animation: slideUp 0.22s ease;
     }
     @keyframes slideUp {
-      from { transform: translateY(60px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
     }
     #modal-handle {
       width: 36px; height: 4px;
-      background: var(--border);
+      background: #d1d5db;
       border-radius: 2px;
-      margin: 0 auto 16px;
+      margin: 0 auto 12px;
+      flex-shrink: 0;
     }
     #modal-title {
-      font-size: 0.82rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      color: var(--sub);
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
     }
     #modal-body {
-      font-size: 0.88rem;
-      line-height: 1.65;
-      color: var(--text);
-      white-space: pre-wrap;
-      word-break: break-word;
+      font-size: 0.85rem;
+      color: #334155;
+      line-height: 1.6;
     }
     #modal-body img {
       width: 100%;
       border-radius: 10px;
-      margin-top: 10px;
       border: 1px solid var(--border);
+      margin-top: 8px;
     }
-
-    /* ── 빠른 질문 ── */
-    #quick-area {
-      padding: 8px 12px 4px;
-      flex-shrink: 0;
-    }
-    .quick-label {
-      font-size: 0.72rem;
-      color: var(--sub);
-      font-weight: 600;
-      margin-bottom: 6px;
-      padding-left: 2px;
-    }
-    .quick-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .quick-btn {
-      background: var(--white);
-      color: #4e5968;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      font-size: 0.78rem;
-      font-family: inherit;
-      padding: 5px 11px;
-      cursor: pointer;
-      transition: background 0.1s, border-color 0.1s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .quick-btn:hover { background: #f9fafb; border-color: #b0b8c1; }
-
-    /* ── 입력창 ── */
-    #input-area {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-top: 1px solid var(--border);
-      background: var(--white);
-      flex-shrink: 0;
-    }
-    #user-input {
-      flex: 1;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 9px 14px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      background: #f9fafb;
-      outline: none;
-      resize: none;
-      max-height: 120px;
-      line-height: 1.4;
-      color: var(--text);
-      -webkit-appearance: none;
-    }
-    #user-input:focus { border-color: #90b8f8; background: var(--white); }
-    #send-btn {
-      width: 38px; height: 38px;
-      background: var(--blue);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #send-btn:hover { background: #2272e3; }
-    #send-btn svg { width: 18px; height: 18px; fill: var(--white); }
-    #send-btn:disabled { background: var(--border); cursor: default; }
   </style>
 </head>
 <body>
-<div id="app">
 
+<div id="app">
   <!-- 헤더 -->
   <header>
     <div class="status-dot"></div>
@@ -383,38 +567,93 @@
     </div>
   </header>
 
-  <!-- 검색 대상 DB 선택 탭 -->
-  <div id="db-selector">
-    <button class="db-tab active" data-db="all">🌐 전체 (교과서+FAQ)</button>
-    <button class="db-tab" data-db="textbook">📘 교과서만</button>
-    <button class="db-tab" data-db="faq">💡 FAQ만</button>
-  </div>
+  <!-- 메인 상단 탭 (상담 vs 본문 찾기) -->
+  <nav id="main-nav">
+    <button class="nav-tab active" data-tab="chat">💬 선택과목 상담 챗봇</button>
+    <button class="nav-tab" data-tab="recommend">📖 나에게 맞는 본문 찾기</button>
+  </nav>
 
-  <!-- 채팅 영역 -->
-  <div id="chat-area"></div>
+  <!-- [VIEW 1] 선택과목 상담 챗봇 -->
+  <div id="chat-view" class="view-container">
+    <!-- 검색 대상 DB 선택 탭 -->
+    <div id="db-selector">
+      <button class="db-tab active" data-db="all">🌐 전체 (교과서+FAQ)</button>
+      <button class="db-tab" data-db="textbook">📘 교과서만</button>
+      <button class="db-tab" data-db="faq">💡 FAQ만</button>
+    </div>
 
-  <!-- 빠른 질문 -->
-  <div id="quick-area">
-    <div class="quick-label">자주 묻는 질문</div>
-    <div class="quick-chips" id="quick-chips">
-      <button class="quick-btn" data-q="공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?">공통영어1 단원 구성</button>
-      <button class="quick-btn" data-q="2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.">내신 5등급제 산출</button>
-      <button class="quick-btn" data-q="세계 문화와 영어 교과서에서는 어떤 국가나 문화를 배우나요?">세계 문화와 영어 주제</button>
-      <button class="quick-btn" data-q="의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.">의령여고 영어 선택과목</button>
+    <!-- 채팅 영역 -->
+    <div id="chat-area"></div>
+
+    <!-- 빠른 질문 -->
+    <div id="quick-area">
+      <div class="quick-label">자주 묻는 질문</div>
+      <div class="quick-chips" id="quick-chips"></div>
+    </div>
+
+    <!-- 입력창 -->
+    <div id="input-area">
+      <textarea id="user-input" placeholder="메시지를 입력하세요" rows="1"></textarea>
+      <button id="send-btn" aria-label="전송">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
     </div>
   </div>
 
-  <!-- 입력창 -->
-  <div id="input-area">
-    <textarea id="user-input" placeholder="메시지를 입력하세요" rows="1"></textarea>
-    <button id="send-btn" aria-label="전송">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
-  </div>
+  <!-- [VIEW 2] 나에게 맞는 교과서 본문 찾기 -->
+  <div id="recommend-view" class="view-container hidden">
+    <div id="recommend-area">
+      <div class="rec-intro-box">
+        <div class="rec-intro-title">🎯 내 진로 & 관심사에 맞는 영어 교과서 본문 찾기</div>
+        <div class="rec-intro-desc">
+          평소 관심 있는 학문 분야나 취미, 진로 희망을 선택하거나 적어보세요.<br>
+          고등학교 6권의 영어 교과서(1,137개 지문) 중 <b>가장 잘 어울리는 본문 지문</b>과 <b>학생부(세특) 연계 탐구 주제</b>를 찾아드립니다!
+        </div>
+      </div>
 
+      <div class="quick-label">💡 관심 분야 빠른 선택</div>
+      <div class="rec-chips-grid">
+        <button class="rec-chip-btn" data-query="인공지능(AI), 미래 첨단 기술, 컴퓨터 공학과 윤리적 딜레마에 관심이 많습니다.">🤖 AI · 과학기술</button>
+        <button class="rec-chip-btn" data-query="기후 변화, 제로 웨이스트, 환경 보호 및 지속 가능한 생태계에 관심이 있습니다.">🌱 기후위기 · 환경</button>
+        <button class="rec-chip-btn" data-query="친구 관계, 청소년 심리, 갈등 해결과 공감 능력 소통에 대해 배우고 싶습니다.">🧠 심리학 · 대인관계</button>
+        <button class="rec-chip-btn" data-query="사회적 약자 배려, 인권 신장, 공정함과 공동체 규범에 대해 탐구하고 싶습니다.">⚖️ 사회정의 · 인권</button>
+        <button class="rec-chip-btn" data-query="다양한 국가의 전통문화, 글로벌 에티켓, 세계 건축과 음식 문화에 흥미가 있습니다.">🌍 세계문화 · 여행</button>
+        <button class="rec-chip-btn" data-query="기업의 사회적 책임(CSR), 글로벌 경제 트렌드 및 미래 직업의 변화에 관심이 있습니다.">📈 경영 · 미래사회</button>
+      </div>
+
+      <div class="rec-input-box">
+        <label class="rec-label" for="rec-textarea">나의 관심사나 진로 희망을 구체적으로 적어주세요:</label>
+        <textarea id="rec-textarea" placeholder="예: 생명과학이나 의학 분야로 진학하고 싶고, 뇌과학이나 질병 극복에 대한 영문 지문을 읽어보고 싶어요."></textarea>
+      </div>
+
+      <div class="rec-filter-row">
+        <select id="rec-grade-select">
+          <option value="전체">전체 학년 교과서</option>
+          <option value="1학년">1학년 (공통영어1, 2)</option>
+          <option value="2학년">2학년 (영어Ⅰ, 독해와작문)</option>
+          <option value="3학년">3학년 (세계문화와영어, 영어Ⅱ)</option>
+        </select>
+        <button id="rec-submit-btn">🔍 맞춤 본문 찾기</button>
+      </div>
+
+      <!-- 추천 결과 영역 -->
+      <div id="rec-loading" style="display:none; text-align:center; padding: 24px 0; color: var(--sub);">
+        <div class="loading-bubble" style="border-radius:14px; margin-bottom:8px;">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div style="font-size:0.84rem;">교과서 1,137개 지문 중 최적의 본문과 세특 연계 주제를 분석하고 있습니다...</div>
+      </div>
+
+      <div id="rec-result-area">
+        <div class="rec-report-card" id="rec-report-content"></div>
+        <div class="quick-label" style="margin-top:16px;">📖 추천된 교과서 실제 페이지 확인</div>
+        <div id="rec-candidates-list"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- 출처 모달 -->
+<!-- 출처 / 이미지 바텀시트 모달 -->
 <div id="source-modal" role="dialog" aria-modal="true">
   <div id="modal-backdrop"></div>
   <div id="modal-sheet">
@@ -427,19 +666,125 @@
 <script>
   /* ── 전역 상태 ── */
   let currentTargetDb = 'all';
-  let sourcesStore = {};   // msgId → sources 배열
-  let msgCounter   = 0;
-  let isLoading    = false;
+  let sourcesStore = {};
+  let msgCounter = 0;
+  let isLoading = false;
 
-  const chatArea   = document.getElementById('chat-area');
-  const userInput  = document.getElementById('user-input');
-  const sendBtn    = document.getElementById('send-btn');
-  const modal      = document.getElementById('source-modal');
+  const chatArea = document.getElementById('chat-area');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const modal = document.getElementById('source-modal');
   const modalTitle = document.getElementById('modal-title');
-  const modalBody  = document.getElementById('modal-body');
+  const modalBody = document.getElementById('modal-body');
   const quickChipsContainer = document.getElementById('quick-chips');
 
-  /* ── DB 모드별 추천 질문 ── */
+  const chatView = document.getElementById('chat-view');
+  const recommendView = document.getElementById('recommend-view');
+  const recTextarea = document.getElementById('rec-textarea');
+  const recGradeSelect = document.getElementById('rec-grade-select');
+  const recSubmitBtn = document.getElementById('rec-submit-btn');
+  const recLoading = document.getElementById('rec-loading');
+  const recResultArea = document.getElementById('rec-result-area');
+  const recReportContent = document.getElementById('rec-report-content');
+  const recCandidatesList = document.getElementById('rec-candidates-list');
+
+  /* ── 메인 상단 탭 전환 (상담 vs 본문 찾기) ── */
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const targetTab = tab.dataset.tab;
+      if (targetTab === 'chat') {
+        chatView.classList.remove('hidden');
+        recommendView.classList.add('hidden');
+      } else {
+        chatView.classList.add('hidden');
+        recommendView.classList.remove('hidden');
+      }
+    });
+  });
+
+  /* ── 추천 탭 프리셋 칩 클릭 ── */
+  document.querySelectorAll('.rec-chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      recTextarea.value = btn.dataset.query;
+      recTextarea.focus();
+    });
+  });
+
+  /* ── 맞춤 본문 찾기 API 요청 ── */
+  recSubmitBtn.addEventListener('click', async () => {
+    const interest = recTextarea.value.trim();
+    if (!interest) {
+      alert('관심사나 진로 희망 내용을 입력해 주세요!');
+      recTextarea.focus();
+      return;
+    }
+
+    recSubmitBtn.disabled = true;
+    recLoading.style.display = 'block';
+    recResultArea.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          interest: interest,
+          grade: recGradeSelect.value
+        })
+      });
+
+      const data = await res.json();
+      recLoading.style.display = 'none';
+      recSubmitBtn.disabled = false;
+
+      if (data.error) {
+        alert('추천 중 오류가 발생했습니다: ' + data.error);
+        return;
+      }
+
+      // 마크다운 리포트 렌더링
+      recReportContent.innerHTML = (typeof marked !== 'undefined') ? marked.parse(data.report) : data.report;
+
+      // 추천 후보 카드 렌더링
+      recCandidatesList.innerHTML = '';
+      if (data.candidates && data.candidates.length > 0) {
+        data.candidates.forEach((c, idx) => {
+          const card = document.createElement('div');
+          card.className = 'rec-card-item';
+          card.innerHTML = `
+            <div class="rec-card-badge">${c.grade || '전체'} · ${c.subject} (p.${c.page})</div>
+            <div class="rec-card-title">${idx + 1}. ${c.subject} · ${c.topic || ''}</div>
+            <div class="rec-card-quote">${escapeHtml(c.text.slice(0, 200))}...</div>
+            ${c.image_url ? `<button class="rec-view-img-btn" data-img="${c.image_url}" data-title="${c.subject} · p.${c.page}">📷 교과서 원본 사진 보기</button>` : ''}
+          `;
+          recCandidatesList.appendChild(card);
+        });
+
+        // 원본 사진 버튼 이벤트 바인딩
+        recCandidatesList.querySelectorAll('.rec-view-img-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            modalTitle.textContent = btn.dataset.title;
+            modalBody.innerHTML = `<img src="${btn.dataset.img}" alt="교과서 원본 사진" loading="lazy" />`;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+      }
+
+      recResultArea.style.display = 'block';
+      recResultArea.scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      recLoading.style.display = 'none';
+      recSubmitBtn.disabled = false;
+      alert('네트워크 오류가 발생했습니다: ' + err);
+    }
+  });
+
+  /* ── DB 모드별 빠른 질문 ── */
   const quickQuestionsByMode = {
     all: [
       { label: '공통영어1 단원 구성', q: '공통영어1 교과서의 주요 단원 구성과 주제는 무엇인가요?' },
@@ -475,7 +820,7 @@
     });
   }
 
-  // DB 선택 탭 클릭 이벤트 바인딩
+  /* ── DB 선택 탭 클릭 이벤트 ── */
   document.querySelectorAll('.db-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.db-tab').forEach(t => t.classList.remove('active'));
@@ -485,64 +830,37 @@
     });
   });
 
-  /* ── 초기 인사 메시지 ── */
-  appendBotBubble(
-    '안녕하십니까. 영어과 선택과목 안내 챗봇입니다.\n상단의 검색 범위를 선택하여 교육과정 규정이나 교과서에 대해 질문해 주시면 안내해 드립니다.',
-    []
-  );
+  /* ── 초기 웰컴 메시지 ── */
+  window.addEventListener('DOMContentLoaded', () => {
+    appendBotBubble('안녕하십니까. 영어과 선택과목 안내 챗봇입니다. 상단의 검색 범위를 선택하여 교육과정 규정이나 교과서에 대해 질문해 주시면 안내해 드립니다.', []);
+  });
 
-  /* ── marked 마크다운 파서 설정 ── */
-  if (typeof marked !== 'undefined') {
-    marked.setOptions({
-      breaks: true,
-      gfm: true
-    });
-  }
-
-  /* ── 텍스트에서 Markdown 변환 + [N] 출처 칩 변환 ── */
-  function renderAnswer(text, sources, msgId) {
-    sourcesStore[msgId] = sources;
-
-    let html = (typeof marked !== 'undefined') ? marked.parse(text) : text;
-
-    return html.replace(/\[(\d+)\]/g, (match, n) => {
-      const idx = parseInt(n) - 1;
-      if (idx < 0 || idx >= sources.length) return match;
-      return `<button class="cite-chip" data-msg="${msgId}" data-src="${idx}" aria-label="출처 ${n}">${n}</button>`;
-    });
-  }
-
-  /* ── 봇 버블 추가 ── */
-  function appendBotBubble(text, sources) {
-    const id = ++msgCounter;
-    const row = document.createElement('div');
-    row.className = 'bubble-row bot';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble bot';
-    bubble.innerHTML = renderAnswer(text, sources, id);
-
-    row.appendChild(bubble);
-    chatArea.appendChild(row);
-    scrollToBottom();
-    return row;
-  }
-
-  /* ── 사용자 버블 추가 ── */
   function appendUserBubble(text) {
     const row = document.createElement('div');
     row.className = 'bubble-row user';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble user';
-    bubble.textContent = text;
-
-    row.appendChild(bubble);
+    row.innerHTML = `<div class="bubble user">${escapeHtml(text)}</div>`;
     chatArea.appendChild(row);
     scrollToBottom();
   }
 
-  /* ── 로딩 버블 ── */
+  function appendBotBubble(markdownText, sources) {
+    const msgId = ++msgCounter;
+    sourcesStore[msgId] = sources;
+
+    let processed = markdownText.replace(/\[(\d+)\]/g, (match, num) => {
+      const idx = parseInt(num) - 1;
+      return `<button class="cite-chip" data-msg="${msgId}" data-src="${idx}" aria-label="출처 ${num}">${num}</button>`;
+    });
+
+    const rendered = (typeof marked !== 'undefined') ? marked.parse(processed) : processed;
+
+    const row = document.createElement('div');
+    row.className = 'bubble-row bot';
+    row.innerHTML = `<div class="bubble bot">${rendered}</div>`;
+    chatArea.appendChild(row);
+    scrollToBottom();
+  }
+
   function showLoading() {
     const row = document.createElement('div');
     row.className = 'bubble-row bot';
@@ -560,7 +878,7 @@
     chatArea.scrollTop = chatArea.scrollHeight;
   }
 
-  /* ── 출처 모달 열기 ── */
+  /* ── 출처 모달 열기/닫기 ── */
   function openModal(msgId, srcIdx) {
     const sources = sourcesStore[msgId];
     if (!sources || !sources[srcIdx]) return;
@@ -569,7 +887,7 @@
     const isFAQ = src.subject_name === '선택과목 FAQ';
 
     if (isFAQ) {
-      modalTitle.textContent = `💡 FAQ · Q${src.page}  ${src.topic || ''}`;
+      modalTitle.textContent = `💡 FAQ · Q${src.page} ${src.topic || ''}`;
       modalBody.innerHTML = (typeof marked !== 'undefined') ? marked.parse(src.text) : `<div>${escapeHtml(src.text)}</div>`;
     } else {
       modalTitle.textContent = `📘 ${src.subject_name} · p.${src.page}`;
@@ -593,11 +911,9 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
   }
 
-  /* ── 모달 닫기 이벤트 ── */
   document.getElementById('modal-backdrop').addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  /* ── 출처 칩 클릭 (이벤트 위임) ── */
   chatArea.addEventListener('click', e => {
     const chip = e.target.closest('.cite-chip');
     if (chip) {
@@ -608,7 +924,6 @@
     }
   });
 
-  /* ── 질문 전송 ── */
   async function sendMessage(query) {
     if (isLoading || !query.trim()) return;
     isLoading = true;
@@ -643,10 +958,8 @@
     userInput.focus();
   }
 
-  /* ── 전송 버튼 ── */
   sendBtn.addEventListener('click', () => sendMessage(userInput.value.trim()));
 
-  /* ── Enter 전송 (Shift+Enter = 줄바꿈) ── */
   userInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -654,15 +967,12 @@
     }
   });
 
-  /* ── textarea 자동 높이 ── */
   userInput.addEventListener('input', () => {
     userInput.style.height = 'auto';
     userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
   });
 
-  /* ── 초기 빠른 질문 버튼 렌더링 ── */
   renderQuickQuestions('all');
 </script>
 </body>
 </html>
-

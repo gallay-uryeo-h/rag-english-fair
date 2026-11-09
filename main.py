@@ -61,6 +61,26 @@ def search_similar_docs(query_text: str, target_db: str = "all", n_results: int 
     results = collection.query(**query_kwargs)
     return results
 
+def search_recommended_passages(query_text: str, grade_filter: str = "전체", n_results: int = 3):
+    formatted_query = f"task: question answering | query: 영어 교과서 본문 독해 지문 주제: {query_text}"
+    response = gemini_client.models.embed_content(
+        model="gemini-embedding-001",
+        contents=formatted_query
+    )
+    query_vector = response.embeddings[0].values
+
+    if grade_filter in ["1학년", "2학년", "3학년"]:
+        where_cond = {"grade": grade_filter}
+    else:
+        where_cond = {"grade": {"$in": ["1학년", "2학년", "3학년"]}}
+
+    results = collection.query(
+        query_embeddings=[query_vector],
+        n_results=n_results,
+        where=where_cond
+    )
+    return results
+
 SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과의 공식 모바일 챗봇입니다.
 
 [작성 원칙]
@@ -75,6 +95,10 @@ SYSTEM_INSTRUCTION = """당신은 고등학교 선택과목 박람회 영어과�
 class ChatRequest(BaseModel):
     query: str
     target_db: str = "all"  # "all", "textbook", "faq"
+
+class RecommendRequest(BaseModel):
+    interest: str
+    grade: str = "전체"  # "전체", "1학년", "2학년", "3학년"
 
 # ── 라우트 ───────────────────────────────────────────────────
 @app.get("/")
@@ -165,6 +189,78 @@ def chat(req: ChatRequest):
             src["image_url"] = ""
 
     return {"answer": answer, "sources": sources}
+
+
+@app.post("/api/recommend")
+def recommend(req: RecommendRequest):
+    if not gemini_client:
+        return JSONResponse({"error": "GEMINI_API_KEY가 설정되지 않았습니다."}, status_code=500)
+
+    interest = req.interest.strip()
+    if not interest:
+        return JSONResponse({"error": "관심사 내용이 비어있습니다."}, status_code=400)
+
+    grade_choice = req.grade if req.grade in ["전체", "1학년", "2학년", "3학년"] else "전체"
+
+    try:
+        rec_results = search_recommended_passages(interest, grade_filter=grade_choice, n_results=3)
+    except Exception as e:
+        return JSONResponse({"error": f"추천 검색 오류: {e}"}, status_code=500)
+
+    candidates = []
+    if rec_results and rec_results["documents"] and rec_results["documents"][0]:
+        for d, m in zip(rec_results["documents"][0], rec_results["metadatas"][0]):
+            ip = m.get("image_path", "")
+            img_url = f"/pages_cache/{os.path.basename(ip)}" if ip else ""
+            candidates.append({
+                "subject": m.get("subject_name", "영어 교과서"),
+                "grade": m.get("grade", ""),
+                "semester": m.get("semester", ""),
+                "page": m.get("page", "?"),
+                "publisher": m.get("publisher", ""),
+                "topic": m.get("topic", ""),
+                "text": d,
+                "image_url": img_url
+            })
+
+    if not candidates:
+        return {"report": "관련된 교과서 본문을 찾지 못했습니다. 다른 관심사 키워드로 검색해 보세요.", "candidates": []}
+
+    prompt_for_ai = f"""당신은 고등학교 영어과 진로 연계 교육과정 전문가입니다.
+학생의 관심사를 바탕으로, 교과서 검색 결과 중 가장 잘 어울리는 지문들을 분석하여 친절하게 추천 리포트를 마크다운 형식으로 작성해 주세요.
+
+[학생의 관심사/진로]:
+{interest}
+
+[검색된 교과서 후보 지문들]:
+"""
+    for idx, c in enumerate(candidates):
+        prompt_for_ai += f"""
+--- 지문 {idx+1} ---
+- 교과서: {c['subject']} (p.{c['page']})
+- 내용 발췌: {c['text'][:300]}
+"""
+
+    prompt_for_ai += """
+[작성 가이드라인]:
+1. 학생의 관심사와 각 지문이 어떻게 연결되는지 따뜻하고 친절한 격려 어조('~해요', '~해 보세요')로 작성하세요.
+2. 각 후보 지문별로:
+   - 🌟 **[추천 지문 주제]**: 지문의 핵심 테마와 소재
+   - 💡 **[추천 이유]**: 학생의 관심사/진로와 어떻게 이어지는지 설명
+   - 📝 **[학생부 세특 탐구 연계 팁]**: 이 본문을 읽고 심화 발표나 보고서로 확장할 수 있는 구체적인 탐구 활동 아이디어 1가지 제안
+3. 마지막에 해당 교과서 과목(공통영어/영어Ⅰ/독해와작문/세계문화와영어 등)의 학습 조언을 1~2줄로 덧붙여 주세요.
+"""
+
+    try:
+        rec_response = gemini_client.models.generate_content(
+            model="gemini-3.5-flash-lite",
+            contents=prompt_for_ai
+        )
+        report = rec_response.text
+    except Exception as e:
+        report = f"리포트 생성 중 오류가 발생했습니다: {e}"
+
+    return {"report": report, "candidates": candidates}
 
 
 # ── 정적 파일 (index.html 이후에 마운트) ─────────────────────
