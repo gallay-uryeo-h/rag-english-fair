@@ -415,15 +415,40 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-      line-height: 1.6;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      line-height: 1.65;
       font-size: 0.88rem;
+      color: #334155;
     }
-    .rec-report-card h3 { font-size: 1rem; color: #1e3a8a; margin-bottom: 10px; }
-    .rec-report-card p { margin-bottom: 8px; }
-    .rec-report-card strong { color: #111; }
+    .rec-report-card h1, .rec-report-card h2, .rec-report-card h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 18px 0 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .rec-report-card h1:first-child, .rec-report-card h2:first-child, .rec-report-card h3:first-child {
+      margin-top: 0;
+    }
+    .rec-report-card ul {
+      margin-left: 1.2rem;
+      margin-bottom: 14px;
+      padding-left: 0;
+    }
+    .rec-report-card li {
+      margin-bottom: 6px;
+      line-height: 1.55;
+    }
+    .rec-report-card strong {
+      color: #0f172a;
+      font-weight: 600;
+    }
+    .rec-report-card p {
+      margin-bottom: 8px;
+    }
     .rec-card-item {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -569,17 +594,17 @@
 
   <!-- 메인 상단 탭 (상담 vs 본문 찾기) -->
   <nav id="main-nav">
-    <button class="nav-tab active" data-tab="chat">💬 선택과목 상담 챗봇</button>
-    <button class="nav-tab" data-tab="recommend">📖 나에게 맞는 본문 찾기</button>
+    <button class="nav-tab active" data-tab="chat">선택과목 상담</button>
+    <button class="nav-tab" data-tab="recommend">맞춤 본문 찾기</button>
   </nav>
 
   <!-- [VIEW 1] 선택과목 상담 챗봇 -->
   <div id="chat-view" class="view-container">
     <!-- 검색 대상 DB 선택 탭 -->
     <div id="db-selector">
-      <button class="db-tab active" data-db="all">🌐 전체 (교과서+FAQ)</button>
-      <button class="db-tab" data-db="textbook">📘 교과서만</button>
-      <button class="db-tab" data-db="faq">💡 FAQ만</button>
+      <button class="db-tab active" data-db="all">전체 (교과서+FAQ)</button>
+      <button class="db-tab" data-db="textbook">교과서만</button>
+      <button class="db-tab" data-db="faq">FAQ만</button>
     </div>
 
     <!-- 채팅 영역 -->
@@ -604,21 +629,21 @@
   <div id="recommend-view" class="view-container hidden">
     <div id="recommend-area">
       <div class="rec-intro-box">
-        <div class="rec-intro-title">🎯 내 진로 & 관심사에 맞는 영어 교과서 본문 찾기</div>
+        <div class="rec-intro-title">진로·관심사 맞춤 영어 본문 큐레이션</div>
         <div class="rec-intro-desc">
-          평소 관심 있는 학문 분야나 취미, 진로 희망을 선택하거나 적어보세요.<br>
-          고등학교 6권의 영어 교과서(1,137개 지문) 중 <b>가장 잘 어울리는 본문 지문</b>과 <b>학생부(세특) 연계 탐구 주제</b>를 찾아드립니다!
+          희망 진로 분야나 관심사를 선택하거나 직접 입력해 보세요.<br>
+          고등학교 6권의 영어 교과서(1,137개 지문) 중 <b>가장 적합한 본문 지문</b>과 <b>학생부(세특) 연계 탐구 과제</b>를 추천합니다.
         </div>
       </div>
 
-      <div class="quick-label">💡 관심 분야 빠른 선택</div>
+      <div class="quick-label">관심 분야 빠른 선택</div>
       <div class="rec-chips-grid">
-        <button class="rec-chip-btn" data-query="인공지능(AI), 미래 첨단 기술, 컴퓨터 공학과 윤리적 딜레마에 관심이 많습니다.">🤖 AI · 과학기술</button>
-        <button class="rec-chip-btn" data-query="기후 변화, 제로 웨이스트, 환경 보호 및 지속 가능한 생태계에 관심이 있습니다.">🌱 기후위기 · 환경</button>
-        <button class="rec-chip-btn" data-query="친구 관계, 청소년 심리, 갈등 해결과 공감 능력 소통에 대해 배우고 싶습니다.">🧠 심리학 · 대인관계</button>
-        <button class="rec-chip-btn" data-query="사회적 약자 배려, 인권 신장, 공정함과 공동체 규범에 대해 탐구하고 싶습니다.">⚖️ 사회정의 · 인권</button>
-        <button class="rec-chip-btn" data-query="다양한 국가의 전통문화, 글로벌 에티켓, 세계 건축과 음식 문화에 흥미가 있습니다.">🌍 세계문화 · 여행</button>
-        <button class="rec-chip-btn" data-query="기업의 사회적 책임(CSR), 글로벌 경제 트렌드 및 미래 직업의 변화에 관심이 있습니다.">📈 경영 · 미래사회</button>
+        <button class="rec-chip-btn" data-query="인공지능(AI), 미래 첨단 기술, 컴퓨터 공학과 윤리적 딜레마에 관심이 많습니다.">인공지능 · 첨단기술</button>
+        <button class="rec-chip-btn" data-query="기후 변화, 제로 웨이스트, 환경 보호 및 지속 가능한 생태계에 관심이 있습니다.">기후환경 · 생태계</button>
+        <button class="rec-chip-btn" data-query="친구 관계, 청소년 심리, 갈등 해결과 공감 능력 소통에 대해 배우고 싶습니다.">청소년심리 · 소통</button>
+        <button class="rec-chip-btn" data-query="사회적 약자 배려, 인권 신장, 공정함과 공동체 규범에 대해 탐구하고 싶습니다.">사회정의 · 법과인권</button>
+        <button class="rec-chip-btn" data-query="다양한 국가의 전통문화, 글로벌 에티켓, 세계 건축과 음식 문화에 흥미가 있습니다.">세계문화 · 글로벌</button>
+        <button class="rec-chip-btn" data-query="기업의 사회적 책임(CSR), 글로벌 경제 트렌드 및 미래 직업의 변화에 관심이 있습니다.">경영경제 · 미래사회</button>
       </div>
 
       <div class="rec-input-box">
@@ -633,7 +658,7 @@
           <option value="2학년">2학년 (영어Ⅰ, 독해와작문)</option>
           <option value="3학년">3학년 (세계문화와영어, 영어Ⅱ)</option>
         </select>
-        <button id="rec-submit-btn">🔍 맞춤 본문 찾기</button>
+        <button id="rec-submit-btn">맞춤 본문 탐색</button>
       </div>
 
       <!-- 추천 결과 영역 -->
@@ -641,12 +666,12 @@
         <div class="loading-bubble" style="border-radius:14px; margin-bottom:8px;">
           <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
-        <div style="font-size:0.84rem;">교과서 1,137개 지문 중 최적의 본문과 세특 연계 주제를 분석하고 있습니다...</div>
+        <div style="font-size:0.84rem;">교과서 1,137개 지문 중 최적의 본문과 세특 연계 과제를 분석하고 있습니다...</div>
       </div>
 
       <div id="rec-result-area">
         <div class="rec-report-card" id="rec-report-content"></div>
-        <div class="quick-label" style="margin-top:16px;">📖 추천된 교과서 실제 페이지 확인</div>
+        <div class="quick-label" style="margin-top:16px;">추천 교과서 원본 페이지 확인</div>
         <div id="rec-candidates-list"></div>
       </div>
     </div>
@@ -758,7 +783,7 @@
             <div class="rec-card-badge">${c.grade || '전체'} · ${c.subject} (p.${c.page})</div>
             <div class="rec-card-title">${idx + 1}. ${c.subject} · ${c.topic || ''}</div>
             <div class="rec-card-quote">${escapeHtml(c.text.slice(0, 200))}...</div>
-            ${c.image_url ? `<button class="rec-view-img-btn" data-img="${c.image_url}" data-title="${c.subject} · p.${c.page}">📷 교과서 원본 사진 보기</button>` : ''}
+            ${c.image_url ? `<button class="rec-view-img-btn" data-img="${c.image_url}" data-title="${c.subject} · p.${c.page}">교과서 원본 페이지 확인</button>` : ''}
           `;
           recCandidatesList.appendChild(card);
         });
