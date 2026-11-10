@@ -366,24 +366,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
             </p>
           </div>
-
-          <div className="flex items-center justify-between pt-2.5 border-t border-white/20 relative z-10">
-            <span className="text-[11px] text-slate-300 font-medium">
-              {expandedSections.mbti ? '▲ 탭하여 테스트 창 접기' : '▼ 탭하여 바로 테스트 시작하기'}
-            </span>
-            <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-lg group-hover:bg-blue-600 group-hover:text-white transition-all">
-              <span>{expandedSections.mbti ? '진단창 접기' : '진단 펼치기'}</span>
-              {expandedSections.mbti ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </div>
-          </div>
         </div>
-
-        {/* 🌟 아코디언 인라인 진단창 (피드 안에서 바로 열림) */}
-        {expandedSections.mbti && (
-          <div className="border-t border-blue-200 bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-            <DeepEnglishMbtiTab onOpenImage={onOpenImage} />
-          </div>
-        )}
 
         {/* 포스트 소셜 바 */}
         <div className="px-3.5 pt-3 pb-2">
@@ -422,6 +405,32 @@ export const LiveHomeFeed: React.FC<Props> = ({
               나의 성격과 딱 맞는 교과서 지문을 만나면 독해가 즐거운 탐구로 바뀝니다. 지금 바로 진단해 보세요! ✨
             </span>
           </div>
+
+          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+          <div className="pt-2.5 pb-1">
+            <button
+              onClick={() => onToggleSection('mbti')}
+              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                <span className="text-xs font-bold text-slate-800 group-hover:text-blue-600">
+                  {expandedSections.mbti ? 'MBTI 테스트 뷰어 접기' : 'MBTI 테스트 바로 시작하기'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-blue-600">
+                <span>{expandedSections.mbti ? '닫기' : '펼쳐보기'}</span>
+                {expandedSections.mbti ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+          </div>
+
+          {/* 🌟 아코디언 인라인 진단창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+          {expandedSections.mbti && (
+            <div className="mt-2.5 border border-blue-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+              <DeepEnglishMbtiTab onOpenImage={onOpenImage} />
+            </div>
+          )}
 
           {/* 💬 댓글 목록 미리보기 */}
           {comments.mbti && comments.mbti.length > 0 && (
@@ -528,24 +537,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
             </p>
           </div>
-
-          <div className="flex items-center justify-between pt-2.5 border-t border-white/20 relative z-10">
-            <span className="text-[11px] text-slate-300 font-medium">
-              {expandedSections.vocab ? '▲ 탭하여 퀴즈 창 접기' : '▼ 탭하여 단어 퀴즈 풀기'}
-            </span>
-            <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-lg group-hover:bg-purple-600 group-hover:text-white transition-all">
-              <span>{expandedSections.vocab ? '퀴즈 접기' : '퀴즈 풀기'}</span>
-              {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </div>
-          </div>
         </div>
-
-        {/* 🌟 아코디언 인라인 단어 퀴즈창 */}
-        {expandedSections.vocab && (
-          <div className="border-t border-purple-200 bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-            <VocabListenTab />
-          </div>
-        )}
 
         <div className="px-3.5 pt-3 pb-2">
           <div className="flex items-center justify-between">
@@ -583,6 +575,32 @@ export const LiveHomeFeed: React.FC<Props> = ({
               눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
             </span>
           </div>
+
+          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+          <div className="pt-2.5 pb-1">
+            <button
+              onClick={() => onToggleSection('vocab')}
+              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-purple-500" />
+                <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600">
+                  {expandedSections.vocab ? '단어 퀴즈 뷰어 접기' : '단어 소리 퀴즈 시작하기'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-purple-600">
+                <span>{expandedSections.vocab ? '닫기' : '펼쳐보기'}</span>
+                {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+          </div>
+
+          {/* 🌟 아코디언 인라인 단어 퀴즈창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+          {expandedSections.vocab && (
+            <div className="mt-2.5 border border-purple-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+              <VocabListenTab />
+            </div>
+          )}
 
           {/* 💬 댓글 목록 미리보기 */}
           {comments.vocab && comments.vocab.length > 0 && (
@@ -688,24 +706,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
             </p>
           </div>
-
-          <div className="flex items-center justify-between pt-2 border-t border-white/15 relative z-10">
-            <span className="text-[11px] text-slate-300">
-              {expandedSections.textbook ? '▲ 탭하여 교과서 뷰어 접기' : '▼ 탭하여 6권 교과서 펼쳐보기'}
-            </span>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md group-hover:bg-emerald-500 group-hover:text-white transition-all">
-              <span>{expandedSections.textbook ? '뷰어 접기' : '교과서 열람'}</span>
-              {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </div>
-          </div>
         </div>
-
-        {/* 🌟 아코디언 인라인 교과서 뷰어 */}
-        {expandedSections.textbook && (
-          <div className="border-t border-emerald-200 bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-            <TextbookBrowse2Layer onOpenImage={onOpenImage} />
-          </div>
-        )}
 
         <div className="px-3.5 pt-3 pb-2">
           <div className="flex items-center justify-between">
@@ -743,6 +744,32 @@ export const LiveHomeFeed: React.FC<Props> = ({
               공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
             </span>
           </div>
+
+          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+          <div className="pt-2.5 pb-1">
+            <button
+              onClick={() => onToggleSection('textbook')}
+              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
+                  {expandedSections.textbook ? '6권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">
+                <span>{expandedSections.textbook ? '닫기' : '펼쳐보기'}</span>
+                {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+          </div>
+
+          {/* 🌟 아코디언 인라인 교과서 뷰어 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+          {expandedSections.textbook && (
+            <div className="mt-2.5 border border-emerald-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+              <TextbookBrowse2Layer onOpenImage={onOpenImage} />
+            </div>
+          )}
 
           {/* 💬 댓글 목록 미리보기 */}
           {comments.textbook && comments.textbook.length > 0 && (
@@ -848,24 +875,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
             </p>
           </div>
-
-          <div className="flex items-center justify-between pt-2 border-t border-white/15 relative z-10">
-            <span className="text-[11px] text-slate-300">
-              {expandedSections.seteuk ? '▲ 탭하여 세특 발전소 접기' : '▼ 탭하여 진로별 세특 아이디어 보기'}
-            </span>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md group-hover:bg-amber-500 group-hover:text-white transition-all">
-              <span>{expandedSections.seteuk ? '아이디어 접기' : '세특 보기'}</span>
-              {expandedSections.seteuk ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </div>
-          </div>
         </div>
-
-        {/* 🌟 아코디언 인라인 세특 발전소창 */}
-        {expandedSections.seteuk && (
-          <div className="border-t border-amber-200 bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-            <SeteukGeneratorTab onOpenImage={onOpenImage} />
-          </div>
-        )}
 
         <div className="px-3.5 pt-3 pb-2">
           <div className="flex items-center justify-between">
@@ -903,6 +913,32 @@ export const LiveHomeFeed: React.FC<Props> = ({
               단순한 해석을 넘어선 깊이 있는 탐구! 의령여고의 탄탄한 대입 학종 노하우를 담았습니다.
             </span>
           </div>
+
+          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+          <div className="pt-2.5 pb-1">
+            <button
+              onClick={() => onToggleSection('seteuk')}
+              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-amber-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="text-xs font-bold text-slate-800 group-hover:text-amber-600">
+                  {expandedSections.seteuk ? '세특 발전소 뷰어 접기' : '진로별 세특 보고서 탐색하기'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-amber-600">
+                <span>{expandedSections.seteuk ? '닫기' : '펼쳐보기'}</span>
+                {expandedSections.seteuk ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+          </div>
+
+          {/* 🌟 아코디언 인라인 세특 발전소창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+          {expandedSections.seteuk && (
+            <div className="mt-2.5 border border-amber-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+              <SeteukGeneratorTab onOpenImage={onOpenImage} />
+            </div>
+          )}
 
           {/* 💬 댓글 목록 미리보기 */}
           {comments.seteuk && comments.seteuk.length > 0 && (
