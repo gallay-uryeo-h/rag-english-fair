@@ -75,7 +75,7 @@ const TEXTBOOK_COVERS = [
     publisher: '비상 (권혁승)',
     coverImage: '/pages_cache/3학년_1학기_세계_문화와_영어_비상_p1.jpg',
     badgeBg: 'bg-rose-100 text-rose-800',
-    unitsCount: 2,
+    unitsCount: 6,
   },
 ];
 

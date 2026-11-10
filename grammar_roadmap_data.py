@@ -677,28 +677,92 @@ GRAMMAR_ROADMAP_DATA = [
                 "points": [
                     {
                         "point_num": 1,
-                        "title": "실용 의사소통 및 상호문화 소통 표현 (World Englishes)",
+                        "title": "상호문화 소통과 동아시아 건축문화 (Not only A but also B)",
                         "tag": "의사소통",
-                        "page": 8,
-                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p8.jpg",
-                        "key_sentence": "Exploring diverse cultural perspectives through authentic English texts and project activities.",
-                        "explanation": "문법을 도구로 활용하여 아시아 여러 국가의 문화적 정체성과 현대 생활양식을 영어로 조사하고 발표하는 프로젝트 중심 학습입니다."
+                        "page": 26,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p26.jpg",
+                        "key_sentence": "In these East Asian architectural wonders, we witness not only the smooth blend of tradition and modernity, but also the deep respect for nature.",
+                        "explanation": "인도, 중앙아시아, 중동, 동아시아의 전통과 현대 건축을 비교 탐구하며 다문화 의사소통 및 상관접속사 표현을 학습합니다."
                     }
                 ]
             },
             {
                 "unit_number": 2,
                 "unit_title": "Africa: Wildlife Conservation and Future Potential",
-                "theme": "아프리카 야생동물 보존과 예술",
+                "theme": "아프리카 야생동물 보존과 미래 잠재력",
                 "points": [
                     {
                         "point_num": 1,
-                        "title": "탐구 보고서 작성 및 정보 시각화 프로젝트 (Infographic & Report)",
+                        "title": "생태 관광 및 아프리카의 잠재력 탐구 (Search & Write)",
                         "tag": "프로젝트",
-                        "page": 6,
-                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p6.jpg",
-                        "key_sentence": "Synthesizing research data into persuasive written arguments and cultural presentations.",
-                        "explanation": "환경과 예술을 주제로 복합 문장 구조를 활용하여 실전 인포그래픽 및 영문 탐구 보고서를 완성합니다."
+                        "page": 48,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p48.jpg",
+                        "key_sentence": "Long-distance runners from East Africa are showing amazing potential on the global athletic stage.",
+                        "explanation": "아프리카의 예술, 마라톤 성공 비결, 야생동물 보호 정책 및 미래 발전 가능성을 영문 인포그래픽과 에코투어 포스터로 탐구합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 3,
+                "unit_title": "Europe: Classical Art and Sports Culture",
+                "theme": "유럽의 고전 예술과 스포츠 문화",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "유럽 문화 기행 및 예술·스포츠 담론 분석",
+                        "tag": "문화탐구",
+                        "page": 68,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p68.jpg",
+                        "key_sentence": "A Duel between Two Painters: Leonardo da Vinci and Michelangelo in Renaissance Florence.",
+                        "explanation": "유럽의 미식 여행, 직업학교 시스템, 르네상스 화가들의 대결, 축구 문화를 영어로 심층 분석하고 홍보물을 제작합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 4,
+                "unit_title": "North America: Innovation and Leisure",
+                "theme": "북미의 고교 생활과 차고 창업 혁신",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "관심 표현 및 스타트업 혁신 영문 분석 (I'm interested / fascinated by)",
+                        "tag": "진로탐구",
+                        "page": 90,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p90.jpg",
+                        "key_sentence": "Successful American Garage Startups: Turning visionary ideas into world-changing technological enterprises.",
+                        "explanation": "미국 고교 생활, 도시의 별칭 유래, 빙상 스포츠(아이스하키·컬링), 실리콘밸리 차고 창업 사례를 탐구하며 진로 역량을 확장합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 5,
+                "unit_title": "South America: Culture of Passion and Excitement",
+                "theme": "남미의 열정과 문화적 정체성",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "국기 상징성과 도시 예술(Graffiti) 사회적 의미 분석",
+                        "tag": "사회문화",
+                        "page": 114,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p114.jpg",
+                        "key_sentence": "Flags and Identities in South America: Symbolism and cultural heritage reflected in national emblems.",
+                        "explanation": "남미 여러 국가의 국기 상징, 주요 랜드마크, 그래피티의 기원과 진화, 리오 카니발과 망자의 날 축제를 비교 탐구합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 6,
+                "unit_title": "Oceania: Culture Life and New Horizon",
+                "theme": "오세아니아의 해양 문화와 새로운 지평",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "글로벌 진로 탐색 및 해양 생태계 영문 발표",
+                        "tag": "글로벌진로",
+                        "page": 136,
+                        "image_path": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p136.jpg",
+                        "key_sentence": "Discover Australia: Work and Play on a Working Holiday / Unveiling New Zealand in Avatar.",
+                        "explanation": "영화 모아나 속 폴리네시아 문화, 호주 워킹홀리데이 경험, 아바타 배경이 된 뉴질랜드 자연경관을 통해 글로벌 진로 지평을 넓힙니다."
                     }
                 ]
             }

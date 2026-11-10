@@ -83,7 +83,7 @@ const TEXTBOOK_COVERS = [
     coverImage: '/pages_cache/3학년_1학기_세계_문화와_영어_비상_p1.jpg',
     color: 'from-rose-600 to-pink-700',
     badgeBg: 'bg-rose-100 text-rose-800',
-    unitsCount: 2,
+    unitsCount: 6,
   },
 ];
 

@@ -230,16 +230,40 @@ export const GRAMMAR_START_MAP: Record<string, Record<number, GrammarStartInfo>>
   // 6. 세계 문화와 영어 (비상)
   '세계 문화와 영어': {
     1: {
-      page: 8,
-      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p8.jpg',
-      firstPointTitle: '실용 의사소통 및 상호문화 소통 표현 (World Englishes)',
-      allPoints: ['World Englishes 소통 표현', '문화 간 의사소통 활동'],
+      page: 26,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p26.jpg',
+      firstPointTitle: '상호문화 소통과 동아시아 건축문화 (Not only A but also B)',
+      allPoints: ['상호문화 소통 표현', '상관접속사 Not only A but also B'],
     },
     2: {
-      page: 6,
-      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p6.jpg',
-      firstPointTitle: '탐구 보고서 작성 및 정보 시각화 프로젝트',
-      allPoints: ['탐구 보고서 작성', '영문 인포그래픽 프로젝트'],
+      page: 48,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p48.jpg',
+      firstPointTitle: '생태 관광 및 아프리카의 잠재력 탐구 (Search & Write)',
+      allPoints: ['영문 인포그래픽 프로젝트', '아프리카 잠재력 탐구'],
+    },
+    3: {
+      page: 68,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p68.jpg',
+      firstPointTitle: '유럽 문화 기행 및 예술·스포츠 담론 분석',
+      allPoints: ['르네상스 예술 분석', '유럽 스포츠 문화 탐구'],
+    },
+    4: {
+      page: 90,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p90.jpg',
+      firstPointTitle: '관심 표현 및 스타트업 혁신 영문 분석 (I’m interested in)',
+      allPoints: ['관심·흥미 표현', '실리콘밸리 차고 창업 탐구'],
+    },
+    5: {
+      page: 114,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p114.jpg',
+      firstPointTitle: '국기 상징성과 도시 예술(Graffiti) 사회적 의미 분석',
+      allPoints: ['남미 국기 상징 분석', '도시 그래피티 진화 탐구'],
+    },
+    6: {
+      page: 136,
+      imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p136.jpg',
+      firstPointTitle: '글로벌 진로 탐색 및 해양 생태계 영문 발표',
+      allPoints: ['워킹홀리데이 진로 탐색', '해양 생태계 영어 발표'],
     },
   },
 };
