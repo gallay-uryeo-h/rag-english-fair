@@ -61,7 +61,7 @@
           "label": "말하기",
           "page": 37,
           "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p37.jpg",
-          "desc": "인상 깊었던 소설 줄거리 소개 및 작가 인터뷰 롤플레이"
+          "desc": "티베트 혀 내밀기 등 세계 각국의 인사 문화 이해 및 타 문화 소통 예절 토론"
         },
         {
           "key": "reading",
@@ -125,7 +125,7 @@
           "label": "쓰기",
           "page": 72,
           "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p72.jpg",
-          "desc": "소음 차단 실험 보고서와 프로젝트 보드 정리 영작"
+          "desc": "무지개 우유(Magic Rainbow Milk) 과학 실험 프로젝트 보드 분석 및 영작"
         }
       ]
     },
@@ -147,7 +147,7 @@
           "label": "말하기",
           "page": 81,
           "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p81.jpg",
-          "desc": "학교 축제 일회용품 줄이기 실천 방안 토의 및 발표"
+          "desc": "헌 양말로 인형 만들기 등 중고품 창의 활용(업사이클링) 아이디어 나누기"
         },
         {
           "key": "reading",
@@ -185,14 +185,14 @@
           "label": "듣기",
           "page": 14,
           "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p14.jpg",
-          "desc": "야생동물 보호구역 봉사활동 참여 및 반려동물 입양 안내 대화 청취"
+          "desc": "자선 바자회 준비 대화 및 주말 봉사활동 계획 나누기 청취"
         },
         {
           "key": "speaking",
           "label": "말하기",
           "page": 15,
           "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p15.jpg",
-          "desc": "동물 보호소 봉사 경험 공유 및 올바른 반려 문화 의견 교환"
+          "desc": "야생동물 통행로(Wildlife Crossing) 필요성 토론 및 도움이 필요한 동물 의견 나누기"
         },
         {
           "key": "reading",
@@ -213,7 +213,7 @@
           "label": "쓰기",
           "page": 28,
           "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p28.jpg",
-          "desc": "유기동물 보호소 자원봉사 신청서 및 지원 동기서 영작"
+          "desc": "독거노인을 위한 노인복지관(Senior Welfare Center) 자원봉사 신청서 분석 및 작성"
         }
       ]
     },
@@ -684,7 +684,7 @@
           "label": "읽기",
           "page": 64,
           "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p64.jpg",
-          "desc": "본문: The Decoy Effect: How Subtle Options Drive Decisions"
+          "desc": "본문: The Danger of Fake News & The Myth of the Tongue Map (가짜 뉴스와 미각 과학의 오류)"
         },
         {
           "key": "grammar",
@@ -742,7 +742,7 @@
           "label": "읽기",
           "page": 112,
           "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p112.jpg",
-          "desc": "본문: The Diderot Effect: Why We Buy Things We Don’t Truly Need"
+          "desc": "본문: Unusual Taxes in History (역사 속 특이한 세금 제도와 사회)"
         },
         {
           "key": "grammar",
@@ -1076,7 +1076,7 @@
           "label": "말하기",
           "page": 23,
           "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p23.jpg",
-          "desc": "중앙아시아의 유목 문화와 손님 환대(Hospitality) 전통 발표"
+          "desc": "요가 동작을 친구에게 영어로 설명하고 함께 실습하는 말하기 활동"
         },
         {
           "key": "reading",
@@ -1270,7 +1270,7 @@
           "label": "쓰기",
           "page": 150,
           "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p150.jpg",
-          "desc": "성공적인 호주 워킹홀리데이 일자리 구하기 이력서 및 계획서 작성"
+          "desc": "호주 워킹홀리데이 일자리 지원 이력서(Cover Letter) 표현 및 계획서 작성"
         }
       ]
     }
