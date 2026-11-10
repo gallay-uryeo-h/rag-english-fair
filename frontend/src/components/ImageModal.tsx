@@ -57,3 +57,4 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
     </div>
   );
 };
+

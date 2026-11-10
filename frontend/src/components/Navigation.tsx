@@ -1,6 +1,14 @@
 import React from 'react';
 import type { TabType } from '../types';
-import { Sparkles, Map, MessageSquare, BookOpen } from 'lucide-react';
+import { 
+  Sparkles, 
+  Compass, 
+  Lightbulb, 
+  Award, 
+  Map, 
+  MessageSquare, 
+  BookOpen 
+} from 'lucide-react';
 
 interface Props {
   currentTab: TabType;
@@ -9,24 +17,27 @@ interface Props {
 
 export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
   const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
-    { id: 'recommend', label: 'My English Future', icon: <Sparkles className="w-4 h-4" /> },
-    { id: 'visual', label: '3개년 성장 로드맵', icon: <Map className="w-4 h-4" /> },
-    { id: 'chat', label: '의령여고 생활 Q&A', icon: <MessageSquare className="w-4 h-4" /> },
-    { id: 'grammar', label: '교과서 미리보기', icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'recommend', label: '📸 My English Future', icon: <Sparkles className="w-3.5 h-3.5" /> },
+    { id: 'mbti', label: '🧪 과목 MBTI', icon: <Compass className="w-3.5 h-3.5" /> },
+    { id: 'seteuk', label: '💡 세특 치트키', icon: <Lightbulb className="w-3.5 h-3.5" /> },
+    { id: 'passport', label: '🎫 5부스 여권 스탬프', icon: <Award className="w-3.5 h-3.5" /> },
+    { id: 'visual', label: '🗺️ 3개년 로드맵', icon: <Map className="w-3.5 h-3.5" /> },
+    { id: 'chat', label: '💬 의령여고 Q&A', icon: <MessageSquare className="w-3.5 h-3.5" /> },
+    { id: 'grammar', label: '📖 교과서 E-Book', icon: <BookOpen className="w-3.5 h-3.5" /> },
   ];
 
   return (
-    <nav className="flex gap-1.5 p-2 bg-white border-b border-slate-200 shrink-0 overflow-x-auto no-scrollbar">
+    <nav className="flex gap-1.5 px-2.5 py-2 bg-white border-b border-slate-200 shrink-0 overflow-x-auto no-scrollbar">
       {tabs.map((tab) => {
         const isActive = currentTab === tab.id;
         return (
           <button
             key={tab.id}
             onClick={() => onSelectTab(tab.id)}
-            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
               isActive
-                ? 'bg-blue-50 text-blue-600 shadow-xs'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'text-slate-600 bg-slate-50 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
             }`}
           >
             {tab.icon}

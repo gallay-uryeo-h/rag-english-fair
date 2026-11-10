@@ -201,3 +201,4 @@ export const TextbookPreview: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
+

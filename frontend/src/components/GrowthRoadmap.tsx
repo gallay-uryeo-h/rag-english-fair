@@ -323,3 +323,4 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
+

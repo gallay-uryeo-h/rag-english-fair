@@ -3,6 +3,9 @@ import type { TabType } from './types';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Station5Recommend } from './components/Station5Recommend';
+import { EnglishMbtiTab } from './components/EnglishMbtiTab';
+import { SeteukGeneratorTab } from './components/SeteukGeneratorTab';
+import { DigitalPassportTab } from './components/DigitalPassportTab';
 import { GrowthRoadmap } from './components/GrowthRoadmap';
 import { SchoolLifeQA } from './components/SchoolLifeQA';
 import { TextbookPreview } from './components/TextbookPreview';
@@ -33,22 +36,25 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-2xl mx-auto bg-slate-50 border-x border-slate-200 shadow-sm overflow-hidden">
-      {/* 고정 헤더 */}
+    <div className="flex flex-col h-screen max-w-2xl mx-auto bg-slate-100 border-x border-slate-200 shadow-sm overflow-hidden">
+      {/* 상단 공통 헤더 */}
       <Header />
 
-      {/* 내비게이션 바 */}
+      {/* 7개 서비스 탭 내비게이션 */}
       <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
 
-      {/* 탭 뷰 본문 */}
-      <main className="flex-1 overflow-hidden flex flex-col">
+      {/* 탭 본문 영역 */}
+      <main className="flex-1 overflow-hidden flex flex-col bg-slate-50">
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
+        {currentTab === 'mbti' && <EnglishMbtiTab />}
+        {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
+        {currentTab === 'passport' && <DigitalPassportTab />}
         {currentTab === 'visual' && <GrowthRoadmap onOpenImage={handleOpenImage} />}
         {currentTab === 'chat' && <SchoolLifeQA onOpenImage={handleOpenImage} />}
         {currentTab === 'grammar' && <TextbookPreview onOpenImage={handleOpenImage} />}
       </main>
 
-      {/* 교과서 원본 사진 팝업 모달 */}
+      {/* 교과서 원본 E-Book 팝업 모달 */}
       <ImageModal
         isOpen={modalState.isOpen}
         title={modalState.title}

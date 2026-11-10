@@ -217,3 +217,4 @@ export const SchoolLifeQA: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
+

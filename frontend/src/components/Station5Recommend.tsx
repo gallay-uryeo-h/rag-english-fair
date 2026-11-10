@@ -168,3 +168,4 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
+
