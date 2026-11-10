@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Station5Recommend } from './components/Station5Recommend';
 import { TextbookPreviewClean } from './components/TextbookPreviewClean';
+import { TextbookBrowse2Layer } from './components/TextbookBrowse2Layer';
 import { VocabTestTab } from './components/VocabTestTab';
 import { EnglishMbtiTab } from './components/EnglishMbtiTab';
 import { DeepEnglishMbtiTab } from './components/DeepEnglishMbtiTab';
@@ -51,6 +52,7 @@ export function App() {
       <main className="flex-1 overflow-hidden flex flex-col bg-slate-50">
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
         {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
+        {currentTab === 'textbook-2layer' && <TextbookBrowse2Layer onOpenImage={handleOpenImage} />}
         {currentTab === 'vocab-test' && <VocabTestTab />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'deep-mbti' && <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />}

@@ -1,15 +1,16 @@
 export type TabType =
   | 'recommend'   // 1. My English Future (진로 8대 분야 & 본문 추천)
   | 'textbook-preview' // 2. 교과서 미리보기 (친근한 스토리 & 본문 뷰어)
-  | 'vocab-test'  // 3. 교과서 단어 진단 (나의 단어는 어디쯤? 3지선다 퀴즈)
-  | 'mbti'        // 4. 영어 성향 MBTI (과목 매칭)
-  | 'deep-mbti'   // 5. 심층 본문 MBTI (8문항 정밀 분석 & 본문 지문 매칭)
-  | 'seteuk'      // 6. 세특 아이디어 발전소 (교과서 기반 탐구보고서)
-  | 'grammar-overview' // 7. 문법 한눈에 조망 (3개년 문법 파트 첫페이지 & 매트릭스)
-  | 'passport'    // 8. 디지털 여권 & 5부스 스탬프 투어
-  | 'visual'      // 9. 3개년 성장 로드맵 (연계도 & 4대 계통도)
-  | 'chat'        // 10. 의령여고 생활 Q&A (중3/학부모 추천 질문 & 챗봇)
-  | 'grammar';    // 11. 교과서 E-Book (검색 & 필터 포함 전체 E-Book)
+  | 'textbook-2layer'  // 3. 교과서 2레이어 탐색 (3x2 표지 그리드 & 단원 레이어)
+  | 'vocab-test'  // 4. 교과서 단어 진단 (나의 단어는 어디쯤? 3지선다 퀴즈)
+  | 'mbti'        // 5. 영어 성향 MBTI (과목 매칭)
+  | 'deep-mbti'   // 6. 심층 본문 MBTI (8문항 정밀 분석 & 본문 지문 매칭)
+  | 'seteuk'      // 7. 세특 아이디어 발전소 (교과서 기반 탐구보고서)
+  | 'grammar-overview' // 8. 문법 한눈에 조망 (3개년 문법 파트 첫페이지 & 매트릭스)
+  | 'passport'    // 9. 디지털 여권 & 5부스 스탬프 투어
+  | 'visual'      // 10. 3개년 성장 로드맵 (연계도 & 4대 계통도)
+  | 'chat'        // 11. 의령여고 생활 Q&A (중3/학부모 추천 질문 & 챗봇)
+  | 'grammar';    // 12. 교과서 E-Book (검색 & 필터 포함 전체 E-Book)
 
 export interface ChatMessage {
   role: 'user' | 'bot';
