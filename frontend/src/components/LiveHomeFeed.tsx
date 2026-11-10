@@ -185,10 +185,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
-                    STAGE 01
-                  </span>
+                <div className="flex items-center justify-end">
                   <Heart className="w-4 h-4 text-white fill-white/80" />
                 </div>
                 <div>
@@ -212,10 +209,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
-                    STAGE 02
-                  </span>
+                <div className="flex items-center justify-end">
                   <Volume2 className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -239,10 +233,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
-                    STAGE 03
-                  </span>
+                <div className="flex items-center justify-end">
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -266,10 +257,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
-                    STAGE 04
-                  </span>
+                <div className="flex items-center justify-end">
                   <Lightbulb className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -329,13 +317,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
 
-          <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
-              STAGE 01 · 8문항 정밀 검사
-            </span>
-          </div>
-
-          <div className="space-y-1.5 relative z-10">
+          <div className="space-y-1.5 relative z-10 pt-4">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
               MBTI별 본문 추천
             </h3>
@@ -447,13 +429,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
 
-          <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
-              STAGE 02 · 소리만 듣고 맞추기 포함
-            </span>
-          </div>
-
-          <div className="space-y-1.5 relative z-10">
+          <div className="space-y-1.5 relative z-10 pt-4">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
               단어 미리보기
             </h3>
@@ -563,13 +539,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
 
-          <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
-              STAGE 03 · 3×2 표지 그리드 ➔ 단원 레이어
-            </span>
-          </div>
-
-          <div className="space-y-1 relative z-10">
+          <div className="space-y-1 relative z-10 pt-4">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
               의령여고 3개년 교과서 6권 대공개!
             </h3>
@@ -679,13 +649,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
 
-          <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
-              STAGE 04 · 교과서 본문 연계 탐구보고서
-            </span>
-          </div>
-
-          <div className="space-y-1 relative z-10">
+          <div className="space-y-1 relative z-10 pt-4">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
               교과서 지문이 나만의 세특 치트키로 변신!
             </h3>
