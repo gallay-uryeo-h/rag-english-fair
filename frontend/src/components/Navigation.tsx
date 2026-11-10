@@ -2,13 +2,14 @@ import React from 'react';
 import type { TabType } from '../types';
 import {
   Sparkles,
+  BookOpen,
+  BrainCircuit,
   Compass,
   Lightbulb,
   Award,
   Layers,
   Map,
-  MessageSquare,
-  BookOpen
+  MessageSquare
 } from 'lucide-react';
 
 interface Props {
@@ -20,6 +21,7 @@ export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
   const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
     { id: 'recommend', label: '📸 My English Future', icon: <Sparkles className="w-3.5 h-3.5" /> },
     { id: 'textbook-preview', label: '📖 교과서 미리보기', icon: <BookOpen className="w-3.5 h-3.5" /> },
+    { id: 'vocab-test', label: '🎯 단어 레벨 진단', icon: <BrainCircuit className="w-3.5 h-3.5" /> },
     { id: 'mbti', label: '🧪 본문 MBTI', icon: <Compass className="w-3.5 h-3.5" /> },
     { id: 'seteuk', label: '💡 세특 치트키', icon: <Lightbulb className="w-3.5 h-3.5" /> },
     { id: 'grammar-overview', label: '📐 문법 한눈에 조망', icon: <Layers className="w-3.5 h-3.5" /> },

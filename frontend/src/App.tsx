@@ -3,6 +3,8 @@ import type { TabType } from './types';
 import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { Station5Recommend } from './components/Station5Recommend';
+import { TextbookPreviewClean } from './components/TextbookPreviewClean';
+import { VocabTestTab } from './components/VocabTestTab';
 import { EnglishMbtiTab } from './components/EnglishMbtiTab';
 import { SeteukGeneratorTab } from './components/SeteukGeneratorTab';
 import { DigitalPassportTab } from './components/DigitalPassportTab';
@@ -10,7 +12,6 @@ import { GrammarOverviewTab } from './components/GrammarOverviewTab';
 import { GrowthRoadmap } from './components/GrowthRoadmap';
 import { SchoolLifeQA } from './components/SchoolLifeQA';
 import { TextbookPreview } from './components/TextbookPreview';
-import { TextbookPreviewClean } from './components/TextbookPreviewClean';
 import { ImageModal } from './components/ImageModal';
 
 export function App() {
@@ -49,6 +50,7 @@ export function App() {
       <main className="flex-1 overflow-hidden flex flex-col bg-slate-50">
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
         {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
+        {currentTab === 'vocab-test' && <VocabTestTab />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
         {currentTab === 'grammar-overview' && <GrammarOverviewTab onOpenImage={handleOpenImage} />}
