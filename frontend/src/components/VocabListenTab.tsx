@@ -97,7 +97,7 @@ export const VocabListenTab: React.FC = () => {
       // 일반 모드: 단어 발음
       setTimeout(() => speakWord(currentQ.word, 0.85), 300);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex, selectedSetId, selectedSubjectKey]);
 
   const scrollToBottom = () => {
@@ -222,11 +222,10 @@ export const VocabListenTab: React.FC = () => {
               <button
                 key={quiz.subjectKey}
                 onClick={() => handleResetQuiz(quiz.subjectKey, 1)}
-                className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-                  isSelected
+                className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer border ${isSelected
                     ? 'bg-purple-600 text-white border-purple-600 shadow-xs scale-[1.02]'
                     : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-                }`}
+                  }`}
               >
                 <span className="truncate w-full text-center">{quiz.title}</span>
                 <span className={`text-[10px] font-normal truncate mt-0.5 ${isSelected ? 'text-purple-100' : 'text-slate-500'}`}>
@@ -257,11 +256,10 @@ export const VocabListenTab: React.FC = () => {
                     <button
                       key={set.setId}
                       onClick={() => handleResetQuiz(undefined, set.setId)}
-                      className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center border cursor-pointer ${
-                        isSelected
+                      className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center border cursor-pointer ${isSelected
                           ? 'bg-purple-600 text-white border-purple-600 shadow-xs ring-2 ring-purple-200'
                           : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
-                      }`}
+                        }`}
                     >
                       {set.setId}
                     </button>
@@ -288,67 +286,62 @@ export const VocabListenTab: React.FC = () => {
             />
           </div>
 
-          {/* 🎧 문제 모드 배지 */}
-          <div className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold ${
-            isListenOnlyMode
-              ? 'bg-amber-50 border border-amber-300 text-amber-800'
-              : 'bg-purple-50 border border-purple-200 text-purple-700'
-          }`}>
-            <div className="flex items-center gap-1.5">
-              {isListenOnlyMode ? (
-                <>
-                  <EyeOff className="w-3.5 h-3.5" />
-                  <span>🎧 소리만 듣고 맞추기 (단어가 숨겨집니다)</span>
-                </>
-              ) : (
-                <>
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>단어 보기 + 자동 발음</span>
-                </>
-              )}
-            </div>
-            <button
-              onClick={() => speakWord(currentQ.word, isListenOnlyMode ? 0.65 : 0.85)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-current/20 hover:opacity-80 transition-opacity cursor-pointer"
-            >
-              <Volume2 className="w-3.5 h-3.5" />
-              <span>다시 듣기</span>
-            </button>
-          </div>
-
           {/* 단어 / 예문 박스 */}
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-center">
-            <div className="text-[11px] font-semibold text-purple-600 tracking-wider uppercase">
-              Target Vocabulary
+            <div className="flex items-center justify-between text-[11px] font-semibold text-purple-600 tracking-wider uppercase">
+              <span>Target Vocabulary</span>
+              {isListenOnlyMode && (
+                <span className="text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 lowercase tracking-normal">
+                  🎧 소리만 듣고 맞추기
+                </span>
+              )}
             </div>
 
-            {/* 소리만 듣기 모드: 단어 숨김, 일반 모드: 단어 보여줌 */}
+            {/* 소리만 듣기 모드: 단어 숨김 및 스피커 버튼, 일반 모드: 단어 + 스피커 아이콘 */}
             {isListenOnlyMode ? (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-48 h-10 bg-slate-200 rounded-xl flex items-center justify-center">
-                  <span className="text-slate-400 text-sm font-semibold tracking-widest">? ? ? ?</span>
+              <div className="flex flex-col items-center gap-2 py-1">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-36 h-10 bg-slate-200/80 rounded-xl flex items-center justify-center">
+                    <span className="text-slate-400 text-sm font-black tracking-widest">? ? ? ?</span>
+                  </div>
+                  <button
+                    onClick={() => speakWord(currentQ.word, 0.7)}
+                    title="소리 다시 듣기"
+                    className="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white shadow-xs transition-transform active:scale-95 cursor-pointer flex items-center justify-center"
+                  >
+                    <Volume2 className="w-5 h-5" />
+                  </button>
                 </div>
-                <div className="text-[11px] text-amber-700 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                  🔇 소리를 듣고 단어를 맞춰보세요!
+                <div className="text-[11px] text-amber-700 font-medium">
+                  스피커를 눌러 발음을 듣고 어떤 단어인지 맞춰보세요!
                 </div>
               </div>
             ) : (
-              <h3 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
-                {currentQ.word}
-                {currentQ.pronunciation && (
-                  <span className="text-sm font-normal text-slate-400 ml-2">[{currentQ.pronunciation}]</span>
-                )}
-              </h3>
+              <div className="flex items-center justify-center gap-2">
+                <h3 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
+                  {currentQ.word}
+                  {currentQ.pronunciation && (
+                    <span className="text-sm font-normal text-slate-400 ml-2">[{currentQ.pronunciation}]</span>
+                  )}
+                </h3>
+                <button
+                  onClick={() => speakWord(currentQ.word, 0.85)}
+                  title="발음 듣기"
+                  className="p-1.5 rounded-lg text-purple-600 hover:text-purple-800 hover:bg-purple-100/70 transition-colors cursor-pointer"
+                >
+                  <Volume2 className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
+              </div>
             )}
 
             {/* 예문 (소리만 듣기 모드에서도 예문은 표시) */}
             <p className="text-xs md:text-sm text-slate-600 font-mono bg-white p-2.5 rounded-lg border border-slate-200/60 leading-relaxed text-left">
               {isListenOnlyMode
                 ? /* 소리만 듣기: 예문에서 단어 부분을 ___로 가림 */
-                  `"${currentQ.contextSentence.replace(
-                    new RegExp(currentQ.word, 'gi'),
-                    '______'
-                  )}"`
+                `"${currentQ.contextSentence.replace(
+                  new RegExp(currentQ.word, 'gi'),
+                  '______'
+                )}"`
                 : `"${currentQ.contextSentence}"`}
             </p>
           </div>
