@@ -1,0 +1,1278 @@
+{
+  "공통영어1": {
+    "1": {
+      "unitTitle": "You and I Become “We”",
+      "topic": "대인관계와 소통",
+      "careerTag": "심리 · 교육 · 미디어",
+      "passageSummary": "다정함과 협력이 약육강식보다 인류의 생존과 번영에 더 큰 힘을 발휘해 왔음을 생물학적 사례로 배웁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 14,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p14.jpg",
+          "desc": "친구들의 고민 상담 대화와 새로운 교우 관계 형성 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 15,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p15.jpg",
+          "desc": "공감하며 경청하기 표현 및 진솔한 소통 스피치"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 19,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p19.jpg",
+          "desc": "본문: The Power of Friendliness: Soft but Strong (다정함의 진화론적 힘)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 26,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p26.jpg",
+          "desc": "주격/목적격 관계대명사 및 수동태 분사구문 표현"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p28.jpg",
+          "desc": "친구의 학교생활 고민에 건네는 따뜻한 조언 편지 영작"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "Open a Book, Open the World",
+      "topic": "문학과 공감",
+      "careerTag": "인문 · 문학 · 사회학",
+      "passageSummary": "마오리족의 족보와 구전 이야기를 담은 소설을 통해 책으로 세상을 이해하고 문화적 뿌리를 되새깁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 36,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p36.jpg",
+          "desc": "세계 각국의 전통 인사법과 도서관 추천 도서 대화 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 37,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p37.jpg",
+          "desc": "인상 깊었던 소설 줄거리 소개 및 작가 인터뷰 롤플레이"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 41,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p41.jpg",
+          "desc": "본문: Gathering of the Whakapapa (마오리 족보와 조상의 숨결)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 48,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p48.jpg",
+          "desc": "as if 가정법(마치 ~인 것처럼) 및 감탄문 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 50,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p50.jpg",
+          "desc": "감명 깊게 읽은 영미 문학 작품의 서평(Book Review) 작성"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Free Yourself with Science",
+      "topic": "과학 원리와 발명",
+      "careerTag": "전자공학 · 컴퓨터 · 물리",
+      "passageSummary": "노이즈 캔슬링 이어폰 속 반대 위상 음파 상쇄 간섭 기술의 원리와 일상 속 소음 제어 기술을 탐구합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 58,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p58.jpg",
+          "desc": "세척 가능한 키보드 등 일상 속 편리한 과학 발명품 대화 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 59,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p59.jpg",
+          "desc": "자연을 모방한 발명품(생체모방기술) 아이디어 발표하기"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 63,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p63.jpg",
+          "desc": "본문: Tuning Out: The Science of Noise-Cancellation (소음 제어 과학)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 70,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p70.jpg",
+          "desc": "부정어구 도치문(Never did she dream...) 및 장소부사구 도치"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 72,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p72.jpg",
+          "desc": "소음 차단 실험 보고서와 프로젝트 보드 정리 영작"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Let It Be Green",
+      "topic": "생태와 지속가능성",
+      "careerTag": "환경공학 · 바이오 · 신재생",
+      "passageSummary": "버려지는 커피 찌꺼기(커피박)를 고부가가치 바이오 연료와 친환경 소재로 새활용하는 환경 솔루션을 다룹니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 80,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p80.jpg",
+          "desc": "꿀벌의 날(World Bee Day) 생태계 역할 및 텀블러 사용 캠페인 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 81,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p81.jpg",
+          "desc": "학교 축제 일회용품 줄이기 실천 방안 토의 및 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 85,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p85.jpg",
+          "desc": "본문: A Better Future for Coffee Waste (커피박의 친환경 대변신)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 92,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p92.jpg",
+          "desc": "with + 명사 + 분사(동시동작 부대상황) 및 상관접속사 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 94,
+          "imagePath": "pages_cache/1학년_1학기_공통영어1_미래엔_p94.jpg",
+          "desc": "환경 통계 그래프 분석 및 탄소 발자국 줄이기 제안서 작성"
+        }
+      ]
+    }
+  },
+  "공통영어2": {
+    "1": {
+      "unitTitle": "We Share, We Care",
+      "topic": "동물 복지와 공존",
+      "careerTag": "수의학 · 동물생태 · 보건",
+      "passageSummary": "상처 입은 코끼리를 치유하는 야생 보호소 캠프 봉사를 통해 생명 존중과 동물권의 가치를 깊이 있게 다룹니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 14,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p14.jpg",
+          "desc": "야생동물 보호구역 봉사활동 참여 및 반려동물 입양 안내 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 15,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p15.jpg",
+          "desc": "동물 보호소 봉사 경험 공유 및 올바른 반려 문화 의견 교환"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 19,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p19.jpg",
+          "desc": "본문: Caring for Animals: Elephant Rescue Camp (코끼리 구호 이야기)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 26,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p26.jpg",
+          "desc": "목적격 보어로 to부정사를 취하는 5형식 동사 및 과거완료(had p.p.)"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p28.jpg",
+          "desc": "유기동물 보호소 자원봉사 신청서 및 지원 동기서 영작"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "Be a Wise Consumer",
+      "topic": "미디어와 소비 윤리",
+      "careerTag": "경영마케팅 · IT개발 · 법학",
+      "passageSummary": "온라인 쇼핑 화면에서 소비자를 기만하여 결제를 유도하는 다크 패턴(Dark Pattern)의 속임수를 고발합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 36,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p36.jpg",
+          "desc": "온라인 정기구독 자동 갱신 청구서 확인 및 환불 요청 통화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 37,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p37.jpg",
+          "desc": "쇼핑몰 후기의 진위 구별법 토론 및 합리적 구매 조언 나누기"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 41,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p41.jpg",
+          "desc": "본문: Light Up Dark Patterns (다크 패턴 속임수 파헤치기)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 48,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p48.jpg",
+          "desc": "조동사 + have p.p.(과거 후회/추측) 및 요구·제안 동사 that절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 50,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p50.jpg",
+          "desc": "기만적 광고로 인한 피해 환불 요청 이메일(Customer Service) 작성"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "The True Art Lovers",
+      "topic": "예술과 삶",
+      "careerTag": "예술기획 · 디자인 · 문화콘텐츠",
+      "passageSummary": "골판지 위에 그림을 그린 빌 트레일러와 작은 오두막의 모드 루이스 등 순수한 민속 예술가들의 감동을 전합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 58,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p58.jpg",
+          "desc": "미술관 도슨트의 전시 작품 해설 및 관람 에티켓 안내 방송 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 59,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p59.jpg",
+          "desc": "가장 좋아하는 예술 작품 감상평 공유 및 도슨트 소개 롤플레이"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 63,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p63.jpg",
+          "desc": "본문: From Shadows to Spotlight: Bill Traylor & Maud Lewis"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 70,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p70.jpg",
+          "desc": "접속사 because vs 전치사 because of 구분 및 관계사 계속적 용법"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 72,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p72.jpg",
+          "desc": "역경을 딛고 꿈을 이룬 예술가의 짧은 영문 전기문(Biography) 작성"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Sink or Swim in the Digital Ocean",
+      "topic": "인공지능과 미래 기술",
+      "careerTag": "AI인공지능 · 뇌과학 · 컴퓨터",
+      "passageSummary": "뇌-컴퓨터 인터페이스(BCI)와 AI 뉴럴 임플란트가 가져올 인류의 초인간적 가능성과 윤리적 쟁점을 조망합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 80,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p80.jpg",
+          "desc": "AI 스마트 헬스케어 기기 사용법과 신경망 기술 소개 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 81,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p81.jpg",
+          "desc": "뇌 임플란트 기술의 장단점 찬반 토론 및 미래 사회 예측 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 85,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p85.jpg",
+          "desc": "본문: Will AI-Powered Neural Implants Make Us Super-Humans?"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 92,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p92.jpg",
+          "desc": "가목적어-진목적어 구문(consider it important to-v) 및 동격의 that"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 94,
+          "imagePath": "pages_cache/1학년_2학기_공통영어2_미래엔_p94.jpg",
+          "desc": "인공지능 윤리 가이드라인 제정을 촉구하는 설득적 영문 단락 작성"
+        }
+      ]
+    }
+  },
+  "영어Ⅰ": {
+    "1": {
+      "unitTitle": "Journey to the Future",
+      "topic": "진로와 롤모델",
+      "careerTag": "심리상담 · 진로교육 · 다큐제작",
+      "passageSummary": "해양학자 자크 쿠스토와 애니메이터 등 진로 탐색에 영감을 주는 롤모델들의 도전 스토리를 만납니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 10,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p10.jpg",
+          "desc": "선호하는 장래 희망 직업과 꿈을 그리게 된 계기 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 9,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p9.jpg",
+          "desc": "성격 유형별 어울리는 진로 탐색 및 롤모델 소개 스피치"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 15,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p15.jpg",
+          "desc": "진로 설계 및 롤모델 지문 핵심 숙어와 그림 문맥 어휘 학습"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 16,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p16.jpg",
+          "desc": "본문: Mapping Out the Right Career Path (나의 진로 로드맵과 롤모델)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 25,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p25.jpg",
+          "desc": "목적격 보어로 to부정사를 취하는 구문 및 so ~ that 결과 부사절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p28.jpg",
+          "desc": "수의사 등 미래 진로 목표를 위한 구체적 실천 계획서 영작"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "The Power of Good Habits",
+      "topic": "동물 지능과 습관 과학",
+      "careerTag": "인지과학 · 심리학 · 동물행동학",
+      "passageSummary": "까마귀의 도구 사용 실험과 과학 보고서를 통해 동물 인지 능력과 습관 형성의 원리를 탐구합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 36,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p36.jpg",
+          "desc": "방과 후 달리기 습관 계획 및 새로운 루틴 만들기에 관한 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 35,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p35.jpg",
+          "desc": "작은 습관 쌓기(Habit Stacking) 전략 발표 및 친구와 계획 교환"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 41,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p41.jpg",
+          "desc": "과학 실험 조건 및 동물의 인지 행동 관련 핵심 학술 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 42,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p42.jpg",
+          "desc": "본문: Science Report: Animal Habits and Tool Use (까마귀 지능 실험)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 51,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p51.jpg",
+          "desc": "시간/조건 부사절의 현재시제 미래 대용 및 전치사 + 동명사 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 54,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p54.jpg",
+          "desc": "좋은 습관을 실천 중인 교내 인물 인터뷰 기사 작성"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Let’s Live in Harmony",
+      "topic": "세대 통합과 상생",
+      "careerTag": "사회복지 · 도시계획 · 노인학",
+      "passageSummary": "네덜란드 대학생들이 노인 요양원에서 말벗을 해주고 무료 숙박을 얻는 세대 공존 프로젝트를 다룹니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 62,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p62.jpg",
+          "desc": "미술관 에티켓 및 평화로운 지역사회 유지를 위한 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 61,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p61.jpg",
+          "desc": "세대 간 소통의 장단점 토론 및 친절의 파동 캠페인 발표"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 67,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p67.jpg",
+          "desc": "사회 통합, 고립 해소, 복지 주거 관련 필수 공공 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 68,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p68.jpg",
+          "desc": "본문: Humanitas: Living in Harmony Across Generations"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 77,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p77.jpg",
+          "desc": "의문사 + to부정사 명사구 및 관계대명사 주격/목적격 수식절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 80,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p80.jpg",
+          "desc": "요양원 어르신들께 감사의 마음을 전하는 영문 감사 편지 작성"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Spark Your Creativity",
+      "topic": "푸드 아트와 발상의 전환",
+      "careerTag": "식품영양 · 시각디자인 · 광고기획",
+      "passageSummary": "음식 재료를 유머러스한 예술로 승화시킨 헬가 스텐첼과 아르침볼도의 독창적인 작품 세계를 감상합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 88,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p88.jpg",
+          "desc": "창의적인 미술 프로젝트 시작을 위한 조언 구하기 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 87,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p87.jpg",
+          "desc": "일상 사물에서 영감을 얻은 기발한 아이디어 제안하기"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 93,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p93.jpg",
+          "desc": "착시, 시각적 변형, 창의적 표현 관련 예술 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 94,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p94.jpg",
+          "desc": "본문: Edible Art: Transforming Food into Visual Wonders"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 103,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p103.jpg",
+          "desc": "접속사가 남아있는 분사구문(when asked) 및 대동사 do so"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 106,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p106.jpg",
+          "desc": "일상의 불편함을 창의적으로 해결하는 문제 해결 단락 영작"
+        }
+      ]
+    },
+    "5": {
+      "unitTitle": "Rise Above Challenges",
+      "topic": "난민 수영선수의 불굴의 의지",
+      "careerTag": "국제인권 · 스포츠외교 · NGO",
+      "passageSummary": "침몰 위기의 보트를 바다에서 끌고 헤엄쳐 승객을 구하고 올림픽에 출전한 유스라 마르디니의 감동 실화입니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 114,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p114.jpg",
+          "desc": "어려움을 극복하고 봉사활동을 실천한 학생의 인터뷰 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 113,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p113.jpg",
+          "desc": "위기 상황에서의 용기와 협력의 힘에 관한 발표 및 스피치"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 119,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p119.jpg",
+          "desc": "생존, 인권, 역경 극복 관련 고난도 수능 빈출 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 120,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p120.jpg",
+          "desc": "본문: Yusra Mardini: A Journey From War to the Olympics"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 129,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p129.jpg",
+          "desc": "준사역동사 help + O + (to) 동원 및 간접화법 전환 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 132,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p132.jpg",
+          "desc": "역경을 딛고 꿈을 실현한 감동적인 영문 서사 단락 작성"
+        }
+      ]
+    },
+    "6": {
+      "unitTitle": "Special Lesson: The Open Window",
+      "topic": "영미 고전 명작 단편소설",
+      "careerTag": "영미문학 · 번역 · 시나리오",
+      "passageSummary": "풍자와 위트가 돋보이는 사키(Saki)의 단편소설 ‘열린 창문’의 반전 결말을 원문으로 감상합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 139,
+          "imagePath": "pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p139.jpg",
+          "desc": "본문: The Open Window by Saki (열린 창문 속 반전 이야기)"
+        }
+      ]
+    }
+  },
+  "영어독해와작문": {
+    "1": {
+      "unitTitle": "Discover Who You Are",
+      "topic": "가면 증후군과 자아존중감",
+      "careerTag": "임상심리 · 상담치료 · 뇌과학",
+      "passageSummary": "성공한 사람들도 겪는 가면 증후군(Impostor Syndrome)의 원인과 회복 탄력성을 다룹니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 16,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p16.jpg",
+          "desc": "본문: You Are Good Enough: Overcoming the Impostor Syndrome"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 26,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p26.jpg",
+          "desc": "목적격 보어로 to-v를 취하는 5형식 동사 및 조건/양보 부사절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p28.jpg",
+          "desc": "자신의 불안과 실패를 극복했던 경험을 다룬 성찰적 영문 수필"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "Embrace the Earth",
+      "topic": "물 발자국과 자원 보존",
+      "careerTag": "환경공학 · 수자원관리 · 지속가능성",
+      "passageSummary": "티셔츠 한 벌에 쓰이는 보이지 않는 가상수(물 발자국)와 지속 가능한 업사이클링을 분석합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 40,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p40.jpg",
+          "desc": "본문: Mind Your Water Footprint: Water Used to Make Everyday Items"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 50,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p50.jpg",
+          "desc": "동격의 that(the fact that...) 및 명사를 뒤에서 수식하는 분사구"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 52,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p52.jpg",
+          "desc": "지자체나 기업에 수자원 절약을 제안하는 정책 건의 이메일 작성"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Think Critically",
+      "topic": "행동경제학과 미끼 효과",
+      "careerTag": "경제학 · 마케팅 · 소비자심리",
+      "passageSummary": "소비자의 비합리적 선택을 유도하는 미끼 효과(Decoy Effect)의 심리적 메커니즘을 파헤칩니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 64,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p64.jpg",
+          "desc": "본문: The Decoy Effect: How Subtle Options Drive Decisions"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 74,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p74.jpg",
+          "desc": "현재완료 수동태(have been p.p.) 및 결과적 용법의 분사구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 76,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p76.jpg",
+          "desc": "소비자 선택 실험 그래프를 분석하고 결과를 보고하는 경제 리포트"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Appreciate Art",
+      "topic": "천문학으로 푼 모네 명화의 비밀",
+      "careerTag": "천문학 · 미술사 · 포렌식과학",
+      "passageSummary": "모네의 인상, 해돋이 그림 속 태양 궤적과 조수 간만을 천문학 소프트웨어로 추적해 그린 날짜를 규명합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 88,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p88.jpg",
+          "desc": "본문: Astronomy Solves an Art Mystery: The Exact Time Monet Painted"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 98,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p98.jpg",
+          "desc": "관계대명사의 계속적 용법(, which) 및 It is ~ that 강조 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 100,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p100.jpg",
+          "desc": "과학적 융합 탐구로 역사적 수수께끼를 밝힌 인물 탐구 전기 작성"
+        }
+      ]
+    },
+    "5": {
+      "unitTitle": "Money in Our Lives",
+      "topic": "디드로 효과와 과소비의 굴레",
+      "careerTag": "소비자경제 · 사회학 · 재무관리",
+      "passageSummary": "고급 가운 한 벌을 선물받고 온 집안 가구를 바꾸다 파산한 디드로의 일화로 과소비의 본질을 경고합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 112,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p112.jpg",
+          "desc": "본문: The Diderot Effect: Why We Buy Things We Don’t Truly Need"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 122,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p122.jpg",
+          "desc": "전치사의 목적어로 쓰인 의문사 to-v 및 조동사 have p.p."
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 124,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p124.jpg",
+          "desc": "현대 청소년 소비 트렌드를 분석하는 영문 신문 기사 칼럼 작성"
+        }
+      ]
+    },
+    "6": {
+      "unitTitle": "Explore the Future",
+      "topic": "로봇 공학과 감정의 지각",
+      "careerTag": "AI로봇 · SF문학 · 인지철학",
+      "passageSummary": "가즈오 이시구로의 SF 소설 ‘클라라와 태양’을 통해 인간과 공감하는 인공지능 로봇의 존재 이유를 묻습니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 136,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p136.jpg",
+          "desc": "본문: Imagine Living with AI: Robotics and Klara and the Sun"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 146,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p146.jpg",
+          "desc": "상관접속사 either A or B 병렬 구조 및 간접의문문 명사절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 148,
+          "imagePath": "pages_cache/2학년_2학기_영어독해와작문_미래엔_p148.jpg",
+          "desc": "감정을 지닌 AI 로봇 개발의 윤리적 쟁점을 다룬 논증적 영문 에세이"
+        }
+      ]
+    }
+  },
+  "영어Ⅱ": {
+    "1": {
+      "unitTitle": "Build a Better World",
+      "topic": "백일해 백신 개발의 여성 영웅들",
+      "careerTag": "의예과 · 약학연구 · 생명과학",
+      "passageSummary": "1930년대 영유아 치사율 1위였던 백일해의 백신을 끝없는 집념으로 개발해 인류를 구한 여성 과학자들의 실화입니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 10,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p10.jpg",
+          "desc": "주말 지역사회 봉사활동 경험 및 기업의 사회적 책임(CSR) 강연 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 9,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p9.jpg",
+          "desc": "사회에 기여하는 이타적 롤모델의 도덕적 의무와 가치관 토론"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 14,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p14.jpg",
+          "desc": "임상 시험, 병원균 배양, 면역 형성 관련 전문 의학 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 15,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p15.jpg",
+          "desc": "본문: Two Heroes Who Fought a Deadly Disease (펄 켄드릭과 그레이스 엘더링)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 25,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p25.jpg",
+          "desc": "과거완료 수동태(had been p.p.) 및 주절-종속절 대과거 시제 일치"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p28.jpg",
+          "desc": "질병 극복과 사회 공헌을 위한 의료 봉사활동 지원 신청서 작성"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "The World of Scientific Discovery",
+      "topic": "시민 천문학과 갤럭시 주",
+      "careerTag": "천체물리 · 빅데이터 · 크라우드소싱",
+      "passageSummary": "수십만 명의 일반 시민들이 참여해 100만 개 이상의 우주 은하 사진을 분류해 낸 시민과학 프로젝트를 다룹니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 38,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p38.jpg",
+          "desc": "위대한 발명가들의 실패를 딛고 일어선 과학사 강연 요약 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 35,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p35.jpg",
+          "desc": "과학 탐구에서 시민 참여의 중요성에 관한 호기심 표현 스피치"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 40,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p40.jpg",
+          "desc": "은하 구조, 집단 지성, 천체 망원경 관측 필수 과학 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 41,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p41.jpg",
+          "desc": "본문: Science Is for Everyone: The Galaxy Zoo Citizen Project"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 51,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p51.jpg",
+          "desc": "전치사구 및 방법 강조 구문(It is by ~ that ...)과 장소 부사구 강조"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 54,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p54.jpg",
+          "desc": "우주 탐사나 과학 다큐멘터리를 감상하고 작성하는 영문 영화 비평문"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Life Is a Sum of Choices",
+      "topic": "민주주의와 다양한 투표 제도",
+      "careerTag": "정치외교 · 행정학 · 통계수학",
+      "passageSummary": "단순 다수결의 맹점을 극복하고 유권자의 다양한 선호를 반영하는 선호투표제 등 선거 제도의 원리를 탐색합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 62,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p62.jpg",
+          "desc": "진로와 일상 속 신중한 의사결정에 대한 조언 구하기 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 61,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p61.jpg",
+          "desc": "모둠 대표를 선출할 때 가장 공정한 투표 방식에 관한 의견 표현"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 66,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p66.jpg",
+          "desc": "선거 제도, 투표용지, 과반수, 비례대표 관련 정치·사회 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 67,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p67.jpg",
+          "desc": "본문: There’s More than One Way to Vote (다양한 투표 제도의 과학)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 77,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p77.jpg",
+          "desc": "복합관계대명사(whoever/whatever) 및 전치사 + 관계대명사"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 80,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p80.jpg",
+          "desc": "선거 개혁 제안 및 민주주의 의사결정 방식 개선 논평 작성"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Create a Greener Tomorrow",
+      "topic": "전자 폐기물(E-Waste)의 역습",
+      "careerTag": "환경공학 · 자원순환 · 도시광산",
+      "passageSummary": "매년 수천만 톤씩 버려지는 스마트폰 등 전자 폐기물의 유독 물질과 도시 광산 자원 회수 방안을 모색합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 88,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p88.jpg",
+          "desc": "스마트폰 교체 주기와 전자 기기 분리배출 캠페인 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 87,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p87.jpg",
+          "desc": "계획적 구식화(Planned Obsolescence) 비판 및 소비 절제 권유하기"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 92,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p92.jpg",
+          "desc": "중금속 오염, 침출수, 매립지, 희귀 금속 추출 관련 환경 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 93,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p93.jpg",
+          "desc": "본문: Breaking the Cycle: The Urgent Need to Manage E-Waste"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 103,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p103.jpg",
+          "desc": "당위성 제안/요구 동사 뒤 that절의 (should) 동사원형 구문"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 106,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p106.jpg",
+          "desc": "글로벌 전자 폐기물 증가 추세 그래프를 정밀 묘사하는 분석 단락"
+        }
+      ]
+    },
+    "5": {
+      "unitTitle": "Open Your Mind, Defeat Your Biases",
+      "topic": "고대 조각상의 숨겨진 색채 과학",
+      "careerTag": "고고학 · 미술보존학 · 분광학",
+      "passageSummary": "순백의 백색 대리석으로 알려졌던 고대 그리스 조각상이 원래 자외선 분광 분석 결과 화려한 다채색이었음을 밝힙니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 114,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p114.jpg",
+          "desc": "우리의 고정관념과 편견에 대한 심리학 실험 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 113,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p113.jpg",
+          "desc": "역사적 통념을 깨뜨린 과학적 발견 공유 및 열린 시야 발표"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 118,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p118.jpg",
+          "desc": "대리석 풍화, 천연 안료, 다채색 복원 관련 고고미술 어휘"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 119,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p119.jpg",
+          "desc": "본문: The Colorful Truth of Ancient Statues (고대 조각의 다채색 비밀)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 129,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p129.jpg",
+          "desc": "동격의 명사절 that 및 전치사가 뒤에 남는 관계대명사절"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 132,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p132.jpg",
+          "desc": "집념 어린 과학적 추적으로 역사의 진실을 밝혀낸 학자의 전기문 작성"
+        }
+      ]
+    },
+    "6": {
+      "unitTitle": "Special Lesson: The Model Millionaire",
+      "topic": "오스카 와일드의 풍자 문학",
+      "careerTag": "영문학 · 연극영화 · 창작",
+      "passageSummary": "가난하지만 마음씨 착한 청년 휴이와 걸인 백만장자의 따뜻하고 유머러스한 반전 단편소설을 감상합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 139,
+          "imagePath": "pages_cache/3학년_1학기_영어Ⅱ_능률_p139.jpg",
+          "desc": "본문: The Model Millionaire by Oscar Wilde (모범적인 백만장자)"
+        }
+      ]
+    }
+  },
+  "세계 문화와 영어": {
+    "1": {
+      "unitTitle": "Asia & Middle East",
+      "topic": "중동 스포츠와 동아시아 건축",
+      "careerTag": "건축디자인 · 아시아지역학 · 글로벌교류",
+      "passageSummary": "로봇 기수가 달리는 중동의 낙타 경주와 자연과 하나 되는 동아시아의 한옥·목조 건축 미학을 배웁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 22,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p22.jpg",
+          "desc": "인도의 문화유산 요가(Yoga) 동작 안내 및 효능 설명 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 23,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p23.jpg",
+          "desc": "중앙아시아의 유목 문화와 손님 환대(Hospitality) 전통 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 26,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p26.jpg",
+          "desc": "본문: Traditional Sports (Camel Racing) & East Asian Architecture"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 34,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p34.jpg",
+          "desc": "팟타이 등 아시아 대표 길거리 음식 소개 영문 카드 작성"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "Africa: Unlocking Its Potential",
+      "topic": "아프리카 야생동물 보존과 마라톤",
+      "careerTag": "국제개발 · 스포츠과학 · 생태관광",
+      "passageSummary": "짐바브웨 국립공원의 멸종위기 야생동물 밀렵 감시 레인저와 케냐 고지대 마라토너들의 성공 비결을 다룹니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 44,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p44.jpg",
+          "desc": "아프리카 전통 현대 예술가들의 작품 해설 안내 방송 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 46,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p46.jpg",
+          "desc": "동아프리카 마라토너들의 고지대 훈련과 신체적 강점 토론"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 48,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p48.jpg",
+          "desc": "본문: Wildlife Protection in Zimbabwe & Africa's Innovation"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 56,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p56.jpg",
+          "desc": "아프리카 대륙의 젊은 인구와 기술 스타트업 잠재력 보고서 영작"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Europe: Classical Art and Sports",
+      "topic": "르네상스 명화 대결과 유럽 축구",
+      "careerTag": "서양사 · 미술관큐레이터 · 스포츠산업",
+      "passageSummary": "피렌체 베키오 궁전에서 펼쳐진 다빈치와 미켈란젤로의 벽화 경쟁, 문화가 된 유럽 프로축구 열기를 소개합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 64,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p64.jpg",
+          "desc": "프랑스 크루아상 등 유럽 식문화 역사 및 요리 레시피 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 66,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p66.jpg",
+          "desc": "유럽 각국의 다양한 마이스터 직업학교와 교육 시스템 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 68,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p68.jpg",
+          "desc": "본문: A Duel between Two Painters: Leonardo da Vinci & Michelangelo"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 78,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p78.jpg",
+          "desc": "유럽 프리미어리그 더비 매치와 서포터스 응원 문화 영문 기사 작성"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "North America: High School & Startup",
+      "topic": "차고 창업 혁신과 동계 스포츠",
+      "careerTag": "벤처창업 · IT비즈니스 · 스포츠마케팅",
+      "passageSummary": "실리콘밸리의 차고에서 시작해 세계를 바꾼 스타트업 창업 신화와 캐나다인의 자부심 아이스하키·컬링을 탐구합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 86,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p86.jpg",
+          "desc": "미국 고등학교의 방과 후 클럽 활동 및 스포츠 리그 참여 대화 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 88,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p88.jpg",
+          "desc": "도시별 별명(The Big Apple 등)의 역사적 유래와 문화 조사 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 90,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p90.jpg",
+          "desc": "본문: Ice Hockey and Curling: Canada’s Most Beloved Winter Sports"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 102,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p102.jpg",
+          "desc": "세상을 바꿀 청소년 테크 스타트업 사업 기획서(Business Plan) 영작"
+        }
+      ]
+    },
+    "5": {
+      "unitTitle": "South America: Flags & Carnival",
+      "topic": "남미 거리 예술과 카니발 열정",
+      "careerTag": "축제기획 · 중남미지역학 · 도시문화예술",
+      "passageSummary": "도시의 벽면을 수놓은 정치·사회적 거리 예술(그라피티)과 지구촌 최대의 축제 브라질 리오 카니발의 열기를 전합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 110,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p110.jpg",
+          "desc": "남미 국가들의 국기 상징색과 역사적 독립 투쟁 안내 방송 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 112,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p112.jpg",
+          "desc": "안데스 산맥과 이과수 폭포 등 남미의 지리적 랜드마크 소개 스피치"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 114,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p114.jpg",
+          "desc": "본문: Graffiti in Latin America: Origin and Evolution"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 124,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p124.jpg",
+          "desc": "삼바 퍼레이드 의상과 축제 안전 수칙을 소개하는 관광 가이드 영작"
+        }
+      ]
+    },
+    "6": {
+      "unitTitle": "Oceania: Nature & Marine",
+      "topic": "오세아니아 대자연과 워킹홀리데이",
+      "careerTag": "관광경영 · 해양생태 · 국제교류",
+      "passageSummary": "호주에서 일과 여행을 병행하는 워킹홀리데이의 생생한 삶과 뉴질랜드의 웅장한 대자연을 조망합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 132,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p132.jpg",
+          "desc": "영화 모아나 속 폴리네시아 원주민들의 항해술 문화 설명 청취"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 134,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p134.jpg",
+          "desc": "그레이트 배리어 리프 스노클링 등 선호하는 해양 액티비티 토론"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 136,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p136.jpg",
+          "desc": "본문: Discover Australia: Work and Play on a Working Holiday"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 150,
+          "imagePath": "pages_cache/3학년_1학기_세계_문화와_영어_비상_p150.jpg",
+          "desc": "성공적인 호주 워킹홀리데이 일자리 구하기 이력서 및 계획서 작성"
+        }
+      ]
+    }
+  }
+}
