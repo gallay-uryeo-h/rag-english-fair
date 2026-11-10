@@ -207,7 +207,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
               STAGE 01 · 8문항 정밀 검사
             </span>
-            <span className="text-2xl filter drop-shadow-md">🧭</span>
           </div>
 
           <div className="space-y-1.5 relative z-10">
@@ -326,7 +325,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
               STAGE 02 · 소리만 듣고 맞추기 포함
             </span>
-            <span className="text-2xl filter drop-shadow-md">🎧</span>
           </div>
 
           <div className="space-y-1.5 relative z-10">
@@ -443,7 +441,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
               STAGE 03 · 3×2 표지 그리드 ➔ 단원 레이어
             </span>
-            <span className="text-3xl filter drop-shadow-md">📚</span>
           </div>
 
           <div className="space-y-1 relative z-10">
@@ -560,7 +557,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
               STAGE 04 · 교과서 본문 연계 탐구보고서
             </span>
-            <span className="text-3xl filter drop-shadow-md">💡</span>
           </div>
 
           <div className="space-y-1 relative z-10">
