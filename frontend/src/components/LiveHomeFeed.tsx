@@ -78,6 +78,47 @@ export const LiveHomeFeed: React.FC<Props> = ({
     setSavedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  // 💬 인스타그램 스타일 댓글 관리 (초기 실감나는 학생 댓글 포함)
+  const [comments, setComments] = useState<Record<string, Array<{ id: string; user: string; text: string; time: string }>>>({
+    mbti: [
+      { id: 'c1', user: 'ur_student_jenny', text: 'ENFP 나왔는데 여행 영어 지문 완전 찰떡이네요!! ✈️', time: '12분 전' },
+      { id: 'c2', user: 'english_lover_08', text: '친구랑 같이 해봤는데 둘 다 너무 잘 맞아서 소름돋음 ㅋㅋㅋ', time: '5분 전' },
+    ],
+    vocab: [
+      { id: 'c3', user: 'quiz_master_kim', text: '5번 문제 소리만 듣기 진짜 스릴 넘쳐요 🎧 백점 맞았습니다!', time: '20분 전' },
+    ],
+    textbook: [
+      { id: 'c4', user: 'study_with_me_ur', text: '교과서 표지 누르니까 뷰어 바로 뜨는 거 완전 신기해요 👍', time: '35분 전' },
+      { id: 'c5', user: 'future_doctor_25', text: '3학년 세계문화와 영어 지문 퀄리티 대박이네요!', time: '18분 전' },
+    ],
+    seteuk: [
+      { id: 'c6', user: 'dream_nurse_h', text: '간호 보건 탐구 주제 보고서 작성할 때 큰 도움 됐어요 감사합니다 🩺', time: '40분 전' },
+    ],
+  });
+
+  const [commentInputs, setCommentInputs] = useState<Record<string, string>>({
+    mbti: '',
+    vocab: '',
+    textbook: '',
+    seteuk: '',
+  });
+
+  const handleAddComment = (postId: string) => {
+    const text = commentInputs[postId]?.trim();
+    if (!text) return;
+    const newComment = {
+      id: `comm_${Date.now()}`,
+      user: 'ur_guest_visitor',
+      text,
+      time: '방금 전',
+    };
+    setComments((prev) => ({
+      ...prev,
+      [postId]: [...(prev[postId] || []), newComment],
+    }));
+    setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
+  };
+
   // 상단 스토리 목록
   const stories: StoryItem[] = [
     {
@@ -381,6 +422,56 @@ export const LiveHomeFeed: React.FC<Props> = ({
               나의 성격과 딱 맞는 교과서 지문을 만나면 독해가 즐거운 탐구로 바뀝니다. 지금 바로 진단해 보세요! ✨
             </span>
           </div>
+
+          {/* 💬 댓글 목록 미리보기 */}
+          {comments.mbti && comments.mbti.length > 0 && (
+            <div className="pt-2 space-y-1">
+              <span className="text-[11px] text-slate-400 font-medium">
+                댓글 {comments.mbti.length}개 모두 보기
+              </span>
+              {comments.mbti.map((c) => (
+                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                  <div>
+                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                    <span className="text-slate-700">{c.text}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 p-0.5 shrink-0">
+                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                  U
+                </div>
+              </div>
+              <input
+                type="text"
+                value={commentInputs.mbti || ''}
+                onChange={(e) => setCommentInputs((prev) => ({ ...prev, mbti: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddComment('mbti');
+                  }
+                }}
+                placeholder="댓글 달기..."
+                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+              />
+              {commentInputs.mbti?.trim() && (
+                <button
+                  onClick={() => handleAddComment('mbti')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                >
+                  게시
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </article>
 
@@ -492,6 +583,56 @@ export const LiveHomeFeed: React.FC<Props> = ({
               눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
             </span>
           </div>
+
+          {/* 💬 댓글 목록 미리보기 */}
+          {comments.vocab && comments.vocab.length > 0 && (
+            <div className="pt-2 space-y-1">
+              <span className="text-[11px] text-slate-400 font-medium">
+                댓글 {comments.vocab.length}개 모두 보기
+              </span>
+              {comments.vocab.map((c) => (
+                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                  <div>
+                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                    <span className="text-slate-700">{c.text}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 p-0.5 shrink-0">
+                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                  U
+                </div>
+              </div>
+              <input
+                type="text"
+                value={commentInputs.vocab || ''}
+                onChange={(e) => setCommentInputs((prev) => ({ ...prev, vocab: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddComment('vocab');
+                  }
+                }}
+                placeholder="댓글 달기..."
+                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+              />
+              {commentInputs.vocab?.trim() && (
+                <button
+                  onClick={() => handleAddComment('vocab')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                >
+                  게시
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </article>
 
@@ -602,6 +743,56 @@ export const LiveHomeFeed: React.FC<Props> = ({
               공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
             </span>
           </div>
+
+          {/* 💬 댓글 목록 미리보기 */}
+          {comments.textbook && comments.textbook.length > 0 && (
+            <div className="pt-2 space-y-1">
+              <span className="text-[11px] text-slate-400 font-medium">
+                댓글 {comments.textbook.length}개 모두 보기
+              </span>
+              {comments.textbook.map((c) => (
+                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                  <div>
+                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                    <span className="text-slate-700">{c.text}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 p-0.5 shrink-0">
+                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                  U
+                </div>
+              </div>
+              <input
+                type="text"
+                value={commentInputs.textbook || ''}
+                onChange={(e) => setCommentInputs((prev) => ({ ...prev, textbook: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddComment('textbook');
+                  }
+                }}
+                placeholder="댓글 달기..."
+                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+              />
+              {commentInputs.textbook?.trim() && (
+                <button
+                  onClick={() => handleAddComment('textbook')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                >
+                  게시
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </article>
 
@@ -711,6 +902,56 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <span className="text-slate-800">
               단순한 해석을 넘어선 깊이 있는 탐구! 의령여고의 탄탄한 대입 학종 노하우를 담았습니다.
             </span>
+          </div>
+
+          {/* 💬 댓글 목록 미리보기 */}
+          {comments.seteuk && comments.seteuk.length > 0 && (
+            <div className="pt-2 space-y-1">
+              <span className="text-[11px] text-slate-400 font-medium">
+                댓글 {comments.seteuk.length}개 모두 보기
+              </span>
+              {comments.seteuk.map((c) => (
+                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                  <div>
+                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                    <span className="text-slate-700">{c.text}</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 p-0.5 shrink-0">
+                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                  U
+                </div>
+              </div>
+              <input
+                type="text"
+                value={commentInputs.seteuk || ''}
+                onChange={(e) => setCommentInputs((prev) => ({ ...prev, seteuk: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddComment('seteuk');
+                  }
+                }}
+                placeholder="댓글 달기..."
+                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+              />
+              {commentInputs.seteuk?.trim() && (
+                <button
+                  onClick={() => handleAddComment('seteuk')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                >
+                  게시
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </article>
