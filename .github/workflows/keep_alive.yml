@@ -22,3 +22,4 @@ jobs:
             echo "Checking API endpoint..."
             curl -s --max-time 60 "https://rag-english-fair.onrender.com/api/grammar-roadmap" > /dev/null || true
           fi
+

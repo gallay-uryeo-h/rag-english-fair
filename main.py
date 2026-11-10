@@ -327,4 +327,7 @@ def recommend(req: RecommendRequest):
 
 # ── 정적 파일 (index.html 이후에 마운트) ─────────────────────
 app.mount("/static", StaticFiles(directory="static"), name="static")
+if os.path.exists("static/assets"):
+    app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+
 
