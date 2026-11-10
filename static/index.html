@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>영어과 선택과목 상담 & 맞춤 본문 찾기</title>
+  <title>의령여고 English Passport | 5. My English Future</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -199,6 +199,28 @@
       padding-bottom: 2px;
     }
     .quick-chips::-webkit-scrollbar { display: none; }
+    .quick-tab-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .quick-target-tab {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: #64748b;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      font-family: inherit;
+    }
+    .quick-target-tab.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: #bfdbfe;
+    }
     .quick-btn {
       flex-shrink: 0;
       padding: 5px 10px;
@@ -1064,63 +1086,48 @@
   <header>
     <div class="status-dot"></div>
     <div>
-      <span class="bot-name">영어과 선택과목 상담</span>
-      <span class="bot-status">상담 가능</span>
+      <span class="bot-name">의령여고 English Passport ✈️</span>
+      <span class="bot-status">5. My English Future</span>
     </div>
   </header>
 
-  <!-- 메인 상단 탭 (상담 vs 본문 찾기 vs 한눈에 보는 로드맵 vs 문법 상세) -->
+  <!-- 메인 상단 탭 (My English Future vs 3개년 로드맵 vs 의령여고 Q&A vs 교과서 미리보기) -->
   <nav id="main-nav">
-    <button class="nav-tab active" data-tab="chat">선택과목 상담</button>
-    <button class="nav-tab" data-tab="recommend">맞춤 본문 찾기</button>
-    <button class="nav-tab" data-tab="visual">한눈에 보는 로드맵</button>
-    <button class="nav-tab" data-tab="grammar">단원별 문법 상세</button>
+    <button class="nav-tab active" data-tab="recommend">📸 My English Future</button>
+    <button class="nav-tab" data-tab="visual">🗺️ 3개년 성장 로드맵</button>
+    <button class="nav-tab" data-tab="chat">💬 의령여고 생활 Q&A</button>
+    <button class="nav-tab" data-tab="grammar">📖 교과서 미리보기</button>
   </nav>
 
-  <!-- [VIEW 1] 선택과목 상담 챗봇 -->
-  <div id="chat-view" class="view-container">
-    <!-- 채팅 영역 -->
-    <div id="chat-area"></div>
-
-    <!-- 빠른 질문 -->
-    <div id="quick-area">
-      <div class="quick-label">자주 묻는 질문</div>
-      <div class="quick-chips" id="quick-chips"></div>
-    </div>
-
-    <!-- 입력창 -->
-    <div id="input-area">
-      <textarea id="user-input" placeholder="메시지를 입력하세요" rows="1"></textarea>
-      <button id="send-btn" aria-label="전송">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- [VIEW 2] 나에게 맞는 교과서 본문 찾기 -->
-  <div id="recommend-view" class="view-container hidden">
+  <!-- [VIEW 1] 나에게 맞는 교과서 본문 찾기 (My English Future - 기본 활성화) -->
+  <div id="recommend-view" class="view-container">
     <div id="recommend-area">
       <div class="rec-intro-box">
-        <div class="rec-intro-title">진로·관심사 맞춤 영어 본문 큐레이션</div>
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+          <span style="background:var(--blue); color:white; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:12px;">English Passport · Station 5</span>
+        </div>
+        <div class="rec-intro-title">📸 인생 네컷 속 나의 꿈, 의령여고 영어 수업과 연결하기</div>
         <div class="rec-intro-desc">
-          희망 진로 분야나 관심사를 선택하거나 직접 입력해 보세요.<br>
-          고등학교 6권의 영어 교과서 <b>Reading 본문 지문(65개 단원 본문)</b> 중 <b>가장 적합한 지문</b>과 <b>학생부(세특) 연계 탐구 과제</b>를 추천합니다.
+          인생 네컷 사진에 담긴 나의 희망 진로와 관심사를 선택해 보세요.<br>
+          의령여자고등학교 3년 동안 배울 <b>실제 교과서 본문 지문(34개 대표 단원)</b> 중 <b>가장 잘 맞는 지문</b>과 <b>학생부(세특) 연계 탐구 과제</b>를 추천합니다.
         </div>
       </div>
 
-      <div class="quick-label">관심 분야 빠른 선택</div>
+      <div class="quick-label">관심 진로 빠른 선택 (인생 네컷 테마)</div>
       <div class="rec-chips-grid">
-        <button class="rec-chip-btn" data-query="인공지능(AI), 미래 첨단 기술, 컴퓨터 공학과 윤리적 딜레마에 관심이 많습니다.">인공지능 · 첨단기술</button>
-        <button class="rec-chip-btn" data-query="기후 변화, 제로 웨이스트, 환경 보호 및 지속 가능한 생태계에 관심이 있습니다.">기후환경 · 생태계</button>
-        <button class="rec-chip-btn" data-query="친구 관계, 청소년 심리, 갈등 해결과 공감 능력 소통에 대해 배우고 싶습니다.">청소년심리 · 소통</button>
-        <button class="rec-chip-btn" data-query="사회적 약자 배려, 인권 신장, 공정함과 공동체 규범에 대해 탐구하고 싶습니다.">사회정의 · 법과인권</button>
-        <button class="rec-chip-btn" data-query="다양한 국가의 전통문화, 글로벌 에티켓, 세계 건축과 음식 문화에 흥미가 있습니다.">세계문화 · 글로벌</button>
-        <button class="rec-chip-btn" data-query="기업의 사회적 책임(CSR), 글로벌 경제 트렌드 및 미래 직업의 변화에 관심이 있습니다.">경영경제 · 미래사회</button>
+        <button class="rec-chip-btn" data-query="간호사, 보건의료, 의학 및 생명과학 연구와 질병 극복에 관심이 많습니다.">🩺 간호 · 보건 · 의학</button>
+        <button class="rec-chip-btn" data-query="인공지능(AI), 컴퓨터 공학, 미래 첨단 기술과 알고리즘 윤리에 관심이 있습니다.">🤖 AI · 컴퓨터 · SW</button>
+        <button class="rec-chip-btn" data-query="방송 PD, 영상 크리에이터, 웹툰, 미디어 콘텐츠 제작과 문화 기획에 흥미가 있습니다.">🎬 미디어 · 영상 · 웹툰</button>
+        <button class="rec-chip-btn" data-query="기업 경영, 마케팅, 스타트업 창업 및 글로벌 경제 트렌드에 관심이 있습니다.">💼 경영 · 마케팅 · 경제</button>
+        <button class="rec-chip-btn" data-query="교사, 청소년 심리 상담, 사회복지 및 공감과 소통에 대해 배우고 싶습니다.">📚 교육 · 심리 · 상담</button>
+        <button class="rec-chip-btn" data-query="경찰, 공무원, 법률과 사회 정의, 공동체 규칙 준수에 관심이 있습니다.">⚖️ 경찰 · 공공 · 사회정의</button>
+        <button class="rec-chip-btn" data-query="기후 변화 대응, 환경 보호, 동물권과 지속 가능한 미래 생태계에 관심이 있습니다.">🌿 환경 · 생태 · 바이오</button>
+        <button class="rec-chip-btn" data-query="다양한 세계 문화, 여행, 외국어 소통과 국제 교류에 흥미가 있습니다.">✈️ 세계문화 · 글로벌외교</button>
       </div>
 
       <div class="rec-input-box">
-        <label class="rec-label" for="rec-textarea">나의 관심사나 진로 희망을 구체적으로 적어주세요:</label>
-        <textarea id="rec-textarea" placeholder="예: 생명과학이나 의학 분야로 진학하고 싶고, 뇌과학이나 질병 극복에 대한 영문 지문을 읽어보고 싶어요."></textarea>
+        <label class="rec-label" for="rec-textarea">나의 관심사나 진로 희망을 자유롭게 적어보세요:</label>
+        <textarea id="rec-textarea" placeholder="예: 간호학과나 보건계열로 진학하고 싶고, 질병 퇴치나 환자 돌봄에 대한 영어 지문을 탐구해보고 싶어요."></textarea>
       </div>
 
       <div class="rec-filter-row">
@@ -1130,7 +1137,7 @@
           <option value="2학년">2학년 (영어Ⅰ, 독해와작문)</option>
           <option value="3학년">3학년 (세계문화와영어, 영어Ⅱ)</option>
         </select>
-        <button id="rec-submit-btn">맞춤 본문 탐색</button>
+        <button id="rec-submit-btn">나의 영어 미래 탐색</button>
       </div>
 
       <!-- 추천 결과 영역 -->
@@ -1138,7 +1145,7 @@
         <div class="loading-bubble" style="border-radius:14px; margin-bottom:8px;">
           <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
-        <div style="font-size:0.84rem;">교과서 본문(Reading) 지문 중 최적의 지문과 세특 연계 과제를 분석하고 있습니다...</div>
+        <div style="font-size:0.84rem;">의령여고 교과서 본문 지문 중 최적의 진로 연계 지문과 세특 과제를 분석하고 있습니다...</div>
       </div>
 
       <div id="rec-result-area">
@@ -1146,6 +1153,29 @@
         <div class="quick-label" style="margin-top:16px;">추천 교과서 원본 페이지 확인</div>
         <div id="rec-candidates-list"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- [VIEW 2] 의령여고 학교생활 Q&A 챗봇 -->
+  <div id="chat-view" class="view-container hidden">
+    <!-- 채팅 영역 -->
+    <div id="chat-area"></div>
+
+    <!-- 빠른 질문 -->
+    <div id="quick-area">
+      <div class="quick-tab-row">
+        <button class="quick-target-tab active" data-target="student">🎒 중3 학생 추천 질문</button>
+        <button class="quick-target-tab" data-target="parent">🎓 학부모 추천 질문</button>
+      </div>
+      <div class="quick-chips" id="quick-chips"></div>
+    </div>
+
+    <!-- 입력창 -->
+    <div id="input-area">
+      <textarea id="user-input" placeholder="의령여고 학교생활에 대해 질문하세요" rows="1"></textarea>
+      <button id="send-btn" aria-label="전송">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
     </div>
   </div>
 
@@ -1292,6 +1322,7 @@
 
           <div class="v-step-box">
             <div class="v-step-subname">🌍 세계 문화와 영어 (3학년 1학기 · 비상 권혁승)</div>
+            <div style="font-size:0.73rem; color:#be185d; background:#fdf2f8; padding:3px 8px; border-radius:6px; margin-bottom:6px; font-weight:600;">✨ English Passport 2번 부스 [World Culture Passport]와 직접 연계되는 실용 융합 교과목!</div>
             <div class="v-chips-grid">
               <span class="v-chip proj" data-img="/pages_cache/3학년_1학기_세계_문화와_영어_비상_p8.jpg" data-title="세계 문화와 영어 · World Englishes (p.8)">World Englishes 상호문화 의사소통</span>
               <span class="v-chip proj" data-img="/pages_cache/3학년_1학기_세계_문화와_영어_비상_p6.jpg" data-title="세계 문화와 영어 · 인포그래픽 프로젝트 (p.6)">대륙별 문화 비교 인포그래픽 프로젝트</span>
@@ -1554,17 +1585,17 @@
     </div>
   </div>
 
-  <!-- [VIEW 4] 단원별 문법 상세 로드맵 -->
+  <!-- [VIEW 4] 교과서 미리보기 (E-Book) -->
   <div id="grammar-view" class="view-container hidden">
     <div id="grammar-area">
       <!-- 안내 멘트 상자 -->
       <div class="grammar-notice-box">
         <div class="grammar-notice-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#1d4ed8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-          고등학교 3개년 문법 로드맵 안내
+          📖 의령여고 영어 교과서 6권 단원별 미리보기 (E-Book)
         </div>
         <div class="grammar-notice-desc">
-          교과서 문법 파트(Structures / Grammar in Reading)에 나오는 순서대로 정리되었으며 실제 수업과는 차이가 있을 수 있습니다.
+          의령여고에서 배우는 6권 교과서의 단원별 핵심 문법과 원본 페이지를 확인할 수 있습니다. (교과서 문법 파트에 나오는 순서대로 정리되었으며 실제 수업과는 차이가 있을 수 있습니다.)
         </div>
       </div>
 
@@ -1775,18 +1806,28 @@
     }
   });
 
-  /* ── 선택과목 상담 빠른 질문 ── */
-  const faqQuestions = [
-    { label: '내신 5등급제 산출 방식', q: '2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식에 대해 알려주세요.' },
-    { label: '학생부 세특 기록 연계 방안', q: '영어과 선택과목 수업을 통해 학생부 세특에 어떤 내용을 기록할 수 있나요?' },
-    { label: '의령여고 영어 선택과목 체계', q: '의령여고에서 개설되는 영어 선택과목들의 평가 방식과 특징을 알려주세요.' },
-    { label: '진로·융합선택 평가 차이', q: '일반선택, 진로선택, 융합선택 과목의 성적 산출 및 평가 방식 차이를 알려주세요.' }
-  ];
+  /* ── 의령여고 학교생활 Q&A 빠른 질문 (중3 학생용 / 학부모용 분리) ── */
+  let currentQuickTarget = 'student';
+  const quickQuestionsData = {
+    student: [
+      { label: '중학교 vs 고등학교 영어 차이', q: '중학교 영어와 고등학교 영어는 시험 방식과 난이도가 어떻게 다른가요?' },
+      { label: '영포자도 내신 1등급 가능?', q: '중학교 때 영어를 잘 못했어도 의령여고에 입학해서 열심히 하면 내신 상위권을 노릴 수 있나요?' },
+      { label: '영어 수행평가 방식', q: '의령여고 영어 수행평가는 주로 어떤 방식(말하기, 글쓰기, 프로젝트 등)으로 진행되나요?' },
+      { label: '교내 영어 동아리 & 행사', q: '의령여고에는 어떤 영어 동아리나 교내 영어 페어, 영어 축제 활동이 있나요?' }
+    ],
+    parent: [
+      { label: '2028 내신 5등급제와 의령여고', q: '2028 대입 개편에 따른 고등학교 영어 내신 5등급제 산출 방식과 소규모 학교인 의령여고의 장점은 무엇인가요?' },
+      { label: '학생부 세특 밀착 관리', q: '영어과 수업을 통해 선생님들이 학생 개개인의 학생부 세특 기록을 어떻게 지도하고 관리해 주시나요?' },
+      { label: '수능 1등급 대비 지원', q: '수능 영어를 위한 모의고사 대비 및 정시 수능 지원은 학교에서 어떻게 이루어지나요?' },
+      { label: '일반선택 vs 진로선택 차이', q: '일반선택과 진로선택 과목의 성적 산출 및 대입 반영 방식 차이를 알려주세요.' }
+    ]
+  };
 
   function renderQuickQuestions() {
     if (!quickChipsContainer) return;
     quickChipsContainer.innerHTML = '';
-    faqQuestions.forEach(item => {
+    const list = quickQuestionsData[currentQuickTarget] || quickQuestionsData.student;
+    list.forEach(item => {
       const btn = document.createElement('button');
       btn.className = 'quick-btn';
       btn.dataset.q = item.q;
@@ -1796,9 +1837,19 @@
     });
   }
 
+  // 중3 학생용 vs 학부모용 탭 전환 바인딩
+  document.querySelectorAll('.quick-target-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.quick-target-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentQuickTarget = tab.dataset.target;
+      renderQuickQuestions();
+    });
+  });
+
   /* ── 초기 웰컴 메시지 ── */
   window.addEventListener('DOMContentLoaded', () => {
-    appendBotBubble('안녕하십니까. 의령여고 영어과 선택과목 안내 챗봇입니다. 교육과정 규정, 과목별 평가 방식, 학생부 세특 연계 등 선택과목에 대해 질문해 주시면 친절히 안내해 드립니다.', []);
+    appendBotBubble('안녕하십니까! 의령여자고등학교 **English Passport (Station 5. My English Future)**에 오신 중3 학생과 학부모님을 진심으로 환영합니다. 🌸\n\n중학교와 고등학교 영어의 차이, 2028 내신 5등급제 대비, 의령여고만의 학생부 세특 밀착 관리 등 학교생활에 대해 무엇이든 편하게 물어보세요!', []);
   });
 
   function appendUserBubble(text) {
