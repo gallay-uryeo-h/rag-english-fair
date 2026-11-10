@@ -24,6 +24,7 @@ export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
     { id: 'textbook-preview', label: '📖 교과서 미리보기 (1행)', icon: <BookOpen className="w-3.5 h-3.5" /> },
     { id: 'textbook-2layer', label: '📚 교과서 탐색 (3×2 2레이어)', icon: <Layers className="w-3.5 h-3.5" /> },
     { id: 'vocab-test', label: '🎯 단어 레벨 진단', icon: <BrainCircuit className="w-3.5 h-3.5" /> },
+    { id: 'vocab-listen', label: '🎧 단어 듣기 진단 (소리+퀴즈)', icon: <BrainCircuit className="w-3.5 h-3.5 text-purple-600" /> },
     { id: 'mbti', label: '🧪 본문 MBTI (기본)', icon: <Compass className="w-3.5 h-3.5" /> },
     { id: 'deep-mbti', label: '🔬 심층 본문 MBTI (정밀)', icon: <Brain className="w-3.5 h-3.5" /> },
     { id: 'seteuk', label: '💡 세특 치트키', icon: <Lightbulb className="w-3.5 h-3.5" /> },

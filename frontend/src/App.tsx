@@ -6,6 +6,7 @@ import { Station5Recommend } from './components/Station5Recommend';
 import { TextbookPreviewClean } from './components/TextbookPreviewClean';
 import { TextbookBrowse2Layer } from './components/TextbookBrowse2Layer';
 import { VocabTestTab } from './components/VocabTestTab';
+import { VocabListenTab } from './components/VocabListenTab';
 import { EnglishMbtiTab } from './components/EnglishMbtiTab';
 import { DeepEnglishMbtiTab } from './components/DeepEnglishMbtiTab';
 import { SeteukGeneratorTab } from './components/SeteukGeneratorTab';
@@ -54,6 +55,7 @@ export function App() {
         {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
         {currentTab === 'textbook-2layer' && <TextbookBrowse2Layer onOpenImage={handleOpenImage} />}
         {currentTab === 'vocab-test' && <VocabTestTab />}
+        {currentTab === 'vocab-listen' && <VocabListenTab />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'deep-mbti' && <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}

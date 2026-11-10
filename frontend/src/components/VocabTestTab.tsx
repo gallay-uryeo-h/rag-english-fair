@@ -217,41 +217,42 @@ export const VocabTestTab: React.FC = () => {
       {/* 📝 2. 퀴즈 풀기 영역 (세트 선택 카드는 삭제되고, 문제 카드 상단에 세트 버튼들이 일체형으로 배치됨) */}
       {!showResult ? (
         <div className="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 shadow-xs space-y-4">
-          {/* 🎯 문제 카드 상단: 세트 버튼 바 (영어1 세트1 세트2 ... 형식 & 현재 세트 하이라이트) */}
-          <div className="space-y-2 border-b border-slate-100 pb-3.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+          {/* 🎯 문제 카드 상단: 세트 번호 선택 (한 줄에 세트 선택과 1 2 3 4 5 번호 배치) */}
+          <div className="space-y-2 border-b border-slate-100 pb-3">
+            <div className="flex items-center justify-between gap-2 flex-wrap text-xs">
+              <div className="flex items-center gap-1.5 shrink-0 font-bold text-slate-800">
                 <Layers className="w-4 h-4 text-blue-600" />
-                <span>{currentQuiz.title} 세트 선택:</span>
-              </span>
-              <span className="text-[11px] text-slate-400 font-medium">
+                <span>세트 선택:</span>
+              </div>
+
+              {/* 번호만으로 세트 표시 (1, 2, 3, 4, 5) */}
+              <div className="flex items-center gap-1.5 flex-1 max-w-xs">
+                {currentQuiz.sets.map((set) => {
+                  const isSelected = selectedSetId === set.setId;
+                  return (
+                    <button
+                      key={set.setId}
+                      onClick={() => handleResetQuiz(undefined, set.setId)}
+                      className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center border cursor-pointer ${
+                        isSelected
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-200'
+                          : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      {set.setId}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <span className="text-[11px] text-slate-400 font-medium shrink-0 ml-auto">
                 문제 {currentQuestionIndex + 1} / {totalQuestions}
               </span>
             </div>
 
-            {/* 세트1 ~ 세트5 버튼 한 줄 배치 */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {currentQuiz.sets.map((set) => {
-                const isSelected = selectedSetId === set.setId;
-                return (
-                  <button
-                    key={set.setId}
-                    onClick={() => handleResetQuiz(undefined, set.setId)}
-                    className={`flex-1 min-w-[70px] py-1.5 px-2 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${
-                      isSelected
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-200'
-                        : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
-                    }`}
-                  >
-                    <span>세트 {set.setId}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 현재 세트 간단 설명 */}
-            <div className="text-[11px] text-blue-600 font-semibold px-0.5 pt-0.5">
-              💡 {currentSet.setName}: {currentSet.description}
+            {/* 아래에 세트 설명 */}
+            <div className="text-xs text-blue-600 font-medium bg-blue-50/60 px-2.5 py-1.5 rounded-lg border border-blue-100/80">
+              💡 <span className="font-bold">{currentSet.setName}:</span> {currentSet.description}
             </div>
           </div>
 

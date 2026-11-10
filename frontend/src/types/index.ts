@@ -3,6 +3,7 @@ export type TabType =
   | 'textbook-preview' // 2. 교과서 미리보기 (친근한 스토리 & 본문 뷰어)
   | 'textbook-2layer'  // 3. 교과서 2레이어 탐색 (3x2 표지 그리드 & 단원 레이어)
   | 'vocab-test'  // 4. 교과서 단어 진단 (나의 단어는 어디쯤? 3지선다 퀴즈)
+  | 'vocab-listen' // 4b. 단어 듣기 진단 (TTS 자동발음 + 소리만 듣고 맞추기)
   | 'mbti'        // 5. 영어 성향 MBTI (과목 매칭)
   | 'deep-mbti'   // 6. 심층 본문 MBTI (8문항 정밀 분석 & 본문 지문 매칭)
   | 'seteuk'      // 7. 세특 아이디어 발전소 (교과서 기반 탐구보고서)
