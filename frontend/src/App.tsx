@@ -6,6 +6,7 @@ import { Station5Recommend } from './components/Station5Recommend';
 import { EnglishMbtiTab } from './components/EnglishMbtiTab';
 import { SeteukGeneratorTab } from './components/SeteukGeneratorTab';
 import { DigitalPassportTab } from './components/DigitalPassportTab';
+import { GrammarOverviewTab } from './components/GrammarOverviewTab';
 import { GrowthRoadmap } from './components/GrowthRoadmap';
 import { SchoolLifeQA } from './components/SchoolLifeQA';
 import { TextbookPreview } from './components/TextbookPreview';
@@ -48,6 +49,7 @@ export function App() {
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
+        {currentTab === 'grammar-overview' && <GrammarOverviewTab onOpenImage={handleOpenImage} />}
         {currentTab === 'passport' && <DigitalPassportTab />}
         {currentTab === 'visual' && <GrowthRoadmap onOpenImage={handleOpenImage} />}
         {currentTab === 'chat' && <SchoolLifeQA onOpenImage={handleOpenImage} />}

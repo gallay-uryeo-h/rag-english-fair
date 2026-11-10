@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { GrammarRoadmapResponse, GrammarSubject } from '../types';
-import { Search, BookOpen, Loader2, Info, Image as ImageIcon, ExternalLink } from 'lucide-react';
-import { getPassageStartInfo } from '../utils/passageMapper';
+import { Search, BookOpen, Loader2, Info, Image as ImageIcon, ExternalLink, BookmarkCheck } from 'lucide-react';
+import { getPassageStartInfo, getGrammarStartInfo } from '../utils/passageMapper';
 
 interface Props {
   onOpenImage: (title: string, url: string) => void;
@@ -144,6 +144,7 @@ export const TextbookPreview: React.FC<Props> = ({ onOpenImage }) => {
               <div className="space-y-3 pt-1">
                 {subj.units.map((unit, uIdx) => {
                   const passageInfo = getPassageStartInfo(subj.subject, unit.unit_number);
+                  const grammarInfo = getGrammarStartInfo(subj.subject, unit.unit_number);
                   return (
                     <div key={uIdx} className="rounded-xl border border-slate-150 p-3 bg-slate-50/50 space-y-2.5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-bold text-slate-700">
@@ -153,20 +154,37 @@ export const TextbookPreview: React.FC<Props> = ({ onOpenImage }) => {
                           {unit.theme && <span className="text-[11px] text-slate-400 font-normal">({unit.theme})</span>}
                         </div>
 
-                        {passageInfo && (
-                          <button
-                            onClick={() =>
-                              onOpenImage(
-                                `${subj.subject} Unit ${unit.unit_number} 본문 · p.${passageInfo.page} (${passageInfo.passageTitle})`,
-                                `/${passageInfo.imagePath}`
-                              )
-                            }
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-[11px] font-semibold transition-colors cursor-pointer shrink-0"
-                          >
-                            <span>📖 본문 첫 페이지 (p.{passageInfo.page})</span>
-                            <ExternalLink className="w-3 h-3 text-blue-500" />
-                          </button>
-                        )}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {grammarInfo && (
+                            <button
+                              onClick={() =>
+                                onOpenImage(
+                                  `${subj.subject} Unit ${unit.unit_number} 문법 파트 · p.${grammarInfo.page} (${grammarInfo.firstPointTitle})`,
+                                  `/${grammarInfo.imagePath}`
+                                )
+                              }
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 text-[11px] font-semibold transition-colors cursor-pointer shrink-0"
+                            >
+                              <BookmarkCheck className="w-3 h-3 text-emerald-600" />
+                              <span>📐 문법 파트 첫 페이지 (p.{grammarInfo.page})</span>
+                            </button>
+                          )}
+
+                          {passageInfo && (
+                            <button
+                              onClick={() =>
+                                onOpenImage(
+                                  `${subj.subject} Unit ${unit.unit_number} 본문 · p.${passageInfo.page} (${passageInfo.passageTitle})`,
+                                  `/${passageInfo.imagePath}`
+                                )
+                              }
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-[11px] font-semibold transition-colors cursor-pointer shrink-0"
+                            >
+                              <span>📖 본문 첫 페이지 (p.{passageInfo.page})</span>
+                              <ExternalLink className="w-3 h-3 text-blue-500" />
+                            </button>
+                          )}
+                        </div>
                       </div>
 
                     {/* 문법 포인트 목록 */}
