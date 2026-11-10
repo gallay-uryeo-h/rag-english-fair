@@ -847,7 +847,7 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
   return (
     <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 🌟 헤더 배너 */}
-      <div className="bg-gradient-to-r from-violet-700 via-purple-700 to-indigo-700 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
+      <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
           <Brain className="w-3.5 h-3.5 text-amber-300" />
           <span>의령여고 정통 16대 MBTI 독해 성향 분석</span>

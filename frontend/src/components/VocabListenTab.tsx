@@ -180,10 +180,10 @@ export const VocabListenTab: React.FC = () => {
   return (
     <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 🌟 상단 인트로 배너 */}
-      <div className="bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
+      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-pink-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800/40">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
           <Ear className="w-3.5 h-3.5 text-amber-300" />
-          <span>의령여고 단어 듣기 + 보기 진단</span>
+          <span>의령여고 오디오 릴스 어휘 챌린지</span>
         </div>
         <h2 className="text-lg md:text-xl font-bold tracking-tight">
           소리로 배우는 영단어 🎧

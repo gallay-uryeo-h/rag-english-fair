@@ -532,7 +532,7 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
       {!selectedBook ? (
         <div className="space-y-3 animate-in fade-in duration-200">
           {/* 헤더 카드 */}
-          <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-800 text-white p-5 shadow-sm space-y-2 border-b border-blue-900">
+          <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-slate-900 text-white p-5 shadow-sm space-y-2 border-b border-blue-900">
             <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
               <BookOpen className="w-3.5 h-3.5 text-amber-300" />
               <span>교과서 탐색 2-Layer</span>

@@ -19,6 +19,8 @@ import { SeteukGeneratorTab } from './SeteukGeneratorTab';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
+  viewMode?: 'feed' | 'grid';
+  onSelectGridPost?: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
   // 외부 앵커 참조
   feedRefs: {
     homeRef: React.RefObject<HTMLDivElement | null>;
@@ -48,6 +50,8 @@ interface StoryItem {
 
 export const LiveHomeFeed: React.FC<Props> = ({
   onOpenImage,
+  viewMode = 'feed',
+  onSelectGridPost,
   feedRefs,
   expandedSections,
   onToggleSection,
@@ -156,9 +160,131 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </div>
       </section>
 
-      {/* =========================================================================
-          📸 2. 인피드 아코디언 포스트 1: 심층 본문 MBTI (Deep MBTI)
-          ========================================================================= */}
+      {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 (Instagram Profile / Explore Grid View) */}
+      {viewMode === 'grid' ? (
+        <section className="bg-white border-y border-slate-200 p-2 sm:p-3 animate-in fade-in duration-300">
+          <div className="flex items-center justify-between px-2 py-2 mb-2 border-b border-slate-100">
+            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <span>📸 포스트 탐색 그리드 (4대 코너)</span>
+            </span>
+            <span className="text-[11px] text-slate-400">사진을 터치하면 바로 해당 코너로 이동</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            {/* 그리드 1: MBTI */}
+            <div
+              onClick={() => {
+                if (onSelectGridPost) onSelectGridPost('mbti');
+                else onScrollTo('mbti');
+              }}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80"
+                alt="MBTI 포스트"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    STAGE 01
+                  </span>
+                  <Heart className="w-4 h-4 text-white fill-white/80" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-extrabold text-white leading-tight">MBTI별 본문 추천</h4>
+                  <p className="text-[11px] text-slate-200 truncate mt-0.5">8문항 성향 정밀 진단</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 그리드 2: 단어 릴스 */}
+            <div
+              onClick={() => {
+                if (onSelectGridPost) onSelectGridPost('vocab');
+                else onScrollTo('vocab');
+              }}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+                alt="단어 소리 퀴즈 포스트"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    STAGE 02
+                  </span>
+                  <Volume2 className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-extrabold text-white leading-tight">단어 미리보기</h4>
+                  <p className="text-[11px] text-slate-200 truncate mt-0.5">TTS 소리만 듣기 퀴즈</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 그리드 3: 교과서 6권 */}
+            <div
+              onClick={() => {
+                if (onSelectGridPost) onSelectGridPost('textbook');
+                else onScrollTo('textbook');
+              }}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80"
+                alt="교과서 6권 대공개 포스트"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    STAGE 03
+                  </span>
+                  <BookOpen className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-extrabold text-white leading-tight">교과서 6권 대공개</h4>
+                  <p className="text-[11px] text-slate-200 truncate mt-0.5">3×2 표지 ➔ 단원 레이어</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 그리드 4: 세특 발전소 */}
+            <div
+              onClick={() => {
+                if (onSelectGridPost) onSelectGridPost('seteuk');
+                else onScrollTo('seteuk');
+              }}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80"
+                alt="세특 발전소 포스트"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    STAGE 04
+                  </span>
+                  <Lightbulb className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-extrabold text-white leading-tight">세특 치트키 발전소</h4>
+                  <p className="text-[11px] text-slate-200 truncate mt-0.5">8대 진로 학생부 가이드</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
+          {/* =========================================================================
+              📸 3. 단일 무한 피드 모드 (인라인 아코디언)
+              ========================================================================= */}
       <article
         ref={feedRefs.mbtiRef}
         className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
@@ -624,6 +750,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
           </div>
         </div>
       </article>
+      </>
+      )}
 
       {/* 피드 최하단 안내 */}
       <div className="text-center py-6 space-y-1.5">

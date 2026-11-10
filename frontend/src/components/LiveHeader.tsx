@@ -1,12 +1,19 @@
 import React from 'react';
-import { Heart, MessageCircle, ChevronDown, FlaskConical, Sparkles } from 'lucide-react';
+import { Heart, MessageCircle, ChevronDown, FlaskConical, Sparkles, LayoutGrid, List } from 'lucide-react';
 
 interface Props {
   isLiveMode: boolean;
   onToggleMode: () => void;
+  viewMode?: 'feed' | 'grid';
+  onToggleViewMode?: () => void;
 }
 
-export const LiveHeader: React.FC<Props> = ({ isLiveMode, onToggleMode }) => {
+export const LiveHeader: React.FC<Props> = ({
+  isLiveMode,
+  onToggleMode,
+  viewMode = 'feed',
+  onToggleViewMode,
+}) => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 shrink-0 shadow-2xs">
       <div className="max-w-xl mx-auto flex items-center justify-between">
@@ -21,8 +28,27 @@ export const LiveHeader: React.FC<Props> = ({ isLiveMode, onToggleMode }) => {
           </span>
         </div>
 
-        {/* 우측 인스타 아이콘 (하트, DM메시지, 연구모드 토글) */}
-        <div className="flex items-center gap-3.5 text-slate-900">
+        {/* 우측 인스타 아이콘 (그리드뷰/피드뷰 토글, 하트, DM메시지, 연구모드 토글) */}
+        <div className="flex items-center gap-3 text-slate-900">
+          {/* 🌟 피드 뷰 ↔ 그리드 뷰 토글 버튼 (인스타그램 프로필 그리드 감성) */}
+          {isLiveMode && onToggleViewMode && (
+            <button
+              onClick={onToggleViewMode}
+              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                viewMode === 'grid'
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+              }`}
+              title={viewMode === 'grid' ? '단일 피드뷰로 보기' : '인스타 그리드뷰로 보기'}
+            >
+              {viewMode === 'grid' ? (
+                <List className="w-4 h-4" />
+              ) : (
+                <LayoutGrid className="w-4 h-4" />
+              )}
+            </button>
+          )}
+
           <button
             onClick={() => alert('의령여고 영어 페스티벌에 오신 것을 환영합니다! ❤️')}
             className="hover:opacity-70 transition-opacity cursor-pointer p-0.5"
