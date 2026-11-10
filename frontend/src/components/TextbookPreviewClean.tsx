@@ -4,9 +4,14 @@ import {
   Sparkles,
   ChevronDown,
   Layers,
-  ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Headphones,
+  Mic,
+  PenTool,
+  Bookmark,
+  FileText
 } from 'lucide-react';
+import sectionMapData from '../utils/section_map.json';
 
 interface Props {
   onOpenImage: (title: string, url: string) => void;
@@ -437,6 +442,49 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
   },
 ];
 
+// 영역(섹션)별 한글 라벨, 아이콘, 스타일 및 한 줄 설명
+const SECTION_CONFIG: Record<
+  string,
+  { label: string; icon: React.FC<{ className?: string }>; color: string; desc: string }
+> = {
+  listening: {
+    label: '듣기',
+    icon: Headphones,
+    color: 'bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300',
+    desc: '원어민 실생활 대화와 담화 핵심 표현 청취',
+  },
+  speaking: {
+    label: '말하기',
+    icon: Mic,
+    color: 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300',
+    desc: '상황별 롤플레이와 질문에 답하는 구어 의사소통',
+  },
+  reading: {
+    label: '읽기',
+    icon: BookOpen,
+    color: 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700 shadow-xs',
+    desc: '단원 핵심 장문 독해 지문과 내용 이해 탐구',
+  },
+  grammar: {
+    label: '문법',
+    icon: Bookmark,
+    color: 'bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100 hover:border-amber-300',
+    desc: '본문 속 핵심 구문 규칙과 어법 적용 훈련',
+  },
+  writing: {
+    label: '쓰기',
+    icon: PenTool,
+    color: 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 hover:border-rose-300',
+    desc: '단원 주제 기반 단락 구성과 서술형 영작',
+  },
+  vocab: {
+    label: '어휘',
+    icon: FileText,
+    color: 'bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100 hover:border-purple-300',
+    desc: '문맥 속 핵심 단어 및 숙어 표현 학습',
+  },
+};
+
 export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
   // 선택된 교과서 (기본값: 공통영어1)
   const [selectedBookId, setSelectedBookId] = useState<string>('공통영어1');
@@ -584,11 +632,33 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
           </div>
         </div>
 
-        {/* 단원별 읽을거리 & 본문 첫 페이지 아코디언 목록 */}
-        <div className="space-y-2.5">
+        {/* 단원별 읽을거리 & 영역별 첫 페이지 아코디언 목록 */}
+        <div className="space-y-3">
           {selectedBook.units.map((unit, uIdx) => {
             const unitKey = `${selectedBook.id}_${unit.unitNumber}`;
             const isOpen = openUnits[unitKey] ?? (uIdx === 0);
+
+            // 해당 교과서 및 단원의 섹션 정보 가져오기
+            const bookSections = (sectionMapData as any)[selectedBook.id]?.[String(unit.unitNumber)] || {};
+            const sectionOrder = ['listening', 'speaking', 'reading', 'grammar', 'writing', 'vocab'];
+            const availableSections = sectionOrder
+              .filter((sec) => !!bookSections[sec])
+              .map((sec) => ({
+                key: sec,
+                page: bookSections[sec].page,
+                imagePath: bookSections[sec].imagePath,
+                ...SECTION_CONFIG[sec],
+              }));
+
+            // 혹시 DB 매핑에 reading이 없을 경우 unit.startPage를 기본 reading으로 보완
+            if (!availableSections.some((s) => s.key === 'reading')) {
+              availableSections.splice(2, 0, {
+                key: 'reading',
+                page: unit.startPage,
+                imagePath: unit.imagePath,
+                ...SECTION_CONFIG.reading,
+              });
+            }
 
             return (
               <div
@@ -599,10 +669,10 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                     : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50'
                 }`}
               >
-                {/* 아코디언 헤더 바 (클릭 시 토글) */}
+                {/* 📌 아코디언 헤더 바 (클릭 시 토글) */}
                 <div
                   onClick={() => toggleUnit(unit.unitNumber)}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 sm:p-3.5 cursor-pointer select-none"
+                  className="flex items-center justify-between gap-2 p-3 sm:p-3.5 cursor-pointer select-none"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span
@@ -613,43 +683,45 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                       {unit.unitNumber}
                     </span>
 
-                    <div className="truncate">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs md:text-sm font-bold text-slate-800">
-                          Unit {unit.unitNumber}. {unit.unitTitle}
-                        </span>
-                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 hidden sm:inline">
-                          {unit.topic}
-                        </span>
+                    <div className="min-w-0">
+                      {/* 1행: Unit 번호 및 제목 */}
+                      <div className="text-xs md:text-sm font-bold text-slate-800 truncate">
+                        Unit {unit.unitNumber}. {unit.unitTitle}
                       </div>
-                      <div className="text-[11px] text-slate-500 truncate mt-0.5">
-                        본문: <strong>{unit.passageTitle}</strong>
+                      {/* 2행: 본문 제목은 생략하고 단원 주제 배치 */}
+                      <div className="text-[11px] text-slate-500 font-medium truncate mt-0.5 flex items-center gap-1.5">
+                        <span className="text-blue-600 font-semibold">주제:</span>
+                        <span>{unit.topic}</span>
+                        <span className="text-slate-300">·</span>
+                        <span className="text-slate-400 text-[10px]">진로: {unit.careerTag}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* 우측: 본문 첫 페이지 열기 버튼 & 아코디언 화살표 */}
+                  {/* 우측: 읽기 빠른 열기 버튼 & 아코디언 열고 닫기 토글 버튼 */}
                   <div
-                    className="flex items-center gap-2 shrink-0 self-end sm:self-auto"
+                    className="flex items-center gap-1.5 shrink-0"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
                       onClick={() =>
                         onOpenImage(
-                          `${selectedBook.title} Unit ${unit.unitNumber} 본문 · p.${unit.startPage} (${unit.passageTitle})`,
+                          `${selectedBook.title} Unit ${unit.unitNumber} 읽기 · p.${unit.startPage}`,
                           `/${unit.imagePath}`
                         )
                       }
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer group"
+                      title="읽기 지문 바로보기"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all shadow-xs cursor-pointer group"
                     >
                       <BookOpen className="w-3.5 h-3.5 text-blue-100" />
-                      <span>본문 첫 페이지 보기 (p.{unit.startPage})</span>
+                      <span>읽기</span>
                       <ExternalLink className="w-3 h-3 text-blue-200 group-hover:translate-x-0.5 transition-transform" />
                     </button>
 
                     <button
                       onClick={() => toggleUnit(unit.unitNumber)}
-                      className="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors ml-0.5 cursor-pointer"
+                      className="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                      title={isOpen ? '접기' : '펼치기'}
                     >
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-300 ease-in-out ${
@@ -660,43 +732,55 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                   </div>
                 </div>
 
-                {/* 아코디언 바디: 편안하게 읽는 본문 스토리 요약 및 연계 진로 */}
+                {/* 📌 아코디언 바디: 파트별 버튼 & 간단 설명 그리드 + 한 줄 스토리 */}
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                    isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100 bg-slate-50/40 space-y-2.5">
-                    {/* 친근한 줄거리 카드 */}
-                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold text-blue-600 flex items-center gap-1">
-                          <Sparkles className="w-3 h-3" />
-                          <span>어떤 흥미로운 이야기인가요?</span>
-                        </span>
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                          연계 진로: {unit.careerTag}
-                        </span>
-                      </div>
+                  <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100 bg-slate-50/40 space-y-3">
+                    {/* 파트별 버튼 및 설명 카드 그리드 */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-1">
+                      {availableSections.map((sec) => {
+                        const IconComponent = sec.icon;
 
-                      <p className="text-xs md:text-sm text-slate-700 leading-relaxed pl-0.5">
-                        {unit.passageSummary}
-                      </p>
+                        return (
+                          <div
+                            key={sec.key}
+                            className="flex flex-col bg-white rounded-xl border border-slate-200/80 p-2 shadow-2xs hover:border-slate-300 transition-all"
+                          >
+                            {/* 파트 열기 버튼 (간단하게 '듣기', '말하기', '읽기' 등) */}
+                            <button
+                              onClick={() =>
+                                onOpenImage(
+                                  `${selectedBook.title} Unit ${unit.unitNumber} ${sec.label} · p.${sec.page}`,
+                                  `/${sec.imagePath}`
+                                )
+                              }
+                              className={`w-full py-1.5 px-2 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1.5 cursor-pointer ${sec.color}`}
+                            >
+                              <IconComponent className="w-3.5 h-3.5 shrink-0" />
+                              <span>{sec.label}</span>
+                              <span className="text-[10px] font-normal opacity-80">(p.{sec.page})</span>
+                            </button>
 
-                      <div className="pt-1 flex items-center justify-between text-[11px] text-slate-400">
-                        <span>단원 주제: {unit.topic}</span>
-                        <button
-                          onClick={() =>
-                            onOpenImage(
-                              `${selectedBook.title} Unit ${unit.unitNumber} · p.${unit.startPage} (${unit.passageTitle})`,
-                              `/${unit.imagePath}`
-                            )
-                          }
-                          className="font-semibold text-blue-600 hover:underline inline-flex items-center gap-1 cursor-pointer"
-                        >
-                          <span>교과서 본문 원본 읽기</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
+                            {/* 버튼 아래 간단한 설명 텍스트 */}
+                            <div className="mt-1.5 px-0.5 text-center sm:text-left">
+                              <p className="text-[11px] text-slate-500 leading-tight">
+                                {sec.desc}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 친근한 단원 줄거리 요약 */}
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-start gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
+                      <div className="text-xs text-slate-600 leading-relaxed min-w-0">
+                        <span className="font-semibold text-slate-800 mr-1.5">단원 스토리:</span>
+                        <span>{unit.passageSummary}</span>
                       </div>
                     </div>
                   </div>
