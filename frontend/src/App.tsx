@@ -68,10 +68,10 @@ export function App() {
 
       {isLiveMode ? (
         /* =========================================================================
-           [안 1] 실전 운영 모드: 시원시원한 Full Width & 모바일 앱형 하단 바 레이아웃
+           [안 1] 실전 운영 모드: 모바일 좌우 여백 0 풀스크린 Full Width (Edge-to-Edge)
            ========================================================================= */
         <div className="flex-1 flex flex-col w-full bg-slate-50 pb-20">
-          <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-4 md:py-6">
+          <main className="flex-1 w-full max-w-xl mx-auto px-0 py-0 sm:py-4">
             {liveTab === 'home' && (
               <LiveHomeFeed
                 onNavigate={handleLiveNavigate}

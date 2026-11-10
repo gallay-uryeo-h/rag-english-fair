@@ -525,14 +525,14 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* ─────────────────────────────────────────────────────────────
           [LAYER 1] 교과서 표지 3*2 배치 그리드 (교과서 선택 화면)
       ───────────────────────────────────────────────────────────── */}
       {!selectedBook ? (
-        <div className="space-y-4 animate-in fade-in duration-200">
+        <div className="space-y-3 animate-in fade-in duration-200">
           {/* 헤더 카드 */}
-          <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-800 text-white rounded-2xl p-5 shadow-sm space-y-2">
+          <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-800 text-white p-5 shadow-sm space-y-2 border-b border-blue-900">
             <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
               <BookOpen className="w-3.5 h-3.5 text-amber-300" />
               <span>교과서 탐색 2-Layer</span>
@@ -546,7 +546,7 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
           </div>
 
           {/* 3 * 2 교과서 표지 그리드 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 px-2 pb-4">
             {TEXTBOOK_OVERVIEW_DATA.map((book) => (
               <div
                 key={book.id}
@@ -604,15 +604,15 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
         /* ─────────────────────────────────────────────────────────────
             [LAYER 2] 특정 교과서 내부 상세 화면 (뒤로가기 + 단원 아코디언)
         ───────────────────────────────────────────────────────────── */
-        <div className="space-y-4 animate-in slide-in-from-right-4 duration-200">
+        <div className="space-y-3 animate-in slide-in-from-right-4 duration-200">
           {/* 뒤로가기 네비게이션 바 */}
-          <div className="flex items-center justify-between bg-white rounded-2xl p-3 border border-slate-200 shadow-xs">
+          <div className="flex items-center justify-between bg-white p-3 border-y border-slate-200 shadow-2xs">
             <button
               onClick={handleBackToBooks}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer group"
             >
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:-translate-x-0.5 transition-transform" />
-              <span>교과서 목록으로 (3×2 그리드)</span>
+              <span>교과서 목록으로</span>
             </button>
 
             {/* 모두 펼치기 / 접기 버튼 */}
@@ -633,7 +633,7 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
           </div>
 
           {/* 선택된 교과서 정보 헤더 카드 */}
-          <div className="bg-white rounded-2xl p-4 md:p-5 border border-slate-200 shadow-xs space-y-3">
+          <div className="bg-white p-4 border-y border-slate-200 shadow-2xs space-y-3">
             <div className="flex items-start gap-4">
               {/* 표지 작은 썸네일 */}
               <div
@@ -703,10 +703,10 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
               return (
                 <div
                   key={uIdx}
-                  className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                  className={`border-y transition-all duration-200 overflow-hidden ${
                     isOpen
-                      ? 'border-blue-400 bg-white shadow-xs'
-                      : 'border-slate-200 bg-slate-50/70 hover:bg-slate-50'
+                      ? 'border-blue-400 bg-white shadow-2xs'
+                      : 'border-slate-200 bg-white hover:bg-slate-50'
                   }`}
                 >
                   {/* 단원 아코디언 헤더 */}
@@ -809,3 +809,4 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
+

@@ -101,9 +101,9 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
   const cat = SETEUK_DATA[selectedCategory];
 
   return (
-    <div className="flex-1 overflow-y-auto space-y-4 w-full">
+    <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 상단 배너 */}
-      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 text-white rounded-2xl p-4 md:p-5 shadow-xs">
+      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 text-white p-5 shadow-sm border-b border-amber-800">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 w-fit px-2.5 py-1 rounded-full mb-2">
           <Lightbulb className="w-3.5 h-3.5" />
           <span>학생부 세특 치트키</span>
@@ -117,7 +117,7 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
       </div>
 
       {/* 진로 분야 선택 */}
-      <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+      <div className="bg-white p-3 border-y border-slate-200 overflow-x-auto no-scrollbar flex gap-2">
         {SETEUK_DATA.map((item, idx) => (
           <button
             key={idx}
@@ -125,7 +125,7 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
               selectedCategory === idx
                 ? 'bg-amber-500 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:border-amber-300 hover:bg-amber-50/50'
+                : 'bg-slate-50 text-slate-600 border border-slate-200 hover:border-amber-300 hover:bg-amber-50/50'
             }`}
           >
             <span>{item.icon}</span>
@@ -135,11 +135,11 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
       </div>
 
       {/* 탐구보고서 주제 카드 목록 */}
-      <div className="space-y-3.5">
+      <div className="space-y-3">
         {cat.topics.map((tp, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-2xl p-4 md:p-5 border border-slate-200 shadow-xs space-y-3"
+            className="bg-white border-y border-slate-200/90 p-4 shadow-2xs space-y-3"
           >
             <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
               <div>

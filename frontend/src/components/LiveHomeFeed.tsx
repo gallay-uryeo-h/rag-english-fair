@@ -207,11 +207,11 @@ export const LiveHomeFeed: React.FC<Props> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="w-full max-w-xl mx-auto space-y-4 pb-8">
+    <div className="w-full space-y-3 pb-8">
       {/* =========================================================================
-          📸 1. 인스타그램 스토리 캐러셀 (Instagram Story Carousel)
+          📸 1. 인스타그램 스토리 캐러셀 (Instagram Story Carousel) - 좌우 여백 0
           ========================================================================= */}
-      <section className="bg-white border-y sm:border border-slate-200 sm:rounded-2xl py-3 px-3 overflow-hidden shadow-xs">
+      <section className="bg-white border-b border-slate-200 py-3 px-3 overflow-hidden shadow-2xs">
         <div className="flex items-center gap-4 overflow-x-auto no-scrollbar px-1">
           {/* 공식 계정 프로필 스토리 */}
           <div className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer">
@@ -248,9 +248,9 @@ export const LiveHomeFeed: React.FC<Props> = ({ onNavigate }) => {
       </section>
 
       {/* =========================================================================
-          📸 2. 인스타그램 메인 피드 포스트 목록 (Instagram Feed Posts)
+          📸 2. 인스타그램 메인 피드 포스트 목록 (좌우 여백 0, border-b로 구분)
           ========================================================================= */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {posts.map((post) => {
           const isLiked = likedPosts[post.id] ?? false;
           const isSaved = savedPosts[post.id] ?? false;
@@ -259,7 +259,7 @@ export const LiveHomeFeed: React.FC<Props> = ({ onNavigate }) => {
           return (
             <article
               key={post.id}
-              className="bg-white border-y sm:border border-slate-200 sm:rounded-2xl overflow-hidden shadow-xs"
+              className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs"
             >
               {/* 포스트 상단: 프로필 정보 + 더보기 아이콘 */}
               <div className="flex items-center justify-between px-3.5 py-3">

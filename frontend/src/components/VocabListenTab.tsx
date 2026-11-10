@@ -178,9 +178,9 @@ export const VocabListenTab: React.FC = () => {
   const feedback = getFeedbackMessage();
 
   return (
-    <div className="flex-1 overflow-y-auto space-y-4 w-full">
+    <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 🌟 상단 인트로 배너 */}
-      <div className="bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-600 text-white rounded-2xl p-5 shadow-sm space-y-2">
+      <div className="bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
           <Ear className="w-3.5 h-3.5 text-amber-300" />
           <span>의령여고 단어 듣기 + 보기 진단</span>
@@ -207,7 +207,7 @@ export const VocabListenTab: React.FC = () => {
       </div>
 
       {/* 📚 교과서 선택 탭 */}
-      <div className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs space-y-2">
+      <div className="bg-white p-3 border-y border-slate-200 shadow-2xs space-y-2">
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <BookOpen className="w-4 h-4 text-purple-600" />
@@ -239,7 +239,7 @@ export const VocabListenTab: React.FC = () => {
 
       {/* 📝 퀴즈 영역 */}
       {!showResult ? (
-        <div className="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-white p-4 border-y border-slate-200 shadow-2xs space-y-4">
           {/* 세트 선택 바: 번호만으로 세트 표시 & 아래에 세트 설명 */}
           <div className="space-y-2 border-b border-slate-100 pb-3">
             <div className="flex items-center justify-between gap-2 flex-wrap text-xs">
@@ -436,7 +436,7 @@ export const VocabListenTab: React.FC = () => {
         </div>
       ) : (
         /* 🏆 결과 화면 */
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs text-center space-y-5 animate-in zoom-in-95 duration-200">
+        <div className="bg-white p-6 border-y border-slate-200 shadow-2xs text-center space-y-5 animate-in zoom-in-95 duration-200">
           <div className="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto shadow-inner">
             <Trophy className="w-8 h-8" />
           </div>

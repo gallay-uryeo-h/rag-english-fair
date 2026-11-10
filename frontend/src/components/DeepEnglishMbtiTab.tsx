@@ -845,9 +845,9 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
   const currentQ = DEEP_QUESTIONS[currentStep];
 
   return (
-    <div className="flex-1 overflow-y-auto space-y-4 w-full">
+    <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 🌟 헤더 배너 */}
-      <div className="bg-gradient-to-r from-violet-700 via-purple-700 to-indigo-700 text-white rounded-2xl p-5 shadow-sm space-y-2">
+      <div className="bg-gradient-to-r from-violet-700 via-purple-700 to-indigo-700 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
           <Brain className="w-3.5 h-3.5 text-amber-300" />
           <span>의령여고 정통 16대 MBTI 독해 성향 분석</span>
@@ -861,7 +861,7 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
       </div>
 
       {/* 안내 문구 */}
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-purple-50 border border-purple-200 text-purple-900 text-xs leading-relaxed">
+      <div className="flex items-start gap-2 p-3 bg-purple-50 border-y border-purple-200 text-purple-900 text-xs leading-relaxed">
         <Info className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
         <span>
           💡 의령여고 영어 교과서 6권 31개 단원의 실제 본문 지문 데이터를 바탕으로 정통 MBTI 16가지 성향(INTJ, ENFP, ISTJ 등)과 1:1 정밀 매칭되는 심층 진단 알고리즘입니다.
@@ -869,7 +869,7 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
       </div>
 
       {!finalResult ? (
-        <div className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200 shadow-xs space-y-5">
+        <div className="bg-white p-4 sm:p-6 border-y border-slate-200 shadow-2xs space-y-5">
           {/* 진행도 */}
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
             <span className="flex items-center gap-1.5 text-purple-700 font-bold">
@@ -948,7 +948,7 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
         </div>
       ) : (
         /* 🏆 결과 화면 */
-        <div className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200 shadow-xs space-y-6 animate-in fade-in duration-300">
+        <div className="bg-white p-4 sm:p-6 border-y border-slate-200 shadow-2xs space-y-6 animate-in fade-in duration-300">
           {/* 타이틀 및 정통 4글자 MBTI 배지 */}
           <div className="text-center space-y-2 border-b border-slate-100 pb-5">
             <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${finalResult.badgeColor}`}>
