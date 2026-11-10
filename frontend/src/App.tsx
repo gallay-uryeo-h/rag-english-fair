@@ -6,6 +6,7 @@ import { Station5Recommend } from './components/Station5Recommend';
 import { TextbookPreviewClean } from './components/TextbookPreviewClean';
 import { VocabTestTab } from './components/VocabTestTab';
 import { EnglishMbtiTab } from './components/EnglishMbtiTab';
+import { DeepEnglishMbtiTab } from './components/DeepEnglishMbtiTab';
 import { SeteukGeneratorTab } from './components/SeteukGeneratorTab';
 import { DigitalPassportTab } from './components/DigitalPassportTab';
 import { GrammarOverviewTab } from './components/GrammarOverviewTab';
@@ -52,6 +53,7 @@ export function App() {
         {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
         {currentTab === 'vocab-test' && <VocabTestTab />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
+        {currentTab === 'deep-mbti' && <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
         {currentTab === 'grammar-overview' && <GrammarOverviewTab onOpenImage={handleOpenImage} />}
         {currentTab === 'passport' && <DigitalPassportTab />}
