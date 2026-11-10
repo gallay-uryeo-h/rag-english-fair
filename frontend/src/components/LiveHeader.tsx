@@ -13,7 +13,7 @@ export const LiveHeader: React.FC<Props> = ({ isLiveMode, onToggleMode }) => {
         {/* 인스타그램 감성 폰트 로고 & 드롭다운 화살표 */}
         <div className="flex items-center gap-1.5 cursor-pointer select-none">
           <span className="font-serif italic text-2xl font-black tracking-tight text-slate-900">
-            Instagram
+            Urgirlshigh
           </span>
           <ChevronDown className="w-4 h-4 text-slate-700 stroke-[2.5] mt-1" />
           <span className="ml-1 text-[11px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">
