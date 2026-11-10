@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { TabType } from './types';
 import { Header } from './components/Header';
 import { LiveHeader } from './components/LiveHeader';
@@ -21,13 +21,28 @@ import { TextbookPreview } from './components/TextbookPreview';
 import { ImageModal } from './components/ImageModal';
 
 export function App() {
-  // 🌟 운영 모드 (true: 인스타그램 풀위드 안1, false: 전체 브레인스토밍 아카이브)
+  // 🌟 운영 모드 (true: 인스타그램 무한 피드 & 아코디언, false: 브레인스토밍 12개 탭)
   const [isLiveMode, setIsLiveMode] = useState<boolean>(true);
 
-  // 🌟 운영 모드 내 5개 내비게이션 탭 ('home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk')
-  const [liveTab, setLiveTab] = useState<LiveNavTab>('home');
+  // 🌟 하단 바 활성 탭 (현재 화면 위치 표시용)
+  const [activeNavTab, setActiveNavTab] = useState<LiveNavTab>('home');
 
-  // 기존 브레인스토밍 탭
+  // 🌟 인피드 아코디언 열림/닫힘 상태
+  const [expandedSections, setExpandedSections] = useState({
+    mbti: false,
+    vocab: false,
+    textbook: false,
+    seteuk: false,
+  });
+
+  // 🌟 피드 내 각 포스트 앵커 참조 (스크롤 점프용)
+  const homeRef = useRef<HTMLDivElement | null>(null);
+  const mbtiRef = useRef<HTMLDivElement | null>(null);
+  const vocabRef = useRef<HTMLDivElement | null>(null);
+  const textbookRef = useRef<HTMLDivElement | null>(null);
+  const seteukRef = useRef<HTMLDivElement | null>(null);
+
+  // 브레인스토밍 탭
   const [currentTab, setCurrentTab] = useState<TabType>('recommend');
 
   const [modalState, setModalState] = useState<{
@@ -52,15 +67,48 @@ export function App() {
     setModalState((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // 피드 배너나 카드에서 특정 코너로 바로가기
-  const handleLiveNavigate = (tab: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
-    setLiveTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 아코디언 토글 함수
+  const handleToggleSection = (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  // 🎯 스마트 북마크 스크롤 (부드럽게 이동하고 해당 아코디언 자동 오픈!)
+  const handleScrollTo = (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
+    setActiveNavTab(key);
+
+    if (key === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // 대상 아코디언을 자동으로 펼침
+    setExpandedSections((prev) => ({
+      ...prev,
+      [key]: true,
+    }));
+
+    // 약간의 딜레이 후 해당 요소로 스크롤
+    setTimeout(() => {
+      const refMap = {
+        mbti: mbtiRef,
+        vocab: vocabRef,
+        textbook: textbookRef,
+        seteuk: seteukRef,
+      };
+
+      const targetRef = refMap[key];
+      if (targetRef?.current) {
+        targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
   };
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
-      {/* 🌟 1. 상단 글로벌 헤더 (운영 모드 ⇄ 브레인스토밍 토글 내장) */}
+      {/* 🌟 1. 최상단 인스타그램 Urgirlshigh 헤더 (연구 모드 토글 내장) */}
       <LiveHeader
         isLiveMode={isLiveMode}
         onToggleMode={() => setIsLiveMode((prev) => !prev)}
@@ -68,53 +116,39 @@ export function App() {
 
       {isLiveMode ? (
         /* =========================================================================
-           [안 1] 실전 운영 모드: 모바일 좌우 여백 0 풀스크린 Full Width (Edge-to-Edge)
+           [안 1 혁신형] 단일 무한 피드 + 인라인 아코디언 확장 + 하단 스마트 북마크
            ========================================================================= */
         <div className="flex-1 flex flex-col w-full bg-slate-50 pb-20">
-          <main className="flex-1 w-full max-w-xl mx-auto px-0 py-0 sm:py-4">
-            {liveTab === 'home' && (
-              <LiveHomeFeed
-                onNavigate={handleLiveNavigate}
-                onOpenImage={handleOpenImage}
-              />
-            )}
-            {liveTab === 'mbti' && (
-              <div className="w-full">
-                <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />
-              </div>
-            )}
-            {liveTab === 'vocab' && (
-              <div className="w-full">
-                <VocabListenTab />
-              </div>
-            )}
-            {liveTab === 'textbook' && (
-              <div className="w-full">
-                <TextbookBrowse2Layer onOpenImage={handleOpenImage} />
-              </div>
-            )}
-            {liveTab === 'seteuk' && (
-              <div className="w-full">
-                <SeteukGeneratorTab onOpenImage={handleOpenImage} />
-              </div>
-            )}
+          <main className="flex-1 w-full max-w-xl mx-auto px-0 py-0">
+            <LiveHomeFeed
+              onOpenImage={handleOpenImage}
+              feedRefs={{
+                homeRef,
+                mbtiRef,
+                vocabRef,
+                textbookRef,
+                seteukRef,
+              }}
+              expandedSections={expandedSections}
+              onToggleSection={handleToggleSection}
+              onScrollTo={handleScrollTo}
+            />
           </main>
 
-          {/* 인스타그램 스타일 하단 고정 내비게이션 바 */}
-          <LiveBottomBar currentTab={liveTab} onSelectTab={setLiveTab} />
+          {/* 하단 스마트 북마크 네비게이션 바 */}
+          <LiveBottomBar
+            currentTab={activeNavTab}
+            onSelectTab={handleScrollTo}
+          />
         </div>
       ) : (
         /* =========================================================================
            [기존] 브레인스토밍 모드: 12개 전체 실험적 탭 & 모바일 프레임 유지
            ========================================================================= */
         <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto bg-slate-100 border-x border-slate-200 shadow-sm overflow-hidden">
-          {/* 브레인스토밍 서브헤더 */}
           <Header />
-
-          {/* 전체 12개 탭 내비게이션 */}
           <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
 
-          {/* 탭 본문 */}
           <main className="flex-1 overflow-y-auto flex flex-col bg-slate-50 p-2">
             {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
             {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
