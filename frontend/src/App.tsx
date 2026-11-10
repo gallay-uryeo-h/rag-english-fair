@@ -46,7 +46,7 @@ export function App() {
       {/* 탭 본문 영역 */}
       <main className="flex-1 overflow-hidden flex flex-col bg-slate-50">
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
-        {currentTab === 'mbti' && <EnglishMbtiTab />}
+        {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
         {currentTab === 'passport' && <DigitalPassportTab />}
         {currentTab === 'visual' && <GrowthRoadmap onOpenImage={handleOpenImage} />}

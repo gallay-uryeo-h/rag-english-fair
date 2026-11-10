@@ -1,4 +1,4 @@
-export type TabType = 
+export type TabType =
   | 'recommend'   // 1. My English Future (진로 8대 분야 & 본문 추천)
   | 'mbti'        // 2. 영어 성향 MBTI (과목 매칭)
   | 'seteuk'      // 3. 세특 아이디어 발전소 (교과서 기반 탐구보고서)

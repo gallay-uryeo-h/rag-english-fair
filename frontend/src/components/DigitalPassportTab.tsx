@@ -119,11 +119,10 @@ export const DigitalPassportTab: React.FC = () => {
           {BOOTHS.map((b) => (
             <div
               key={b.id}
-              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                stamps[b.id]
+              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${stamps[b.id]
                   ? 'bg-blue-600 text-white shadow-xs scale-105'
                   : 'bg-slate-100 text-slate-400'
-              }`}
+                }`}
             >
               {b.id}
             </div>
@@ -139,11 +138,10 @@ export const DigitalPassportTab: React.FC = () => {
             <div
               key={b.id}
               onClick={() => toggleStamp(b.id)}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                isStamped
+              className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${isStamped
                   ? 'bg-white border-blue-200 shadow-xs ring-1 ring-blue-100'
                   : 'bg-slate-50/80 border-slate-200 opacity-80 hover:opacity-100 hover:bg-white'
-              }`}
+                }`}
             >
               <div className="flex items-center gap-3">
                 <div className="text-2xl">{b.emoji}</div>

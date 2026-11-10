@@ -1,13 +1,13 @@
 import React from 'react';
 import type { TabType } from '../types';
-import { 
-  Sparkles, 
-  Compass, 
-  Lightbulb, 
-  Award, 
-  Map, 
-  MessageSquare, 
-  BookOpen 
+import {
+  Sparkles,
+  Compass,
+  Lightbulb,
+  Award,
+  Map,
+  MessageSquare,
+  BookOpen
 } from 'lucide-react';
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
   const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
     { id: 'recommend', label: '📸 My English Future', icon: <Sparkles className="w-3.5 h-3.5" /> },
-    { id: 'mbti', label: '🧪 과목 MBTI', icon: <Compass className="w-3.5 h-3.5" /> },
+    { id: 'mbti', label: '🧪 본문 MBTI', icon: <Compass className="w-3.5 h-3.5" /> },
     { id: 'seteuk', label: '💡 세특 치트키', icon: <Lightbulb className="w-3.5 h-3.5" /> },
     { id: 'passport', label: '🎫 5부스 여권 스탬프', icon: <Award className="w-3.5 h-3.5" /> },
     { id: 'visual', label: '🗺️ 3개년 로드맵', icon: <Map className="w-3.5 h-3.5" /> },
@@ -34,11 +34,10 @@ export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
           <button
             key={tab.id}
             onClick={() => onSelectTab(tab.id)}
-            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
-              isActive
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${isActive
                 ? 'bg-blue-600 text-white shadow-xs'
                 : 'text-slate-600 bg-slate-50 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
-            }`}
+              }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
