@@ -31,14 +31,12 @@ const TEXTBOOK_METAS: BookMeta[] = [
 function parseUrlToBookInfo(url: string): { prefix: string; page: number; bookName: string; maxPage: number } | null {
   if (!url) return null;
   const decoded = decodeURI(url);
-  // Match pattern like /pages_cache/1학년_1학기_공통영어1_미래엔_p19.jpg
   const match = decoded.match(/([^\/\\]+)_p(\d+)\.jpg/);
   if (!match) return null;
 
   const rawPrefix = match[1];
   const page = parseInt(match[2], 10);
 
-  // Find corresponding metadata
   const found = TEXTBOOK_METAS.find((m) => m.prefix === rawPrefix || rawPrefix.includes(m.prefix) || m.prefix.includes(rawPrefix));
   if (found) {
     return {
@@ -49,7 +47,6 @@ function parseUrlToBookInfo(url: string): { prefix: string; page: number; bookNa
     };
   }
 
-  // Fallback
   return {
     prefix: rawPrefix,
     page,
@@ -82,6 +79,14 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
   const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
+  // Touch State for Mobile Pinch Zoom & Pan & Swipe
+  const touchStartDistRef = useRef<number | null>(null);
+  const touchStartScaleRef = useRef<number>(1);
+  const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const touchPanStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const touchSwipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lastTapTimeRef = useRef<number>(0);
+
   // Loading & Error State
   const [imgLoading, setImgLoading] = useState<boolean>(true);
   const [imgError, setImgError] = useState<boolean>(false);
@@ -90,6 +95,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
   const [pageInput, setPageInput] = useState<string>('');
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const viewerAreaRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   // Sync state when opened or url changed
@@ -143,7 +149,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
   }, [currentPage, maxPage, goToPage]);
 
   // Zoom handlers
-  const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.3, 3.5));
+  const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.3, 4.0));
   const handleZoomOut = () => setScale((prev) => Math.max(prev - 0.3, 0.6));
   const handleResetZoom = () => {
     setScale(1);
@@ -177,7 +183,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
       } else if (e.key === 'ArrowRight') {
         nextPage();
       } else if (e.key === '+' || e.key === '=') {
-        setScale((prev) => Math.min(prev + 0.2, 3.5));
+        setScale((prev) => Math.min(prev + 0.2, 4.0));
       } else if (e.key === '-') {
         setScale((prev) => Math.max(prev - 0.2, 0.6));
       } else if (e.key === '0') {
@@ -216,7 +222,96 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
       const delta = e.deltaY < 0 ? 0.2 : -0.2;
-      setScale((prev) => Math.max(0.6, Math.min(prev + delta, 3.5)));
+      setScale((prev) => Math.max(0.6, Math.min(prev + delta, 4.0)));
+    }
+  };
+
+  // ================= Touch Pinch & Pan & Swipe Handlers =================
+  const getTouchDistance = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      // 2 finger pinch
+      const dist = getTouchDistance(e.touches[0], e.touches[1]);
+      touchStartDistRef.current = dist;
+      touchStartScaleRef.current = scale;
+      touchStartPosRef.current = { ...position };
+      touchSwipeStartRef.current = null;
+    } else if (e.touches.length === 1) {
+      // 1 finger touch: either pan (if zoomed) or swipe (if 1x) or double-tap
+      const touch = e.touches[0];
+      const now = Date.now();
+      if (now - lastTapTimeRef.current < 300) {
+        // Double tap: toggle 1x and 2x
+        if (scale > 1.2) {
+          handleResetZoom();
+        } else {
+          setScale(2.2);
+        }
+        lastTapTimeRef.current = 0;
+        return;
+      }
+      lastTapTimeRef.current = now;
+
+      touchPanStartRef.current = {
+        x: touch.clientX - position.x,
+        y: touch.clientY - position.y,
+      };
+      touchSwipeStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+      };
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && touchStartDistRef.current !== null) {
+      // Pinch zoom
+      e.preventDefault();
+      const newDist = getTouchDistance(e.touches[0], e.touches[1]);
+      const factor = newDist / touchStartDistRef.current;
+      const targetScale = Math.max(0.8, Math.min(touchStartScaleRef.current * factor, 4.0));
+      setScale(targetScale);
+    } else if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      if (scale > 1.05) {
+        // Pan when zoomed
+        e.preventDefault();
+        setPosition({
+          x: touch.clientX - touchPanStartRef.current.x,
+          y: touch.clientY - touchPanStartRef.current.y,
+        });
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length < 2) {
+      touchStartDistRef.current = null;
+    }
+
+    // Check horizontal swipe if not zoomed
+    if (scale <= 1.05 && touchSwipeStartRef.current && e.changedTouches.length === 1) {
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchSwipeStartRef.current.x;
+      const deltaY = touch.clientY - touchSwipeStartRef.current.y;
+
+      // Horizontal swipe threshold: 50px, and horizontal travel must be > 1.5 * vertical
+      if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX < 0) {
+          nextPage(); // swipe left -> next page
+        } else {
+          prevPage(); // swipe right -> prev page
+        }
+      }
+    }
+
+    if (e.touches.length === 0) {
+      touchSwipeStartRef.current = null;
     }
   };
 
@@ -226,33 +321,33 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/75 backdrop-blur-xs transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-3 md:p-6 bg-black/85 backdrop-blur-xs transition-opacity"
       onClick={onClose}
     >
       <div
         ref={containerRef}
-        className={`relative flex flex-col w-full bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 border border-slate-700 select-none ${
-          isFullscreen ? 'w-screen h-screen rounded-none max-w-none max-h-none border-none' : 'max-w-4xl max-h-[94vh] h-[90vh]'
+        className={`relative flex flex-col w-full bg-slate-900 rounded-none sm:rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 border-0 sm:border border-slate-700 select-none ${
+          isFullscreen ? 'w-screen h-screen rounded-none max-w-none max-h-none border-none' : 'max-w-4xl max-h-[100dvh] sm:max-h-[94vh] h-[100dvh] sm:h-[90vh]'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 모달 상단 툴바 */}
-        <div className="flex items-center justify-between px-3 md:px-4 py-2.5 bg-slate-800 border-b border-slate-700 text-white shrink-0">
+        <div className="flex items-center justify-between px-3 md:px-4 py-2 sm:py-2.5 bg-slate-800 border-b border-slate-700 text-white shrink-0">
           {/* 교과서 정보 및 페이지 점프 */}
           <div className="flex items-center gap-2 min-w-0 pr-2">
             <BookOpen className="w-4 h-4 text-blue-400 shrink-0" />
             <div className="truncate">
               <h3 className="text-xs md:text-sm font-bold truncate text-slate-100">{displayTitle}</h3>
               {bookName && (
-                <div className="text-[11px] text-slate-400 hidden sm:block truncate">
-                  의령여고 E-Book Viewer · 총 {maxPage}페이지
+                <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">
+                  총 {maxPage}쪽 · 핀치로 확대/이동 가능
                 </div>
               )}
             </div>
           </div>
 
           {/* 중앙: 확대/축소 및 전체화면 컨트롤 */}
-          <div className="flex items-center gap-1 bg-slate-700/80 px-2 py-1 rounded-xl shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-slate-700/80 px-1.5 sm:px-2 py-1 rounded-xl shrink-0">
             <button
               onClick={handleZoomOut}
               title="축소 (-)"
@@ -260,7 +355,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[11px] font-mono font-bold w-10 text-center text-slate-200">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold w-9 sm:w-10 text-center text-slate-200">
               {Math.round(scale * 100)}%
             </span>
             <button
@@ -277,11 +372,11 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
-            <div className="w-px h-3.5 bg-slate-600 mx-0.5" />
+            <div className="w-px h-3.5 bg-slate-600 mx-0.5 hidden sm:block" />
             <button
               onClick={toggleFullscreen}
               title={isFullscreen ? '전체화면 종료' : '전체화면'}
-              className="p-1 rounded-lg hover:bg-slate-600 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              className="p-1 rounded-lg hover:bg-slate-600 text-slate-300 hover:text-white transition-colors cursor-pointer hidden sm:block"
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
             </button>
@@ -297,13 +392,17 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
           </button>
         </div>
 
-        {/* 메인 교과서 뷰어 영역 (좌우 넘김 버튼 포함) */}
+        {/* 메인 교과서 뷰어 영역 (마우스 드래그 & 터치 핀치/팬/스와이프 지원) */}
         <div
-          className="flex-1 overflow-hidden relative flex items-center justify-center bg-slate-950 cursor-grab active:cursor-grabbing"
+          ref={viewerAreaRef}
+          className="flex-1 overflow-hidden relative flex items-center justify-center bg-slate-950 cursor-grab active:cursor-grabbing touch-none"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onWheel={handleWheel}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {/* 이전 페이지 버튼 (좌측 오버레이) */}
           <button
@@ -350,7 +449,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
             </div>
           ) : (
             <div
-              className="flex items-center justify-center w-full h-full p-2 transition-transform duration-75 ease-out"
+              className="flex items-center justify-center w-full h-full p-1 sm:p-2 transition-transform duration-75 ease-out"
               style={{
                 transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
                 transformOrigin: 'center center',
@@ -366,7 +465,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
                   setImgLoading(false);
                   setImgError(true);
                 }}
-                className={`max-h-[80vh] w-auto max-w-full object-contain rounded-md shadow-2xl transition-opacity duration-200 select-none ${
+                className={`max-h-[82vh] w-auto max-w-full object-contain rounded-md shadow-2xl transition-opacity duration-200 select-none ${
                   imgLoading ? 'opacity-0' : 'opacity-100'
                 }`}
                 loading="eager"
@@ -376,10 +475,10 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
         </div>
 
         {/* 하단 페이지 내비게이션 바 */}
-        <div className="flex items-center justify-between px-3 md:px-5 py-2.5 bg-slate-800 border-t border-slate-700 text-white shrink-0">
+        <div className="flex items-center justify-between px-3 md:px-5 py-2 sm:py-2.5 bg-slate-800 border-t border-slate-700 text-white shrink-0">
           <div className="text-xs text-slate-400 hidden sm:block">
             키보드 <kbd className="px-1.5 py-0.5 rounded bg-slate-700 text-[10px] text-slate-300">←</kbd>{' '}
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-700 text-[10px] text-slate-300">→</kbd> 방향키로 책장을 넘길 수 있습니다.
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-700 text-[10px] text-slate-300">→</kbd> 또는 모바일 좌우 스와이프로 책장을 넘길 수 있습니다.
           </div>
 
           {/* 페이지 이동 컨트롤러 */}
