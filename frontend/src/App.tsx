@@ -10,6 +10,7 @@ import { GrammarOverviewTab } from './components/GrammarOverviewTab';
 import { GrowthRoadmap } from './components/GrowthRoadmap';
 import { SchoolLifeQA } from './components/SchoolLifeQA';
 import { TextbookPreview } from './components/TextbookPreview';
+import { TextbookPreviewClean } from './components/TextbookPreviewClean';
 import { ImageModal } from './components/ImageModal';
 
 export function App() {
@@ -47,6 +48,7 @@ export function App() {
       {/* 탭 본문 영역 */}
       <main className="flex-1 overflow-hidden flex flex-col bg-slate-50">
         {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
+        {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
         {currentTab === 'mbti' && <EnglishMbtiTab onOpenImage={handleOpenImage} />}
         {currentTab === 'seteuk' && <SeteukGeneratorTab onOpenImage={handleOpenImage} />}
         {currentTab === 'grammar-overview' && <GrammarOverviewTab onOpenImage={handleOpenImage} />}

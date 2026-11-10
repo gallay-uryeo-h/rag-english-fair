@@ -19,13 +19,14 @@ interface Props {
 export const Navigation: React.FC<Props> = ({ currentTab, onSelectTab }) => {
   const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
     { id: 'recommend', label: '📸 My English Future', icon: <Sparkles className="w-3.5 h-3.5" /> },
+    { id: 'textbook-preview', label: '📖 교과서 미리보기', icon: <BookOpen className="w-3.5 h-3.5" /> },
     { id: 'mbti', label: '🧪 본문 MBTI', icon: <Compass className="w-3.5 h-3.5" /> },
     { id: 'seteuk', label: '💡 세특 치트키', icon: <Lightbulb className="w-3.5 h-3.5" /> },
     { id: 'grammar-overview', label: '📐 문법 한눈에 조망', icon: <Layers className="w-3.5 h-3.5" /> },
     { id: 'passport', label: '🎫 5부스 여권 스탬프', icon: <Award className="w-3.5 h-3.5" /> },
     { id: 'visual', label: '🗺️ 3개년 로드맵', icon: <Map className="w-3.5 h-3.5" /> },
     { id: 'chat', label: '💬 의령여고 Q&A', icon: <MessageSquare className="w-3.5 h-3.5" /> },
-    { id: 'grammar', label: '📖 교과서 E-Book', icon: <BookOpen className="w-3.5 h-3.5" /> },
+    { id: 'grammar', label: '📚 교과서 E-Book', icon: <BookOpen className="w-3.5 h-3.5" /> },
   ];
 
   return (
