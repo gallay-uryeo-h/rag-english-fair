@@ -73,10 +73,10 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '가정법 과거', page: 23, path: 'pages_cache/공통영어1_p23.jpg' },
-                    { tag: '사역·지각동사 5형식', page: 45, path: 'pages_cache/공통영어1_p45.jpg' },
-                    { tag: 'with 분사구문', page: 67, path: 'pages_cache/공통영어1_p67.jpg' },
-                    { tag: '수동태', page: 89, path: 'pages_cache/공통영어1_p89.jpg' },
+                    { tag: '가정법 과거', page: 23, path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p23.jpg' },
+                    { tag: '사역·지각동사 5형식', page: 45, path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p45.jpg' },
+                    { tag: 'with 분사구문', page: 67, path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p67.jpg' },
+                    { tag: '수동태', page: 89, path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p89.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -97,10 +97,10 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '복합관계대명사', page: 25, path: 'pages_cache/공통영어2_p25.jpg' },
-                    { tag: 'It~that 강조구문', page: 47, path: 'pages_cache/공통영어2_p47.jpg' },
-                    { tag: '과거완료진행', page: 69, path: 'pages_cache/공통영어2_p69.jpg' },
-                    { tag: '동격의 that', page: 91, path: 'pages_cache/공통영어2_p91.jpg' },
+                    { tag: '복합관계대명사', page: 25, path: 'pages_cache/1학년_2학기_공통영어2_미래엔_p25.jpg' },
+                    { tag: 'It~that 강조구문', page: 47, path: 'pages_cache/1학년_2학기_공통영어2_미래엔_p47.jpg' },
+                    { tag: '과거완료진행', page: 69, path: 'pages_cache/1학년_2학기_공통영어2_미래엔_p69.jpg' },
+                    { tag: '동격의 that', page: 91, path: 'pages_cache/1학년_2학기_공통영어2_미래엔_p91.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -140,10 +140,10 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '완료 분사구문', page: 23, path: 'pages_cache/영어I_p23.jpg' },
-                    { tag: '도치 구문', page: 47, path: 'pages_cache/영어I_p47.jpg' },
-                    { tag: '관계부사', page: 71, path: 'pages_cache/영어I_p71.jpg' },
-                    { tag: '조동사 have p.p.', page: 95, path: 'pages_cache/영어I_p95.jpg' },
+                    { tag: '완료 분사구문', page: 23, path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p23.jpg' },
+                    { tag: '도치 구문', page: 47, path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p47.jpg' },
+                    { tag: '관계부사', page: 71, path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p71.jpg' },
+                    { tag: '조동사 have p.p.', page: 95, path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p95.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -164,10 +164,10 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '혼합가정법', page: 23, path: 'pages_cache/영어II_p23.jpg' },
-                    { tag: '목적격보어 분사', page: 47, path: 'pages_cache/영어II_p47.jpg' },
-                    { tag: 'so ~ that 구문', page: 71, path: 'pages_cache/영어II_p71.jpg' },
-                    { tag: '부분부정·특수부정', page: 95, path: 'pages_cache/영어II_p95.jpg' },
+                    { tag: '혼합가정법', page: 23, path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p23.jpg' },
+                    { tag: '목적격보어 분사', page: 47, path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p47.jpg' },
+                    { tag: 'so ~ that 구문', page: 71, path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p71.jpg' },
+                    { tag: '부분부정·특수부정', page: 95, path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p95.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -207,10 +207,10 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '무생물 주어구문', page: 25, path: 'pages_cache/영어_독해와_작문_p25.jpg' },
-                    { tag: '원형부정사 보어', page: 49, path: 'pages_cache/영어_독해와_작문_p49.jpg' },
-                    { tag: '전치사+관계대명사', page: 73, path: 'pages_cache/영어_독해와_작문_p73.jpg' },
-                    { tag: '독립분사구문', page: 97, path: 'pages_cache/영어_독해와_작문_p97.jpg' },
+                    { tag: '무생물 주어구문', page: 25, path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p25.jpg' },
+                    { tag: '원형부정사 보어', page: 49, path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p49.jpg' },
+                    { tag: '전치사+관계대명사', page: 73, path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p73.jpg' },
+                    { tag: '독립분사구문', page: 97, path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p97.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -234,8 +234,8 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    { tag: '글로벌 에티켓 표현', page: 25, path: 'pages_cache/세계_문화와_영어_p25.jpg' },
-                    { tag: '다문화 관용표현', page: 49, path: 'pages_cache/세계_문화와_영어_p49.jpg' },
+                    { tag: '글로벌 에티켓 표현', page: 25, path: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p25.jpg' },
+                    { tag: '다문화 관용표현', page: 49, path: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p49.jpg' },
                   ].map((item, idx) => (
                     <button
                       key={idx}
@@ -264,33 +264,33 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
             {
               title: '1. 관계사 (Relative Clauses) 계통도',
               nodes: [
-                { grade: '1학년', name: '복합관계대명사 (whatever/whoever)', book: '공통영어2 p.25', path: 'pages_cache/공통영어2_p25.jpg' },
-                { grade: '2학년', name: '관계부사 (where, when, why)', book: '영어I p.71', path: 'pages_cache/영어I_p71.jpg' },
-                { grade: '3학년', name: '전치사 + 관계대명사 (in which/to whom)', book: '독해와작문 p.73', path: 'pages_cache/영어_독해와_작문_p73.jpg' },
+                { grade: '1학년', name: '복합관계대명사 (whatever/whoever)', book: '공통영어2 p.25', path: 'pages_cache/1학년_2학기_공통영어2_미래엔_p25.jpg' },
+                { grade: '2학년', name: '관계부사 (where, when, why)', book: '영어I p.71', path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p71.jpg' },
+                { grade: '3학년', name: '전치사 + 관계대명사 (in which/to whom)', book: '독해와작문 p.73', path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p73.jpg' },
               ],
             },
             {
               title: '2. 분사 및 분사구문 (Participles) 계통도',
               nodes: [
-                { grade: '1학년', name: 'with + 목적어 + 분사 (동시동작)', book: '공통영어1 p.67', path: 'pages_cache/공통영어1_p67.jpg' },
-                { grade: '2학년', name: '완료 분사구문 (Having p.p.)', book: '영어I p.23', path: 'pages_cache/영어I_p23.jpg' },
-                { grade: '3학년', name: '독립분사구문 & 관용 분사표현', book: '독해와작문 p.97', path: 'pages_cache/영어_독해와_작문_p97.jpg' },
+                { grade: '1학년', name: 'with + 목적어 + 분사 (동시동작)', book: '공통영어1 p.67', path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p67.jpg' },
+                { grade: '2학년', name: '완료 분사구문 (Having p.p.)', book: '영어I p.23', path: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p23.jpg' },
+                { grade: '3학년', name: '독립분사구문 & 관용 분사표현', book: '독해와작문 p.97', path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p97.jpg' },
               ],
             },
             {
               title: '3. 5형식 문장구조 (Sentence Patterns) 계통도',
               nodes: [
-                { grade: '1학년', name: '사역·지각동사 + 원형부정사', book: '공통영어1 p.45', path: 'pages_cache/공통영어1_p45.jpg' },
-                { grade: '2학년', name: '목적격보어로 쓰이는 현재/과거분사', book: '영어II p.47', path: 'pages_cache/영어II_p47.jpg' },
-                { grade: '3학년', name: '원형부정사 보어 관용패턴', book: '독해와작문 p.49', path: 'pages_cache/영어_독해와_작문_p49.jpg' },
+                { grade: '1학년', name: '사역·지각동사 + 원형부정사', book: '공통영어1 p.45', path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p45.jpg' },
+                { grade: '2학년', name: '목적격보어로 쓰이는 현재/과거분사', book: '영어II p.47', path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p47.jpg' },
+                { grade: '3학년', name: '원형부정사 보어 관용패턴', book: '독해와작문 p.49', path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p49.jpg' },
               ],
             },
             {
               title: '4. 특수구문 (도치 / 강조 / 가정법) 계통도',
               nodes: [
-                { grade: '1학년', name: 'It ~ that 강조구문 & 가정법 과거', book: '공통영어1 p.23', path: 'pages_cache/공통영어1_p23.jpg' },
-                { grade: '2학년', name: '부정어 도치 & 혼합가정법', book: '영어II p.23', path: 'pages_cache/영어II_p23.jpg' },
-                { grade: '3학년', name: '무생물 주어구문 (물주구문 독해)', book: '독해와작문 p.25', path: 'pages_cache/영어_독해와_작문_p25.jpg' },
+                { grade: '1학년', name: 'It ~ that 강조구문 & 가정법 과거', book: '공통영어1 p.23', path: 'pages_cache/1학년_1학기_공통영어1_미래엔_p23.jpg' },
+                { grade: '2학년', name: '부정어 도치 & 혼합가정법', book: '영어II p.23', path: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p23.jpg' },
+                { grade: '3학년', name: '무생물 주어구문 (물주구문 독해)', book: '독해와작문 p.25', path: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p25.jpg' },
               ],
             },
           ].map((tree, idx) => (
@@ -323,4 +323,3 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
-

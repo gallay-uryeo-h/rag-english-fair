@@ -146,13 +146,36 @@ def root():
 
 from grammar_roadmap_data import GRAMMAR_ROADMAP_DATA, NOTICE_MESSAGE
 
-@app.get("/pages_cache/{filename}")
+from urllib.parse import unquote
+
+@app.get("/pages_cache/{filename:path}")
 def get_page_image(filename: str):
-    path = os.path.join("pages_cache", filename)
-    if os.path.exists(path):
-        media_type = "image/jpeg" if filename.lower().endswith((".jpg", ".jpeg")) else "image/png"
-        return FileResponse(path, media_type=media_type)
-    return JSONResponse({"error": "not found"}, status_code=404)
+    clean_name = unquote(filename).strip()
+    direct_path = os.path.join("pages_cache", clean_name)
+    if os.path.exists(direct_path):
+        media_type = "image/jpeg" if clean_name.lower().endswith((".jpg", ".jpeg")) else "image/png"
+        return FileResponse(direct_path, media_type=media_type)
+
+    # 스마트 매칭: 약식 이름(예: 공통영어1_p23.jpg, 영어독해와작문_p25.jpg 등)을 실제 정규 파일명과 매칭
+    norm_query = clean_name.replace(" ", "").replace("_", "").lower()
+    if os.path.exists("pages_cache"):
+        for real_file in os.listdir("pages_cache"):
+            norm_real = real_file.replace(" ", "").replace("_", "").lower()
+            # 페이지 번호 매칭 검사
+            import re
+            p_match_query = re.search(r'p\d+', norm_query)
+            p_match_real = re.search(r'p\d+', norm_real)
+            if p_match_query and p_match_real and p_match_query.group() == p_match_real.group():
+                # 과목명 키워드 검사
+                keywords = ["공통영어1", "공통영어2", "영어i", "영어1", "영어ii", "영어2", "영어독해와작문", "독해와작문", "세계문화와영어", "세계문화"]
+                for kw in keywords:
+                    if kw in norm_query and (kw in norm_real or (kw == "영어i" and "영어ⅰ" in norm_real) or (kw == "영어ii" and "영어ⅱ" in norm_real)):
+                        matched_path = os.path.join("pages_cache", real_file)
+                        media_type = "image/jpeg" if real_file.lower().endswith((".jpg", ".jpeg")) else "image/png"
+                        return FileResponse(matched_path, media_type=media_type)
+
+    return JSONResponse({"error": f"Image '{clean_name}' not found"}, status_code=404)
+
 
 @app.get("/api/grammar-roadmap")
 def get_grammar_roadmap():
@@ -323,6 +346,13 @@ def recommend(req: RecommendRequest):
         report = f"리포트 생성 중 오류가 발생했습니다: {e}"
 
     return {"report": report, "candidates": candidates}
+
+
+@app.get("/api/recommend-passages")
+@app.get("/api/recommend")
+def recommend_get(career: str = "", interest: str = "", grade: str = "전체"):
+    q = (career or interest).strip()
+    return recommend(RecommendRequest(interest=q, grade=grade))
 
 
 # ── 정적 파일 (index.html 이후에 마운트) ─────────────────────
