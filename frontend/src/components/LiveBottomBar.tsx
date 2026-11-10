@@ -10,16 +10,16 @@ interface Props {
 
 export const LiveBottomBar: React.FC<Props> = ({ currentTab, onSelectTab }) => {
   const tabs = [
-    { id: 'home' as const, label: '홈 피드', icon: Home },
-    { id: 'mbti' as const, label: '본문 MBTI', icon: Compass },
-    { id: 'vocab' as const, label: '단어 퀴즈', icon: Volume2 },
-    { id: 'textbook' as const, label: '교과서 탐색', icon: BookOpen },
-    { id: 'seteuk' as const, label: '세특 발전소', icon: Lightbulb },
+    { id: 'home' as const, label: '피드', icon: Home },
+    { id: 'mbti' as const, label: 'MBTI', icon: Compass },
+    { id: 'vocab' as const, label: '단어릴스', icon: Volume2 },
+    { id: 'textbook' as const, label: '교과서', icon: BookOpen },
+    { id: 'seteuk' as const, label: '프로필', icon: Lightbulb },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-lg py-1.5 px-4">
-      <div className="max-w-2xl mx-auto flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-1 px-4">
+      <div className="max-w-md mx-auto flex items-center justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;
@@ -27,20 +27,21 @@ export const LiveBottomBar: React.FC<Props> = ({ currentTab, onSelectTab }) => {
             <button
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
-                isActive
-                  ? 'text-blue-600 scale-105'
-                  : 'text-slate-500 hover:text-slate-800'
+              className={`flex flex-col items-center justify-center py-1 px-3 transition-transform active:scale-90 cursor-pointer ${
+                isActive ? 'text-slate-900' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              <div
-                className={`p-1 rounded-xl transition-all ${
-                  isActive ? 'bg-blue-50 text-blue-600' : ''
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+              <div className="relative">
+                <Icon
+                  className={`w-6 h-6 ${
+                    isActive ? 'stroke-[2.5] text-slate-900 fill-slate-900' : 'stroke-[1.8]'
+                  }`}
+                />
+                {isActive && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-slate-900" />
+                )}
               </div>
-              <span className={`text-[10px] tracking-tight mt-0.5 ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <span className={`text-[10px] tracking-tight mt-0.5 ${isActive ? 'font-bold text-slate-900' : 'font-normal text-slate-500'}`}>
                 {tab.label}
               </span>
             </button>
