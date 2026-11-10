@@ -211,7 +211,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
           <div className="space-y-1.5 relative z-10">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-              E vs I, S vs N, T vs F, J vs P
+              MBTI별 본문 추천
             </h3>
             <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
               나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
@@ -329,7 +329,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
           <div className="space-y-1.5 relative z-10">
             <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-              단어가 뜰 때 원어민 소리가 팡팡!
+              단어 미리보기
             </h3>
             <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
               1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!

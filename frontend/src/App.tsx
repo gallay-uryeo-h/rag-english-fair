@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { TabType } from './types';
 import { Header } from './components/Header';
 import { LiveHeader } from './components/LiveHeader';
@@ -66,6 +66,60 @@ export function App() {
   const handleCloseModal = () => {
     setModalState((prev) => ({ ...prev, isOpen: false }));
   };
+
+  // 🌟 스크롤 위치 감지: 현재 화면에 위치한 섹션에 맞추어 하단 탭 자동 하이라이트
+  useEffect(() => {
+    if (!isLiveMode) return;
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          // 헤더 높이 등을 감안한 감지 오프셋
+          const offset = 180;
+
+          if (scrollY < 120) {
+            setActiveNavTab('home');
+            ticking = false;
+            return;
+          }
+
+          const sections: { key: LiveNavTab; ref: React.RefObject<HTMLDivElement | null> }[] = [
+            { key: 'mbti', ref: mbtiRef },
+            { key: 'vocab', ref: vocabRef },
+            { key: 'textbook', ref: textbookRef },
+            { key: 'seteuk', ref: seteukRef },
+          ];
+
+          // 역순으로 탐색하여 화면 상단(offset)보다 위 또는 걸쳐 있는 가장 아래 섹션 찾기
+          let active: LiveNavTab = 'home';
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const el = sections[i].ref.current;
+            if (el) {
+              const top = el.getBoundingClientRect().top;
+              if (top <= offset) {
+                active = sections[i].key;
+                break;
+              }
+            }
+          }
+
+          // 맨 아래 끝까지 스크롤된 경우 마지막 탭 활성화
+          if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+            active = 'seteuk';
+          }
+
+          setActiveNavTab(active);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLiveMode]);
 
   // 아코디언 토글 함수
   const handleToggleSection = (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
