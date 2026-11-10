@@ -79,9 +79,10 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
   const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
-  // Touch State for Mobile Pinch Zoom & Pan & Swipe
+  // Touch State for Simultaneous Mobile Pinch Zoom & Pan
   const touchStartDistRef = useRef<number | null>(null);
   const touchStartScaleRef = useRef<number>(1);
+  const touchStartCenterRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchPanStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchSwipeStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -118,6 +119,29 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
       }
     }
   }, [isOpen, imageUrl, title]);
+
+  // ================= 📱 모바일 기기 뒤로가기 버튼 처리 (History State) =================
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // 모달이 열릴 때 history state를 푸시하여 뒤로가기 버튼을 가로챔
+    window.history.pushState({ modalOpen: true }, '');
+
+    const handlePopState = () => {
+      // 사용자가 안드로이드 뒤로가기 또는 브라우저 뒤로가기 클릭 시 모달 닫기
+      onClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      // 모달이 정상 닫힐 때(X버튼, Esc 등) 불필요한 forward 히스토리 방지
+      if (window.history.state && window.history.state.modalOpen) {
+        window.history.back();
+      }
+    };
+  }, [isOpen, onClose]);
 
   const goToPage = useCallback(
     (page: number) => {
@@ -233,12 +257,21 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
     return Math.sqrt(dx * dx + dy * dy);
   };
 
+  const getTouchCenter = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
+    return {
+      x: (t1.clientX + t2.clientX) / 2,
+      y: (t1.clientY + t2.clientY) / 2,
+    };
+  };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 2) {
-      // 2 finger pinch
+      // 2 finger pinch + pan simultaneous start
       const dist = getTouchDistance(e.touches[0], e.touches[1]);
+      const center = getTouchCenter(e.touches[0], e.touches[1]);
       touchStartDistRef.current = dist;
       touchStartScaleRef.current = scale;
+      touchStartCenterRef.current = center;
       touchStartPosRef.current = { ...position };
       touchSwipeStartRef.current = null;
     } else if (e.touches.length === 1) {
@@ -246,7 +279,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
       const touch = e.touches[0];
       const now = Date.now();
       if (now - lastTapTimeRef.current < 300) {
-        // Double tap: toggle 1x and 2x
+        // Double tap: toggle 1x and 2.2x
         if (scale > 1.2) {
           handleResetZoom();
         } else {
@@ -270,16 +303,26 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2 && touchStartDistRef.current !== null) {
-      // Pinch zoom
+      // 🔥 두 손가락으로 확대/축소와 이동(Pan)을 동시에 자연스럽게 반영
       e.preventDefault();
       const newDist = getTouchDistance(e.touches[0], e.touches[1]);
+      const newCenter = getTouchCenter(e.touches[0], e.touches[1]);
+      
       const factor = newDist / touchStartDistRef.current;
-      const targetScale = Math.max(0.8, Math.min(touchStartScaleRef.current * factor, 4.0));
+      const targetScale = Math.max(0.7, Math.min(touchStartScaleRef.current * factor, 4.5));
       setScale(targetScale);
+
+      // 중심점 이동 계산을 통해 두 손가락을 벌리며 움직일 때도 위치가 함께 추적됨
+      const deltaX = newCenter.x - touchStartCenterRef.current.x;
+      const deltaY = newCenter.y - touchStartCenterRef.current.y;
+      setPosition({
+        x: touchStartPosRef.current.x + deltaX,
+        y: touchStartPosRef.current.y + deltaY,
+      });
     } else if (e.touches.length === 1) {
       const touch = e.touches[0];
       if (scale > 1.05) {
-        // Pan when zoomed
+        // 1 finger pan when zoomed
         e.preventDefault();
         setPosition({
           x: touch.clientX - touchPanStartRef.current.x,
@@ -340,7 +383,7 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
               <h3 className="text-xs md:text-sm font-bold truncate text-slate-100">{displayTitle}</h3>
               {bookName && (
                 <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">
-                  총 {maxPage}쪽 · 핀치로 확대/이동 가능
+                  총 {maxPage}쪽 · 핀치 줌 & 이동 지원
                 </div>
               )}
             </div>
