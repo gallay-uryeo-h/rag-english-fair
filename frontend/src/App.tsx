@@ -19,6 +19,7 @@ import { GrowthRoadmap } from './components/GrowthRoadmap';
 import { SchoolLifeQA } from './components/SchoolLifeQA';
 import { TextbookPreview } from './components/TextbookPreview';
 import { ImageModal } from './components/ImageModal';
+import { InstagramPostCard } from './components/InstagramPostCard';
 
 export function App() {
   // 🌟 운영 모드 (true: 인스타그램 무한 피드 & 아코디언, false: 브레인스토밍 12개 탭)
@@ -204,6 +205,88 @@ export function App() {
           <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
 
           <main className="flex-1 overflow-y-auto flex flex-col bg-slate-50 p-2">
+            {/* 📸 1. 인스타그램 일관성 복제본 탭들 */}
+            {currentTab === 'insta-mbti' && (
+              <InstagramPostCard
+                accountName="ur_english_mbti"
+                badgeText="성향 진단 공식"
+                badgeColorClass="text-blue-600 bg-blue-50"
+                avatarChar="🧭"
+                avatarGradientClass="from-pink-500 via-rose-500 to-amber-500"
+                locationText="의령여고 1부스 · 16 MBTI 매칭"
+                heroImageSrc="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
+                stageBadgeText="STAGE 01 · 8문항 정밀 검사"
+                heroTitle="MBTI별 본문 추천"
+                heroSubtitle="나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!"
+                heroImageAlt="영어 공부와 성향 탐색"
+                initialLikes={482}
+                postCaption="친구와 나의 학습 성향을 비교하고 최적의 교과서 단원을 발견하세요! 🧭"
+              >
+                <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />
+              </InstagramPostCard>
+            )}
+
+            {currentTab === 'insta-vocab' && (
+              <InstagramPostCard
+                accountName="ur_audio_vocab"
+                badgeText="TTS 원어민 음성 탑재"
+                badgeColorClass="text-purple-600 bg-purple-50"
+                avatarChar="🎧"
+                avatarGradientClass="from-purple-500 via-indigo-500 to-pink-500"
+                locationText="의령여고 2부스 · 소리 퀴즈"
+                heroImageSrc="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+                stageBadgeText="STAGE 02 · 소리만 듣고 맞추기 포함"
+                heroTitle="단어 미리보기"
+                heroSubtitle="1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!"
+                heroImageAlt="헤드폰 음악 소리 단어"
+                initialLikes={295}
+                postCaption="눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧"
+              >
+                <VocabListenTab />
+              </InstagramPostCard>
+            )}
+
+            {currentTab === 'insta-textbook' && (
+              <InstagramPostCard
+                accountName="ur_textbook_viewer"
+                badgeText="144개 섹션 정밀 검증"
+                badgeColorClass="text-emerald-600 bg-emerald-50"
+                avatarChar="📚"
+                avatarGradientClass="from-emerald-500 via-teal-500 to-cyan-500"
+                locationText="3개년 교육과정 전시관 · 6권 교과서"
+                heroImageSrc="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+                stageBadgeText="STAGE 03 · 3×2 표지 그리드 ➔ 단원 레이어"
+                heroTitle="의령여고 3개년 교과서 6권 대공개!"
+                heroSubtitle="표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요."
+                heroImageAlt="도서관 교과서"
+                initialLikes={512}
+                postCaption="공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다. 📚"
+              >
+                <TextbookBrowse2Layer onOpenImage={handleOpenImage} />
+              </InstagramPostCard>
+            )}
+
+            {currentTab === 'insta-seteuk' && (
+              <InstagramPostCard
+                accountName="ur_seteuk_powerhouse"
+                badgeText="대입 학생부 종합 대비"
+                badgeColorClass="text-amber-600 bg-amber-50"
+                avatarChar="💡"
+                avatarGradientClass="from-amber-500 via-orange-500 to-rose-500"
+                locationText="진로 & 세특 전략 연구소 · 8대 전공"
+                heroImageSrc="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
+                stageBadgeText="STAGE 04 · 교과서 본문 연계 탐구보고서"
+                heroTitle="교과서 지문이 나만의 세특 치트키로 변신!"
+                heroSubtitle="희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요."
+                heroImageAlt="노트 공부 세특"
+                initialLikes={389}
+                postCaption="단순한 지문 읽기를 넘어 나의 꿈과 진로를 학생부 세특 보고서로 완성하는 마법! 💡"
+              >
+                <SeteukGeneratorTab onOpenImage={handleOpenImage} />
+              </InstagramPostCard>
+            )}
+
+            {/* 🔬 2. 기존 브레인스토밍 랩 뷰 탭들 */}
             {currentTab === 'recommend' && <Station5Recommend onOpenImage={handleOpenImage} />}
             {currentTab === 'textbook-preview' && <TextbookPreviewClean onOpenImage={handleOpenImage} />}
             {currentTab === 'textbook-2layer' && <TextbookBrowse2Layer onOpenImage={handleOpenImage} />}

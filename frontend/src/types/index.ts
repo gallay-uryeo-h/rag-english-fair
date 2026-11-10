@@ -1,4 +1,10 @@
 export type TabType =
+  // 🌟 인스타그램 피드 일관성 탭 (신규 복제본)
+  | 'insta-mbti'      // 📸 [인스타] MBTI별 본문 추천
+  | 'insta-vocab'     // 📸 [인스타] 단어 미리보기 (소리 퀴즈)
+  | 'insta-textbook'  // 📸 [인스타] 교과서 6권 대공개 (3×2 2레이어)
+  | 'insta-seteuk'    // 📸 [인스타] 세특 발전소 치트키
+  // 기존 연구 모드 13개 탭
   | 'recommend'   // 1. My English Future (진로 8대 분야 & 본문 추천)
   | 'textbook-preview' // 2. 교과서 미리보기 (친근한 스토리 & 본문 뷰어)
   | 'textbook-2layer'  // 3. 교과서 2레이어 탐색 (3x2 표지 그리드 & 단원 레이어)
