@@ -178,7 +178,7 @@ export const VocabListenTab: React.FC = () => {
   const feedback = getFeedbackMessage();
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-3xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto space-y-4 w-full">
       {/* 🌟 상단 인트로 배너 */}
       <div className="bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-600 text-white rounded-2xl p-5 shadow-sm space-y-2">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">

@@ -101,7 +101,7 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
   const cat = SETEUK_DATA[selectedCategory];
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-3xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto space-y-4 w-full">
       {/* 상단 배너 */}
       <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 text-white rounded-2xl p-4 md:p-5 shadow-xs">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 w-fit px-2.5 py-1 rounded-full mb-2">

@@ -71,7 +71,7 @@ export function App() {
            [안 1] 실전 운영 모드: 시원시원한 Full Width & 모바일 앱형 하단 바 레이아웃
            ========================================================================= */
         <div className="flex-1 flex flex-col w-full bg-slate-50 pb-20">
-          <main className="flex-1 w-full max-w-5xl mx-auto px-2 sm:px-4 py-4 md:py-6">
+          <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-4 md:py-6">
             {liveTab === 'home' && (
               <LiveHomeFeed
                 onNavigate={handleLiveNavigate}
@@ -79,12 +79,12 @@ export function App() {
               />
             )}
             {liveTab === 'mbti' && (
-              <div className="w-full max-w-3xl mx-auto">
+              <div className="w-full">
                 <DeepEnglishMbtiTab onOpenImage={handleOpenImage} />
               </div>
             )}
             {liveTab === 'vocab' && (
-              <div className="w-full max-w-3xl mx-auto">
+              <div className="w-full">
                 <VocabListenTab />
               </div>
             )}
@@ -94,7 +94,7 @@ export function App() {
               </div>
             )}
             {liveTab === 'seteuk' && (
-              <div className="w-full max-w-3xl mx-auto">
+              <div className="w-full">
                 <SeteukGeneratorTab onOpenImage={handleOpenImage} />
               </div>
             )}
