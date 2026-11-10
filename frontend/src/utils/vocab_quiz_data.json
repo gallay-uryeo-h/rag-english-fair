@@ -1,0 +1,2228 @@
+[
+  {
+    "subjectKey": "공통영어1",
+    "title": "공통영어1",
+    "grade": "1학년 1학기",
+    "publisher": "미래엔 (김선영)",
+    "difficulty": "기초 (고1 입문)",
+    "color": "from-blue-600 to-indigo-600",
+    "description": "고등학교에 첫발을 디딘 학생들을 위한 중·고교 필수 핵심 어휘 테스트입니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 학교생활과 소통",
+        "description": "대인관계와 새로운 고교 환경 적응에 필요한 기초 핵심 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "encounter",
+            "contextSentence": "Media literacy is the ability to critically assess perspectives we encounter in daily life.",
+            "options": [
+              "(우연히) 마주치다, 접하다",
+              "포기하다, 그만두다",
+              "축하하다, 기념하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'encounter'는 예상치 못하게 마주치거나 접할 때 쓰는 고1 핵심 빈출 동사입니다.",
+            "tip": "Unit 1 본문 수록 어휘"
+          },
+          {
+            "id": 2,
+            "word": "cooperation",
+            "contextSentence": "Our human ancestors lived in larger communities that promoted cooperation.",
+            "options": [
+              "경쟁, 시합",
+              "협동, 협력",
+              "고립, 단절"
+            ],
+            "correctIndex": 1,
+            "explanation": "'co-(함께)' + 'operate(일하다)' + '-ion'으로 공동 목표를 위해 힘을 합치는 협력을 뜻합니다.",
+            "tip": "Unit 1 다정함의 힘 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "pretend",
+            "contextSentence": "He was surprised at how easy it is to pretend to be someone else.",
+            "options": [
+              "기억해 내다",
+              "~인 체하다, 가장하다",
+              "불평하다"
+            ],
+            "correctIndex": 1,
+            "explanation": "'pretend'는 사실이 아닌 것을 사실인 것처럼 꾸며 행동할 때 씁니다.",
+            "tip": "Unit 2 본문 수록 어휘"
+          },
+          {
+            "id": 4,
+            "word": "inspire",
+            "contextSentence": "The speaker inspired students to pursue their passions without hesitation.",
+            "options": [
+              "영감을 주다, 고무하다",
+              "방해하다, 가로막다",
+              "지적하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'inspire'는 마음에 열정이나 새로운 생각을 불어넣어 줄 때 사용하는 단어입니다.",
+            "tip": "Unit 1 본문 수록 어휘"
+          },
+          {
+            "id": 5,
+            "word": "sustainable",
+            "contextSentence": "We need to build a sustainable recycling system for the environment.",
+            "options": [
+              "일시적인, 순간의",
+              "지속 가능한",
+              "예측 불가능한"
+            ],
+            "correctIndex": 1,
+            "explanation": "'sustain(유지하다)' + '-able(~할 수 있는)'의 결합으로 생태·환경 분야 필수 단어입니다.",
+            "tip": "Unit 4 커피박 재활용 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 감정과 다정함의 힘",
+        "description": "친절함과 긍정적인 사회적 유대감을 표현하는 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "friendliness",
+            "contextSentence": "Survival was not always about brute force, but about friendliness and teamwork.",
+            "options": [
+              "다정함, 친절함",
+              "적대감, 반항",
+              "두려움, 공포"
+            ],
+            "correctIndex": 0,
+            "explanation": "'friendly(친절한)'의 명사형으로 인류 진화에서 협력의 중요성을 설명할 때 핵심어로 쓰입니다.",
+            "tip": "Unit 1 The Power of Friendliness"
+          },
+          {
+            "id": 2,
+            "word": "empathy",
+            "contextSentence": "Developing empathy allows teenagers to understand how their classmates truly feel.",
+            "options": [
+              "공감, 감정이입",
+              "질투, 시기",
+              "무관심"
+            ],
+            "correctIndex": 0,
+            "explanation": "'empathy'는 타인의 기분이나 처지를 자신의 일처럼 깊이 공감하는 마음입니다.",
+            "tip": "Unit 1 소통과 관계 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "essential",
+            "contextSentence": "Mutual trust is essential for maintaining strong and healthy relationships.",
+            "options": [
+              "선택적인",
+              "필수적인, 극히 중요한",
+              "불필요한"
+            ],
+            "correctIndex": 1,
+            "explanation": "'essential'은 어떤 것이 존재하거나 성공하기 위해 반드시 필요한 핵심 요소를 말합니다.",
+            "tip": "Unit 1 독해 지문 빈출 어휘"
+          },
+          {
+            "id": 4,
+            "word": "evolutionary",
+            "contextSentence": "Dr. Wilson explained the evolutionary advantages of living in friendly groups.",
+            "options": [
+              "진화의, 진화론적인",
+              "전통적인",
+              "혁명적인 무력의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'evolve(진화하다)'의 파생어로 생물의 생존과 적응 과정을 설명할 때 등장합니다.",
+            "tip": "Unit 1 생물학 강연 지문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "ancestor",
+            "contextSentence": "Our prehistoric ancestors shared food and protected one another from wild predators.",
+            "options": [
+              "조상, 선조",
+              "후손, 자손",
+              "침입자"
+            ],
+            "correctIndex": 0,
+            "explanation": "'ancestor'는 먼 옛날 대대로 내려온 선조를 뜻하며, 반의어는 descendant(자손)입니다.",
+            "tip": "Unit 1 인류 진화 지문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 문학과 세상 읽기",
+        "description": "책, 이야기, 문화적 유산을 탐구하는 기본 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "gathering",
+            "contextSentence": "The community held an annual gathering to celebrate traditional folklore stories.",
+            "options": [
+              "모임, 집회",
+              "분열, 해체",
+              "경쟁, 승부"
+            ],
+            "correctIndex": 0,
+            "explanation": "'gather(모이다)'에서 유래하여 사람들이 함께 모이는 자리나 집회를 뜻합니다.",
+            "tip": "Unit 2 마오리족 문학 지문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "heritage",
+            "contextSentence": "Passing down oral stories helps preserve the cultural heritage of indigenous tribes.",
+            "options": [
+              "유산, 전통",
+              "상업, 무역",
+              "장애물"
+            ],
+            "correctIndex": 0,
+            "explanation": "'heritage'는 조상으로부터 대대로 물려받은 역사적·문화적 가치를 지닌 유산입니다.",
+            "tip": "Unit 2 문화 유산 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "perspective",
+            "contextSentence": "Reading world literature allows us to see life from a broader perspective.",
+            "options": [
+              "관점, 시각",
+              "거리감",
+              "편견, 왜곡"
+            ],
+            "correctIndex": 0,
+            "explanation": "'perspective'는 사물이나 사건을 바라보는 균형 잡힌 관점이나 시야를 의미합니다.",
+            "tip": "Unit 2 독서의 가치 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "wisdom",
+            "contextSentence": "Elders in the village shared their ancient wisdom with the younger generation.",
+            "options": [
+              "지혜, 슬기",
+              "욕심, 탐욕",
+              "자만, 오만"
+            ],
+            "correctIndex": 0,
+            "explanation": "'wise(지혜로운)'의 명사형으로 삶의 깊은 경험에서 우러나온 통찰력을 말합니다.",
+            "tip": "Unit 2 조상의 지혜 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "narrative",
+            "contextSentence": "The author weaves a fascinating narrative about family roots and identity.",
+            "options": [
+              "이야기, 서사",
+              "통계 자료",
+              "실험 보고서"
+            ],
+            "correctIndex": 0,
+            "explanation": "'narrative'는 사건들을 인과관계에 따라 흥미롭게 엮어낸 서사나 이야기를 뜻합니다.",
+            "tip": "Unit 2 문학 독해 지문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 과학 원리와 소리 기술",
+        "description": "노이즈 캔슬링과 소리 파동, 기술 원리를 설명하는 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "eliminate",
+            "contextSentence": "Noise-cancelling headphones generate opposite waves to eliminate background rumble.",
+            "options": [
+              "제거하다, 없애다",
+              "증폭하다, 키우다",
+              "측정하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'eliminate'는 불필요하거나 방해되는 요소를 완전히 없애는 것을 뜻합니다.",
+            "tip": "Unit 3 소음 제어 원리 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "interference",
+            "contextSentence": "Destructive interference occurs when two opposing sound waves collide and cancel each other.",
+            "options": [
+              "간섭, 방해",
+              "증폭, 확장",
+              "보존, 유지"
+            ],
+            "correctIndex": 0,
+            "explanation": "물리학에서 파동이 겹쳐 서로를 약화시키거나 강화시키는 현상을 '간섭(interference)'이라 합니다.",
+            "tip": "Unit 3 음파 상쇄 간섭 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "generate",
+            "contextSentence": "The tiny computer inside the earphone can generate an inverted sound wave in milliseconds.",
+            "options": [
+              "생성하다, 발생시키다",
+              "흡수하다",
+              "파괴하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'generate'는 전기, 소리, 아이디어 등을 새롭게 만들어 낼 때 씁니다.",
+            "tip": "Unit 3 음파 생성 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "frequency",
+            "contextSentence": "Engineers analyzed the frequency of airplane engine hums to tune the microphones.",
+            "options": [
+              "진동수, 주파수, 빈도",
+              "음량, 볼륨",
+              "파장의 길이"
+            ],
+            "correctIndex": 0,
+            "explanation": "'frequency'는 일정한 시간 동안 진동이나 사건이 일어나는 횟수를 뜻합니다.",
+            "tip": "Unit 3 소리 주파수 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "circuitry",
+            "contextSentence": "Modern digital circuitry processes external noises with incredible precision.",
+            "options": [
+              "회로망, 전자 회로",
+              "외장 케이스",
+              "전원 케이블"
+            ],
+            "correctIndex": 0,
+            "explanation": "'circuit(회로)'의 집합명사로 기기 내부의 전자 신호 통로 시스템을 말합니다.",
+            "tip": "Unit 3 전자 회로 기술 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 생태 환경과 자원순환",
+        "description": "커피 찌꺼기 재활용과 지속 가능한 친환경 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "pollutant",
+            "contextSentence": "Rotting coffee waste in landfills emits methane, a potent climate pollutant.",
+            "options": [
+              "오염 물질",
+              "천연 비료",
+              "정화 장치"
+            ],
+            "correctIndex": 0,
+            "explanation": "'pollutant'는 공기나 토양, 물을 더럽히는 유해 오염 물질을 가리킵니다.",
+            "tip": "Unit 4 환경오염 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "extract",
+            "contextSentence": "Scientists found a way to extract valuable oils from discarded coffee grounds.",
+            "options": [
+              "추출하다, 뽑아내다",
+              "폐기하다",
+              "응고시키다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'extract'는 물질 내부에서 유용한 성분을 분리하여 뽑아내는 것을 의미합니다.",
+            "tip": "Unit 4 커피 오일 추출 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "potential",
+            "contextSentence": "Many entrepreneurs recognize the commercial potential of upcycled organic waste.",
+            "options": [
+              "잠재력, 가능성",
+              "한계점",
+              "위험성"
+            ],
+            "correctIndex": 0,
+            "explanation": "'potential'은 아직 완전히 실현되지 않았지만 앞으로 발전할 수 있는 힘을 뜻합니다.",
+            "tip": "Unit 4 자원 가치 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "fertilizer",
+            "contextSentence": "Rich in minerals, treated coffee grounds make an exceptional organic fertilizer.",
+            "options": [
+              "비료, 거름",
+              "살충제",
+              "잡초 제거제"
+            ],
+            "correctIndex": 0,
+            "explanation": "'fertile(비옥한)'에서 온 단어로 식물이 잘 자라도록 흙에 주는 영양분을 뜻합니다.",
+            "tip": "Unit 4 친환경 비료 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "decompose",
+            "contextSentence": "Biodegradable materials decompose naturally into the soil without harming wildlife.",
+            "options": [
+              "분해되다, 부패하다",
+              "얼어붙다",
+              "팽창하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'de-(반대/분리)' + 'compose(구성하다)'로 자연 속에서 유기물이 썩어 흙으로 돌아가는 현상입니다.",
+            "tip": "Unit 4 생분해 본문 어휘"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "subjectKey": "공통영어2",
+    "title": "공통영어2",
+    "grade": "1학년 2학기",
+    "publisher": "미래엔 (김선영)",
+    "difficulty": "기본 (고1 심화)",
+    "color": "from-cyan-600 to-blue-600",
+    "description": "디지털 소비 윤리, 동물 복지, AI 기술 등 1학년 2학기 교과서 속 심화 어휘를 점검합니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 동물 복지와 생명 존중",
+        "description": "야생동물 보호소와 인간-동물의 공존을 다루는 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "rescue",
+            "contextSentence": "Volunteers worked hard to rescue injured elephants in Thailand.",
+            "options": [
+              "구조하다, 구출하다",
+              "조사하다",
+              "길들이다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'rescue'는 위험이나 고통에 빠진 생명을 구출해 내는 핵심 동사입니다.",
+            "tip": "Unit 1 코끼리 구조 캠프 어휘"
+          },
+          {
+            "id": 2,
+            "word": "coexist",
+            "contextSentence": "Humans must learn how to coexist peacefully with wild animals.",
+            "options": [
+              "경쟁하다",
+              "공존하다, 함께 살아가다",
+              "지배하다"
+            ],
+            "correctIndex": 1,
+            "explanation": "'co-(함께)' + 'exist(존재하다)'로 자연과 인류의 평화로운 공생을 뜻합니다.",
+            "tip": "Unit 1 동물 보호 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "sanctuary",
+            "contextSentence": "The national park serves as a safe sanctuary for mistreated honey bears.",
+            "options": [
+              "보호구역, 안식처",
+              "사냥터",
+              "연구 실험실"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sanctuary'는 상처받은 동물들이 안전하게 쉴 수 있는 보호구역이나 안식처입니다.",
+            "tip": "Unit 1 동물 안식처 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "captivity",
+            "contextSentence": "Bears born in captivity often lack the survival skills needed in the wild.",
+            "options": [
+              "감금, 포획 상태",
+              "야생 상태",
+              "자유"
+            ],
+            "correctIndex": 0,
+            "explanation": "'captive(포로)'의 명사형으로 동물원이나 철장 등에 갇혀 지내는 상태를 가리킵니다.",
+            "tip": "Unit 1 사육 동물 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "rehabilitate",
+            "contextSentence": "Vets provide medical therapy to rehabilitate traumatized animals back to health.",
+            "options": [
+              "사회복귀/회복시키다",
+              "격리하다",
+              "방임하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'rehabilitate'는 부상이나 트라우마를 입은 동물을 치료해 원래 생활로 돌려보내는 과정입니다.",
+            "tip": "Unit 1 야생 복귀 치료 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 디지털 소비와 다크 패턴",
+        "description": "온라인 상거래 속 기만적인 UI 속임수와 소비자 보호 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "manipulate",
+            "contextSentence": "Dark patterns are sneaky tricks designed to manipulate users into buying more.",
+            "options": [
+              "조작하다, 교묘하게 다루다",
+              "보호하다",
+              "칭찬하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'manipulate'는 사용자의 심리를 교묘히 파고들어 원치 않는 결정을 내리게 조작하는 것입니다.",
+            "tip": "Unit 2 다크패턴 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "deceptive",
+            "contextSentence": "Consumers should be aware of deceptive design patterns when shopping online.",
+            "options": [
+              "기만적인, 현혹하는",
+              "창의적인",
+              "투명한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'deceive(속이다)'의 형용사형으로 사실을 왜곡해 사람을 속이는 것을 뜻합니다.",
+            "tip": "Unit 2 기만적 디자인 어휘"
+          },
+          {
+            "id": 3,
+            "word": "subscription",
+            "contextSentence": "Free trials often turn into an automatic paid subscription without a clear warning.",
+            "options": [
+              "구독, 가입",
+              "환불, 반품",
+              "할인 쿠폰"
+            ],
+            "correctIndex": 0,
+            "explanation": "'subscription'은 정기적으로 요금을 내고 서비스나 콘텐츠를 계속 이용하는 구독입니다.",
+            "tip": "Unit 2 정기구독 덫 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "unintentional",
+            "contextSentence": "Misleading buttons lead to unintentional purchases that users never wanted.",
+            "options": [
+              "의도하지 않은, 고의가 아닌",
+              "계획적인",
+              "만족스러운"
+            ],
+            "correctIndex": 0,
+            "explanation": "'intent(의도)' + '-ion' + 'un-(부정)'의 결합으로 무심코 실수로 저지른 것을 뜻합니다.",
+            "tip": "Unit 2 실수 결제 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "transparent",
+            "contextSentence": "Ethical e-commerce platforms must maintain transparent pricing with no hidden fees.",
+            "options": [
+              "투명한, 명백한",
+              "비밀스러운",
+              "복잡한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'transparent'는 숨김없이 솔직하고 투명하게 공개되어 누구나 알 수 있는 상태입니다.",
+            "tip": "Unit 2 투명한 가격 정책 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 민속 미술과 순수한 열정",
+        "description": "정규 교육 없이 영혼을 울린 민속 화가들의 예술 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "folk",
+            "contextSentence": "Bill Traylor created remarkable folk art on discarded cardboard pieces.",
+            "options": [
+              "민속의, 서민의",
+              "귀족의, 궁정의",
+              "디지털의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'folk'는 평범한 일반 서민들의 소박하고 진솔한 삶의 문화를 뜻합니다.",
+            "tip": "Unit 3 민속 미술 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "depict",
+            "contextSentence": "Maud Lewis used bright oil paints to depict scenes of Nova Scotia landscapes.",
+            "options": [
+              "묘사하다, 그리다",
+              "감추다, 숨기다",
+              "비판하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'depict'는 그림이나 글을 통해 인물이나 풍경을 생생하게 표현해 내는 동사입니다.",
+            "tip": "Unit 3 모드 루이스 작품 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "authentic",
+            "contextSentence": "Art critics praised her authentic expression that came straight from the heart.",
+            "options": [
+              "진정한, 진짜의",
+              "모조의, 가짜의",
+              "과장된"
+            ],
+            "correctIndex": 0,
+            "explanation": "'authentic'은 거짓이나 꾸밈없이 진실되고 고유한 가치를 지닌 상태를 뜻합니다.",
+            "tip": "Unit 3 진솔한 예술성 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "adversity",
+            "contextSentence": "Despite facing severe physical adversity, she never stopped painting smiles.",
+            "options": [
+              "역경, 고난",
+              "행운, 축복",
+              "풍요, 부유"
+            ],
+            "correctIndex": 0,
+            "explanation": "'adversity'는 삶을 가로막는 혹독한 시련이나 불행한 역경을 의미합니다.",
+            "tip": "Unit 3 역경 극복 화가 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "spontaneous",
+            "contextSentence": "His paintings are characterized by bold colors and spontaneous brushstrokes.",
+            "options": [
+              "자연스러운, 즉흥적인",
+              "계산된, 억지스러운",
+              "지루한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'spontaneous'는 억지로 꾸미지 않고 마음에서 우러나오는 대로 즉흥적이고 자연스러운 것입니다.",
+            "tip": "Unit 3 붓 터치 기법 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 인공지능과 뉴럴 임플란트",
+        "description": "뇌-컴퓨터 인터페이스(BCI)와 차세대 AI 첨단 과학 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "neural",
+            "contextSentence": "Will AI-powered neural implants turn us into super-humans?",
+            "options": [
+              "신경의, 신경계의",
+              "중립적인",
+              "도덕적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'nerve(신경)'의 형용사형으로 뇌세포나 인공 신경망 기술을 지칭할 때 사용됩니다.",
+            "tip": "Unit 4 AI 뉴럴 임플란트 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "implant",
+            "contextSentence": "Surgeons tested an electronic implant that decodes signals from paralyzed muscles.",
+            "options": [
+              "이식(장치), 심다",
+              "제거(물)",
+              "진단서"
+            ],
+            "correctIndex": 0,
+            "explanation": "'implant'는 생체 조직 속에 인공 기기나 장치를 심어 넣는 행위 또는 그 장치를 말합니다.",
+            "tip": "Unit 4 뇌 이식 장치 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "paralyze",
+            "contextSentence": "The device allowed paralyzed patients to type sentences using only their thoughts.",
+            "options": [
+              "마비시키다",
+              "치료하다",
+              "자극하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'paralyze'는 신경 손상 등으로 신체 부위가 움직이지 못하게 마비되는 상태를 뜻합니다.",
+            "tip": "Unit 4 마비 환자 치료 지문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "interface",
+            "contextSentence": "A brain-computer interface bridges the human nervous system with external computers.",
+            "options": [
+              "접속 장치, 인터페이스",
+              "격리벽",
+              "방화벽"
+            ],
+            "correctIndex": 0,
+            "explanation": "'interface'는 서로 다른 두 시스템이 정보를 주고받을 수 있도록 연결해 주는 접점입니다.",
+            "tip": "Unit 4 BCI 기술 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "ethical",
+            "contextSentence": "Enhancing memory via brain chips raises serious ethical questions about human fairness.",
+            "options": [
+              "윤리적인, 도덕적인",
+              "수익성 있는",
+              "불법적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'ethics(윤리학)'의 형용사형으로 무엇이 옳고 그른지에 대한 도덕적 기준을 뜻합니다.",
+            "tip": "Unit 4 기술 윤리 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 미래 사회와 종합 논쟁",
+        "description": "기술 발전이 가져올 사회적 변화와 비판적 사고 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "inequality",
+            "contextSentence": "Unequal access to expensive neural upgrades could widen social inequality.",
+            "options": [
+              "불평등, 불균형",
+              "평등, 공정",
+              "조화, 일치"
+            ],
+            "correctIndex": 0,
+            "explanation": "'equal(평등한)'에 부정 접두사 in-이 붙어 계층 간 불평등한 격차를 뜻합니다.",
+            "tip": "Unit 4 기술 격차 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "distinguish",
+            "contextSentence": "It is increasingly difficult to distinguish human-written articles from AI outputs.",
+            "options": [
+              "구별하다, 분간하다",
+              "융합하다",
+              "무시하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'distinguish'는 여러 대상 사이의 차이점을 파악해 똑똑히 분간해 내는 것입니다.",
+            "tip": "Unit 4 AI 판별 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "regulation",
+            "contextSentence": "Governments are passing strict regulation to prevent intrusive dark web advertising.",
+            "options": [
+              "규제, 법규",
+              "장려, 촉진",
+              "보조금"
+            ],
+            "correctIndex": 0,
+            "explanation": "'regulate(규제하다)'의 명사형으로 공공의 이익을 위해 제정하는 규칙이나 규제입니다.",
+            "tip": "Unit 2 법적 규제 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "compassion",
+            "contextSentence": "True civilization is measured by compassion shown toward vulnerable creatures.",
+            "options": [
+              "연민, 동정심",
+              "잔혹함",
+              "경쟁심"
+            ],
+            "correctIndex": 0,
+            "explanation": "'compassion'은 고통받는 대상에게 깊은 슬픔과 함께 도움을 주려는 따뜻한 연민입니다.",
+            "tip": "Unit 1 생명 존중 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "sustainable",
+            "contextSentence": "We must aim for sustainable progress where nature and high tech live together.",
+            "options": [
+              "지속 가능한",
+              "단기적인",
+              "비현실적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sustainable'은 미래 세대의 자원을 해치지 않고 오랫동안 유지 발전될 수 있는 상태입니다.",
+            "tip": "Unit 1-4 공통 핵심 가치 어휘"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "subjectKey": "영어Ⅰ",
+    "title": "영어Ⅰ",
+    "grade": "2학년 1학기",
+    "publisher": "엔이능률 (김성곤)",
+    "difficulty": "실전 (고2 일반)",
+    "color": "from-emerald-600 to-teal-600",
+    "description": "수능 모의고사 2~3등급의 관문이 되는 2학년 대표 필수 학술·실화 어휘를 평가합니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 진로와 인생의 롤모델",
+        "description": "해양학자 자크 쿠스토와 애니메이터 등 열정적 진로 탐구 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "accumulate",
+            "contextSentence": "He accumulated extensive knowledge about marine biology throughout his travels.",
+            "options": [
+              "축적하다, 모으다",
+              "흩뿌리다",
+              "낭비하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'accumulate'는 시간의 흐름에 따라 지식이나 경험, 재산을 차곡차곡 쌓는 동사입니다.",
+            "tip": "Lesson 1 롤모델 탐색 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "perseverance",
+            "contextSentence": "Achieving your dream career requires continuous passion and perseverance.",
+            "options": [
+              "인내심, 끈기",
+              "조급함",
+              "변덕, 불성실"
+            ],
+            "correctIndex": 0,
+            "explanation": "'persevere(인내하다)'의 명사형으로 어려움을 끝까지 참고 견디는 끈기를 뜻합니다.",
+            "tip": "Lesson 1 진로 성공 조건 어휘"
+          },
+          {
+            "id": 3,
+            "word": "curiosity",
+            "contextSentence": "Cousteau's unquenchable curiosity drove him to explore the unknown underwater world.",
+            "options": [
+              "호기심, 궁금증",
+              "무관심",
+              "두려움"
+            ],
+            "correctIndex": 0,
+            "explanation": "'curiosity'는 새로운 것에 대해 알고 싶어 하는 지적 탐구심입니다.",
+            "tip": "Lesson 1 자크 쿠스토 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "dedication",
+            "contextSentence": "Her lifelong dedication to marine conservation inspired millions across the globe.",
+            "options": [
+              "헌신, 전념",
+              "변심, 배신",
+              "방관"
+            ],
+            "correctIndex": 0,
+            "explanation": "'dedicate(바치다)'의 명사형으로 공공의 목적이나 일에 온 힘을 쏟아붓는 것입니다.",
+            "tip": "Lesson 1 인물 실화 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "accomplishment",
+            "contextSentence": "Winning the film festival prize was his proudest artistic accomplishment.",
+            "options": [
+              "업적, 성취",
+              "실패, 좌절",
+              "시작, 착수"
+            ],
+            "correctIndex": 0,
+            "explanation": "'accomplish(완수하다)'의 명사형으로 노력 끝에 이루어낸 훌륭한 성과를 뜻합니다.",
+            "tip": "Lesson 1 업적 평가 지문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 동물 지능과 인지과학",
+        "description": "까마귀의 도구 사용과 문제 해결 능력을 다루는 과학 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "cognitive",
+            "contextSentence": "Crows possess remarkable cognitive abilities for solving multistep puzzles.",
+            "options": [
+              "인지적인, 인식의",
+              "육체적인",
+              "원시적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'cognition(인지)'의 형용사형으로 생각하고 추론하며 판단하는 지적 능력을 말합니다.",
+            "tip": "Lesson 2 동물 인지능력 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "manipulate",
+            "contextSentence": "The bird was observed manipulating a bent wire to pull meat out of a tube.",
+            "options": [
+              "교묘히 다루다, 조작하다",
+              "삼키다",
+              "부러뜨리다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'manipulate'는 손이나 부리 등으로 도구를 정교하게 다루는 것을 의미합니다.",
+            "tip": "Lesson 2 도구 사용 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "experiment",
+            "contextSentence": "Biologists designed a laboratory experiment to test if animals understand gravity.",
+            "options": [
+              "실험, 시험",
+              "이론 강의",
+              "수술, 시술"
+            ],
+            "correctIndex": 0,
+            "explanation": "'experiment'는 과학적 가설을 검증하기 위해 조건을 통제하고 행하는 시험입니다.",
+            "tip": "Lesson 2 과학 보고서 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "hypothesis",
+            "contextSentence": "The test results strongly supported the initial hypothesis about corvid intelligence.",
+            "options": [
+              "가설, 가정",
+              "결론, 종결",
+              "오류, 왜곡"
+            ],
+            "correctIndex": 0,
+            "explanation": "'hypothesis'는 과학 연구에서 증명하기 전 임시로 세우는 논리적 추측입니다.",
+            "tip": "Lesson 2 과학 가설 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "insight",
+            "contextSentence": "Animals often show sudden moments of insight when overcoming physical barriers.",
+            "options": [
+              "통찰력, 번뜩이는 지혜",
+              "시력, 시야",
+              "착각, 환상"
+            ],
+            "correctIndex": 0,
+            "explanation": "'insight'는 문제의 본질을 꿰뚫어 보는 통찰력이나 갑작스러운 깨달음을 뜻합니다.",
+            "tip": "Lesson 2 침팬지/까마귀 통찰 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 세대 공존과 휴머니타스",
+        "description": "네덜란드 대학생과 노인들의 세대 통합 주거 프로젝트 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "intergenerational",
+            "contextSentence": "Humanitas is an innovative intergenerational living project in the Netherlands.",
+            "options": [
+              "세대 간의, 세대를 아우르는",
+              "국제적인",
+              "내면적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'inter-(사이)' + 'generation(세대)' + '-al'로 청년과 노인 세대 사이의 교류를 뜻합니다.",
+            "tip": "Lesson 3 휴머니타스 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "isolation",
+            "contextSentence": "Regular interactions with young students helped cure the elderly residents' social isolation.",
+            "options": [
+              "고립, 외로움",
+              "사교성, 친화력",
+              "자립, 독립"
+            ],
+            "correctIndex": 0,
+            "explanation": "'isolate(고립시키다)'의 명사형으로 사회적 관계가 끊겨 홀로 떨어져 있는 상태입니다.",
+            "tip": "Lesson 3 노인 고립 해결 어휘"
+          },
+          {
+            "id": 3,
+            "word": "companionship",
+            "contextSentence": "In exchange for free rent, college students provide 30 hours of monthly companionship.",
+            "options": [
+              "말벗, 교우 관계, 동반자 관계",
+              "청소 용역",
+              "간병 의무"
+            ],
+            "correctIndex": 0,
+            "explanation": "'companion(동반자)'에서 유래하여 서로 외롭지 않게 함께 있어 주는 따뜻한 교제입니다.",
+            "tip": "Lesson 3 교우 봉사 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "sympathy",
+            "contextSentence": "Sharing stories fostered deep mutual sympathy between the two distant age groups.",
+            "options": [
+              "동정, 공감",
+              "반감, 적개심",
+              "경쟁심"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sympathy'는 상대방의 처지를 가슴으로 이해하고 마음을 함께 나누는 것입니다.",
+            "tip": "Lesson 3 세대 공감 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "residence",
+            "contextSentence": "The nursing residence transformed into a lively community center filled with laughter.",
+            "options": [
+              "주거지, 거처",
+              "병원 병동",
+              "상가 건물"
+            ],
+            "correctIndex": 0,
+            "explanation": "'reside(거주하다)'의 명사형으로 사람들이 머물며 생활하는 주거 공간을 뜻합니다.",
+            "tip": "Lesson 3 요양 주거 시설 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 푸드 아트와 창의성",
+        "description": "음식 재료를 활용한 기발한 시각 예술과 창작 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "edible",
+            "contextSentence": "The artist creates extraordinary portraits using only edible food items.",
+            "options": [
+              "먹을 수 있는, 식용의",
+              "값비싼",
+              "썩기 쉬운"
+            ],
+            "correctIndex": 0,
+            "explanation": "'edible'은 먹어도 해가 없어 음식으로 섭취할 수 있는 안전한 상태를 말합니다.",
+            "tip": "Lesson 4 푸드 아트 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "ordinary",
+            "contextSentence": "She transforms ordinary vegetables like carrots and cabbages into humorous characters.",
+            "options": [
+              "평범한, 일상적인",
+              "기괴한, 괴상한",
+              "화려한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'ordinary'는 특별하지 않고 우리 주변에서 흔히 볼 수 있는 일상적인 것입니다.",
+            "tip": "Lesson 4 일상 재료 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "perspective",
+            "contextSentence": "Looking at everyday objects from a playful perspective sparks genuine creativity.",
+            "options": [
+              "관점, 시각",
+              "원근법",
+              "거리감"
+            ],
+            "correctIndex": 0,
+            "explanation": "'perspective'는 사물을 바라보는 독창적인 생각의 각도나 관점을 뜻합니다.",
+            "tip": "Lesson 4 창의적 시각 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "resemble",
+            "contextSentence": "With clever placement, a slice of toast was made to resemble a cute puppy face.",
+            "options": [
+              "~을 닮다, 유사하다",
+              "분해하다",
+              "삼키다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'resemble'은 외모나 모양이 다른 대상과 아주 비슷하게 닮은 것을 뜻합니다.",
+            "tip": "Lesson 4 형상화 기법 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "optical",
+            "contextSentence": "Arcimboldo used fruits and plants to create an optical illusion of human faces.",
+            "options": [
+              "시각적인, 눈의",
+              "청각적인",
+              "미각적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'optic(눈)'에서 유래하여 시각이나 착시 현상(optical illusion)을 가리킬 때 씁니다.",
+            "tip": "Lesson 4 착시 명화 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 올림픽 난민 수영선수의 도전",
+        "description": "시리아 난민 출신 수영선수 유스라 마르디니의 감동 실화 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "refugee",
+            "contextSentence": "Yusra Mardini competed at the Olympics as a member of the Refugee Team.",
+            "options": [
+              "난민, 망명자",
+              "외교관",
+              "후원자"
+            ],
+            "correctIndex": 0,
+            "explanation": "'refuge(피난처)'에서 온 단어로 전쟁이나 박해를 피해 고국을 떠난 난민입니다.",
+            "tip": "Lesson 5 유스라 마르디니 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "persevere",
+            "contextSentence": "Athletes who persevere through hardships can achieve great accomplishments.",
+            "options": [
+              "인내하다, 끈기 있게 계속하다",
+              "포기하다",
+              "주저하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'persevere'는 절망적인 상황에서도 굴하지 않고 목표를 향해 끝까지 버티는 것입니다.",
+            "tip": "Lesson 5 역경 극복 동사"
+          },
+          {
+            "id": 3,
+            "word": "courage",
+            "contextSentence": "It took immense courage to jump into the freezing sea to push the sinking boat.",
+            "options": [
+              "용기, 담력",
+              "자만심",
+              "절망, 체념"
+            ],
+            "correctIndex": 0,
+            "explanation": "'courage'는 위험이나 두려움에 맞서 올바른 일을 행하는 굳센 마음입니다.",
+            "tip": "Lesson 5 침몰 보트 구호 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "destination",
+            "contextSentence": "After swimming for three agonizing hours, the exhausted refugees finally reached their destination.",
+            "options": [
+              "목적지, 행선지",
+              "출발지",
+              "경유지"
+            ],
+            "correctIndex": 0,
+            "explanation": "'destination'은 긴 여정 끝에 최종적으로 도달하고자 하는 장소입니다.",
+            "tip": "Lesson 5 그리스 해안 도착 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "inspire",
+            "contextSentence": "Her bravery continues to inspire millions of displaced people around the globe.",
+            "options": [
+              "영감을 주다, 용기를 북돋우다",
+              "비난하다",
+              "동정하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'inspire'는 역경을 이겨낸 삶을 통해 전 세계 사람들에게 희망을 줄 때 씁니다.",
+            "tip": "Lesson 5 희망의 메시지 어휘"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "subjectKey": "영어 독해와 작문",
+    "title": "영어독해와작문",
+    "grade": "2학년 2학기",
+    "publisher": "미래엔 (김대진)",
+    "difficulty": "고급 (고2·3 심화)",
+    "color": "from-amber-600 to-orange-600",
+    "description": "행동경제학, 천문학적 미술 감정, 인공지능 로봇 철학 등 수능 고난도 비문학 어휘입니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 실패의 극복과 자아 발견",
+        "description": "가면 증후군(Impostor Syndrome)과 마야 안젤루의 회복 탄력성 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "impostor",
+            "contextSentence": "Many high achievers secretly worry that they will be exposed as an impostor.",
+            "options": [
+              "사기꾼, 사칭자",
+              "영웅, 지도자",
+              "멘토, 스승"
+            ],
+            "correctIndex": 0,
+            "explanation": "'impostor'는 자신의 능력을 과소평가하고 자신을 사기꾼처럼 느끼는 가면 증후군 핵심어입니다.",
+            "tip": "Lesson 1 가면 증후군 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "resilience",
+            "contextSentence": "Developing emotional resilience allows writers to overcome harsh rejections.",
+            "options": [
+              "회복 탄력성, 복원력",
+              "취약성",
+              "고집, 완고함"
+            ],
+            "correctIndex": 0,
+            "explanation": "'resilience'는 큰 충격이나 실패를 겪은 뒤 다시 일어서는 마음의 근력입니다.",
+            "tip": "Lesson 1 시련 극복 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "vulnerable",
+            "contextSentence": "Admitting one's self-doubt makes a person feel emotionally vulnerable.",
+            "options": [
+              "상처받기 쉬운, 취약한",
+              "무적의, 천하무적의",
+              "거만한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'vulnerable'은 비판이나 공격에 쉽게 상처를 입을 수 있는 연약한 상태를 뜻합니다.",
+            "tip": "Lesson 1 심리 묘사 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "inadequacy",
+            "contextSentence": "Feelings of personal inadequacy can prevent talented students from taking risks.",
+            "options": [
+              "불충분, 부적격, 능력 부족",
+              "우월감, 자부심",
+              "충족, 만족"
+            ],
+            "correctIndex": 0,
+            "explanation": "'adequate(충분한)'의 반의어 파생형으로 자신이 모자란다고 느끼는 결핍감입니다.",
+            "tip": "Lesson 1 내면 심리 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "authentic",
+            "contextSentence": "Maya Angelou encouraged young readers to embrace their authentic voices.",
+            "options": [
+              "진정한, 본연의",
+              "가식적인",
+              "모방한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'authentic'은 남을 흉내 내지 않는 자기 자신만의 진실된 모습을 가리킵니다.",
+            "tip": "Lesson 1 자아 정체성 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 지속 가능성과 친환경 새활용",
+        "description": "물 발자국(Water Footprint)과 업사이클링 자원 순환 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "upcycling",
+            "contextSentence": "Upcycling transforms discarded industrial waste into premium fashion items.",
+            "options": [
+              "새활용(가치를 더한 재활용)",
+              "단순 매립",
+              "자연 소각"
+            ],
+            "correctIndex": 0,
+            "explanation": "'up-(가치 상승)' + 'recycling(재활용)'으로 폐기물에 디자인을 더해 고부가가치 제품을 만드는 것입니다.",
+            "tip": "Lesson 2 업사이클링 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "footprint",
+            "contextSentence": "Consumers rarely think about the hidden water footprint required to produce a T-shirt.",
+            "options": [
+              "발자국, 환경 발자국(소비 총량)",
+              "신발 밑창",
+              "지문"
+            ],
+            "correctIndex": 0,
+            "explanation": "환경학에서 제품 생산 전 과정에서 소비되는 자원 총량을 '발자국(footprint)'이라 부릅니다.",
+            "tip": "Lesson 2 물 발자국 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "deplete",
+            "contextSentence": "Over-farming without crop rotation will rapidly deplete ground water supplies.",
+            "options": [
+              "고갈시키다, 바닥내다",
+              "정화하다",
+              "비축하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'deplete'는 자원이나 에너지를 급격하게 써버려 고갈시키는 상태를 말합니다.",
+            "tip": "Lesson 2 지하수 고갈 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "biodegradable",
+            "contextSentence": "Eco-friendly brands are developing biodegradable plastics made from corn starch.",
+            "options": [
+              "생분해성의, 자연 분해되는",
+              "불연성의",
+              "인체 유해한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'bio-(생물)' + 'degrade(분해하다)' + '-able'로 미생물에 의해 자연 분해되는 친환경 소재입니다.",
+            "tip": "Lesson 2 친환경 플라스틱 어휘"
+          },
+          {
+            "id": 5,
+            "word": "circular",
+            "contextSentence": "A circular economy aims to minimize waste by keeping resources in use as long as possible.",
+            "options": [
+              "순환의, 원형의",
+              "직선형의",
+              "정체된"
+            ],
+            "correctIndex": 0,
+            "explanation": "'circular economy'는 자원을 쓰고 버리는 대신 계속 순환시키는 순환 경제 시스템입니다.",
+            "tip": "Lesson 2 순환 경제 모델 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 행동경제학과 미끼 효과",
+        "description": "합리적이지 않은 인간의 선택 심리와 마케팅 넛지 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "decoy",
+            "contextSentence": "A decoy option is cleverly introduced to make another choice look far more attractive.",
+            "options": [
+              "미끼, 유인물",
+              "보상금",
+              "결함, 하자"
+            ],
+            "correctIndex": 0,
+            "explanation": "'decoy'는 행동경제학에서 특정 선택지를 더 매력적으로 보이게 만드는 미끼 상품을 뜻합니다.",
+            "tip": "Lesson 3 미끼 효과 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "irrational",
+            "contextSentence": "Behavioral economics proves that human consumers frequently make irrational financial decisions.",
+            "options": [
+              "비이성적인, 비합리적인",
+              "냉철한, 논리적인",
+              "수학적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'rational(합리적인)'의 반의어로 감정이나 착각에 휘둘려 비이성적으로 판단하는 것입니다.",
+            "tip": "Lesson 3 행동경제학 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "nudge",
+            "contextSentence": "Subtle changes in supermarket shelf layouts nudge customers toward purchasing healthier snacks.",
+            "options": [
+              "슬그머니 유도하다, 쿡 찌르다",
+              "강요하다",
+              "금지하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'nudge'는 강요하지 않고 부드럽게 개입하여 더 나은 선택을 유도하는 행동 유도 장치입니다.",
+            "tip": "Lesson 3 넛지 마케팅 어휘"
+          },
+          {
+            "id": 4,
+            "word": "compromise",
+            "contextSentence": "When presented with three price tiers, shoppers usually compromise by picking the middle one.",
+            "options": [
+              "절충하다, 타협하다",
+              "거부하다",
+              "의심하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'compromise'는 양극단의 선택지 사이에서 중간 수준으로 타협하거나 절충하는 행동입니다.",
+            "tip": "Lesson 3 타협 효과 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "perception",
+            "contextSentence": "Price anchoring alters the consumer's subjective perception of a product's real worth.",
+            "options": [
+              "인식, 지각",
+              "구매력",
+              "영수증"
+            ],
+            "correctIndex": 0,
+            "explanation": "'perceive(인식하다)'의 명사형으로 외부 자극이나 가격을 머릿속으로 해석하고 받아들이는 틀입니다.",
+            "tip": "Lesson 3 가치 인식 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 천문학과 모네 명화 미스터리",
+        "description": "클로드 모네의 그림 속 태양 위치를 천문학으로 추적한 융합 지문 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "astronomy",
+            "contextSentence": "How modern astronomy solved a century-old art mystery regarding Claude Monet's painting.",
+            "options": [
+              "천문학",
+              "점성술",
+              "고고학"
+            ],
+            "correctIndex": 0,
+            "explanation": "'astro-(별)' + 'nomy(학문)'로 우주와 별, 태양의 궤적을 연구하는 천문학입니다.",
+            "tip": "Lesson 4 모네 명화 미스터리 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "tide",
+            "contextSentence": "Astronomers calculated the precise tide levels of the Normandy harbor back in 1872.",
+            "options": [
+              "조수, 조석(밀물과 썰물)",
+              "해류의 속도",
+              "폭풍우"
+            ],
+            "correctIndex": 0,
+            "explanation": "'tide'는 달과 태양의 인력에 의해 해수면이 주기적으로 오르내리는 밀물과 썰물입니다.",
+            "tip": "Lesson 4 조수 간만의 차 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "trajectory",
+            "contextSentence": "By plotting the sun's trajectory across the morning sky, they pinpointed the exact minute.",
+            "options": [
+              "궤적, 궤도",
+              "면적, 넓이",
+              "온도 변화"
+            ],
+            "correctIndex": 0,
+            "explanation": "'trajectory'는 하늘을 가로지르는 태양이나 발사체가 지나간 곡선 궤적입니다.",
+            "tip": "Lesson 4 태양 궤적 계산 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "celestial",
+            "contextSentence": "Computer algorithms simulated past celestial coordinates to verify the historical date.",
+            "options": [
+              "천체의, 하늘의",
+              "지상의, 육지의",
+              "해저의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'celestial'은 밤하늘이나 우주 공간에 떠 있는 천체(별, 행성, 태양)와 관련된 것입니다.",
+            "tip": "Lesson 4 천체 시뮬레이션 어휘"
+          },
+          {
+            "id": 5,
+            "word": "corroborate",
+            "contextSentence": "Archival weather records corroborated the forensic astronomical findings.",
+            "options": [
+              "확증하다, 뒷받침하다",
+              "반박하다",
+              "은폐하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'corroborate'는 추가 증거나 자료를 통해 연구 결과나 진술이 사실임을 확고히 뒷받침하는 것입니다.",
+            "tip": "Lesson 4 과학적 검증 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 과소비와 AI 철학 (클라라와 태양)",
+        "description": "디드로 효과(과소비 나선)와 감정을 지닌 인공지능 로봇 철학 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "spiral",
+            "contextSentence": "The Diderot Effect causes an endless spiral of consumption and unnecessary purchases.",
+            "options": [
+              "나선형(소용돌이) 상승/하강",
+              "정체, 멈춤",
+              "절약, 검소"
+            ],
+            "correctIndex": 0,
+            "explanation": "'spiral'은 꼬리에 꼬리를 물고 걷잡을 수 없이 빠져드는 나선형 소용돌이를 뜻합니다.",
+            "tip": "Lesson 5 디드로 효과 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "sentient",
+            "contextSentence": "Will artificial intelligence ever become sentient with genuine emotions and feelings?",
+            "options": [
+              "느각·지각 능력이 있는",
+              "오류가 없는",
+              "통제 가능한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sentient'는 단순 연산을 넘어 자의식과 감정, 아픔을 느낄 수 있는 지각 능력을 말합니다.",
+            "tip": "Lesson 6 클라라와 태양 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "emulate",
+            "contextSentence": "Robotic companions are programmed to emulate human warmth and empathy.",
+            "options": [
+              "모방하다, 흉내 내다",
+              "파괴하다",
+              "거부하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'emulate'는 다른 사람의 장점이나 행동을 열심히 본받아 그대로 흉내 내는 것입니다.",
+            "tip": "Lesson 6 로봇 감정 모방 어휘"
+          },
+          {
+            "id": 4,
+            "word": "devotion",
+            "contextSentence": "Klara demonstrated selfless devotion to help heal the sick human girl.",
+            "options": [
+              "헌신, 지극한 사랑",
+              "배신, 변심",
+              "질투"
+            ],
+            "correctIndex": 0,
+            "explanation": "'devote(바치다)'의 명사형으로 누군가를 위해 모든 마음을 다하는 지극한 헌신입니다.",
+            "tip": "Lesson 6 클라라의 헌신 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "consciousness",
+            "contextSentence": "Scientists still debate the exact boundary between simulated intelligence and true consciousness.",
+            "options": [
+              "의식, 자각",
+              "무의식, 수면",
+              "착각, 착오"
+            ],
+            "correctIndex": 0,
+            "explanation": "'conscious(의식하는)'의 명사형으로 자신이 살아 숨 쉬고 생각한다는 것을 자각하는 의식입니다.",
+            "tip": "Lesson 6 인공지능 의식 본문 어휘"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "subjectKey": "영어Ⅱ",
+    "title": "영어Ⅱ",
+    "grade": "3학년 1학기",
+    "publisher": "능률 (김성곤)",
+    "difficulty": "수능 완성 (고3)",
+    "color": "from-purple-600 to-violet-600",
+    "description": "백신 개발 의학사, 시민 천문학, 고고학적 과학 검증 등 대학 전공 수준의 수능 완성 어휘입니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 백일해 백신 개발의 영웅들",
+        "description": "여성 과학자들의 불굴의 연구와 질병 극복 의학사 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "vaccine",
+            "contextSentence": "They dedicated their entire careers to developing a safe pertussis vaccine.",
+            "options": [
+              "백신, 예방 접종약",
+              "항생제",
+              "소독제"
+            ],
+            "correctIndex": 0,
+            "explanation": "'vaccine'은 치명적인 감염병을 사전에 예방하기 위해 인체 면역계를 훈련하는 약품입니다.",
+            "tip": "Lesson 1 백일해 백신 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "pertussis",
+            "contextSentence": "Pertussis, commonly called whooping cough, was once a deadly epidemic among infants.",
+            "options": [
+              "백일해(어린이 기침 질환)",
+              "천연두",
+              "홍역"
+            ],
+            "correctIndex": 0,
+            "explanation": "'pertussis'는 영유아에게 심한 기침 발작을 일으키는 백일해 질환의 의학 명칭입니다.",
+            "tip": "Lesson 1 의학사 지문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "immunize",
+            "contextSentence": "Mass vaccination campaigns successfully immunized millions of vulnerable children.",
+            "options": [
+              "면역력을 갖추게 하다",
+              "감염시키다",
+              "격리하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'immune(면역의)'에서 파생된 동사로 예방접종을 통해 병원체에 대한 저항력을 주는 것입니다.",
+            "tip": "Lesson 1 면역 형성 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "eradicate",
+            "contextSentence": "Global medical teamwork aims to eradicate fatal infectious diseases from the planet.",
+            "options": [
+              "근절하다, 뿌리뽑다",
+              "배양하다",
+              "방치하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'eradicate'는 질병이나 사회적 악습을 뿌리째 완전히 없애버리는 것입니다.",
+            "tip": "Lesson 1 질병 근절 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "rigorous",
+            "contextSentence": "The team conducted rigorous clinical trials to ensure the serum caused no harmful side effects.",
+            "options": [
+              "엄격한, 철저한",
+              "느슨한, 대충하는",
+              "성급한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'rigorous'는 아주 작은 오차나 부작용도 용납하지 않고 극도로 엄격하고 치밀한 상태입니다.",
+            "tip": "Lesson 1 임상 시험 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 시민 천문학과 갤럭시 주",
+        "description": "일반 시민들의 집단지성으로 수백만 개 은하를 분류한 시민과학 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "classify",
+            "contextSentence": "Online volunteers helped classify millions of distant galaxy images on Galaxy Zoo.",
+            "options": [
+              "분류하다, 구분하다",
+              "삭제하다",
+              "확대하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'classify'는 대량의 데이터를 특징과 기준에 따라 체계적으로 분류하는 것입니다.",
+            "tip": "Lesson 2 은하 분류 시민과학 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "crowdsourcing",
+            "contextSentence": "Crowdsourcing enables massive scientific projects that exceed the capacity of professional researchers.",
+            "options": [
+              "크라우드소싱(대중 참여)",
+              "단독 연구",
+              "특허 독점"
+            ],
+            "correctIndex": 0,
+            "explanation": "'crowd(대중)' + 'sourcing(조달)'으로 수많은 일반인의 지혜와 손길을 모아 문제를 푸는 방식입니다.",
+            "tip": "Lesson 2 집단 지성 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "spiral",
+            "contextSentence": "Participants were asked whether the imaged cosmic structure looked like a spiral or elliptical galaxy.",
+            "options": [
+              "나선형의",
+              "직선형의",
+              "무정형의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'spiral galaxy'는 우리 은하처럼 소용돌이 팔을 뻗치고 있는 나선 은하를 뜻합니다.",
+            "tip": "Lesson 2 나선 은하 판별 어휘"
+          },
+          {
+            "id": 4,
+            "word": "anomalous",
+            "contextSentence": "A Dutch schoolteacher spotted an anomalous green glowing object that baffled astrophysicists.",
+            "options": [
+              "특이한, 변칙적인",
+              "흔한, 일상적인",
+              "인공적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'anomalous'는 일반적인 규칙이나 패턴에서 벗어나 기이하고 설명하기 힘든 상태입니다.",
+            "tip": "Lesson 2 하니의 천체(Hanny's Voorwerp) 어휘"
+          },
+          {
+            "id": 5,
+            "word": "astronomer",
+            "contextSentence": "Professional astronomers confirmed that the public discovery was an entirely new cosmic phenomenon.",
+            "options": [
+              "천문학자",
+              "우주비행사",
+              "기상학자"
+            ],
+            "correctIndex": 0,
+            "explanation": "'astronomer'는 망원경과 물리학 법칙을 활용해 별과 우주를 전문적으로 연구하는 학자입니다.",
+            "tip": "Lesson 2 전문 천문학자 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 민주주의와 다양한 투표 제도",
+        "description": "선호투표제와 다수결 제도의 수학적·정치적 맹점 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "ballot",
+            "contextSentence": "Ranked-choice voting requires citizens to rank candidates on the official ballot.",
+            "options": [
+              "투표용지, 무기명 투표",
+              "당선 증서",
+              "의회 의사당"
+            ],
+            "correctIndex": 0,
+            "explanation": "'ballot'은 비밀 투표에서 유권자가 자신의 의사를 표기하는 투표용지나 투표 행위입니다.",
+            "tip": "Lesson 3 선거와 투표 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "preference",
+            "contextSentence": "Voters can express their second and third preference without wasting their initial votes.",
+            "options": [
+              "선호(도), 우선순위",
+              "무관심",
+              "포기"
+            ],
+            "correctIndex": 0,
+            "explanation": "'prefer(더 좋아하다)'의 명사형으로 여러 후보 중 어떤 후보를 더 선호하는지 나타냅니다.",
+            "tip": "Lesson 3 선호 순위 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "majority",
+            "contextSentence": "A candidate must secure an absolute majority of over 50 percent to win outright.",
+            "options": [
+              "과반수, 다수",
+              "소수",
+              "기권표"
+            ],
+            "correctIndex": 0,
+            "explanation": "'majority'는 전체 유효 투표수의 절반을 넘는 과반수를 가리킵니다.",
+            "tip": "Lesson 3 과반수 득표 어휘"
+          },
+          {
+            "id": 4,
+            "word": "elimination",
+            "contextSentence": "After the elimination of the lowest-ranked candidate, their votes are transferred to next choices.",
+            "options": [
+              "탈락, 제거",
+              "합격, 당선",
+              "재검표"
+            ],
+            "correctIndex": 0,
+            "explanation": "'eliminate(탈락시키다)'의 명사형으로 최하위 후보를 제외하고 표를 재배분하는 과정입니다.",
+            "tip": "Lesson 3 선호투표제 탈락 규칙 어휘"
+          },
+          {
+            "id": 5,
+            "word": "representation",
+            "contextSentence": "Alternative electoral systems strive for proportional representation of diverse voices.",
+            "options": [
+              "대의, 대표(성)",
+              "배제, 소외",
+              "독재"
+            ],
+            "correctIndex": 0,
+            "explanation": "'represent(대표하다)'의 명사형으로 국민의 다양한 의사가 의회에 균형 있게 반영되는 대의성입니다.",
+            "tip": "Lesson 3 비례 대표성 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 전자 폐기물의 위협과 자원 회수",
+        "description": "버려지는 스마트폰 e-waste와 독성 물질 관리 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "e-waste",
+            "contextSentence": "Discarded electronic equipment creates tens of millions of tons of hazardous e-waste annually.",
+            "options": [
+              "전자 폐기물",
+              "온라인 광고",
+              "가상 통화"
+            ],
+            "correctIndex": 0,
+            "explanation": "'electronic waste'의 줄임말로 스마트폰, 컴퓨터 등 수명이 다해 버려지는 첨단 전자 쓰레기입니다.",
+            "tip": "Lesson 4 전자 폐기물 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "toxic",
+            "contextSentence": "Old motherboards contain toxic heavy metals such as lead and mercury.",
+            "options": [
+              "유독한, 독성의",
+              "무해한",
+              "영양가 있는"
+            ],
+            "correctIndex": 0,
+            "explanation": "'toxic'은 인체나 생태계에 치명적인 중독을 일으키는 독성 물질을 수식합니다.",
+            "tip": "Lesson 4 유독성 중금속 어휘"
+          },
+          {
+            "id": 3,
+            "word": "landfill",
+            "contextSentence": "When dumped into an unlined landfill, chemical toxins seep into underground aquifers.",
+            "options": [
+              "쓰레기 매립지",
+              "재활용 센터",
+              "자연 습지"
+            ],
+            "correctIndex": 0,
+            "explanation": "'landfill'은 쓰레기를 땅에 묻어 처리하는 폐기물 매립 장소입니다.",
+            "tip": "Lesson 4 쓰레기 매립지 침출수 어휘"
+          },
+          {
+            "id": 4,
+            "word": "obsolescence",
+            "contextSentence": "Planned obsolescence by manufacturers encourages consumers to replace working phones prematurely.",
+            "options": [
+              "노후화, 구식화(계획적 진부화)",
+              "품질 보증",
+              "내구성 강화"
+            ],
+            "correctIndex": 0,
+            "explanation": "기업이 신제품 판매를 늘리기 위해 일부러 구형 제품을 빨리 낡게 만드는 전략을 '계획적 구식화'라 합니다.",
+            "tip": "Lesson 4 계획적 진부화 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "extraction",
+            "contextSentence": "Urban mining focuses on the efficient extraction of gold and copper from shredded microchips.",
+            "options": [
+              "추출, 채굴",
+              "매립, 폐기",
+              "소각"
+            ],
+            "correctIndex": 0,
+            "explanation": "'extraction'은 폐가전 기판 속에서 금, 은, 구리 등 희귀 금속을 캐내어 회수하는 것입니다.",
+            "tip": "Lesson 4 도시 광산 금속 추출 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 고대 조각상의 숨겨진 다채로운 진실",
+        "description": "새하얀 줄 알았던 그리스·로마 대리석 조각상의 원래 색채 과학 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "pigment",
+            "contextSentence": "Ultraviolet lamps revealed microscopic traces of colorful pigment on ancient Greek statues.",
+            "options": [
+              "안료, 색소",
+              "균열, 틈",
+              "석고 조각"
+            ],
+            "correctIndex": 0,
+            "explanation": "'pigment'는 그림이나 조각상 표면에 색을 입히기 위해 사용된 천연 안료나 물감입니다.",
+            "tip": "Lesson 5 조각상 색채 분석 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "marble",
+            "contextSentence": "People long believed classical statues were deliberately sculpted from pure white marble.",
+            "options": [
+              "대리석",
+              "청동",
+              "도자기"
+            ],
+            "correctIndex": 0,
+            "explanation": "'marble'은 고대 서양 신전과 조각상에 가장 널리 쓰인 단단하고 아름다운 대리석 석재입니다.",
+            "tip": "Lesson 5 대리석 조각 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "polychromy",
+            "contextSentence": "Archaeological polychromy proves that Greek temples were originally painted in vivid hues.",
+            "options": [
+              "다채색 기법(여러 색 사용)",
+              "단색화, 흑백",
+              "조각 기법"
+            ],
+            "correctIndex": 0,
+            "explanation": "'poly-(여러)' + 'chrome(색채)'로 고대 건축과 조각에 다채로운 원색을 입혔던 역사적 사실입니다.",
+            "tip": "Lesson 5 다채색 기법 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "weathering",
+            "contextSentence": "Centuries of environmental weathering and over-zealous cleaning washed away the delicate colors.",
+            "options": [
+              "풍화 작용(자연 마모)",
+              "인공 도색",
+              "발굴 작업"
+            ],
+            "correctIndex": 0,
+            "explanation": "'weathering'은 비바람이나 햇빛, 세월에 의해 암석 표면이 서서히 깎이고 부식되는 현상입니다.",
+            "tip": "Lesson 5 자연 풍화 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "reconstruction",
+            "contextSentence": "Using laser spectroscopy, researchers built a vibrant color reconstruction of the Augustus statue.",
+            "options": [
+              "복원, 재구성",
+              "파괴, 해체",
+              "경매, 매매"
+            ],
+            "correctIndex": 0,
+            "explanation": "'reconstruct(복원하다)'의 명사형으로 과학적 데이터를 바탕으로 원래 원형을 되살리는 것입니다.",
+            "tip": "Lesson 5 색채 복원 모형 어휘"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "subjectKey": "세계 문화와 영어",
+    "title": "세계 문화와 영어",
+    "grade": "3학년 1학기",
+    "publisher": "비상 (권혁승)",
+    "difficulty": "실용 글로벌 (진로)",
+    "color": "from-rose-600 to-pink-600",
+    "description": "6개 대륙의 문화, 글로벌 스타트업, 워킹홀리데이, 축제 등 생생한 실용 영어 어휘입니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 아시아 전통 스포츠와 건축",
+        "description": "중동 낙타 경주 로봇 기수와 동아시아 자연 친화 건축 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "hospitality",
+            "contextSentence": "Nomadic people in the desert are world-renowned for their warm and generous hospitality.",
+            "options": [
+              "환대, 친절한 대접",
+              "적대감, 반감",
+              "호기심"
+            ],
+            "correctIndex": 0,
+            "explanation": "'hospitality'는 낯선 손님이나 여행자를 가족처럼 따뜻하게 맞아 극진히 대접하는 미덕입니다.",
+            "tip": "Lesson 1 중앙아시아·중동 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "jockey",
+            "contextSentence": "To protect children, modern camel races in the Gulf use lightweight robot jockeys.",
+            "options": [
+              "기수(말/낙타를 타는 사람)",
+              "심판",
+              "사육사"
+            ],
+            "correctIndex": 0,
+            "explanation": "'jockey'는 경마나 낙타 경주에서 동물을 타고 달리며 속도를 제어하는 전문 선수입니다.",
+            "tip": "Lesson 1 로봇 낙타 기수 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "architecture",
+            "contextSentence": "Traditional Korean and Japanese architecture emphasizes gentle harmony with surrounding nature.",
+            "options": [
+              "건축(술), 건축 양식",
+              "조각상",
+              "풍경화"
+            ],
+            "correctIndex": 0,
+            "explanation": "'architecture'는 건물을 설계하고 짓는 조형 양식이나 건축 기술을 포괄하는 단어입니다.",
+            "tip": "Lesson 1 동아시아 목조 건축 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "sustainable",
+            "contextSentence": "Timber buildings constructed without iron nails proved surprisingly resilient and sustainable.",
+            "options": [
+              "지속 가능한, 환경 친화적인",
+              "취약한",
+              "인위적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sustainable'은 자연 재료를 활용해 오랜 세월 환경 파괴 없이 보존될 수 있는 상태입니다.",
+            "tip": "Lesson 1 친환경 건축 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "eaves",
+            "contextSentence": "The curved eaves of the wooden roof keep out scorching summer sunlight while letting in breeze.",
+            "options": [
+              "처마",
+              "주춧돌",
+              "대들보"
+            ],
+            "correctIndex": 0,
+            "explanation": "'eaves'는 한옥이나 동아시아 전통 목조 가옥 지붕의 처마 끝자락을 뜻합니다.",
+            "tip": "Lesson 1 한옥 처마의 미학 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 아프리카 야생동물 보존과 잠재력",
+        "description": "짐바브웨 국립공원 레인저와 케냐 마라톤의 비밀 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "poaching",
+            "contextSentence": "Armed park rangers patrol day and night to protect endangered rhinos from illegal poaching.",
+            "options": [
+              "밀렵, 불법 포획",
+              "합법적 사냥",
+              "자연 방사"
+            ],
+            "correctIndex": 0,
+            "explanation": "'poach'는 법을 어기고 보호구역의 희귀 동물을 몰래 사냥하는 밀렵 행위를 뜻합니다.",
+            "tip": "Lesson 2 아프리카 코뿔소 보호 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "endurance",
+            "contextSentence": "Kenyan marathon runners attribute their extraordinary endurance to high-altitude training.",
+            "options": [
+              "지구력, 참을성",
+              "순발력",
+              "유연성"
+            ],
+            "correctIndex": 0,
+            "explanation": "'endure(견디다)'의 명사형으로 긴 시간 동안 지치지 않고 달리는 체력과 인내심입니다.",
+            "tip": "Lesson 2 마라톤 지구력 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "conservation",
+            "contextSentence": "Local communities receive eco-tourism revenue to actively participate in wildlife conservation.",
+            "options": [
+              "자연 보호, 보존",
+              "자원 개발, 벌목",
+              "도시화"
+            ],
+            "correctIndex": 0,
+            "explanation": "'conserve(보존하다)'의 명사형으로 멸종 위기종과 생태계를 지키는 활동입니다.",
+            "tip": "Lesson 2 생태 관광 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "potential",
+            "contextSentence": "With the world's youngest population, Africa possesses vast economic potential.",
+            "options": [
+              "잠재력, 가능성",
+              "위험 요소",
+              "부채, 빚"
+            ],
+            "correctIndex": 0,
+            "explanation": "'potential'은 아직 완전히 피어나지 않았지만 앞으로 크게 도약할 수 있는 성장 가능성입니다.",
+            "tip": "Lesson 2 아프리카의 도약 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "habitat",
+            "contextSentence": "Farming expansion continues to shrink the natural habitat of African wild dogs.",
+            "options": [
+              "서식지, 자생지",
+              "가공 공장",
+              "동물원"
+            ],
+            "correctIndex": 0,
+            "explanation": "'habitat'는 특정 동물이나 식물이 자연 속에서 번식하고 살아가는 보금자리입니다.",
+            "tip": "Lesson 2 야생 서식지 보호 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 유럽 예술의 거장과 축구 문화",
+        "description": "다빈치 대 미켈란젤로의 벽화 대결과 유럽 프리미어 축구 열기 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "fresco",
+            "contextSentence": "The Renaissance council commissioned two rival painters to create a monumental fresco on palace walls.",
+            "options": [
+              "프레스코화(벽화)",
+              "유화",
+              "동판화"
+            ],
+            "correctIndex": 0,
+            "explanation": "'fresco'는 회반죽 벽이 마르기 전 물감으로 그린 르네상스 대표 벽화 기법입니다.",
+            "tip": "Lesson 3 피렌체 벽화 대결 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "rivalry",
+            "contextSentence": "The intense artistic rivalry between Leonardo and Michelangelo pushed both men to peak creativity.",
+            "options": [
+              "라이벌 관계, 경쟁",
+              "친밀한 우정",
+              "동업, 합작"
+            ],
+            "correctIndex": 0,
+            "explanation": "'rival(경쟁 상대)'의 명사형으로 서로 최고가 되기 위해 치열하게 다투는 경쟁 구도입니다.",
+            "tip": "Lesson 3 두 거장의 라이벌전 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "enthusiasm",
+            "contextSentence": "European football fans sing team anthems with unbelievable passion and enthusiasm.",
+            "options": [
+              "열정, 열광",
+              "냉담함, 침묵",
+              "불안, 초조"
+            ],
+            "correctIndex": 0,
+            "explanation": "'enthusiasm'은 특정 스포츠나 취미에 온 마음을 쏟아붓는 뜨거운 열의입니다.",
+            "tip": "Lesson 3 유럽 축구 문화 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "masterpiece",
+            "contextSentence": "The unfinished battle scene is still celebrated as a timeless artistic masterpiece.",
+            "options": [
+              "걸작, 명작",
+              "초기 습작",
+              "위조품"
+            ],
+            "correctIndex": 0,
+            "explanation": "'masterpiece'는 작가의 기량이 최고조에 달했을 때 남긴 가장 위대한 걸작입니다.",
+            "tip": "Lesson 3 르네상스 명작 어휘"
+          },
+          {
+            "id": 5,
+            "word": "derby",
+            "contextSentence": "A local derby match between neighboring city teams always brings out intense community loyalty.",
+            "options": [
+              "더비 경기(연고지 라이벌전)",
+              "친선 연습 경기",
+              "올스타전"
+            ],
+            "correctIndex": 0,
+            "explanation": "'derby'는 같은 지역이나 오랜 맞수 클럽끼리 벌이는 치열한 라이벌 축구 경기입니다.",
+            "tip": "Lesson 3 로컬 더비 매치 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 북미 차고 창업과 동계 스포츠",
+        "description": "실리콘밸리 차고 스타트업과 캐나다 아이스하키·컬링 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "entrepreneur",
+            "contextSentence": "Steve Jobs started out as an ambitious young entrepreneur assembling circuit boards in a garage.",
+            "options": [
+              "기업가, 창업가",
+              "투자 심사역",
+              "정치인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'entrepreneur'는 위험을 감수하고 창의적인 아이디어로 새로운 회사를 일구는 창업가입니다.",
+            "tip": "Lesson 4 실리콘밸리 차고 창업 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "innovation",
+            "contextSentence": "Relentless technological innovation transformed small garage ventures into global tech giants.",
+            "options": [
+              "혁신, 쇄신",
+              "정체, 퇴보",
+              "모방, 복제"
+            ],
+            "correctIndex": 0,
+            "explanation": "'innovate(혁신하다)'의 명사형으로 기존의 틀을 깨고 완전히 새로운 가치를 창출하는 혁신입니다.",
+            "tip": "Lesson 4 기술 혁신 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "agility",
+            "contextSentence": "Ice hockey demands lightning speed, brute balance, and supreme physical agility.",
+            "options": [
+              "민첩성, 날렵함",
+              "무게감",
+              "지루함"
+            ],
+            "correctIndex": 0,
+            "explanation": "'agile(날렵한)'의 명사형으로 빙판 위에서 방향을 번개같이 바꾸는 신체 민첩성입니다.",
+            "tip": "Lesson 4 아이스하키 스포츠 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "curling",
+            "contextSentence": "Curling is often dubbed 'chess on ice' because of the deep tactical strategy involved.",
+            "options": [
+              "컬링(빙상 스포츠)",
+              "봅슬레이",
+              "스피드스케이팅"
+            ],
+            "correctIndex": 0,
+            "explanation": "'curling'은 빙판 위에서 화강암 스톤을 미끄러뜨려 표적 중심에 넣는 동계 스포츠입니다.",
+            "tip": "Lesson 4 빙판의 체스 컬링 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "venture",
+            "contextSentence": "Starting a tech startup is a risky venture, but the rewards can change the world.",
+            "options": [
+              "모험적인 사업, 벤처",
+              "안전한 적금",
+              "규제 정책"
+            ],
+            "correctIndex": 0,
+            "explanation": "'venture'는 모험과 위험(venture)을 무릅쓰고 도전하는 신생 사업체를 뜻합니다.",
+            "tip": "Lesson 4 벤처 비즈니스 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 남미 카니발 축제와 오세아니아 워홀",
+        "description": "리오 카니발의 삼바 열정과 호주 워킹홀리데이 실전 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "carnival",
+            "contextSentence": "The Rio Carnival dazzles spectators with vibrant samba music, elaborate costumes, and non-stop dancing.",
+            "options": [
+              "카니발, 축제",
+              "추모식, 애도회",
+              "학술 대회"
+            ],
+            "correctIndex": 0,
+            "explanation": "'carnival'은 화려한 가장행렬과 음악, 춤으로 가득 찬 대규모 거리 축제입니다.",
+            "tip": "Lesson 5 브라질 리오 카니발 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "spectacle",
+            "contextSentence": "The parade at the Sambadrome is an unforgettable visual spectacle of Brazilian culture.",
+            "options": [
+              "장관, 화려한 구경거리",
+              "안경",
+              "사소한 일"
+            ],
+            "correctIndex": 0,
+            "explanation": "'spectacle'은 눈을 뗄 수 없을 만큼 웅장하고 압도적인 볼거리나 장관을 의미합니다.",
+            "tip": "Lesson 5 삼바 퍼레이드 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "graffiti",
+            "contextSentence": "Latin American cities are filled with colorful political graffiti painted on public walls.",
+            "options": [
+              "그라피티, 벽화 낙서 예술",
+              "광고 전단지",
+              "도로 표지판"
+            ],
+            "correctIndex": 0,
+            "explanation": "'graffiti'는 도시의 벽이나 건조물에 스프레이 페인트 등으로 그린 거리 예술입니다.",
+            "tip": "Lesson 5 남미 거리 벽화 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "independence",
+            "contextSentence": "A working holiday in Australia offers young people an invaluable lesson in self-reliance and independence.",
+            "options": [
+              "독립심, 자립",
+              "의존, 예속",
+              "외로움"
+            ],
+            "correctIndex": 0,
+            "explanation": "'independent(독립적인)'의 명사형으로 부모 곁을 떠나 스스로 삶을 개척하는 독립성입니다.",
+            "tip": "Lesson 6 호주 워킹홀리데이 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "adaptability",
+            "contextSentence": "Living abroad tests your cultural adaptability when adjusting to new customs and accents.",
+            "options": [
+              "적응력, 유연성",
+              "거부감",
+              "고립감"
+            ],
+            "correctIndex": 0,
+            "explanation": "'adapt(적응하다)'의 명사형으로 낯선 글로벌 환경에서도 유연하게 적응하는 능력입니다.",
+            "tip": "Lesson 6 해외 생활 적응력 어휘"
+          }
+        ]
+      }
+    ]
+  }
+]
