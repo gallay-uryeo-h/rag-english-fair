@@ -20,6 +20,7 @@ const CAREER_CHIPS = [
 
 export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
   const [careerInput, setCareerInput] = useState('');
+  const [activeCareer, setActiveCareer] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<RecommendResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +31,23 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
     setLoading(true);
     setError(null);
     setCareerInput(q);
+    setActiveCareer(q);
 
     try {
-      const res = await fetch(`/api/recommend-passages?career=${encodeURIComponent(q)}`);
-      if (!res.ok) throw new Error(`추천 생성 실패 (상태 코드: ${res.status})`);
+      const res = await fetch('/api/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          interest: q,
+          grade: '전체',
+        }),
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `추천 생성 실패 (상태 코드: ${res.status})`);
+      }
+
       const data: RecommendResponse = await res.json();
       setResult(data);
     } catch (err: any) {
@@ -103,7 +117,7 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
         <div className="bg-white rounded-2xl p-8 border border-slate-200 text-center space-y-3">
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin mx-auto" />
           <div className="text-sm font-bold text-slate-700">
-            의령여고 3개년 교과서에서 &apos;{careerInput}&apos; 맞춤 본문을 분석하고 있습니다...
+            의령여고 3개년 교과서에서 &lsquo;{careerInput}&rsquo; 맞춤 본문을 분석하고 있습니다...
           </div>
           <div className="text-xs text-slate-400">
             교과서 지문과 학생부 연계 탐구 주제를 구성 중입니다.
@@ -127,7 +141,7 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
                 탐색 완료
               </span>
               <h3 className="font-bold text-slate-800 text-base md:text-lg">
-                &apos;{result.career}&apos; 맞춤 미래 성장 리포트
+                &lsquo;{activeCareer}&rsquo; 맞춤 미래 성장 리포트
               </h3>
             </div>
           </div>
@@ -139,23 +153,35 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
           />
 
           {/* 연계 교과서 본문 카드 */}
-          {result.sources && result.sources.length > 0 && (
+          {result.candidates && result.candidates.length > 0 && (
             <div className="border-t border-slate-100 pt-4 space-y-2.5">
               <div className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5 text-blue-500" />
                 <span>연계 교과서 추천 본문 확인 (원문 E-Book)</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {result.sources.map((src, i) => (
+                {result.candidates.map((cand, i) => (
                   <div
                     key={i}
-                    onClick={() => onOpenImage(`${src.title} · p.${src.page} 본문`, src.image_url)}
+                    onClick={() =>
+                      cand.image_url &&
+                      onOpenImage(
+                        `${cand.subject} ${cand.unit_title} · ${cand.page_label}`,
+                        cand.image_url
+                      )
+                    }
                     className="p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer group flex items-start justify-between gap-2"
                   >
                     <div>
-                      <div className="text-xs font-bold text-blue-600 mb-0.5">{src.title}</div>
-                      <div className="text-xs text-slate-800 font-medium line-clamp-1">{src.unit_title}</div>
-                      <div className="text-[11px] text-slate-400 mt-1">시작 페이지: p.{src.page}</div>
+                      <div className="text-xs font-bold text-blue-600 mb-0.5">
+                        {cand.subject}
+                      </div>
+                      <div className="text-xs text-slate-800 font-medium line-clamp-1">
+                        {cand.unit_title || cand.passage_title || `Unit ${cand.unit_number}`}
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-1">
+                        페이지: {cand.page_label}
+                      </div>
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                   </div>
@@ -168,4 +194,3 @@ export const Station5Recommend: React.FC<Props> = ({ onOpenImage }) => {
     </div>
   );
 };
-

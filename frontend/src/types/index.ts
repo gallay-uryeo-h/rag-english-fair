@@ -50,14 +50,23 @@ export interface GrammarRoadmapResponse {
   notice: string;
 }
 
-export interface RecommendResponse {
-  career: string;
-  report: string;
-  sources: Array<{
-    title: string;
-    page: number;
-    image_url: string;
-    unit_title: string;
-    section: string;
-  }>;
+export interface RecommendCandidate {
+  subject: string;
+  unit_number: number;
+  unit_title: string;
+  passage_title: string;
+  grade: string;
+  semester: string;
+  page: number | string;
+  page_label: string;
+  publisher: string;
+  topic: string;
+  text: string;
+  image_url: string;
 }
+
+export interface RecommendResponse {
+  report: string;
+  candidates: RecommendCandidate[];
+}
+
