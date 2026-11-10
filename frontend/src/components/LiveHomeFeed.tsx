@@ -5,7 +5,6 @@ import {
   Send,
   Bookmark,
   MoreHorizontal,
-  Compass,
   Volume2,
   BookOpen,
   Lightbulb,
@@ -39,13 +38,12 @@ interface Props {
   onScrollTo: (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
 }
 
-interface StoryItem {
+interface MockStoryUser {
   id: string;
-  key: 'mbti' | 'vocab' | 'textbook' | 'seteuk';
-  title: string;
-  tag: string;
-  color: string;
-  icon: React.ReactNode;
+  username: string;
+  avatarImg: string;
+  hasUnreadStory: boolean;
+  colorRing: string;
 }
 
 export const LiveHomeFeed: React.FC<Props> = ({
@@ -119,39 +117,49 @@ export const LiveHomeFeed: React.FC<Props> = ({
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
   };
 
-  // 상단 스토리 목록
-  const stories: StoryItem[] = [
+  // 👥 실제 인스타그램 느낌의 다른 사용자 Mock 스토리 목록
+  const mockStories: MockStoryUser[] = [
     {
-      id: 'story-mbti',
-      key: 'mbti',
-      title: '본문 MBTI',
-      tag: '성향진단',
-      color: 'from-pink-500 via-rose-500 to-amber-500',
-      icon: <Compass className="w-5 h-5 text-white" />,
+      id: 'mock_1',
+      username: 'ur_english_club',
+      avatarImg: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: true,
+      colorRing: 'from-amber-400 via-rose-500 to-purple-600',
     },
     {
-      id: 'story-vocab',
-      key: 'vocab',
-      title: '소리 퀴즈',
-      tag: '단어듣기',
-      color: 'from-purple-600 via-indigo-600 to-blue-500',
-      icon: <Volume2 className="w-5 h-5 text-white" />,
+      id: 'mock_2',
+      username: 'minji_study',
+      avatarImg: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: true,
+      colorRing: 'from-pink-500 via-purple-500 to-indigo-500',
     },
     {
-      id: 'story-textbook',
-      key: 'textbook',
-      title: '교과서 6권',
-      tag: '3×2뷰어',
-      color: 'from-emerald-500 via-teal-500 to-cyan-500',
-      icon: <BookOpen className="w-5 h-5 text-white" />,
+      id: 'mock_3',
+      username: 'soyeon_grammar',
+      avatarImg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: true,
+      colorRing: 'from-emerald-400 via-teal-500 to-blue-500',
     },
     {
-      id: 'story-seteuk',
-      key: 'seteuk',
-      title: '세특 치트키',
-      tag: '학종보고서',
-      color: 'from-amber-500 via-orange-500 to-yellow-500',
-      icon: <Lightbulb className="w-5 h-5 text-white" />,
+      id: 'mock_4',
+      username: 'haru_english',
+      avatarImg: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: false,
+      colorRing: 'from-slate-300 to-slate-400',
+    },
+    {
+      id: 'mock_5',
+      username: 'native_teacher_j',
+      avatarImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: true,
+      colorRing: 'from-yellow-400 via-orange-500 to-red-500',
+    },
+    {
+      id: 'mock_6',
+      username: 'uryeo_broadcasting',
+      avatarImg: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+      hasUnreadStory: true,
+      colorRing: 'from-pink-500 to-yellow-500',
     },
   ];
 
@@ -161,42 +169,52 @@ export const LiveHomeFeed: React.FC<Props> = ({
           📸 1. 인스타그램 스토리 캐러셀 (Instagram Story Bar)
           ========================================================================= */}
       <section className="bg-white border-b border-slate-200 py-3 px-3 overflow-hidden shadow-2xs">
-        <div className="flex items-center gap-4 overflow-x-auto no-scrollbar px-1">
-          {/* 의령여고 공식 스토리 */}
+        <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar px-1">
+          {/* 🌟 의령여고 영어과 공식 스토리 (영어를 상징하는 멋진 고화질 사진 아바타) */}
           <div
             onClick={() => onScrollTo('home')}
-            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer"
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
           >
-            <div className="w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-400">
+            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-400 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
               <div className="w-full h-full rounded-full bg-white p-0.5">
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-700 to-indigo-900 flex items-center justify-center text-white font-black text-xs shadow-inner">
-                  의령여고
-                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
+                  alt="의령여고 영어과"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              {/* 내 스토리 플러스 뱃지 */}
+              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">
+                +
               </div>
             </div>
-            <span className="text-[11px] font-medium text-slate-700 tracking-tight">내 스토리</span>
+            <span className="text-[11px] font-bold text-slate-800 tracking-tight">
+              의령여고 영어과
+            </span>
           </div>
 
-          {/* 4대 코너 스토리 버튼 (터치 시 해당 피드로 스크롤 + 자동 아코디언 오픈) */}
-          {stories.map((story) => (
-            <button
+          {/* 🌟 다른 사람들의 실제 인스타그램 계정 Mock 스토리 목록 */}
+          {mockStories.map((story) => (
+            <div
               key={story.id}
-              onClick={() => onScrollTo(story.key)}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group"
+              onClick={() => alert(`@${story.username} 님의 새로운 스토리를 확인했습니다! 📸`)}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
               <div
-                className={`w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${story.color} transition-transform group-hover:scale-105 active:scale-95`}
+                className={`w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${story.colorRing} transition-transform group-hover:scale-105 active:scale-95 shadow-xs`}
               >
                 <div className="w-full h-full rounded-full bg-white p-0.5">
-                  <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center">
-                    {story.icon}
-                  </div>
+                  <img
+                    src={story.avatarImg}
+                    alt={story.username}
+                    className="w-full h-full rounded-full object-cover"
+                  />
                 </div>
               </div>
-              <span className="text-[11px] font-semibold text-slate-800 tracking-tight">
-                {story.title}
+              <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate">
+                {story.username}
               </span>
-            </button>
+            </div>
           ))}
         </div>
       </section>
@@ -314,97 +332,96 @@ export const LiveHomeFeed: React.FC<Props> = ({
           {/* =========================================================================
               📸 3. 단일 무한 피드 모드 (인라인 아코디언)
               ========================================================================= */}
-      <article
-        ref={feedRefs.mbtiRef}
-        className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-      >
-        {/* 포스트 상단 계정 정보 */}
-        <div className="flex items-center justify-between px-3.5 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-500">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
-                <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                  🧭
+          <article
+            ref={feedRefs.mbtiRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            {/* 포스트 상단 계정 정보 */}
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      🧭
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_english_mbti</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded">
+                      성향 진단 공식
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">의령여고 1부스 · 16 MBTI 매칭</p>
                 </div>
               </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-900">ur_english_mbti</span>
-                <span className="w-1 h-1 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded">
-                  성향 진단 공식
+
+            {/* 포스트 메인 히어로 카드 (실제 고화질 배경 사진 적용) */}
+            <div
+              onClick={() => onToggleSection('mbti')}
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+            >
+              {/* 고화질 사진 배경 + 어두운 오버레이 */}
+              <img
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
+                alt="영어 공부와 성향 탐색"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
+              <div className="space-y-1.5 relative z-10 pt-4">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                  MBTI별 본문 추천
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
+                  나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
+                </p>
+              </div>
+        </div>
+
+            {/* 포스트 소셜 바 */}
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('mbti')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.mbti ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('mbti')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('mbti')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.mbti ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {(384 + (likedPosts.mbti ? 1 : 0)).toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_english_mbti</span>
+                <span className="text-slate-800">
+                  나의 성격과 딱 맞는 교과서 지문을 만나면 독해가 즐거운 탐구로 바뀝니다. 지금 바로 진단해 보세요! ✨
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500">의령여고 1부스 · 16 MBTI 매칭</p>
-            </div>
-          </div>
-          <button className="text-slate-400 p-1">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* 포스트 메인 히어로 카드 (실제 고화질 배경 사진 적용) */}
-        <div
-          onClick={() => onToggleSection('mbti')}
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
-        >
-          {/* 고화질 사진 배경 + 어두운 오버레이 */}
-          <img
-            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
-            alt="영어 공부와 성향 탐색"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
-
-          <div className="space-y-1.5 relative z-10 pt-4">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-              MBTI별 본문 추천
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
-              나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
-            </p>
-          </div>
-        </div>
-
-        {/* 포스트 소셜 바 */}
-        <div className="px-3.5 pt-3 pb-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-slate-800">
-              <button onClick={() => toggleLike('mbti')} className="transition-transform active:scale-125">
-                <Heart
-                  className={`w-6 h-6 ${
-                    likedPosts.mbti ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                  }`}
-                />
-              </button>
-              <button onClick={() => onToggleSection('mbti')} className="hover:text-slate-600">
-                <MessageCircle className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('링크가 복사되었습니다!');
-                }}
-                className="hover:text-slate-600"
-              >
-                <Send className="w-6 h-6" />
-              </button>
-            </div>
-            <button onClick={() => toggleSave('mbti')}>
-              <Bookmark className={`w-6 h-6 ${savedPosts.mbti ? 'fill-slate-900 text-slate-900' : ''}`} />
-            </button>
-          </div>
-          <div className="pt-2 text-xs font-bold text-slate-900">
-            좋아요 {(384 + (likedPosts.mbti ? 1 : 0)).toLocaleString()}개
-          </div>
-          <div className="pt-1 text-xs">
-            <span className="font-bold text-slate-900 mr-2">ur_english_mbti</span>
-            <span className="text-slate-800">
-              나의 성격과 딱 맞는 교과서 지문을 만나면 독해가 즐거운 탐구로 바뀝니다. 지금 바로 진단해 보세요! ✨
-            </span>
-          </div>
 
           {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
           <div className="pt-2.5 pb-1">
@@ -432,149 +449,148 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           )}
 
-          {/* 💬 댓글 목록 미리보기 */}
-          {comments.mbti && comments.mbti.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <span className="text-[11px] text-slate-400 font-medium">
-                댓글 {comments.mbti.length}개 모두 보기
-              </span>
-              {comments.mbti.map((c) => (
-                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
-                    <span className="text-slate-700">{c.text}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+              {/* 💬 댓글 목록 미리보기 */}
+              {comments.mbti && comments.mbti.length > 0 && (
+                <div className="pt-2 space-y-1">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    댓글 {comments.mbti.length}개 모두 보기
+                  </span>
+                  {comments.mbti.map((c) => (
+                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                      <div>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="text-slate-700">{c.text}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
-          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 p-0.5 shrink-0">
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
-                  U
+              {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+              <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 p-0.5 shrink-0">
+                    <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                      U
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={commentInputs.mbti || ''}
+                    onChange={(e) => setCommentInputs((prev) => ({ ...prev, mbti: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddComment('mbti');
+                      }
+                    }}
+                    placeholder="댓글 달기..."
+                    className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                  {commentInputs.mbti?.trim() && (
+                    <button
+                      onClick={() => handleAddComment('mbti')}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                    >
+                      게시
+                    </button>
+                  )}
                 </div>
               </div>
-              <input
-                type="text"
-                value={commentInputs.mbti || ''}
-                onChange={(e) => setCommentInputs((prev) => ({ ...prev, mbti: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddComment('mbti');
-                  }
-                }}
-                placeholder="댓글 달기..."
-                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
-              />
-              {commentInputs.mbti?.trim() && (
-                <button
-                  onClick={() => handleAddComment('mbti')}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
-                >
-                  게시
-                </button>
-              )}
             </div>
-          </div>
-        </div>
-      </article>
+          </article>
 
-      {/* =========================================================================
+          {/* =========================================================================
           📸 3. 인피드 아코디언 포스트 2: 소리 단어 퀴즈 (Vocab Listen)
           ========================================================================= */}
-      <article
-        ref={feedRefs.vocabRef}
-        className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-      >
-        <div className="flex items-center justify-between px-3.5 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-purple-500 via-indigo-600 to-blue-500">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
-                <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                  🎧
+          <article
+            ref={feedRefs.vocabRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-purple-500 via-indigo-600 to-blue-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      🎧
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_audio_vocab</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">
+                      원어민 TTS 챌린지
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 6권 30세트</p>
                 </div>
               </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-900">ur_audio_vocab</span>
-                <span className="w-1 h-1 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">
-                  원어민 TTS 챌린지
+
+            {/* 포스트 메인 히어로 카드 (헤드폰/오디오 고화질 사진 배경) */}
+            <div
+              onClick={() => onToggleSection('vocab')}
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+                alt="영어 듣기와 단어 퀴즈"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
+              <div className="space-y-1.5 relative z-10 pt-4">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                  단어 미리보기
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
+                  1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
+                </p>
+              </div>
+        </div>
+
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('vocab')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.vocab ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('vocab')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('vocab')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.vocab ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {(295 + (likedPosts.vocab ? 1 : 0)).toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_audio_vocab</span>
+                <span className="text-slate-800">
+                  눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 6권 30세트</p>
-            </div>
-          </div>
-          <button className="text-slate-400 p-1">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* 포스트 메인 히어로 카드 (헤드폰/오디오 고화질 사진 배경) */}
-        <div
-          onClick={() => onToggleSection('vocab')}
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
-            alt="영어 듣기와 단어 퀴즈"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
-
-          <div className="space-y-1.5 relative z-10 pt-4">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-              단어 미리보기
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
-              1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
-            </p>
-          </div>
-        </div>
-
-        <div className="px-3.5 pt-3 pb-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-slate-800">
-              <button onClick={() => toggleLike('vocab')} className="transition-transform active:scale-125">
-                <Heart
-                  className={`w-6 h-6 ${
-                    likedPosts.vocab ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                  }`}
-                />
-              </button>
-              <button onClick={() => onToggleSection('vocab')} className="hover:text-slate-600">
-                <MessageCircle className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('링크가 복사되었습니다!');
-                }}
-                className="hover:text-slate-600"
-              >
-                <Send className="w-6 h-6" />
-              </button>
-            </div>
-            <button onClick={() => toggleSave('vocab')}>
-              <Bookmark className={`w-6 h-6 ${savedPosts.vocab ? 'fill-slate-900 text-slate-900' : ''}`} />
-            </button>
-          </div>
-          <div className="pt-2 text-xs font-bold text-slate-900">
-            좋아요 {(295 + (likedPosts.vocab ? 1 : 0)).toLocaleString()}개
-          </div>
-          <div className="pt-1 text-xs">
-            <span className="font-bold text-slate-900 mr-2">ur_audio_vocab</span>
-            <span className="text-slate-800">
-              눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
-            </span>
-          </div>
 
           {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
           <div className="pt-2.5 pb-1">
@@ -602,148 +618,147 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           )}
 
-          {/* 💬 댓글 목록 미리보기 */}
-          {comments.vocab && comments.vocab.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <span className="text-[11px] text-slate-400 font-medium">
-                댓글 {comments.vocab.length}개 모두 보기
-              </span>
-              {comments.vocab.map((c) => (
-                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
-                    <span className="text-slate-700">{c.text}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+              {/* 💬 댓글 목록 미리보기 */}
+              {comments.vocab && comments.vocab.length > 0 && (
+                <div className="pt-2 space-y-1">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    댓글 {comments.vocab.length}개 모두 보기
+                  </span>
+                  {comments.vocab.map((c) => (
+                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                      <div>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="text-slate-700">{c.text}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
-          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 p-0.5 shrink-0">
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
-                  U
+              {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+              <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 p-0.5 shrink-0">
+                    <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                      U
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={commentInputs.vocab || ''}
+                    onChange={(e) => setCommentInputs((prev) => ({ ...prev, vocab: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddComment('vocab');
+                      }
+                    }}
+                    placeholder="댓글 달기..."
+                    className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                  {commentInputs.vocab?.trim() && (
+                    <button
+                      onClick={() => handleAddComment('vocab')}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                    >
+                      게시
+                    </button>
+                  )}
                 </div>
               </div>
-              <input
-                type="text"
-                value={commentInputs.vocab || ''}
-                onChange={(e) => setCommentInputs((prev) => ({ ...prev, vocab: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddComment('vocab');
-                  }
-                }}
-                placeholder="댓글 달기..."
-                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
-              />
-              {commentInputs.vocab?.trim() && (
-                <button
-                  onClick={() => handleAddComment('vocab')}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
-                >
-                  게시
-                </button>
-              )}
             </div>
-          </div>
-        </div>
-      </article>
+          </article>
 
-      {/* =========================================================================
+          {/* =========================================================================
           📸 4. 인피드 아코디언 포스트 3: 3×2 교과서 탐색 (Textbook Showcase)
           ========================================================================= */}
-      <article
-        ref={feedRefs.textbookRef}
-        className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-      >
-        <div className="flex items-center justify-between px-3.5 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
-                <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                  📚
+          <article
+            ref={feedRefs.textbookRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      📚
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_textbook_viewer</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">
+                      144개 섹션 정밀 검증
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 6권 교과서</p>
                 </div>
               </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-900">ur_textbook_viewer</span>
-                <span className="w-1 h-1 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">
-                  144개 섹션 정밀 검증
+
+            <div
+              onClick={() => onToggleSection('textbook')}
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+                alt="도서관 교과서"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
+              <div className="space-y-1 relative z-10 pt-4">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                  의령여고 3개년 교과서 6권 대공개!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-light">
+                  표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
+                </p>
+              </div>
+        </div>
+
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('textbook')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.textbook ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('textbook')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('textbook')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.textbook ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {(512 + (likedPosts.textbook ? 1 : 0)).toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
+                <span className="text-slate-800">
+                  공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 6권 교과서</p>
-            </div>
-          </div>
-          <button className="text-slate-400 p-1">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div
-          onClick={() => onToggleSection('textbook')}
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
-            alt="도서관 교과서"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
-
-          <div className="space-y-1 relative z-10 pt-4">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-              의령여고 3개년 교과서 6권 대공개!
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-light">
-              표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
-            </p>
-          </div>
-        </div>
-
-        <div className="px-3.5 pt-3 pb-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-slate-800">
-              <button onClick={() => toggleLike('textbook')} className="transition-transform active:scale-125">
-                <Heart
-                  className={`w-6 h-6 ${
-                    likedPosts.textbook ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                  }`}
-                />
-              </button>
-              <button onClick={() => onToggleSection('textbook')} className="hover:text-slate-600">
-                <MessageCircle className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('링크가 복사되었습니다!');
-                }}
-                className="hover:text-slate-600"
-              >
-                <Send className="w-6 h-6" />
-              </button>
-            </div>
-            <button onClick={() => toggleSave('textbook')}>
-              <Bookmark className={`w-6 h-6 ${savedPosts.textbook ? 'fill-slate-900 text-slate-900' : ''}`} />
-            </button>
-          </div>
-          <div className="pt-2 text-xs font-bold text-slate-900">
-            좋아요 {(512 + (likedPosts.textbook ? 1 : 0)).toLocaleString()}개
-          </div>
-          <div className="pt-1 text-xs">
-            <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
-            <span className="text-slate-800">
-              공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
-            </span>
-          </div>
 
           {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
           <div className="pt-2.5 pb-1">
@@ -771,148 +786,147 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           )}
 
-          {/* 💬 댓글 목록 미리보기 */}
-          {comments.textbook && comments.textbook.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <span className="text-[11px] text-slate-400 font-medium">
-                댓글 {comments.textbook.length}개 모두 보기
-              </span>
-              {comments.textbook.map((c) => (
-                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
-                    <span className="text-slate-700">{c.text}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+              {/* 💬 댓글 목록 미리보기 */}
+              {comments.textbook && comments.textbook.length > 0 && (
+                <div className="pt-2 space-y-1">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    댓글 {comments.textbook.length}개 모두 보기
+                  </span>
+                  {comments.textbook.map((c) => (
+                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                      <div>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="text-slate-700">{c.text}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
-          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 p-0.5 shrink-0">
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
-                  U
+              {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+              <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 p-0.5 shrink-0">
+                    <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                      U
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={commentInputs.textbook || ''}
+                    onChange={(e) => setCommentInputs((prev) => ({ ...prev, textbook: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddComment('textbook');
+                      }
+                    }}
+                    placeholder="댓글 달기..."
+                    className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                  {commentInputs.textbook?.trim() && (
+                    <button
+                      onClick={() => handleAddComment('textbook')}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                    >
+                      게시
+                    </button>
+                  )}
                 </div>
               </div>
-              <input
-                type="text"
-                value={commentInputs.textbook || ''}
-                onChange={(e) => setCommentInputs((prev) => ({ ...prev, textbook: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddComment('textbook');
-                  }
-                }}
-                placeholder="댓글 달기..."
-                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
-              />
-              {commentInputs.textbook?.trim() && (
-                <button
-                  onClick={() => handleAddComment('textbook')}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
-                >
-                  게시
-                </button>
-              )}
             </div>
-          </div>
-        </div>
-      </article>
+          </article>
 
-      {/* =========================================================================
+          {/* =========================================================================
           📸 5. 인피드 아코디언 포스트 4: 세특 발전소 (Seteuk Generator)
           ========================================================================= */}
-      <article
-        ref={feedRefs.seteukRef}
-        className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-      >
-        <div className="flex items-center justify-between px-3.5 py-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
-                <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                  💡
+          <article
+            ref={feedRefs.seteukRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      💡
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_seteuk_powerhouse</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded">
+                      대입 학생부 종합 대비
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">진로 & 세특 전략 연구소 · 8대 전공</p>
                 </div>
               </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-900">ur_seteuk_powerhouse</span>
-                <span className="w-1 h-1 rounded-full bg-slate-400" />
-                <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded">
-                  대입 학생부 종합 대비
+
+            <div
+              onClick={() => onToggleSection('seteuk')}
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
+                alt="노트 공부 세특"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
+              <div className="space-y-1 relative z-10 pt-4">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                  교과서 지문이 나만의 세특 치트키로 변신!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-light">
+                  희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
+                </p>
+              </div>
+        </div>
+
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('seteuk')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.seteuk ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('seteuk')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('seteuk')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.seteuk ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {(647 + (likedPosts.seteuk ? 1 : 0)).toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_seteuk_powerhouse</span>
+                <span className="text-slate-800">
+                  단순한 해석을 넘어선 깊이 있는 탐구! 의령여고의 탄탄한 대입 학종 노하우를 담았습니다.
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500">진로 & 세특 전략 연구소 · 8대 전공</p>
-            </div>
-          </div>
-          <button className="text-slate-400 p-1">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div
-          onClick={() => onToggleSection('seteuk')}
-          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
-            alt="노트 공부 세특"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
-
-          <div className="space-y-1 relative z-10 pt-4">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-              교과서 지문이 나만의 세특 치트키로 변신!
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-light">
-              희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
-            </p>
-          </div>
-        </div>
-
-        <div className="px-3.5 pt-3 pb-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-slate-800">
-              <button onClick={() => toggleLike('seteuk')} className="transition-transform active:scale-125">
-                <Heart
-                  className={`w-6 h-6 ${
-                    likedPosts.seteuk ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                  }`}
-                />
-              </button>
-              <button onClick={() => onToggleSection('seteuk')} className="hover:text-slate-600">
-                <MessageCircle className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('링크가 복사되었습니다!');
-                }}
-                className="hover:text-slate-600"
-              >
-                <Send className="w-6 h-6" />
-              </button>
-            </div>
-            <button onClick={() => toggleSave('seteuk')}>
-              <Bookmark className={`w-6 h-6 ${savedPosts.seteuk ? 'fill-slate-900 text-slate-900' : ''}`} />
-            </button>
-          </div>
-          <div className="pt-2 text-xs font-bold text-slate-900">
-            좋아요 {(647 + (likedPosts.seteuk ? 1 : 0)).toLocaleString()}개
-          </div>
-          <div className="pt-1 text-xs">
-            <span className="font-bold text-slate-900 mr-2">ur_seteuk_powerhouse</span>
-            <span className="text-slate-800">
-              단순한 해석을 넘어선 깊이 있는 탐구! 의령여고의 탄탄한 대입 학종 노하우를 담았습니다.
-            </span>
-          </div>
 
           {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
           <div className="pt-2.5 pb-1">
@@ -940,58 +954,58 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           )}
 
-          {/* 💬 댓글 목록 미리보기 */}
-          {comments.seteuk && comments.seteuk.length > 0 && (
-            <div className="pt-2 space-y-1">
-              <span className="text-[11px] text-slate-400 font-medium">
-                댓글 {comments.seteuk.length}개 모두 보기
-              </span>
-              {comments.seteuk.map((c) => (
-                <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
-                    <span className="text-slate-700">{c.text}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+              {/* 💬 댓글 목록 미리보기 */}
+              {comments.seteuk && comments.seteuk.length > 0 && (
+                <div className="pt-2 space-y-1">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    댓글 {comments.seteuk.length}개 모두 보기
+                  </span>
+                  {comments.seteuk.map((c) => (
+                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
+                      <div>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="text-slate-700">{c.text}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
-          <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 p-0.5 shrink-0">
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
-                  U
+              {/* 💬 인스타그램 스타일 실시간 댓글 입력창 */}
+              <div className="pt-3 pb-1 border-t border-slate-100 mt-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 p-0.5 shrink-0">
+                    <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+                      U
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={commentInputs.seteuk || ''}
+                    onChange={(e) => setCommentInputs((prev) => ({ ...prev, seteuk: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddComment('seteuk');
+                      }
+                    }}
+                    placeholder="댓글 달기..."
+                    className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                  {commentInputs.seteuk?.trim() && (
+                    <button
+                      onClick={() => handleAddComment('seteuk')}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
+                    >
+                      게시
+                    </button>
+                  )}
                 </div>
               </div>
-              <input
-                type="text"
-                value={commentInputs.seteuk || ''}
-                onChange={(e) => setCommentInputs((prev) => ({ ...prev, seteuk: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddComment('seteuk');
-                  }
-                }}
-                placeholder="댓글 달기..."
-                className="flex-1 bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
-              />
-              {commentInputs.seteuk?.trim() && (
-                <button
-                  onClick={() => handleAddComment('seteuk')}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer shrink-0"
-                >
-                  게시
-                </button>
-              )}
             </div>
-          </div>
-        </div>
-      </article>
-      </>
+          </article>
+        </>
       )}
 
       {/* 피드 최하단 안내 */}
