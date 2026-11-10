@@ -189,32 +189,41 @@ export const LiveHomeFeed: React.FC<Props> = ({
           </button>
         </div>
 
-        {/* 포스트 메인 히어로 카드 (탭하면 아코디언 토글) */}
+        {/* 포스트 메인 히어로 카드 (실제 고화질 배경 사진 적용) */}
         <div
           onClick={() => onToggleSection('mbti')}
-          className="relative w-full aspect-[16/10] bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 text-white p-6 sm:p-8 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
         >
+          {/* 고화질 사진 배경 + 어두운 오버레이 */}
+          <img
+            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
+            alt="영어 공부와 성향 탐색"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
           <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
+            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
               STAGE 01 · 8문항 정밀 검사
             </span>
-            <span className="text-3xl filter drop-shadow-md">🧭</span>
+            <span className="text-2xl filter drop-shadow-md">🧭</span>
           </div>
 
-          <div className="space-y-1 relative z-10">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+          <div className="space-y-1.5 relative z-10">
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
               E vs I, S vs N, T vs F, J vs P
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-light">
+            <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
               나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/15 relative z-10">
-            <span className="text-[11px] text-slate-300">
+          <div className="flex items-center justify-between pt-2.5 border-t border-white/20 relative z-10">
+            <span className="text-[11px] text-slate-300 font-medium">
               {expandedSections.mbti ? '▲ 탭하여 테스트 창 접기' : '▼ 탭하여 바로 테스트 시작하기'}
             </span>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md group-hover:bg-blue-500 group-hover:text-white transition-all">
+            <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-lg group-hover:bg-blue-600 group-hover:text-white transition-all">
               <span>{expandedSections.mbti ? '진단창 접기' : '진단 펼치기'}</span>
               {expandedSections.mbti ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
@@ -300,31 +309,40 @@ export const LiveHomeFeed: React.FC<Props> = ({
           </button>
         </div>
 
+        {/* 포스트 메인 히어로 카드 (헤드폰/오디오 고화질 사진 배경) */}
         <div
           onClick={() => onToggleSection('vocab')}
-          className="relative w-full aspect-[16/10] bg-gradient-to-br from-purple-700 via-indigo-800 to-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
         >
+          <img
+            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+            alt="영어 듣기와 단어 퀴즈"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
           <div className="flex items-center justify-between relative z-10">
-            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
+            <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-white shadow-xs">
               STAGE 02 · 소리만 듣고 맞추기 포함
             </span>
-            <span className="text-3xl filter drop-shadow-md">🎧</span>
+            <span className="text-2xl filter drop-shadow-md">🎧</span>
           </div>
 
-          <div className="space-y-1 relative z-10">
-            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+          <div className="space-y-1.5 relative z-10">
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
               단어가 뜰 때 원어민 소리가 팡팡!
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-light">
+            <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
               1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/15 relative z-10">
-            <span className="text-[11px] text-slate-300">
+          <div className="flex items-center justify-between pt-2.5 border-t border-white/20 relative z-10">
+            <span className="text-[11px] text-slate-300 font-medium">
               {expandedSections.vocab ? '▲ 탭하여 퀴즈 창 접기' : '▼ 탭하여 단어 퀴즈 풀기'}
             </span>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md group-hover:bg-purple-500 group-hover:text-white transition-all">
+            <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-lg group-hover:bg-purple-600 group-hover:text-white transition-all">
               <span>{expandedSections.vocab ? '퀴즈 접기' : '퀴즈 풀기'}</span>
               {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </div>
@@ -411,8 +429,16 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
         <div
           onClick={() => onToggleSection('textbook')}
-          className="relative w-full aspect-[16/10] bg-gradient-to-br from-emerald-700 via-teal-800 to-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
         >
+          <img
+            src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+            alt="도서관 교과서"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
           <div className="flex items-center justify-between relative z-10">
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
               STAGE 03 · 3×2 표지 그리드 ➔ 단원 레이어
@@ -520,8 +546,16 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
         <div
           onClick={() => onToggleSection('seteuk')}
-          className="relative w-full aspect-[16/10] bg-gradient-to-br from-amber-600 via-orange-700 to-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+          className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
         >
+          <img
+            src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
+            alt="노트 공부 세특"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+
           <div className="flex items-center justify-between relative z-10">
             <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20">
               STAGE 04 · 교과서 본문 연계 탐구보고서
