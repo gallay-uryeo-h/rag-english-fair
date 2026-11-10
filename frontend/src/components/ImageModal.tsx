@@ -84,9 +84,8 @@ export const ImageModal: React.FC<Props> = ({ isOpen, title, imageUrl, onClose }
                 setImgLoading(false);
                 setImgError(true);
               }}
-              className={`max-h-[75vh] w-auto object-contain rounded-lg shadow-sm border border-slate-200 transition-opacity duration-200 ${
-                imgLoading ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`max-h-[75vh] w-auto object-contain rounded-lg shadow-sm border border-slate-200 transition-opacity duration-200 ${imgLoading ? 'opacity-0' : 'opacity-100'
+                }`}
               loading="lazy"
             />
           )}

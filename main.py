@@ -65,25 +65,40 @@ def search_recommended_passages(query_text: str, grade_filter: str = "전체", n
     )
     query_vector = response.embeddings[0].values
 
-    # section: reading 으로만 필터링 (본문 지문만)
+    # 1. 1차 시도: is_pure_reading: True 로 순수 본문 34편 대상 정밀 검색
     if grade_filter in ["1학년", "2학년", "3학년"]:
         where_cond = {"$and": [
-            {"section": "reading"},
+            {"is_pure_reading": True},
             {"grade": grade_filter}
         ]}
     else:
         where_cond = {"$and": [
-            {"section": "reading"},
+            {"is_pure_reading": True},
             {"grade": {"$in": ["1학년", "2학년", "3학년"]}}
         ]}
 
-    # 넉넉하게 fetch → 중복 제거 후 n_results개 반환
     fetch_n = max(n_results * 6, 20)
-    raw = collection.query(
-        query_embeddings=[query_vector],
-        n_results=fetch_n,
-        where=where_cond
-    )
+    try:
+        raw = collection.query(
+            query_embeddings=[query_vector],
+            n_results=fetch_n,
+            where=where_cond
+        )
+    except Exception:
+        raw = None
+
+    # 만약 결과가 없으면 기존 section: reading 으로 폴백
+    if not raw or not raw.get("ids") or not raw["ids"][0]:
+        if grade_filter in ["1학년", "2학년", "3학년"]:
+            where_fallback = {"$and": [{"section": "reading"}, {"grade": grade_filter}]}
+        else:
+            where_fallback = {"$and": [{"section": "reading"}, {"grade": {"$in": ["1학년", "2학년", "3학년"]}}]}
+        raw = collection.query(
+            query_embeddings=[query_vector],
+            n_results=fetch_n,
+            where=where_fallback
+        )
+
 
     # ── 중복 제거: passage_id 기준 (같은 본문 단위는 최고 유사도 청크 1개만) ──
     seen_passages: set[str] = set()

@@ -72,18 +72,18 @@ const RESULTS: Record<string, ResultType> = {
       {
         subject: '공통영어1',
         unit: 'Lesson 1',
-        title: 'New School, New Start',
-        summary: '새로운 고등학교 생활을 시작하는 주인공의 두근거림과 우정, 도전 이야기',
-        page: 14,
-        imagePath: 'pages_cache/1학년_1학기_공통영어1_미래엔_p14.jpg',
+        title: 'The Power of Friendliness: Soft but Strong',
+        summary: '고등학교 새 출발과 인간관계, 다정함이 지닌 강력한 힘을 다룬 본문',
+        page: 19,
+        imagePath: 'pages_cache/1학년_1학기_공통영어1_미래엔_p19.jpg',
       },
       {
         subject: '영어II',
         unit: 'Lesson 3',
-        title: 'Music That Touched the World',
-        summary: '음악을 통해 사람들의 마음에 위로를 건넨 예술가의 감동 실화',
-        page: 54,
-        imagePath: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p54.jpg',
+        title: "There's More than One Way to Vote",
+        summary: '민주주의와 사회적 선택, 의사결정의 다양한 방식을 스토리로 탐구하는 본문',
+        page: 67,
+        imagePath: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p67.jpg',
       },
     ],
     readingTip: '등장인물의 감정 변화를 나타내는 형용사와 부사를 정리하며 읽으면 어휘력과 서술형 실력이 쑥쑥 늘어납니다.',
@@ -97,18 +97,18 @@ const RESULTS: Record<string, ResultType> = {
       {
         subject: '공통영어2',
         unit: 'Lesson 2',
-        title: 'Nature-Inspired Inventions',
-        summary: '자연의 동식물에게서 영감을 얻어 탄생한 놀라운 생체 모방 과학 기술',
-        page: 36,
-        imagePath: 'pages_cache/1학년_2학기_공통영어2_미래엔_p36.jpg',
+        title: 'Light Up the Truth Behind Dark Patterns',
+        summary: '디지털 소비 환경 속 알고리즘과 소비자 심리 유도 기법의 실체를 밝히는 본문',
+        page: 41,
+        imagePath: 'pages_cache/1학년_2학기_공통영어2_미래엔_p41.jpg',
       },
       {
         subject: '영어I',
         unit: 'Lesson 4',
-        title: 'Smart Technologies Changing Our Lives',
-        summary: '인공지능과 사물인터넷(IoT)이 바꾸어 놓을 스마트 미래 사회의 모습',
-        page: 78,
-        imagePath: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p78.jpg',
+        title: 'Edible Art: Helga Stentzel & Giuseppe Arcimboldo',
+        summary: '예술과 식재료 과학, 일상 사물의 창의적 재해석을 다룬 감각적인 본문',
+        page: 94,
+        imagePath: 'pages_cache/2학년_1학기_영어Ⅰ_엔이능률_p94.jpg',
       },
     ],
     readingTip: '‘원인과 결과(Cause & Effect)’ 연결사(Therefore, However, As a result)를 중심으로 문맥의 흐름을 짚어보세요.',
@@ -121,19 +121,19 @@ const RESULTS: Record<string, ResultType> = {
     passages: [
       {
         subject: '세계 문화와 영어',
-        unit: 'Unit 1',
-        title: 'Table Manners Around the Globe',
-        summary: '대륙별·국가별로 서로 다른 독특하고 흥미로운 식사 예절과 식문화 이야기',
-        page: 18,
-        imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p18.jpg',
+        unit: 'Lesson 1',
+        title: 'Traditional Sports (Camel Racing) & East Asian Architecture',
+        summary: '아시아와 중동의 이색 전통 스포츠와 독특한 건축 문화를 탐험하는 본문',
+        page: 26,
+        imagePath: 'pages_cache/3학년_1학기_세계_문화와_영어_비상_p26.jpg',
       },
       {
         subject: '공통영어1',
-        unit: 'Lesson 4',
-        title: 'Festivals That Color the World',
-        summary: '세계 곳곳의 이색적인 축제와 그 속에 담긴 공동체의 역사적 의미',
-        page: 76,
-        imagePath: 'pages_cache/1학년_1학기_공통영어1_미래엔_p76.jpg',
+        unit: 'Lesson 3',
+        title: 'Noise-Cancelling Headphones / Sound Technology',
+        summary: '음향 과학 기술과 전 세계적인 소음 해결 기술의 응용을 탐구하는 본문',
+        page: 63,
+        imagePath: 'pages_cache/1학년_1학기_공통영어1_미래엔_p63.jpg',
       },
     ],
     readingTip: '각 문화권의 독특한 관용 표현(Idiom)을 우리말 문화와 비교하며 읽어보면 흥미와 성적이 동시에 올라갑니다.',
@@ -146,19 +146,19 @@ const RESULTS: Record<string, ResultType> = {
     passages: [
       {
         subject: '영어 독해와 작문',
-        unit: 'Lesson 2',
-        title: 'The Psychology of Decision Making',
-        summary: '우리가 일상에서 비합리적인 결정을 내리는 이유와 뇌의 인지적 오류 탐구',
-        page: 42,
-        imagePath: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p42.jpg',
+        unit: 'Lesson 3',
+        title: 'The Decoy Effect in Everyday Decisions',
+        summary: '일상의 선택 상황에서 인간의 비합리적 심리를 유도하는 미끼 효과를 분석하는 본문',
+        page: 64,
+        imagePath: 'pages_cache/2학년_2학기_영어독해와작문_미래엔_p64.jpg',
       },
       {
         subject: '영어II',
         unit: 'Lesson 1',
-        title: 'The Power of Habit',
-        summary: '작은 습관이 뇌 신경망을 재구성하여 삶의 커다란 변화를 만들어내는 과정',
-        page: 16,
-        imagePath: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p16.jpg',
+        title: 'Two Heroes Who Fought a Deadly Disease',
+        summary: '치명적인 질병에 맞서 백신을 개발하고 인류에 헌신한 두 영웅의 감동적인 본문',
+        page: 15,
+        imagePath: 'pages_cache/3학년_1학기_영어Ⅱ_능률_p15.jpg',
       },
     ],
     readingTip: '각 문단의 중심 문장(Topic Sentence)을 찾아 밑줄을 긋고, 글쓴이의 숨겨진 핵심 의도를 파악하는 훈련이 잘 맞습니다.',
@@ -214,7 +214,7 @@ export const EnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
           나의 독해 성향 & 의령여고 맞춤 본문 지문 찾기 🧪
         </h2>
         <p className="text-xs md:text-sm text-teal-100 leading-relaxed">
-          4문항으로 알아보는 나의 독해 취향! 의령여고 3개년 교과서 속에서 나에게 가장 흥미로울 본문 지문을 매칭해 드립니다.
+          4문항으로 알아보는 나의 독해 취향! 의령여고 3개년 교과서 속에서 나에게 가장 흥미로울 본문 지문의 첫 페이지를 즉시 열어드립니다.
         </p>
       </div>
 
@@ -293,7 +293,7 @@ export const EnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
           <div className="space-y-3">
             <div className="text-xs font-bold text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
               <BookOpen className="w-4 h-4 text-emerald-600" />
-              <span>나에게 찰떡궁합인 의령여고 교과서 본문 지문 (원문 확인)</span>
+              <span>나에게 찰떡궁합인 본문 지문 (첫 페이지 E-Book 원문)</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -324,7 +324,7 @@ export const EnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
                     onClick={() => onOpenImage(`${ps.subject} ${ps.unit} · p.${ps.page} (${ps.title})`, `/${ps.imagePath}`)}
                     className="w-full inline-flex items-center justify-center gap-1 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold transition-colors cursor-pointer"
                   >
-                    <span>교과서 본문 원본 보기 (p.{ps.page})</span>
+                    <span>본문 첫 페이지 원본 보기 (p.{ps.page})</span>
                     <ExternalLink className="w-3 h-3 text-emerald-600" />
                   </button>
                 </div>

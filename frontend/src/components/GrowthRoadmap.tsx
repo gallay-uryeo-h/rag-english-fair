@@ -27,18 +27,16 @@ export const GrowthRoadmap: React.FC<Props> = ({ onOpenImage }) => {
         <div className="flex p-1 bg-slate-100 rounded-xl">
           <button
             onClick={() => setMode('flow')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs md:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
-              mode === 'flow' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-            }`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs md:text-sm font-semibold rounded-lg transition-all cursor-pointer ${mode === 'flow' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
           >
             <Network className="w-4 h-4" />
             <span>3개년 교육과정 연계도</span>
           </button>
           <button
             onClick={() => setMode('lineage')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs md:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
-              mode === 'lineage' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-            }`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs md:text-sm font-semibold rounded-lg transition-all cursor-pointer ${mode === 'lineage' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
           >
             <GitFork className="w-4 h-4" />
             <span>4대 핵심 문법 계통도</span>
