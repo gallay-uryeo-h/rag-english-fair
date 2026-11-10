@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Sparkles,
   CheckCircle2,
@@ -61,6 +61,9 @@ export const VocabTestTab: React.FC = () => {
   // 결과 화면 표시 여부
   const [showResult, setShowResult] = useState<boolean>(false);
 
+  // 자동 스크롤을 위한 참조
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   // 현재 교과서 및 세트 객체
   const currentQuiz =
     VOCAB_QUIZ_DATA.find((q) => q.subjectKey === selectedSubjectKey) || VOCAB_QUIZ_DATA[0];
@@ -71,12 +74,21 @@ export const VocabTestTab: React.FC = () => {
   const currentQ = currentSet.questions[currentQuestionIndex];
   const isAnswered = selectedAnswers[currentQuestionIndex] !== undefined;
 
+  // 최하단으로 부드럽게 스크롤하는 함수
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   const handleSelectAnswer = (optionIdx: number) => {
     if (isAnswered) return; // 이미 답변했으면 변경 불가
     setSelectedAnswers((prev) => ({
       ...prev,
       [currentQuestionIndex]: optionIdx,
     }));
+    // 선택지 고르면 최하단(해설 및 다음 문제 버튼)으로 자동 스크롤
+    scrollToBottom();
   };
 
   const handleNext = () => {
@@ -84,6 +96,7 @@ export const VocabTestTab: React.FC = () => {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setShowResult(true);
+      scrollToBottom();
     }
   };
 
@@ -98,6 +111,8 @@ export const VocabTestTab: React.FC = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setShowResult(false);
+    // 교과서나 세트 선택 시 문제 카드의 최하단으로 자동 스크롤
+    scrollToBottom();
   };
 
   // 다음 세트 풀어보기 (5세트 완료 시 교과서 내 첫 세트로 순환)
@@ -165,7 +180,7 @@ export const VocabTestTab: React.FC = () => {
         </p>
       </div>
 
-      {/* 📚 1. 교과서 6권 선택 탭 바 */}
+      {/* 📚 1. 교과서 6권 선택 탭 바 (과목 밑에 학년 학기 표시, 기초·기본 등 난이도 삭제) */}
       <div className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs space-y-2">
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
@@ -189,8 +204,9 @@ export const VocabTestTab: React.FC = () => {
                 }`}
               >
                 <span className="truncate w-full text-center">{quiz.title}</span>
-                <span className={`text-[10px] font-normal truncate mt-0.5 ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>
-                  {quiz.difficulty.split(' ')[0]}
+                {/* 과목 밑에 학년 학기 표시 */}
+                <span className={`text-[10px] font-normal truncate mt-0.5 ${isSelected ? 'text-blue-100' : 'text-slate-500'}`}>
+                  {quiz.grade}
                 </span>
               </button>
             );
@@ -198,57 +214,44 @@ export const VocabTestTab: React.FC = () => {
         </div>
       </div>
 
-      {/* 🏷️ 2. 해당 교과서의 5개 세트 선택 바 */}
-      <div className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs space-y-2">
-        <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-indigo-600" />
-            <span>퀴즈 세트 선택 (세트 1 ~ 5)</span>
-          </span>
-          <span className="text-[11px] text-indigo-600 font-semibold">{currentSet.setName}</span>
-        </div>
-
-        <div className="grid grid-cols-5 gap-1.5">
-          {currentQuiz.sets.map((set) => {
-            const isSelected = selectedSetId === set.setId;
-            return (
-              <button
-                key={set.setId}
-                onClick={() => handleResetQuiz(undefined, set.setId)}
-                className={`py-2 px-1 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${
-                  isSelected
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                    : 'bg-white hover:bg-indigo-50/50 text-slate-700 border-slate-200'
-                }`}
-              >
-                <div>세트 {set.setId}</div>
-                <div className={`text-[9px] font-normal truncate mt-0.5 ${isSelected ? 'text-indigo-100' : 'text-slate-400'}`}>
-                  {set.setName.replace(`세트 ${set.setId}: `, '')}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 📝 3. 퀴즈 풀기 영역 */}
+      {/* 📝 2. 퀴즈 풀기 영역 (세트 선택 카드는 삭제되고, 문제 카드 상단에 세트 버튼들이 일체형으로 배치됨) */}
       {!showResult ? (
         <div className="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 shadow-xs space-y-4">
-          {/* 퀴즈 헤더 */}
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">
-                {currentQuiz.title}
+          {/* 🎯 문제 카드 상단: 세트 버튼 바 (영어1 세트1 세트2 ... 형식 & 현재 세트 하이라이트) */}
+          <div className="space-y-2 border-b border-slate-100 pb-3.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-blue-600" />
+                <span>{currentQuiz.title} 세트 선택:</span>
               </span>
-              <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">
-                세트 {currentSet.setId}
-              </span>
-              <span className="text-xs text-slate-400 font-medium hidden sm:inline">
-                {currentSet.description}
+              <span className="text-[11px] text-slate-400 font-medium">
+                문제 {currentQuestionIndex + 1} / {totalQuestions}
               </span>
             </div>
-            <div className="text-xs font-bold text-slate-500">
-              문제 {currentQuestionIndex + 1} / {totalQuestions}
+
+            {/* 세트1 ~ 세트5 버튼 한 줄 배치 */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              {currentQuiz.sets.map((set) => {
+                const isSelected = selectedSetId === set.setId;
+                return (
+                  <button
+                    key={set.setId}
+                    onClick={() => handleResetQuiz(undefined, set.setId)}
+                    className={`flex-1 min-w-[70px] py-1.5 px-2 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${
+                      isSelected
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-200'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                    }`}
+                  >
+                    <span>세트 {set.setId}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 현재 세트 간단 설명 */}
+            <div className="text-[11px] text-blue-600 font-semibold px-0.5 pt-0.5">
+              💡 {currentSet.setName}: {currentSet.description}
             </div>
           </div>
 
@@ -288,9 +291,9 @@ export const VocabTestTab: React.FC = () => {
 
               if (isAnswered) {
                 if (isCorrect) {
-                  btnStyle = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold';
+                  btnStyle = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold ring-2 ring-emerald-200';
                 } else if (selectedThis) {
-                  btnStyle = 'border-red-500 bg-red-50 text-red-900';
+                  btnStyle = 'border-red-500 bg-red-50 text-red-900 ring-2 ring-red-200';
                 } else {
                   btnStyle = 'border-slate-200 bg-slate-50 text-slate-400 opacity-60';
                 }
@@ -344,6 +347,9 @@ export const VocabTestTab: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* 스크롤 기준점 */}
+          <div ref={bottomRef} className="h-1" />
         </div>
       ) : (
         /* 🏆 결과 화면 */
@@ -381,7 +387,7 @@ export const VocabTestTab: React.FC = () => {
               <span>현재 세트 다시 풀기</span>
             </button>
 
-            {/* 2. 다음 세트도 풀어보기 (요청사항 핵심) */}
+            {/* 2. 다음 세트도 풀어보기 */}
             <button
               onClick={handleNextSet}
               className="flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-xs"
@@ -395,7 +401,7 @@ export const VocabTestTab: React.FC = () => {
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
 
-            {/* 3. 다른 교과서 풀어보기 (요청사항 핵심) */}
+            {/* 3. 다른 교과서 풀어보기 */}
             <button
               onClick={handleNextBook}
               className="flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-xs"
@@ -405,6 +411,9 @@ export const VocabTestTab: React.FC = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
+
+          {/* 스크롤 기준점 */}
+          <div ref={bottomRef} className="h-1" />
         </div>
       )}
     </div>
