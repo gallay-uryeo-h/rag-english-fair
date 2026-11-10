@@ -140,29 +140,30 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
           <span className="text-[11px] text-slate-400 font-medium">총 6권</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+        {/* 6개 교과서 표지 한 줄(1행) 6분할 균등 배치 */}
+        <div className="grid grid-cols-6 gap-1.5 sm:gap-2.5">
           {TEXTBOOK_COVERS.map((cover) => {
             const isSelected = selectedSubjectKey === cover.key;
             return (
               <div
                 key={cover.key}
                 onClick={() => setSelectedSubjectKey(cover.key)}
-                className={`group relative rounded-xl p-2 transition-all cursor-pointer flex flex-col items-center text-center border-2 ${
+                className={`group relative rounded-lg sm:rounded-xl p-1 sm:p-2 transition-all cursor-pointer flex flex-col items-center text-center border-2 ${
                   isSelected
                     ? 'border-blue-600 bg-blue-50/50 shadow-md scale-[1.02]'
                     : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-xs'
                 }`}
               >
                 {/* 교과서 표지 썸네일 이미지 */}
-                <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden bg-slate-100 shadow-xs mb-2 border border-slate-200/80">
+                <div className="relative w-full aspect-3/4 rounded sm:rounded-lg overflow-hidden bg-slate-100 shadow-xs mb-1 sm:mb-2 border border-slate-200/80">
                   <img
                     src={cover.coverImage}
                     alt={cover.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute top-1 left-1">
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs ${cover.badgeBg}`}>
+                  <div className="absolute top-0.5 left-0.5 sm:top-1 sm:left-1">
+                    <span className={`text-[8px] sm:text-[9px] font-bold px-1 sm:px-1.5 py-0.5 rounded shadow-xs ${cover.badgeBg}`}>
                       {cover.grade}
                     </span>
                   </div>
@@ -174,25 +175,25 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                       onOpenImage(`${cover.title} · 표지 (p.1)`, cover.coverImage);
                     }}
                     title="표지 원본 보기"
-                    className="absolute bottom-1 right-1 p-1 rounded-md bg-black/60 hover:bg-blue-600 text-white backdrop-blur-xs transition-colors cursor-pointer"
+                    className="absolute bottom-0.5 right-0.5 sm:bottom-1 sm:right-1 p-0.5 sm:p-1 rounded bg-black/60 hover:bg-blue-600 text-white backdrop-blur-xs transition-colors cursor-pointer"
                   >
-                    <Sparkles className="w-3 h-3" />
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                   </button>
                 </div>
 
                 {/* 교과서 타이틀 & 출판사 */}
                 <div className="w-full min-w-0">
-                  <div className={`text-xs font-bold truncate ${isSelected ? 'text-blue-700' : 'text-slate-800'}`}>
+                  <div className={`text-[10px] sm:text-xs font-bold truncate leading-tight ${isSelected ? 'text-blue-700' : 'text-slate-800'}`}>
                     {cover.title}
                   </div>
-                  <div className="text-[10px] text-slate-400 truncate mt-0.5">
-                    {cover.publisher.split(' ')[0]} · {cover.unitsCount}개 단원
+                  <div className="text-[8px] sm:text-[10px] text-slate-400 truncate mt-0.5">
+                    {cover.publisher.split(' ')[0]}
                   </div>
                 </div>
 
                 {/* 선택 표시 인디케이터 바 */}
                 {isSelected && (
-                  <div className="w-8 h-1 bg-blue-600 rounded-full mt-1.5" />
+                  <div className="w-5 sm:w-8 h-0.5 sm:h-1 bg-blue-600 rounded-full mt-1" />
                 )}
               </div>
             );
@@ -261,9 +262,8 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                     return (
                       <div
                         key={uIdx}
-                        className={`rounded-xl border transition-all duration-200 overflow-hidden ${
-                          isOpen ? 'border-blue-200 bg-white shadow-xs' : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50'
-                        }`}
+                        className={`rounded-xl border transition-all duration-200 overflow-hidden ${isOpen ? 'border-blue-200 bg-white shadow-xs' : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50'
+                          }`}
                       >
                         {/* 아코디언 헤더 바 (클릭 시 토글) */}
                         <div
@@ -271,9 +271,8 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                           className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 cursor-pointer select-none"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${
-                              isOpen ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'
-                            }`}>
+                            <span className={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'
+                              }`}>
                               {unit.unit_number}
                             </span>
 
@@ -327,9 +326,8 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
                               className="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors ml-0.5 cursor-pointer"
                             >
                               <ChevronDown
-                                className={`w-4 h-4 transition-transform duration-300 ease-in-out ${
-                                  isOpen ? 'rotate-180 text-blue-600' : ''
-                                }`}
+                                className={`w-4 h-4 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180 text-blue-600' : ''
+                                  }`}
                               />
                             </button>
                           </div>
@@ -337,9 +335,8 @@ export const TextbookPreviewClean: React.FC<Props> = ({ onOpenImage }) => {
 
                         {/* 아코디언 바디 (부드러운 애니메이션) */}
                         <div
-                          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                            isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-                          }`}
+                          className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                            }`}
                         >
                           <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100 space-y-2 bg-slate-50/40">
                             {/* 문법 포인트 목록 */}
