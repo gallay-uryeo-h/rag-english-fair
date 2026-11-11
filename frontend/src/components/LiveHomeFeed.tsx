@@ -1431,12 +1431,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   )}
                 </div>
 
-                {/* 피드 사진 */}
-                <div className="relative w-full aspect-[4/3] bg-slate-900 overflow-hidden">
+                {/* 피드 사진: 인스타그램 스타일 (원본 비율 보존, 크롭/줌인 없는 선명한 고화질 표시) */}
+                <div className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden">
                   <img
                     src={post.photoUrl}
                     alt="게시물 사진"
-                    className="w-full h-full object-cover"
+                    className="w-full max-h-[580px] object-contain"
                     loading="lazy"
                   />
                 </div>

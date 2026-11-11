@@ -95,11 +95,11 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
 
     try {
       setIsCompressing(true);
-      // 브라우저 캔버스를 통해 스마트폰 고용량 사진을 960px/100KB 수준으로 고속 압축
+      // 인스타그램 표준 규격 (1080px, 84% 고품질)으로 압축하여 원본의 디테일과 선명도를 유지
       const { dataUrl, sizeKb } = await compressImageFile(file, {
-        maxWidth: 960,
-        maxHeight: 960,
-        quality: 0.75,
+        maxWidth: 1080,
+        maxHeight: 1350,
+        quality: 0.84,
       });
 
       setUserUploadedPhoto({
@@ -182,19 +182,19 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
 
         {/* 2. 작성 폼 영역 */}
         <form onSubmit={handleSubmit} className="p-4 space-y-3.5 overflow-y-auto">
-          {/* 사진 미리보기 박스 */}
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 shadow-inner group">
+          {/* 사진 미리보기 박스 (원본 비율 유지하여 크롭/줌인 없는 선명한 뷰) */}
+          <div className="relative w-full max-h-[360px] min-h-[220px] rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center shadow-inner group">
             {isCompressing ? (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-white bg-slate-900/90">
+              <div className="w-full h-full min-h-[220px] flex flex-col items-center justify-center gap-2 text-white bg-slate-950">
                 <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
-                <span className="text-xs font-semibold">사진 고화질 최적화 중...</span>
+                <span className="text-xs font-semibold">1080px 고화질 최적화 중...</span>
               </div>
             ) : (
               <>
                 <img
                   src={currentPhotoUrl}
                   alt="피드 사진"
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full max-h-[360px] object-contain transition-transform duration-300"
                 />
                 {/* 선택된 태그 뱃지 */}
                 <div className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1">
@@ -203,9 +203,9 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
                 </div>
                 {/* 내 사진 여부 표시 뱃지 */}
                 {useUploadMode && userUploadedPhoto && (
-                  <div className="absolute bottom-2.5 right-2.5 bg-emerald-600/90 backdrop-blur-xs text-white px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1 shadow-xs">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-200" />
-                    <span>내 사진 ({userUploadedPhoto.sizeKb} KB)</span>
+                  <div className="absolute bottom-2.5 right-2.5 bg-emerald-600/95 backdrop-blur-xs text-white px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1 shadow-xs">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-200" />
+                    <span>고화질 원본 ({userUploadedPhoto.sizeKb} KB)</span>
                   </div>
                 )}
               </>
