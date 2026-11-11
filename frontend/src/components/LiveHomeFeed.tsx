@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  addComment,
+  subscribeComments,
+  subscribeLikes,
+  toggleLikeRemote,
+} from '../services/firestoreService';
+import type { FsComment } from '../services/firestoreService';
 import {
   Heart,
   MessageCircle,
@@ -55,66 +62,66 @@ export const LiveHomeFeed: React.FC<Props> = ({
   onToggleSection,
   onScrollTo,
 }) => {
-  // 인스타그램 좋아요 상태 관리
-  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({
-    mbti: true,
-    vocab: false,
-    textbook: true,
-    seteuk: false,
-  });
+  // ─── Firestore 실시간 댓글 (rag-english-fair 컬렉션) ───────────────────────
+  const POST_IDS = ['mbti', 'vocab', 'textbook', 'seteuk'] as const;
 
-  const [savedPosts, setSavedPosts] = useState<Record<string, boolean>>({
-    mbti: true,
-    textbook: true,
-  });
-
-  const toggleLike = (id: string) => {
-    setLikedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const toggleSave = (id: string) => {
-    setSavedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  // 💬 인스타그램 스타일 댓글 관리 (초기 실감나는 학생 댓글 포함)
-  const [comments, setComments] = useState<Record<string, Array<{ id: string; user: string; text: string; time: string }>>>({
-    mbti: [
-      { id: 'c1', user: 'ur_student_jenny', text: 'ENFP 나왔는데 여행 영어 지문 완전 찰떡이네요!! ✈️', time: '12분 전' },
-      { id: 'c2', user: 'english_lover_08', text: '친구랑 같이 해봤는데 둘 다 너무 잘 맞아서 소름돋음 ㅋㅋㅋ', time: '5분 전' },
-    ],
-    vocab: [
-      { id: 'c3', user: 'quiz_master_kim', text: '5번 문제 소리만 듣기 진짜 스릴 넘쳐요 🎧 백점 맞았습니다!', time: '20분 전' },
-    ],
-    textbook: [
-      { id: 'c4', user: 'study_with_me_ur', text: '교과서 표지 누르니까 뷰어 바로 뜨는 거 완전 신기해요 👍', time: '35분 전' },
-      { id: 'c5', user: 'future_doctor_25', text: '3학년 세계문화와 영어 지문 퀄리티 대박이네요!', time: '18분 전' },
-    ],
-    seteuk: [
-      { id: 'c6', user: 'dream_nurse_h', text: '간호 보건 탐구 주제 보고서 작성할 때 큰 도움 됐어요 감사합니다 🩺', time: '40분 전' },
-    ],
+  const [comments, setComments] = useState<Record<string, FsComment[]>>({
+    mbti: [], vocab: [], textbook: [], seteuk: [],
   });
 
   const [commentInputs, setCommentInputs] = useState<Record<string, string>>({
-    mbti: '',
-    vocab: '',
-    textbook: '',
-    seteuk: '',
+    mbti: '', vocab: '', textbook: '', seteuk: '',
   });
 
-  const handleAddComment = (postId: string) => {
+  // 모든 포스트 댓글을 onSnapshot으로 구독
+  useEffect(() => {
+    const unsubs = POST_IDS.map((postId) =>
+      subscribeComments(postId, (fetched) => {
+        setComments((prev) => ({ ...prev, [postId]: fetched }));
+      })
+    );
+    return () => unsubs.forEach((u) => u());
+  }, []);
+
+  const handleAddComment = useCallback(async (postId: string) => {
     const text = commentInputs[postId]?.trim();
     if (!text) return;
-    const newComment = {
-      id: `comm_${Date.now()}`,
-      user: 'ur_guest_visitor',
-      text,
-      time: '방금 전',
-    };
-    setComments((prev) => ({
-      ...prev,
-      [postId]: [...(prev[postId] || []), newComment],
-    }));
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
+    await addComment(postId, text, 'ur_guest_visitor');
+  }, [commentInputs]);
+
+  // ─── Firestore 실시간 좋아요 카운트 ──────────────────────────────────────
+  // 좋아요 기본 카운트 (초기 디스플레이용 - Firestore에서 덮어씌워짐)
+  const BASE_LIKES: Record<string, number> = { mbti: 384, vocab: 295, textbook: 512, seteuk: 647 };
+  const [remoteLikes, setRemoteLikes] = useState<Record<string, number>>(BASE_LIKES);
+
+  useEffect(() => {
+    const unsubs = POST_IDS.map((postId) =>
+      subscribeLikes(postId, (count) => {
+        setRemoteLikes((prev) => ({ ...prev, [postId]: BASE_LIKES[postId] + count }));
+      })
+    );
+    return () => unsubs.forEach((u) => u());
+  }, []);
+
+  // ─── 로컬 좋아요 토글 (낙관적 UI + Firestore 카운터 동기화) ─────────────
+  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({
+    mbti: false, vocab: false, textbook: false, seteuk: false,
+  });
+
+  const [savedPosts, setSavedPosts] = useState<Record<string, boolean>>({
+    mbti: true, textbook: true,
+  });
+
+  const toggleLike = useCallback((id: string) => {
+    const nextLiked = !likedPosts[id];
+    setLikedPosts((prev) => ({ ...prev, [id]: nextLiked }));
+    // Firestore에 +1 / -1 반영
+    toggleLikeRemote(id, nextLiked).catch(console.error);
+  }, [likedPosts]);
+
+  const toggleSave = (id: string) => {
+    setSavedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   // 👥 실제 인스타그램 느낌의 다른 사용자 Mock 스토리 목록
@@ -414,7 +421,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </button>
               </div>
               <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {(384 + (likedPosts.mbti ? 1 : 0)).toLocaleString()}개
+                좋아요 {remoteLikes.mbti.toLocaleString()}개
               </div>
               <div className="pt-1 text-xs">
                 <span className="font-bold text-slate-900 mr-2">ur_english_mbti</span>
@@ -458,10 +465,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {comments.mbti.map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
                         <span className="text-slate-700">{c.text}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                      <span className="text-[10px] text-slate-400 shrink-0">
+                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -583,7 +592,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </button>
               </div>
               <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {(295 + (likedPosts.vocab ? 1 : 0)).toLocaleString()}개
+                좋아요 {remoteLikes.vocab.toLocaleString()}개
               </div>
               <div className="pt-1 text-xs">
                 <span className="font-bold text-slate-900 mr-2">ur_audio_vocab</span>
@@ -627,10 +636,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {comments.vocab.map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
                         <span className="text-slate-700">{c.text}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                      <span className="text-[10px] text-slate-400 shrink-0">
+                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -751,7 +762,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </button>
               </div>
               <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {(512 + (likedPosts.textbook ? 1 : 0)).toLocaleString()}개
+                좋아요 {remoteLikes.textbook.toLocaleString()}개
               </div>
               <div className="pt-1 text-xs">
                 <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
@@ -795,10 +806,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {comments.textbook.map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
                         <span className="text-slate-700">{c.text}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                      <span className="text-[10px] text-slate-400 shrink-0">
+                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -919,7 +932,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </button>
               </div>
               <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {(647 + (likedPosts.seteuk ? 1 : 0)).toLocaleString()}개
+                좋아요 {remoteLikes.seteuk.toLocaleString()}개
               </div>
               <div className="pt-1 text-xs">
                 <span className="font-bold text-slate-900 mr-2">ur_seteuk_powerhouse</span>
@@ -963,10 +976,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {comments.seteuk.map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.user}</span>
+                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
                         <span className="text-slate-700">{c.text}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">{c.time}</span>
+                      <span className="text-[10px] text-slate-400 shrink-0">
+                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                      </span>
                     </div>
                   ))}
                 </div>
