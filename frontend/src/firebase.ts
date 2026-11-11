@@ -15,3 +15,4 @@ export const db = getFirestore(app);
 
 // 이 앱 전용 Firestore 최상위 컬렉션명 (다른 앱과 공유되는 프로젝트이므로 단일 컬렉션으로 격리)
 export const COLLECTION = 'rag-english-fair';
+

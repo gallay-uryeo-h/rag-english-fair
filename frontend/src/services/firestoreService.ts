@@ -21,7 +21,6 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy,
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore';
@@ -60,27 +59,35 @@ export function subscribeComments(
   postId: string,
   callback: (comments: FsComment[]) => void
 ): () => void {
+  // 복합 색인(Composite Index) 요구를 방지하기 위해 쿼리에서는 filter만 걸고 클라이언트에서 timestamp 정렬 수행
   const q = query(
     collection(db, COLLECTION),
     where('type', '==', 'comment'),
-    where('postId', '==', postId),
-    orderBy('timestamp', 'asc')
+    where('postId', '==', postId)
   );
 
-  return onSnapshot(q, (snapshot) => {
-    const comments: FsComment[] = snapshot.docs.map((d) => {
-      const data = d.data();
-      const ts = data.timestamp as Timestamp | null;
-      return {
-        id: d.id,
-        postId: data.postId as string,
-        text: data.text as string,
-        author: data.author as string,
-        timestamp: ts ? ts.toDate() : new Date(),
-      };
-    });
-    callback(comments);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const comments: FsComment[] = snapshot.docs.map((d) => {
+        const data = d.data();
+        const ts = data.timestamp as Timestamp | null;
+        return {
+          id: d.id,
+          postId: data.postId as string,
+          text: data.text as string,
+          author: data.author as string,
+          timestamp: ts ? ts.toDate() : new Date(),
+        };
+      });
+      // 등록 시간 순 정렬
+      comments.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+      callback(comments);
+    },
+    (error) => {
+      console.error(`Error subscribing to comments for ${postId}:`, error);
+    }
+  );
 }
 
 // ─── Likes ───────────────────────────────────────────────────────────────────
@@ -123,3 +130,4 @@ export function subscribeLikes(postId: string, callback: (count: number) => void
     }
   });
 }
+
