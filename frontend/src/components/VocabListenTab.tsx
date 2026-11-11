@@ -11,8 +11,6 @@ import {
   Layers,
   ChevronRight,
   Volume2,
-  VolumeX,
-  Ear,
   Eye,
   EyeOff,
 } from 'lucide-react';
@@ -69,11 +67,6 @@ export const VocabListenTab: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [showResult, setShowResult] = useState<boolean>(false);
-  const [ttsSupported, setTtsSupported] = useState<boolean>(true);
-
-  useEffect(() => {
-    setTtsSupported('speechSynthesis' in window);
-  }, []);
 
   const currentQuiz =
     VOCAB_QUIZ_DATA.find((q) => q.subjectKey === selectedSubjectKey) || VOCAB_QUIZ_DATA[0];
@@ -168,31 +161,30 @@ export const VocabListenTab: React.FC = () => {
 
   return (
     <div className="flex-1 overflow-y-auto space-y-3 w-full">
-      {/* 🌟 상단 인트로 배너 */}
-      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-pink-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800/40">
-        <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
-          <Ear className="w-3.5 h-3.5 text-amber-300" />
-          <span>의령여고 오디오 릴스 어휘 챌린지</span>
-        </div>
-        <h2 className="text-lg md:text-xl font-bold tracking-tight">
-          소리로 배우는 영단어 🎧
-        </h2>
-        <div className="flex items-start gap-3 text-xs text-purple-100 leading-relaxed">
-          <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-2 py-1 shrink-0">
-            <Eye className="w-3 h-3" />
-            <span>문제 1~4: 단어 보기 + 듣기</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-2 py-1 shrink-0">
-            <EyeOff className="w-3 h-3 text-amber-300" />
-            <span className="text-amber-200 font-semibold">문제 5: 소리만 듣고 맞추기!</span>
+      {/* 🌟 상단 슬림 리본 배너 (단일 바 형태로 컴팩트화) */}
+      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-pink-600 text-white px-3.5 py-2.5 shadow-xs flex items-center justify-between gap-2 border-b border-purple-800/30">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="flex items-center justify-center w-6 h-6 rounded-lg bg-white/20 shrink-0 text-xs">
+            🎧
+          </span>
+          <div className="flex items-baseline gap-1.5 min-w-0">
+            <h2 className="text-xs sm:text-sm font-extrabold tracking-tight truncate">
+              소리로 배우는 영단어
+            </h2>
+            <span className="hidden sm:inline-block text-[10px] text-purple-200 font-medium truncate">
+              오디오 챌린지
+            </span>
           </div>
         </div>
-        {!ttsSupported && (
-          <div className="flex items-center gap-1.5 text-[11px] bg-red-500/30 rounded-lg px-2.5 py-1.5">
-            <VolumeX className="w-3.5 h-3.5" />
-            <span>이 브라우저는 음성 재생을 지원하지 않습니다.</span>
-          </div>
-        )}
+
+        <div className="flex items-center gap-1.5 shrink-0 text-[10px]">
+          <span className="bg-white/15 px-2 py-0.5 rounded-md font-medium text-purple-100 flex items-center gap-1">
+            <Eye className="w-2.5 h-2.5" /> 1~4번 보기
+          </span>
+          <span className="bg-amber-400/25 border border-amber-300/40 text-amber-200 px-2 py-0.5 rounded-md font-bold flex items-center gap-1">
+            <EyeOff className="w-2.5 h-2.5 text-amber-300" /> 5번 소리만!
+          </span>
+        </div>
       </div>
 
       {/* 📚 교과서 선택 탭 */}
