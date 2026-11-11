@@ -17,6 +17,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  deleteDoc,
   increment,
   onSnapshot,
   query,
@@ -130,4 +131,107 @@ export function subscribeLikes(postId: string, callback: (count: number) => void
     }
   });
 }
+
+// ─── User Posts (학생 개별 피드) ─────────────────────────────────────────────
+
+export interface FsUserPost {
+  id: string;
+  type: 'user_post';
+  postId: string;           // Firestore 규칙의 keys().hasAll(['type', 'postId']) 충족용
+  authorId: string;         // 작성자 기기 UID (본인 글 삭제 권한 확인용)
+  authorName: string;       // 작성자 인스타 아이디 (예: 2반_김민지)
+  displayName?: string;     // 표시 이름
+  avatar: string;           // 작성자 프로필 아바타
+  photoUrl: string;         // 피드 사진
+  caption: string;          // 피드 본문
+  tag?: string;             // 부스/코너 태그
+  timestamp: Date;          // 작성 시간
+  likesCount?: number;      // 좋아요 수
+}
+
+/**
+ * 학생 개별 피드 등록
+ */
+export async function addUserPost(params: {
+  authorId: string;
+  authorName: string;
+  displayName?: string;
+  avatar: string;
+  photoUrl: string;
+  caption: string;
+  tag?: string;
+}): Promise<string> {
+  const docRef = await addDoc(collection(db, COLLECTION), {
+    type: 'user_post',
+    postId: `user_post_${Date.now()}`,
+    authorId: params.authorId,
+    authorName: params.authorName,
+    displayName: params.displayName || params.authorName,
+    avatar: params.avatar,
+    photoUrl: params.photoUrl,
+    caption: params.caption,
+    tag: params.tag || '의령여고 영어 박람회',
+    likesCount: 0,
+    timestamp: serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+/**
+ * 모든 학생 피드 실시간 구독 (최신순 정렬)
+ */
+export function subscribeUserPosts(callback: (posts: FsUserPost[]) => void): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'user_post')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const posts: FsUserPost[] = snapshot.docs.map((d) => {
+        const data = d.data();
+        const ts = data.timestamp as Timestamp | null;
+        return {
+          id: d.id,
+          type: 'user_post',
+          postId: data.postId as string,
+          authorId: data.authorId as string,
+          authorName: data.authorName as string,
+          displayName: (data.displayName as string) || (data.authorName as string),
+          avatar: data.avatar as string,
+          photoUrl: data.photoUrl as string,
+          caption: data.caption as string,
+          tag: data.tag as string,
+          likesCount: (data.likesCount as number) || 0,
+          timestamp: ts ? ts.toDate() : new Date(),
+        };
+      });
+      // 최신순 (내림차순) 정렬
+      posts.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      callback(posts);
+    },
+    (error) => {
+      console.error('Error subscribing to user posts:', error);
+    }
+  );
+}
+
+/**
+ * 피드 삭제 (본인 기기 또는 선생님 관리자 권한)
+ */
+export async function deleteUserPost(postId: string): Promise<void> {
+  await deleteDoc(doc(db, COLLECTION, postId));
+}
+
+/**
+ * 학생 피드 좋아요 토글
+ */
+export async function toggleUserPostLike(postId: string, incrementVal: number): Promise<void> {
+  const ref = doc(db, COLLECTION, postId);
+  await updateDoc(ref, {
+    likesCount: increment(incrementVal),
+  });
+}
+
 

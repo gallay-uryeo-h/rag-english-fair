@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   addComment,
   subscribeComments,
   subscribeLikes,
   toggleLikeRemote,
+  subscribeUserPosts,
+  deleteUserPost,
+  toggleUserPostLike,
 } from '../services/firestoreService';
-import type { FsComment } from '../services/firestoreService';
+import type { FsComment, FsUserPost } from '../services/firestoreService';
 import {
   Heart,
   MessageCircle,
@@ -17,11 +20,24 @@ import {
   Lightbulb,
   ChevronDown,
   ChevronUp,
+  Plus,
+  Trash2,
+  Shield,
+  Sparkles,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
 import { VocabListenTab } from './VocabListenTab';
 import { TextbookBrowse2Layer } from './TextbookBrowse2Layer';
 import { SeteukGeneratorTab } from './SeteukGeneratorTab';
+import {
+  getOrCreateUserProfile,
+  isAdminAuthenticated,
+  setAdminAuthenticated,
+} from '../utils/userProfile';
+import type { UserProfile } from '../utils/userProfile';
+import { UserProfileModal } from './UserProfileModal';
+import { CreatePostModal } from './CreatePostModal';
+import { AdminAuthModal } from './AdminAuthModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -62,6 +78,58 @@ export const LiveHomeFeed: React.FC<Props> = ({
   onToggleSection,
   onScrollTo,
 }) => {
+  // ─── 👤 사용자 개별 프로필 (localStorage 기반 로그인 없는 계정) ─────────────
+  const [currentUser, setCurrentUser] = useState<UserProfile>(getOrCreateUserProfile);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(isAdminAuthenticated);
+
+  // ─── 📸 실시간 학생 피드 목록 (Firestore 'user_post' 구독) ─────────────────
+  const [userPosts, setUserPosts] = useState<FsUserPost[]>([]);
+
+  useEffect(() => {
+    return subscribeUserPosts((fetched) => {
+      setUserPosts(fetched);
+    });
+  }, []);
+
+  // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
+  const handleDeletePost = async (post: FsUserPost) => {
+    const isOwner = post.authorId === currentUser.uid;
+    const canDelete = isOwner || isAdmin;
+    if (!canDelete) {
+      alert('본인이 작성한 게시물만 삭제할 수 있습니다.');
+      return;
+    }
+
+    const confirmMsg = isAdmin && !isOwner
+      ? `[선생님 관리자 권한] @${post.authorName} 님의 게시물을 강제 삭제하시겠습니까?`
+      : '게시물을 삭제하시겠습니까?';
+
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      await deleteUserPost(post.id);
+      alert('게시물이 삭제되었습니다.');
+    } catch (e) {
+      console.error(e);
+      alert('삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 학생 피드 좋아요 토글
+  const [likedUserPosts, setLikedUserPosts] = useState<Record<string, boolean>>({});
+  const toggleUserPostLikeHandler = async (postId: string) => {
+    const next = !likedUserPosts[postId];
+    setLikedUserPosts((prev) => ({ ...prev, [postId]: next }));
+    try {
+      await toggleUserPostLike(postId, next ? 1 : -1);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // ─── Firestore 실시간 댓글 (rag-english-fair 컬렉션) ───────────────────────
   const POST_IDS = ['mbti', 'vocab', 'textbook', 'seteuk'] as const;
 
@@ -87,8 +155,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
     const text = commentInputs[postId]?.trim();
     if (!text) return;
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
-    await addComment(postId, text, 'ur_guest_visitor');
-  }, [commentInputs]);
+    // 내 인스타그램 아이디로 댓글 등록
+    await addComment(postId, text, currentUser.username);
+  }, [commentInputs, currentUser.username]);
 
   // ─── Firestore 실시간 좋아요 카운트 ──────────────────────────────────────
   // 좋아요 기본 카운트 (초기 디스플레이용 - Firestore에서 덮어씌워짐)
@@ -170,60 +239,191 @@ export const LiveHomeFeed: React.FC<Props> = ({
     },
   ];
 
+  // 실시간 학생 피드 작성자들 추출 (중복 제거)
+  const studentStoryList = useMemo(() => {
+    const seen = new Set<string>();
+    const list: Array<{ authorName: string; avatar: string; postId: string }> = [];
+    userPosts.forEach((p) => {
+      if (!seen.has(p.authorName) && p.authorName !== currentUser.username) {
+        seen.add(p.authorName);
+        list.push({ authorName: p.authorName, avatar: p.avatar, postId: p.id });
+      }
+    });
+    return list;
+  }, [userPosts, currentUser.username]);
+
   return (
     <div ref={feedRefs.homeRef} className="w-full space-y-4 pb-12">
+      {/* 🛡️ 선생님 관리자 모드 활성화 알림 배너 */}
+      {isAdmin && (
+        <div className="bg-purple-900 text-purple-100 px-3.5 py-2 text-xs flex items-center justify-between shadow-sm animate-in fade-in">
+          <div className="flex items-center gap-1.5 font-bold">
+            <Shield className="w-3.5 h-3.5 text-amber-300" />
+            <span>선생님 관리자 모드 작동 중 (모든 게시물 삭제 권한 활성화)</span>
+          </div>
+          <button
+            onClick={() => {
+              setAdminAuthenticated(false);
+              setIsAdmin(false);
+              alert('관리자 모드가 해제되었습니다.');
+            }}
+            className="text-[11px] bg-white/20 hover:bg-white/30 px-2 py-0.5 rounded font-medium cursor-pointer"
+          >
+            관리자 종료
+          </button>
+        </div>
+      )}
+
       {/* =========================================================================
           📸 1. 인스타그램 스토리 캐러셀 (Instagram Story Bar)
           ========================================================================= */}
       <section className="bg-white border-b border-slate-200 py-3 px-3 overflow-hidden shadow-2xs">
         <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar px-1">
-          {/* 🌟 의령여고 영어과 공식 스토리 (영어를 상징하는 멋진 고화질 사진 아바타) */}
+          {/* 🌟 1. 내 스토리 (내 아바타 + 글쓰기/프로필 변경) */}
           <div
-            onClick={() => onScrollTo('home')}
+            onClick={() => setIsProfileModalOpen(true)}
             className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
           >
-            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-400 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
+            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
               <div className="w-full h-full rounded-full bg-white p-0.5">
                 <img
-                  src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
-                  alt="의령여고 영어과"
+                  src={currentUser.avatar}
+                  alt={currentUser.username}
                   className="w-full h-full rounded-full object-cover"
                 />
               </div>
               {/* 내 스토리 플러스 뱃지 */}
-              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsCreatePostModalOpen(true);
+                }}
+                title="새 피드 올리기"
+                className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs cursor-pointer"
+              >
                 +
               </div>
             </div>
-            <span className="text-[11px] font-bold text-slate-800 tracking-tight">
-              의령여고 영어과
-            </span>
+            <div className="flex flex-col items-center max-w-[70px]">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
+                내 계정
+              </span>
+              <span className="text-[9px] text-slate-500 truncate w-full text-center">
+                @{currentUser.username}
+              </span>
+            </div>
           </div>
 
-          {/* 🌟 다른 사람들의 실제 인스타그램 계정 Mock 스토리 목록 */}
-          {mockStories.map((story) => (
+          {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
+          <div
+            onClick={() => onScrollTo('home')}
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+          >
+            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
+              <div className="w-full h-full rounded-full bg-white p-0.5">
+                <img
+                  src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
+                  alt="의령여고 영어과 공식"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-pink-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-bold shadow-xs">
+                ★
+              </div>
+            </div>
+            <div className="flex flex-col items-center max-w-[70px]">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
+                의령여고 영어과
+              </span>
+              <span className="text-[9px] text-pink-600 font-medium truncate w-full text-center">
+                공식 교육과정
+              </span>
+            </div>
+          </div>
+
+          {/* 🌟 3. 실시간으로 피드를 올린 다른 학생들 스토리 */}
+          {studentStoryList.map((st) => (
             <div
-              key={story.id}
-              onClick={() => alert(`@${story.username} 님의 새로운 스토리를 확인했습니다! 📸`)}
+              key={st.postId}
+              onClick={() => {
+                const el = document.getElementById(`user_post_${st.postId}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                else alert(`@${st.authorName} 님이 작성한 피드로 이동합니다.`);
+              }}
               className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
-              <div
-                className={`w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${story.colorRing} transition-transform group-hover:scale-105 active:scale-95 shadow-xs`}
-              >
+              <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-blue-500 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
                 <div className="w-full h-full rounded-full bg-white p-0.5">
                   <img
-                    src={story.avatarImg}
-                    alt={story.username}
+                    src={st.avatar}
+                    alt={st.authorName}
                     className="w-full h-full rounded-full object-cover"
                   />
                 </div>
               </div>
               <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate">
-                {story.username}
+                @{st.authorName}
               </span>
             </div>
           ))}
+
+          {/* 🌟 4. 초기 박람회 Mock 계정 스토리 (실시간 학생 피드가 적을 때 풍성하게 노출) */}
+          {studentStoryList.length === 0 &&
+            mockStories.map((story) => (
+              <div
+                key={story.id}
+                onClick={() => alert(`@${story.username} 님의 새로운 스토리를 확인했습니다! 📸`)}
+                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+              >
+                <div
+                  className={`w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${story.colorRing} transition-transform group-hover:scale-105 active:scale-95 shadow-xs`}
+                >
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <img
+                      src={story.avatarImg}
+                      alt={story.username}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate">
+                  {story.username}
+                </span>
+              </div>
+            ))}
         </div>
+      </section>
+
+      {/* 🌟 1-1. 내 계정 요약 및 새 글 작성 빠른 액션 바 */}
+      <section className="bg-white border-y border-slate-200 px-3.5 py-2.5 flex items-center justify-between shadow-2xs">
+        <div
+          onClick={() => setIsProfileModalOpen(true)}
+          className="flex items-center gap-2 cursor-pointer group"
+        >
+          <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600">
+            <img
+              src={currentUser.avatar}
+              alt={currentUser.username}
+              className="w-full h-full rounded-full object-cover"
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                @{currentUser.username}
+              </span>
+              <span className="text-[10px] text-slate-400">· 프로필 수정</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setIsCreatePostModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white text-xs font-bold shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
+        >
+          <Plus className="w-3.5 h-3.5 stroke-3" />
+          <span>피드 올리기</span>
+        </button>
       </section>
 
       {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 (Instagram Profile / Explore Grid View) */}
@@ -1023,6 +1223,136 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </>
       )}
 
+      {/* 🌟 4. 실시간 학생 참여 피드 목록 (User Live Feed Stream) */}
+      {userPosts.length > 0 && (
+        <section className="space-y-4 pt-2">
+          <div className="flex items-center justify-between px-3 pt-2">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-pink-500" />
+              <span className="text-xs font-extrabold text-slate-800">
+                학생 라이브 피드 ({userPosts.length})
+              </span>
+            </div>
+            <button
+              onClick={() => setIsCreatePostModalOpen(true)}
+              className="text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
+            >
+              <Plus className="w-3 h-3 stroke-3" />
+              <span>나도 피드 쓰기</span>
+            </button>
+          </div>
+
+          {userPosts.map((post) => {
+            const isOwner = post.authorId === currentUser.uid;
+            const canDelete = isOwner || isAdmin;
+            const isLiked = likedUserPosts[post.id] || false;
+            const totalLikes = (post.likesCount || 0) + (isLiked ? 1 : 0);
+
+            return (
+              <article
+                key={post.id}
+                id={`user_post_${post.id}`}
+                className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+              >
+                {/* 포스트 상단 계정 정보 */}
+                <div className="flex items-center justify-between px-3.5 py-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 to-purple-600">
+                      <img
+                        src={post.avatar}
+                        alt={post.authorName}
+                        className="w-full h-full rounded-full object-cover bg-white p-0.5"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-slate-900">@{post.authorName}</span>
+                        {post.tag && (
+                          <span className="text-[10px] font-semibold text-pink-600 bg-pink-50 px-1.5 py-0.2 rounded">
+                            {post.tag}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-slate-400">
+                        {post.timestamp ? new Date(post.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 삭제 버튼 (본인 또는 선생님 관리자 권한) */}
+                  {canDelete ? (
+                    <button
+                      onClick={() => handleDeletePost(post)}
+                      title={isAdmin && !isOwner ? "선생님 권한 강제 삭제" : "내 게시물 삭제"}
+                      className="flex items-center gap-1 text-[11px] text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>{isAdmin && !isOwner ? "강제삭제" : "삭제"}</span>
+                    </button>
+                  ) : (
+                    <button className="text-slate-400 p-1">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* 피드 사진 */}
+                <div className="relative w-full aspect-[4/3] bg-slate-900 overflow-hidden">
+                  <img
+                    src={post.photoUrl}
+                    alt="게시물 사진"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* 소셜 액션 바 */}
+                <div className="px-3.5 pt-3 pb-3 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 text-slate-800">
+                      <button
+                        onClick={() => toggleUserPostLikeHandler(post.id)}
+                        className="transition-transform active:scale-125"
+                      >
+                        <Heart
+                          className={`w-6 h-6 ${
+                            isLiked ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                          }`}
+                        />
+                      </button>
+                      <button
+                        onClick={() => alert('댓글은 포스트 하단에 작성해 보세요!')}
+                        className="hover:text-slate-600"
+                      >
+                        <MessageCircle className="w-6 h-6" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard?.writeText(window.location.href);
+                          alert('링크가 복사되었습니다!');
+                        }}
+                        className="hover:text-slate-600"
+                      >
+                        <Send className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="text-xs font-bold text-slate-900">
+                    좋아요 {totalLikes.toLocaleString()}개
+                  </div>
+
+                  <div className="text-xs">
+                    <span className="font-bold text-slate-900 mr-2">@{post.authorName}</span>
+                    <span className="text-slate-800 whitespace-pre-line">{post.caption}</span>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      )}
+
       {/* 피드 최하단 안내 */}
       <div className="text-center py-6 space-y-1.5">
         <div className="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center mx-auto text-xs font-bold">
@@ -1033,6 +1363,33 @@ export const LiveHomeFeed: React.FC<Props> = ({
           2025 의령여자고등학교 영어과 교육과정 박람회 인피드 앱
         </p>
       </div>
+
+      {/* ─── 팝업 모달 3종 ─────────────────────────────────────────────────── */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentProfile={currentUser}
+        onProfileUpdated={(updated) => setCurrentUser(updated)}
+        onOpenAdminAuth={() => setIsAdminModalOpen(true)}
+        isAdmin={isAdmin}
+        onLogoutAdmin={() => {
+          setAdminAuthenticated(false);
+          setIsAdmin(false);
+          alert('관리자 모드가 해제되었습니다.');
+        }}
+      />
+
+      <CreatePostModal
+        isOpen={isCreatePostModalOpen}
+        onClose={() => setIsCreatePostModalOpen(false)}
+        currentUser={currentUser}
+      />
+
+      <AdminAuthModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+        onSuccess={() => setIsAdmin(true)}
+      />
     </div>
   );
 };
