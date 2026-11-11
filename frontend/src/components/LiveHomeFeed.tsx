@@ -61,14 +61,6 @@ interface Props {
   onScrollTo: (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
 }
 
-interface MockStoryUser {
-  id: string;
-  username: string;
-  avatarImg: string;
-  hasUnreadStory: boolean;
-  colorRing: string;
-}
-
 export const LiveHomeFeed: React.FC<Props> = ({
   onOpenImage,
   viewMode = 'feed',
@@ -205,52 +197,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
     setSavedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // 👥 실제 인스타그램 느낌의 다른 사용자 Mock 스토리 목록
-  const mockStories: MockStoryUser[] = [
-    {
-      id: 'mock_1',
-      username: 'ur_english_club',
-      avatarImg: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: true,
-      colorRing: 'from-amber-400 via-rose-500 to-purple-600',
-    },
-    {
-      id: 'mock_2',
-      username: 'minji_study',
-      avatarImg: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: true,
-      colorRing: 'from-pink-500 via-purple-500 to-indigo-500',
-    },
-    {
-      id: 'mock_3',
-      username: 'soyeon_grammar',
-      avatarImg: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: true,
-      colorRing: 'from-emerald-400 via-teal-500 to-blue-500',
-    },
-    {
-      id: 'mock_4',
-      username: 'haru_english',
-      avatarImg: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: false,
-      colorRing: 'from-slate-300 to-slate-400',
-    },
-    {
-      id: 'mock_5',
-      username: 'native_teacher_j',
-      avatarImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: true,
-      colorRing: 'from-yellow-400 via-orange-500 to-red-500',
-    },
-    {
-      id: 'mock_6',
-      username: 'uryeo_broadcasting',
-      avatarImg: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
-      hasUnreadStory: true,
-      colorRing: 'from-pink-500 to-yellow-500',
-    },
-  ];
-
   // 실시간 학생 피드 작성자들 추출 (중복 제거)
   const studentStoryList = useMemo(() => {
     const seen = new Set<string>();
@@ -379,14 +325,21 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 🌟 3. 실시간으로 피드를 올린 다른 학생들 스토리 */}
+          {/* 🌟 3. 실시간으로 피드를 올린 실제 참여자들 스토리 (Mock 계정 완전 삭제) */}
           {studentStoryList.map((st) => (
             <div
               key={st.postId}
               onClick={() => {
                 const el = document.getElementById(`user_post_${st.postId}`);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else alert(`@${st.authorName} 님이 작성한 피드로 이동합니다.`);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  el.classList.add('ring-4', 'ring-purple-400');
+                  setTimeout(() => {
+                    el.classList.remove('ring-4', 'ring-purple-400');
+                  }, 1800);
+                } else {
+                  alert(`@${st.authorName} 님이 작성한 피드로 이동합니다.`);
+                }
               }}
               className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
@@ -405,30 +358,22 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           ))}
 
-          {/* 🌟 4. 초기 박람회 Mock 계정 스토리 (실시간 학생 피드가 적을 때 풍성하게 노출) */}
-          {studentStoryList.length === 0 &&
-            mockStories.map((story) => (
-              <div
-                key={story.id}
-                onClick={() => alert(`@${story.username} 님의 새로운 스토리를 확인했습니다! 📸`)}
-                className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
-              >
-                <div
-                  className={`w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr ${story.colorRing} transition-transform group-hover:scale-105 active:scale-95 shadow-xs`}
-                >
-                  <div className="w-full h-full rounded-full bg-white p-0.5">
-                    <img
-                      src={story.avatarImg}
-                      alt={story.username}
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  </div>
-                </div>
-                <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate">
-                  {story.username}
-                </span>
+          {/* 🌟 4. 아직 참여자 피드가 없을 때 안내 칩 */}
+          {studentStoryList.length === 0 && (
+            <div
+              onClick={() => {
+                if (!currentUser) setIsProfileModalOpen(true);
+                else setIsCreatePostModalOpen(true);
+              }}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer select-none opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <div className="w-16 h-16 rounded-full border border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-slate-400 text-xs">
+                <span>✍️</span>
+                <span className="text-[9px] font-bold mt-0.5">첫 피드</span>
               </div>
-            ))}
+              <span className="text-[10px] text-slate-400">참여자 대기</span>
+            </div>
+          )}
         </div>
       </section>
 
