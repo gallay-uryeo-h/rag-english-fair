@@ -6,6 +6,7 @@ interface Props {
   onToggleMode: () => void;
   viewMode?: 'feed' | 'grid';
   onToggleViewMode?: () => void;
+  onOpenDm?: () => void;
 }
 
 export const LiveHeader: React.FC<Props> = ({
@@ -13,6 +14,7 @@ export const LiveHeader: React.FC<Props> = ({
   onToggleMode,
   viewMode = 'feed',
   onToggleViewMode,
+  onOpenDm,
 }) => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 shrink-0 shadow-2xs">
@@ -58,11 +60,18 @@ export const LiveHeader: React.FC<Props> = ({
           </button>
 
           <button
-            onClick={() => alert('부스 안내 교사 및 도우미 학생에게 언제든 질문해 주세요! 💬')}
-            className="hover:opacity-70 transition-opacity cursor-pointer p-0.5"
-            title="DM 메시지"
+            onClick={() => {
+              if (onOpenDm) {
+                onOpenDm();
+              } else {
+                alert('부스 안내 교사 및 도우미 학생에게 언제든 질문해 주세요! 💬');
+              }
+            }}
+            className="hover:opacity-70 transition-opacity cursor-pointer p-0.5 relative"
+            title="의령여고 Q&A 챗봇 1:1 DM"
           >
             <MessageCircle className="w-6 h-6 stroke-[1.8]" />
+            <span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full animate-pulse"></span>
           </button>
 
           {/* 연구/브레인스토밍 모드 전환 스위치 (인스타 필터 느낌) */}

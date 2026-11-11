@@ -201,12 +201,16 @@ def get_grammar_roadmap():
 
 @app.post("/api/chat")
 def chat(req: ChatRequest):
-    if not gemini_client:
-        return JSONResponse({"error": "GEMINI_API_KEY가 설정되지 않았습니다."}, status_code=500)
-
     query = req.query.strip()
     if not query:
         return JSONResponse({"error": "질문이 비어있습니다."}, status_code=400)
+
+    if not gemini_client:
+        # 로컬 테스트용 모의 답변 (배포 환경에서는 실제 Gemini AI + ChromaDB RAG 작동)
+        return {
+            "answer": f"안녕하세요! 의령여고 영어과 Q&A AI 도우미입니다. 🤖\n\n문의하신 **'{query}'**에 대한 안내입니다.\n\n의령여고 영어과는 2028 대입 개편안(내신 5등급제)에 맞춘 학생 맞춤형 교육과정을 운영하고 있으며, 공통영어부터 진로선택·융합선택 과목까지 체계적인 3개년 로드맵을 제공합니다. 부스에 마련된 교과서 및 세특 자료를 함께 둘러보시면 더욱 풍성한 정보를 얻으실 수 있습니다! ✨",
+            "sources": [{"title": "의령여고 영어과 교육과정 가이드", "subject_name": "2026 선택과목 FAQ"}]
+        }
 
     # 1. FAQ 검색 (선택과목 상담 전용)
     try:

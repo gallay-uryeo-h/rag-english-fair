@@ -24,6 +24,7 @@ import {
   Trash2,
   Shield,
   Sparkles,
+  Bot,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
 import { VocabListenTab } from './VocabListenTab';
@@ -41,11 +42,15 @@ import { UserProfileModal } from './UserProfileModal';
 import { CreatePostModal } from './CreatePostModal';
 import { UserProfileViewModal } from './UserProfileViewModal';
 import type { ProfileViewData, OfficialPostItem } from './UserProfileViewModal';
+import { InstagramDmChatModal } from './InstagramDmChatModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
   viewMode?: 'feed' | 'grid';
   onSelectGridPost?: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
+  isDmOpen?: boolean;
+  onOpenDm?: () => void;
+  onCloseDm?: () => void;
   // 외부 앵커 참조
   feedRefs: {
     homeRef: React.RefObject<HTMLDivElement | null>;
@@ -72,7 +77,22 @@ export const LiveHomeFeed: React.FC<Props> = ({
   expandedSections,
   onToggleSection,
   onScrollTo,
+  isDmOpen: externalDmOpen,
+  onOpenDm,
+  onCloseDm,
 }) => {
+  // ─── 🤖 인스타그램 DM 챗봇 모달 상태 ────────────────────────────────────
+  const [internalDmOpen, setInternalDmOpen] = useState(false);
+  const isDmModalOpen = externalDmOpen !== undefined ? externalDmOpen : internalDmOpen;
+  const handleOpenDmModal = () => {
+    if (onOpenDm) onOpenDm();
+    else setInternalDmOpen(true);
+  };
+  const handleCloseDmModal = () => {
+    if (onCloseDm) onCloseDm();
+    else setInternalDmOpen(false);
+  };
+
   // ─── 👤 사용자 개별 프로필 (최초 방문 시 계정 없음: null) ────────────────
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(getUserProfile);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -457,6 +477,30 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </span>
               <span className="text-[9px] text-pink-600 font-medium truncate w-full text-center">
                 공식 교육과정
+              </span>
+            </div>
+          </div>
+
+          {/* 🌟 2-1. 의령여고 Q&A 챗봇 계정 스토리 (@uryeo_qa_bot) */}
+          <div
+            onClick={handleOpenDmModal}
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+            title="의령여고 영어과 Q&A AI 챗봇 1:1 대화"
+          >
+            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
+              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center p-0.5">
+                <Bot className="w-7 h-7 text-cyan-300 group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[8px] font-black shadow-xs">
+                AI
+              </div>
+            </div>
+            <div className="flex flex-col items-center max-w-[70px]">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-purple-600 transition-colors flex items-center justify-center gap-0.5">
+                <span>질문 챗봇</span>
+              </span>
+              <span className="text-[9px] text-purple-600 font-medium truncate w-full text-center">
+                @uryeo_qa_bot
               </span>
             </div>
           </div>
@@ -1557,6 +1601,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
             setIsCreatePostModalOpen(true);
           }
         }}
+      />
+
+      {/* 🤖 인스타그램 1:1 DM 스타일 Q&A 챗봇 모달 */}
+      <InstagramDmChatModal
+        isOpen={isDmModalOpen}
+        onClose={handleCloseDmModal}
       />
     </div>
   );

@@ -28,6 +28,9 @@ export function App() {
   // 🌟 피드 뷰 모드 ('feed': 단일 무한 피드, 'grid': 인스타 3열 그리드 탐색)
   const [feedViewMode, setFeedViewMode] = useState<'feed' | 'grid'>('feed');
 
+  // 🌟 인스타그램 1:1 DM 스타일 Q&A 챗봇 모달 상태
+  const [isDmChatOpen, setIsDmChatOpen] = useState<boolean>(false);
+
   // 🌟 하단 바 활성 탭 (현재 화면 위치 표시용)
   const [activeNavTab, setActiveNavTab] = useState<LiveNavTab>('home');
 
@@ -172,6 +175,7 @@ export function App() {
         onToggleMode={() => setIsLiveMode((prev) => !prev)}
         viewMode={feedViewMode}
         onToggleViewMode={() => setFeedViewMode((prev) => (prev === 'feed' ? 'grid' : 'feed'))}
+        onOpenDm={() => setIsDmChatOpen(true)}
       />
 
       {isLiveMode ? (
@@ -197,6 +201,9 @@ export function App() {
               expandedSections={expandedSections}
               onToggleSection={handleToggleSection}
               onScrollTo={handleScrollTo}
+              isDmOpen={isDmChatOpen}
+              onOpenDm={() => setIsDmChatOpen(true)}
+              onCloseDm={() => setIsDmChatOpen(false)}
             />
           </main>
 
