@@ -5,6 +5,7 @@ import {
   DEFAULT_GUEST_AVATAR,
   saveUserProfile,
   isTeacherAccount,
+  isOfficialAccount,
   TEACHER_PASSWORD,
   setAdminAuthenticated,
 } from '../utils/userProfile';
@@ -66,8 +67,9 @@ export const UserProfileModal: React.FC<Props> = ({
 
   if (!isOpen) return null;
 
-  // 입력된 아이디가 사전 등록된 선생님 계정인지 확인
+  // 입력된 아이디가 사전 등록된 선생님 계정 또는 학교 공식 계정인지 확인
   const isTargetTeacher = isTeacherAccount(username);
+  const isTargetOfficial = isOfficialAccount(username);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,12 +79,14 @@ export const UserProfileModal: React.FC<Props> = ({
       return;
     }
 
-    // 선생님 계정인 경우 비밀번호 검증 필수
+    // 선생님 또는 공식 계정인 경우 비밀번호 검증 필수
     let isTeacherAuth = false;
+    const isOfficialDept = isOfficialAccount(trimmed);
+
     if (isTargetTeacher) {
       if (teacherPassword.trim() !== TEACHER_PASSWORD) {
         setPasswordError(true);
-        alert('선생님 비밀번호가 올바르지 않습니다.');
+        alert(isOfficialDept ? '공식 계정 비밀번호가 올바르지 않습니다.' : '선생님 비밀번호가 올바르지 않습니다.');
         return;
       }
       isTeacherAuth = true;
@@ -92,7 +96,11 @@ export const UserProfileModal: React.FC<Props> = ({
     const updated: UserProfile = {
       uid: currentProfile?.uid || `user_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       username: trimmed,
-      displayName: isTeacherAuth ? `선생님 (@${trimmed})` : trimmed,
+      displayName: isOfficialDept
+        ? '의령여고 영어과'
+        : isTeacherAuth
+          ? `선생님 (@${trimmed})`
+          : trimmed,
       avatar: selectedAvatar,
       createdAt: currentProfile?.createdAt || Date.now(),
       isTeacher: isTeacherAuth,
@@ -102,7 +110,9 @@ export const UserProfileModal: React.FC<Props> = ({
     onProfileUpdated(updated);
     onClose();
 
-    if (isTeacherAuth) {
+    if (isOfficialDept) {
+      alert(`🏛️ 의령여고 영어과 공식 계정(@${trimmed})으로 로그인되었습니다.\n전체 게시물 관리 권한이 활성화됩니다.`);
+    } else if (isTeacherAuth) {
       alert(`🛡️ 선생님 계정(@${trimmed})으로 인증되었습니다. 관리자 권한이 활성화됩니다.`);
     } else {
       alert(`🎉 @${trimmed} 계정이 생성되었습니다! 즐거운 부스 활동 되세요.`);
@@ -170,11 +180,15 @@ export const UserProfileModal: React.FC<Props> = ({
                 <span className="text-xs font-bold text-slate-800">
                   {username ? `@${username}` : '@아이디를 입력하세요'}
                 </span>
-                {isTargetTeacher && (
+                {isTargetOfficial ? (
+                  <span className="text-[10px] font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded-full">
+                    🏛️ 영어과 공식 계정
+                  </span>
+                ) : isTargetTeacher ? (
                   <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-full">
                     선생님
                   </span>
-                )}
+                ) : null}
               </div>
               {isCustomPhoto && (
                 <p className="text-[10px] text-pink-600 font-bold flex items-center justify-center gap-1">
@@ -222,12 +236,14 @@ export const UserProfileModal: React.FC<Props> = ({
             </p>
           </div>
 
-          {/* 🛡️ 선생님 계정 감지 시 비밀번호 입력창 동적 등장 */}
+          {/* 🛡️ 선생님 / 공식 계정 감지 시 비밀번호 입력창 동적 등장 */}
           {isTargetTeacher && (
-            <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-200 space-y-2 animate-in slide-in-from-top-2 duration-200">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-purple-900">
-                <Lock className="w-3.5 h-3.5 text-purple-600" />
-                <span>선생님 전용 비밀번호 확인</span>
+            <div className={`p-3.5 rounded-2xl border space-y-2 animate-in slide-in-from-top-2 duration-200 ${
+              isTargetOfficial ? 'bg-blue-50/80 border-blue-200' : 'bg-purple-50 border-purple-200'
+            }`}>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                <Lock className={`w-3.5 h-3.5 ${isTargetOfficial ? 'text-blue-600' : 'text-purple-600'}`} />
+                <span>{isTargetOfficial ? '의령여고 영어과 관리자 비밀번호 확인' : '선생님 전용 비밀번호 확인'}</span>
               </div>
               <input
                 type="password"
@@ -236,11 +252,13 @@ export const UserProfileModal: React.FC<Props> = ({
                   setTeacherPassword(e.target.value);
                   setPasswordError(false);
                 }}
-                placeholder="선생님 비밀번호를 입력하세요"
+                placeholder={isTargetOfficial ? '영어과 관리자 비밀번호 입력' : '선생님 비밀번호를 입력하세요'}
                 className={`w-full px-3 py-2 rounded-xl border text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-hidden bg-white transition-all ${
                   passwordError
                     ? 'border-red-400 bg-red-50/50'
-                    : 'border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-100'
+                    : isTargetOfficial
+                      ? 'border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+                      : 'border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-100'
                 }`}
                 required
               />
@@ -249,8 +267,10 @@ export const UserProfileModal: React.FC<Props> = ({
                   비밀번호가 올바르지 않습니다.
                 </p>
               )}
-              <p className="text-[10px] text-purple-600">
-                선생님 계정(uryeo-lee, uryeo-kim, uryeo-sung)은 관리자 권한이 함께 부여됩니다.
+              <p className={`text-[10px] ${isTargetOfficial ? 'text-blue-700 font-medium' : 'text-purple-600'}`}>
+                {isTargetOfficial
+                  ? '🏛️ 의령여고 영어과 공식 계정(uryeo-eng)은 전체 게시물 관리 및 공식 피드 작성 권한이 부여됩니다.'
+                  : '선생님 계정(uryeo-lee, uryeo-kim, uryeo-sung)은 관리자 권한이 함께 부여됩니다.'}
               </p>
             </div>
           )}

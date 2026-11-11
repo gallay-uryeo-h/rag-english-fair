@@ -16,18 +16,25 @@ export interface UserProfile {
 const STORAGE_KEY = 'uryeo_english_fair_user_profile';
 const ADMIN_SESSION_KEY = 'uryeo_english_fair_admin_session';
 
-// ─── 선생님 사전 등록 계정 및 비밀번호 ─────────────────────────────────────────
+// ─── 선생님 및 학교 공식 사전 등록 계정 및 비밀번호 ─────────────────────────────
 export const TEACHER_ACCOUNTS = [
   'uryeo-lee',
   'uryeo-kim',
   'uryeo-sung',
+  'uryeo-eng', // 🏛️ 의령여고 영어과 공식 계정
 ] as const;
+
+export const OFFICIAL_ENG_ACCOUNT = 'uryeo-eng';
 
 export const TEACHER_PASSWORD = 'uryeo2026';
 
 export function isTeacherAccount(username: string): boolean {
   const normalized = username.trim().toLowerCase();
   return (TEACHER_ACCOUNTS as readonly string[]).includes(normalized);
+}
+
+export function isOfficialAccount(username: string): boolean {
+  return username.trim().toLowerCase() === OFFICIAL_ENG_ACCOUNT;
 }
 
 // 부스 활동용 아바타 프리셋 목록

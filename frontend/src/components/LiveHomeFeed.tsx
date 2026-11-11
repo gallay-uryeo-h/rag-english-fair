@@ -299,18 +299,22 @@ export const LiveHomeFeed: React.FC<Props> = ({
   // 의령여고 영어과 공식 프로필 열기
   const handleOpenOfficialProfile = () => {
     setViewingProfile({
-      username: 'uryeo_english_fair',
+      username: 'uryeo-eng',
       displayName: '의령여고 영어과',
       avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
-      isTeacher: false,
+      isTeacher: true,
       isOfficial: true,
-      bio: '🏛️ 2026 의령여자고등학교 영어 교육과정 박람회 공식 피드\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관',
+      bio: '🏛️ 2026 의령여자고등학교 영어 교육과정 박람회 공식 계정\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관',
     });
     setIsProfileViewModalOpen(true);
   };
 
   // 다른 학생/선생님 참가자 프로필 열기
   const handleOpenParticipantProfile = (authorName: string, avatar: string) => {
+    if (authorName.trim().toLowerCase() === 'uryeo-eng') {
+      handleOpenOfficialProfile();
+      return;
+    }
     const isTeacher = isTeacherAccount(authorName);
     setViewingProfile({
       username: authorName,
@@ -475,8 +479,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
               <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-pink-600 transition-colors">
                 의령여고 영어과
               </span>
-              <span className="text-[9px] text-pink-600 font-medium truncate w-full text-center">
-                공식 교육과정
+              <span className="text-[9px] text-pink-600 font-bold truncate w-full text-center">
+                @uryeo-eng
               </span>
             </div>
           </div>
@@ -1464,6 +1468,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
                         <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
                           @{post.authorName}
                         </span>
+                        {post.authorName.toLowerCase() === 'uryeo-eng' ? (
+                          <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
+                            ★ 공식
+                          </span>
+                        ) : isTeacherAccount(post.authorName) ? (
+                          <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded">
+                            교사
+                          </span>
+                        ) : null}
                         {post.tag && (
                           <span className="text-[10px] font-semibold text-pink-600 bg-pink-50 px-1.5 py-0.2 rounded">
                             {post.tag}
