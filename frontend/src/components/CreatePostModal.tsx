@@ -1,17 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   X,
   Image as ImageIcon,
   Send,
   Tag,
   Camera,
-  UploadCloud,
   Loader2,
   Check,
 } from 'lucide-react';
 import type { UserProfile } from '../utils/userProfile';
 import { addUserPost } from '../services/firestoreService';
-import { compressImageFile } from '../utils/imageCompressor';
+import { usePhotoPicker } from '../hooks/usePhotoPicker';
+import { PhotoPickerButtons } from './PhotoPickerButtons';
 
 interface Props {
   isOpen: boolean;
@@ -69,20 +69,25 @@ export const CreatePostModal: React.FC<Props> = ({
   currentUser,
   onPostCreated,
 }) => {
-  // 📸 카메라 직접 촬영용 인풋 & 🖼️ 사진 앨범/갤러리 선택용 인풋 분리
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
+  // 📸 통일된 사진 촬영/업로드 훅 (피드용: 1080x1350 고품질)
+  const {
+    openCamera,
+    openGallery,
+    isProcessing: isCompressing,
+    photo: userUploadedPhoto,
+    clearPhoto,
+    hiddenInputs,
+  } = usePhotoPicker({
+    maxWidth: 1080,
+    maxHeight: 1350,
+    quality: 0.84,
+    onSuccess: () => {
+      setUseUploadMode(true);
+    },
+  });
 
-  // 사진 상태
-  const [userUploadedPhoto, setUserUploadedPhoto] = useState<{
-    dataUrl: string;
-    sizeKb: number;
-    fileName: string;
-  } | null>(null);
   const [selectedPresetPhoto, setSelectedPresetPhoto] = useState<string>(POST_PHOTO_PRESETS[0].url);
-  const [isCompressing, setIsCompressing] = useState<boolean>(false);
   const [useUploadMode, setUseUploadMode] = useState<boolean>(true); // 기본: 내 사진 올리기 모드
-
   const [caption, setCaption] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>(PRESET_TAGS[0]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -94,37 +99,6 @@ export const CreatePostModal: React.FC<Props> = ({
     useUploadMode && userUploadedPhoto
       ? userUploadedPhoto.dataUrl
       : selectedPresetPhoto;
-
-  // 스마트폰 앨범 또는 카메라 사진 선택 처리
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setIsCompressing(true);
-      // 인스타그램 표준 규격 (1080px, 84% 고품질)으로 압축하여 원본의 디테일과 선명도를 유지
-      const { dataUrl, sizeKb } = await compressImageFile(file, {
-        maxWidth: 1080,
-        maxHeight: 1350,
-        quality: 0.84,
-      });
-
-      setUserUploadedPhoto({
-        dataUrl,
-        sizeKb,
-        fileName: file.name,
-      });
-      setUseUploadMode(true);
-    } catch (err: any) {
-      console.error(err);
-      alert(err.message || '사진을 처리하는 도중 오류가 발생했습니다.');
-    } finally {
-      setIsCompressing(false);
-      // 파일 인풋 리셋 (동일 파일 재선택 허용)
-      if (cameraInputRef.current) cameraInputRef.current.value = '';
-      if (galleryInputRef.current) galleryInputRef.current.value = '';
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,7 +120,7 @@ export const CreatePostModal: React.FC<Props> = ({
       });
 
       setCaption('');
-      setUserUploadedPhoto(null);
+      clearPhoto();
       // 🌟 alert 팝업 없이 즉시 모달 닫기 & 해당 피드로 부드럽게 스크롤
       onClose();
       onPostCreated?.(newPostId);
@@ -161,24 +135,8 @@ export const CreatePostModal: React.FC<Props> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh]">
-        {/* 📸 카메라 직접 촬영 인풋 (capture="environment"로 모바일 후면 카메라 즉시 구동) */}
-        <input
-          type="file"
-          ref={cameraInputRef}
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-
-        {/* 🖼️ 사진 앨범/갤러리 선택 인풋 */}
-        <input
-          type="file"
-          ref={galleryInputRef}
-          accept="image/*"
-          className="hidden"
-          onChange={handleFileChange}
-        />
+        {/* 📸 공통 숨겨진 카메라/앨범 input 엘리먼트 */}
+        {hiddenInputs}
 
         {/* 1. 모달 상단 헤더 */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-white sticky top-0 z-10">
@@ -224,28 +182,13 @@ export const CreatePostModal: React.FC<Props> = ({
             )}
           </div>
 
-          {/* 사진 선택 컨트롤: [📸 카메라로 촬영] & [🖼️ 앨범에서 선택] */}
+          {/* 사진 선택 컨트롤: [📸 카메라로 촬영] & [🖼️ 앨범에서 선택] (공통 컴포넌트 재사용) */}
           <div className="space-y-2">
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => cameraInputRef.current?.click()}
-                disabled={isCompressing}
-                className="py-2.5 px-3 rounded-xl border-2 border-purple-300 hover:border-purple-500 bg-purple-50 hover:bg-purple-100/80 transition-all flex items-center justify-center gap-1.5 text-xs font-bold text-purple-700 cursor-pointer shadow-xs active:scale-95"
-              >
-                <Camera className="w-4 h-4 text-purple-600 stroke-[2.2]" />
-                <span>카메라로 촬영</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => galleryInputRef.current?.click()}
-                disabled={isCompressing}
-                className="py-2.5 px-3 rounded-xl border border-slate-300 hover:border-slate-400 bg-slate-50 hover:bg-slate-100 transition-all flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer shadow-xs active:scale-95"
-              >
-                <UploadCloud className="w-4 h-4 text-slate-600 stroke-[2.2]" />
-                <span>앨범에서 선택</span>
-              </button>
-            </div>
+            <PhotoPickerButtons
+              onCameraClick={openCamera}
+              onGalleryClick={openGallery}
+              isProcessing={isCompressing}
+            />
 
             {/* 추천 프리셋 사진 선택 영역 (감성 6선) */}
             <div className="pt-1">

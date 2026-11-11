@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Sparkles, User, Lock, ShieldCheck } from 'lucide-react';
+import { X, Check, Sparkles, User, Lock, ShieldCheck, Loader2 } from 'lucide-react';
 import {
   AVATAR_PRESETS,
   DEFAULT_GUEST_AVATAR,
@@ -9,6 +9,8 @@ import {
   setAdminAuthenticated,
 } from '../utils/userProfile';
 import type { UserProfile } from '../utils/userProfile';
+import { usePhotoPicker } from '../hooks/usePhotoPicker';
+import { PhotoPickerButtons } from './PhotoPickerButtons';
 
 interface Props {
   isOpen: boolean;
@@ -25,17 +27,38 @@ export const UserProfileModal: React.FC<Props> = ({
 }) => {
   const [username, setUsername] = useState(currentProfile?.username || '');
   const [selectedAvatar, setSelectedAvatar] = useState(currentProfile?.avatar || DEFAULT_GUEST_AVATAR);
+  const [isCustomPhoto, setIsCustomPhoto] = useState<boolean>(false);
   const [teacherPassword, setTeacherPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+
+  // 📸 통일된 사진 촬영/업로드 훅 (프로필용: 720x720 정사각형 최적화)
+  const {
+    openCamera,
+    openGallery,
+    isProcessing,
+    hiddenInputs,
+  } = usePhotoPicker({
+    maxWidth: 720,
+    maxHeight: 720,
+    quality: 0.85,
+    onSuccess: (result) => {
+      setSelectedAvatar(result.dataUrl);
+      setIsCustomPhoto(true);
+    },
+  });
 
   // currentProfile이 변경될 때 상태 동기화
   useEffect(() => {
     if (currentProfile) {
       setUsername(currentProfile.username);
       setSelectedAvatar(currentProfile.avatar);
+      // 기존 아바타가 프리셋에 없으면 커스텀 사진으로 간주
+      const isPreset = AVATAR_PRESETS.some((av) => av.url === currentProfile.avatar);
+      setIsCustomPhoto(!isPreset);
     } else {
       setUsername('');
       setSelectedAvatar(DEFAULT_GUEST_AVATAR);
+      setIsCustomPhoto(false);
     }
     setTeacherPassword('');
     setPasswordError(false);
@@ -112,32 +135,64 @@ export const UserProfileModal: React.FC<Props> = ({
 
         {/* 폼 내용 */}
         <form onSubmit={handleSave} className="p-5 space-y-4 overflow-y-auto">
-          {/* 현재 선택된 아바타 프리뷰 */}
-          <div className="flex flex-col items-center gap-2 py-1">
-            <div className="relative w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 shadow-md">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
+          {/* 📸 공통 숨겨진 카메라/갤러리 input */}
+          {hiddenInputs}
+
+          {/* 현재 선택된 아바타 프리뷰 & 직접 촬영/앨범 선택 버튼 */}
+          <div className="flex flex-col items-center gap-2.5 py-1">
+            <div className="relative w-22 h-22 rounded-full p-1 bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 shadow-md">
+              <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
                 <img
                   src={selectedAvatar}
                   alt="내 아바타"
                   className="w-full h-full rounded-full object-cover"
                 />
               </div>
+
+              {/* 사진 압축 처리 로딩 오버레이 */}
+              {isProcessing && (
+                <div className="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center text-white text-[10px] font-bold">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>처리 중...</span>
+                </div>
+              )}
+
               {isTargetTeacher && (
-                <div className="absolute -bottom-1 -right-1 bg-purple-600 text-white rounded-full p-1 shadow-xs">
+                <div className="absolute -bottom-1 -right-1 bg-purple-600 text-white rounded-full p-1 shadow-xs" title="선생님 인증">
                   <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
               )}
             </div>
-            <div className="text-center">
-              <span className="text-xs font-bold text-slate-800">
-                {username ? `@${username}` : '@아이디를 입력하세요'}
-              </span>
-              {isTargetTeacher && (
-                <span className="ml-1 text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-full">
-                  선생님 계정 감지됨
+
+            {/* 닉네임 및 상태 안내 */}
+            <div className="text-center space-y-0.5">
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-xs font-bold text-slate-800">
+                  {username ? `@${username}` : '@아이디를 입력하세요'}
                 </span>
+                {isTargetTeacher && (
+                  <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-full">
+                    선생님
+                  </span>
+                )}
+              </div>
+              {isCustomPhoto && (
+                <p className="text-[10px] text-pink-600 font-bold flex items-center justify-center gap-1">
+                  <span>📸 직접 촬영/선택한 프로필 사진 적용 중</span>
+                </p>
               )}
             </div>
+
+            {/* 📸 공통 사진 촬영 & 앨범 선택 버튼 */}
+            <PhotoPickerButtons
+              onCameraClick={openCamera}
+              onGalleryClick={openGallery}
+              isProcessing={isProcessing}
+              cameraLabel="사진 촬영"
+              galleryLabel="앨범에서 선택"
+              size="sm"
+              className="w-full max-w-[240px] pt-1"
+            />
           </div>
 
           {/* 아이디 입력창 */}
@@ -201,19 +256,36 @@ export const UserProfileModal: React.FC<Props> = ({
           )}
 
           {/* 아바타 선택 그리드 */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">프로필 사진 선택</label>
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-700">또는 기본 캐릭터 아바타 선택</label>
+              {isCustomPhoto && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedAvatar(DEFAULT_GUEST_AVATAR);
+                    setIsCustomPhoto(false);
+                  }}
+                  className="text-[10px] text-purple-600 hover:underline cursor-pointer"
+                >
+                  기본으로 초기화
+                </button>
+              )}
+            </div>
             <div className="grid grid-cols-4 gap-2">
               {AVATAR_PRESETS.map((av) => {
-                const isSelected = selectedAvatar === av.url;
+                const isSelected = !isCustomPhoto && selectedAvatar === av.url;
                 return (
                   <button
                     key={av.id}
                     type="button"
-                    onClick={() => setSelectedAvatar(av.url)}
+                    onClick={() => {
+                      setSelectedAvatar(av.url);
+                      setIsCustomPhoto(false);
+                    }}
                     className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all p-0.5 cursor-pointer ${
                       isSelected
-                        ? 'border-purple-600 scale-105 shadow-sm'
+                        ? 'border-purple-600 scale-105 shadow-sm ring-2 ring-purple-100'
                         : 'border-transparent hover:border-slate-300 opacity-80 hover:opacity-100'
                     }`}
                   >
