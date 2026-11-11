@@ -269,8 +269,8 @@ export const UserProfileModal: React.FC<Props> = ({
               )}
               <p className={`text-[10px] ${isTargetOfficial ? 'text-blue-700 font-medium' : 'text-purple-600'}`}>
                 {isTargetOfficial
-                  ? '🏛️ 의령여고 영어과 공식 계정(uryeo-eng)은 전체 게시물 관리 및 공식 피드 작성 권한이 부여됩니다.'
-                  : '선생님 계정(uryeo-lee, uryeo-kim, uryeo-sung)은 관리자 권한이 함께 부여됩니다.'}
+                  ? '🏛️ 의령여고 영어과 공식 계정(uryeo_eng)은 전체 게시물 관리 및 공식 피드 작성 권한이 부여됩니다.'
+                  : '선생님 계정(uryeo_lee, uryeo_kim, uryeo_sung)은 관리자 권한이 함께 부여됩니다.'}
               </p>
             </div>
           )}

@@ -43,6 +43,7 @@ import { CreatePostModal } from './CreatePostModal';
 import { UserProfileViewModal } from './UserProfileViewModal';
 import type { ProfileViewData, OfficialPostItem } from './UserProfileViewModal';
 import { InstagramDmChatModal } from './InstagramDmChatModal';
+import { FeedPhotoModal } from './FeedPhotoModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -115,6 +116,37 @@ export const LiveHomeFeed: React.FC<Props> = ({
       setUserPosts(fetched);
     });
   }, []);
+
+  // ─── 🔍 피드 사진 확대 모달 상태 ──────────────────────────────────────────
+  const [photoZoom, setPhotoZoom] = useState<{
+    isOpen: boolean;
+    imageUrl: string;
+    authorName?: string;
+    authorAvatar?: string;
+    caption?: string;
+    isOfficial?: boolean;
+  }>({
+    isOpen: false,
+    imageUrl: '',
+  });
+
+  const handleOpenPhotoZoom = (
+    imageUrl: string,
+    authorName?: string,
+    authorAvatar?: string,
+    caption?: string,
+    isOfficial?: boolean
+  ) => {
+    if (!imageUrl) return;
+    setPhotoZoom({
+      isOpen: true,
+      imageUrl,
+      authorName,
+      authorAvatar,
+      caption,
+      isOfficial,
+    });
+  };
 
   // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
   const handleDeletePost = async (post: FsUserPost) => {
@@ -291,7 +323,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
       isOfficial: false,
       bio: currentUser.isTeacher
         ? '👩‍🏫 의령여고 영어과 지도교사 (게시물 관리 권한)'
-        : '🎓 2026 의령여고 영어 교육과정 박람회 참가자 ✨',
+        : '🎓 2026 의령여자고등학교 고교학점제 박람회 참가자 ✨',
     });
     setIsProfileViewModalOpen(true);
   };
@@ -299,19 +331,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
   // 의령여고 영어과 공식 프로필 열기
   const handleOpenOfficialProfile = () => {
     setViewingProfile({
-      username: 'uryeo-eng',
+      username: 'uryeo_eng',
       displayName: '의령여고 영어과',
       avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
       isTeacher: true,
       isOfficial: true,
-      bio: '🏛️ 2026 의령여자고등학교 영어 교육과정 박람회 공식 계정\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관',
+      bio: '🏛️ 2026 의령여자고등학교 고교학점제 박람회 영어과 공식 계정\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관',
     });
     setIsProfileViewModalOpen(true);
   };
 
   // 다른 학생/선생님 참가자 프로필 열기
   const handleOpenParticipantProfile = (authorName: string, avatar: string) => {
-    if (authorName.trim().toLowerCase() === 'uryeo-eng') {
+    const norm = authorName.trim().toLowerCase().replace(/-/g, '_');
+    if (norm === 'uryeo_eng') {
       handleOpenOfficialProfile();
       return;
     }
@@ -324,7 +357,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
       isOfficial: false,
       bio: isTeacher
         ? '👩‍🏫 의령여고 영어과 지도교사'
-        : '🎓 의령여고 영어 교육과정 박람회 부스 참가자\n✨ 함께 부스를 즐기고 멋진 피드를 공유해요!',
+        : '🎓 2026 의령여고 고교학점제 박람회 참가자\n✨ 함께 부스를 즐기고 멋진 피드를 공유해요!',
     });
     setIsProfileViewModalOpen(true);
   };
@@ -480,7 +513,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 의령여고 영어과
               </span>
               <span className="text-[9px] text-pink-600 font-bold truncate w-full text-center">
-                @uryeo-eng
+                @uryeo_eng
               </span>
             </div>
           </div>
@@ -1468,7 +1501,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                         <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
                           @{post.authorName}
                         </span>
-                        {post.authorName.toLowerCase() === 'uryeo-eng' ? (
+                        {post.authorName.trim().toLowerCase().replace(/-/g, '_') === 'uryeo_eng' ? (
                           <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
                             ★ 공식
                           </span>
@@ -1506,14 +1539,29 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   )}
                 </div>
 
-                {/* 피드 사진: 인스타그램 스타일 (원본 비율 보존, 크롭/줌인 없는 선명한 고화질 표시) */}
-                <div className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden">
+                {/* 피드 사진: 인스타그램 스타일 (클릭 시 확대 팝업 지원) */}
+                <div
+                  onClick={() =>
+                    handleOpenPhotoZoom(
+                      post.photoUrl,
+                      post.authorName,
+                      post.avatar,
+                      post.caption,
+                      post.authorName.trim().toLowerCase().replace(/-/g, '_') === 'uryeo_eng'
+                    )
+                  }
+                  className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
+                  title="클릭하여 확대해서 보기"
+                >
                   <img
                     src={post.photoUrl}
                     alt="게시물 사진"
-                    className="w-full max-h-[580px] object-contain"
+                    className="w-full max-h-[580px] object-contain transition-transform duration-300 group-hover:scale-[1.015]"
                     loading="lazy"
                   />
+                  <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+                    <span>🔍 탭하여 확대</span>
+                  </div>
                 </div>
 
                 {/* 소셜 액션 바 */}
@@ -1570,7 +1618,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </div>
         <p className="text-xs font-bold text-slate-700">모든 소식을 다 확인했습니다</p>
         <p className="text-[10px] text-slate-400">
-          2025 의령여자고등학교 영어과 교육과정 박람회 인피드 앱
+          2026 의령여자고등학교 고교학점제 박람회 영어과 인피드 앱
         </p>
       </div>
 
@@ -1620,6 +1668,17 @@ export const LiveHomeFeed: React.FC<Props> = ({
       <InstagramDmChatModal
         isOpen={isDmModalOpen}
         onClose={handleCloseDmModal}
+      />
+
+      {/* 🔍 피드 사진 탭 시 풀스크린 확대 뷰어 모달 */}
+      <FeedPhotoModal
+        isOpen={photoZoom.isOpen}
+        imageUrl={photoZoom.imageUrl}
+        authorName={photoZoom.authorName}
+        authorAvatar={photoZoom.authorAvatar}
+        caption={photoZoom.caption}
+        isOfficial={photoZoom.isOfficial}
+        onClose={() => setPhotoZoom((prev) => ({ ...prev, isOpen: false }))}
       />
     </div>
   );

@@ -107,3 +107,4 @@ export function usePhotoPicker(options: UsePhotoPickerOptions = {}) {
     hiddenInputs,
   };
 }
+

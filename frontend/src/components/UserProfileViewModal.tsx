@@ -143,10 +143,10 @@ export const UserProfileViewModal: React.FC<Props> = ({
                   {profile.isOfficial
                     ? '공식'
                     : profile.isTeacher
-                    ? '마스터'
-                    : postCount > 0
-                    ? '체험러'
-                    : '탐색중'}
+                      ? '마스터'
+                      : postCount > 0
+                        ? '체험러'
+                        : '탐색중'}
                 </div>
                 <div className="text-[11px] text-slate-500 font-medium">활동 뱃지</div>
               </div>
@@ -176,7 +176,7 @@ export const UserProfileViewModal: React.FC<Props> = ({
             <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
               {profile.bio ||
                 (profile.isOfficial
-                  ? '🏛️ 2026 의령여자고등학교 영어 교육과정 박람회 공식 피드\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관'
+                  ? '🏛️ 2026 의령여자고등학교 고교학점제 박람회 영어과 공식 피드\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관'
                   : '오늘 영어 박람회 부스에서 나만의 영어 미래를 발견하는 중! ✨')}
             </p>
           </div>
@@ -359,3 +359,4 @@ export const UserProfileViewModal: React.FC<Props> = ({
     </div>
   );
 };
+

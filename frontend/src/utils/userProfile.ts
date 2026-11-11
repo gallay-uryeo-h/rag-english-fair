@@ -17,24 +17,39 @@ const STORAGE_KEY = 'uryeo_english_fair_user_profile';
 const ADMIN_SESSION_KEY = 'uryeo_english_fair_admin_session';
 
 // ─── 선생님 및 학교 공식 사전 등록 계정 및 비밀번호 ─────────────────────────────
+// 인스타그램 표준 언더스코어(_) 형식으로 통일 (하이픈 입력도 자동 호환 지원)
 export const TEACHER_ACCOUNTS = [
-  'uryeo-lee',
+  'uryeo_eng',   // 🏛️ 의령여고 영어과 공식 계정
+  'uryeo_kim',
+  'uryeo_lee',
+  'uryeo_sung',
+  // 하이픈 호환성 유지
+  'uryeo-eng',
   'uryeo-kim',
+  'uryeo-lee',
   'uryeo-sung',
-  'uryeo-eng', // 🏛️ 의령여고 영어과 공식 계정
 ] as const;
 
-export const OFFICIAL_ENG_ACCOUNT = 'uryeo-eng';
+export const OFFICIAL_ENG_ACCOUNT = 'uryeo_eng';
 
 export const TEACHER_PASSWORD = 'uryeo2026';
 
 export function isTeacherAccount(username: string): boolean {
-  const normalized = username.trim().toLowerCase();
-  return (TEACHER_ACCOUNTS as readonly string[]).includes(normalized);
+  if (!username) return false;
+  // 하이픈(-)을 언더스코어(_)로 자동 정규화하여 둘 다 완전 호환
+  const normalized = username.trim().toLowerCase().replace(/-/g, '_');
+  return (
+    normalized === 'uryeo_eng' ||
+    normalized === 'uryeo_kim' ||
+    normalized === 'uryeo_lee' ||
+    normalized === 'uryeo_sung'
+  );
 }
 
 export function isOfficialAccount(username: string): boolean {
-  return username.trim().toLowerCase() === OFFICIAL_ENG_ACCOUNT;
+  if (!username) return false;
+  const normalized = username.trim().toLowerCase().replace(/-/g, '_');
+  return normalized === OFFICIAL_ENG_ACCOUNT;
 }
 
 // 부스 활동용 아바타 프리셋 목록
