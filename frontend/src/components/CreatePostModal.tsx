@@ -6,7 +6,6 @@ import {
   Tag,
   Camera,
   UploadCloud,
-  CheckCircle2,
   Loader2,
   Check,
 } from 'lucide-react';
@@ -18,39 +17,40 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   currentUser: UserProfile;
+  onPostCreated?: (postId: string) => void;
 }
 
-// 박람회 피드용 감성 사진 프리셋 목록 (선택 가능)
+// 🌟 고화질 & 감성적인 박람회 테마 사진 프리셋 (에디토리얼 매거진 감성 6종)
 const POST_PHOTO_PRESETS = [
   {
     id: 'p1',
-    label: '친구들과 함께',
-    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
+    label: '부스 페스티벌',
+    url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1080&q=85',
   },
   {
     id: 'p2',
-    label: '영어 공부와 열정',
-    url: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80',
+    label: '친구들과 추억',
+    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1080&q=85',
   },
   {
     id: 'p3',
-    label: '음악과 오디오 퀴즈',
-    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
+    label: '오디오 릴스 챌린지',
+    url: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1080&q=85',
   },
   {
     id: 'p4',
-    label: '도서관과 교과서',
-    url: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
+    label: '감성 북카페 & 원서',
+    url: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1080&q=85',
   },
   {
     id: 'p5',
-    label: '미래 진로와 세특 노트',
-    url: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80',
+    label: '세특 & 스터디 탐구',
+    url: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1080&q=85',
   },
   {
     id: 'p6',
-    label: '따뜻한 캠퍼스 풍경',
-    url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80',
+    label: '글로벌 캠퍼스 비전',
+    url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1080&q=85',
   },
 ];
 
@@ -63,8 +63,15 @@ const PRESET_TAGS = [
   '#영어과부스체험',
 ];
 
-export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+export const CreatePostModal: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  currentUser,
+  onPostCreated,
+}) => {
+  // 📸 카메라 직접 촬영용 인풋 & 🖼️ 사진 앨범/갤러리 선택용 인풋 분리
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   // 사진 상태
   const [userUploadedPhoto, setUserUploadedPhoto] = useState<{
@@ -114,7 +121,8 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
     } finally {
       setIsCompressing(false);
       // 파일 인풋 리셋 (동일 파일 재선택 허용)
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
+      if (galleryInputRef.current) galleryInputRef.current.value = '';
     }
   };
 
@@ -127,7 +135,7 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
 
     try {
       setIsSubmitting(true);
-      await addUserPost({
+      const newPostId = await addUserPost({
         authorId: currentUser.uid,
         authorName: currentUser.username,
         displayName: currentUser.displayName,
@@ -139,8 +147,9 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
 
       setCaption('');
       setUserUploadedPhoto(null);
+      // 🌟 alert 팝업 없이 즉시 모달 닫기 & 해당 피드로 부드럽게 스크롤
       onClose();
-      alert('📸 피드가 성공적으로 공유되었습니다!');
+      onPostCreated?.(newPostId);
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('피드 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
@@ -152,10 +161,20 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh]">
-        {/* 숨김 처리된 실제 파일 인풋 (카메라 촬영 & 갤러리 지원) */}
+        {/* 📸 카메라 직접 촬영 인풋 (capture="environment"로 모바일 후면 카메라 즉시 구동) */}
         <input
           type="file"
-          ref={fileInputRef}
+          ref={cameraInputRef}
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+
+        {/* 🖼️ 사진 앨범/갤러리 선택 인풋 */}
+        <input
+          type="file"
+          ref={galleryInputRef}
           accept="image/*"
           className="hidden"
           onChange={handleFileChange}
@@ -201,36 +220,39 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
                   <Tag className="w-3 h-3 text-pink-400" />
                   <span>{selectedTag}</span>
                 </div>
-                {/* 내 사진 여부 표시 뱃지 */}
-                {useUploadMode && userUploadedPhoto && (
-                  <div className="absolute bottom-2.5 right-2.5 bg-emerald-600/95 backdrop-blur-xs text-white px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1 shadow-xs">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-200" />
-                    <span>고화질 원본 ({userUploadedPhoto.sizeKb} KB)</span>
-                  </div>
-                )}
               </>
             )}
           </div>
 
-          {/* 사진 선택 컨트롤: [내 사진 직접 올리기] vs [추천 테마 사진] */}
+          {/* 사진 선택 컨트롤: [📸 카메라로 촬영] & [🖼️ 앨범에서 선택] */}
           <div className="space-y-2">
-            {/* 📸 메인 버튼: 스마트폰 사진첩 / 카메라에서 바로 올리기 */}
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isCompressing}
-              className="w-full py-2.5 px-3.5 rounded-xl border-2 border-dashed border-purple-400 hover:border-purple-600 bg-purple-50/70 hover:bg-purple-100/70 transition-all flex items-center justify-center gap-2 text-xs font-bold text-purple-700 cursor-pointer shadow-xs active:scale-[0.99]"
-            >
-              <UploadCloud className="w-4 h-4 text-purple-600" />
-              <span>{userUploadedPhoto ? '다른 사진으로 변경하기 📸' : '내 앨범에서 사진 선택 / 사진 촬영 📸'}</span>
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => cameraInputRef.current?.click()}
+                disabled={isCompressing}
+                className="py-2.5 px-3 rounded-xl border-2 border-purple-300 hover:border-purple-500 bg-purple-50 hover:bg-purple-100/80 transition-all flex items-center justify-center gap-1.5 text-xs font-bold text-purple-700 cursor-pointer shadow-xs active:scale-95"
+              >
+                <Camera className="w-4 h-4 text-purple-600 stroke-[2.2]" />
+                <span>카메라로 촬영</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => galleryInputRef.current?.click()}
+                disabled={isCompressing}
+                className="py-2.5 px-3 rounded-xl border border-slate-300 hover:border-slate-400 bg-slate-50 hover:bg-slate-100 transition-all flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer shadow-xs active:scale-95"
+              >
+                <UploadCloud className="w-4 h-4 text-slate-600 stroke-[2.2]" />
+                <span>앨범에서 선택</span>
+              </button>
+            </div>
 
-            {/* 추천 프리셋 사진 선택 영역 */}
+            {/* 추천 프리셋 사진 선택 영역 (감성 6선) */}
             <div className="pt-1">
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 mb-1.5 px-0.5">
                 <span className="flex items-center gap-1">
                   <ImageIcon className="w-3.5 h-3.5 text-slate-500" />
-                  <span>또는 추천 박람회 사진 선택</span>
+                  <span>또는 감성 추천 사진 선택</span>
                 </span>
                 {userUploadedPhoto && (
                   <button
@@ -257,7 +279,7 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
                       className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
                         isSelected
                           ? 'border-pink-500 scale-105 shadow-xs ring-2 ring-pink-200'
-                          : 'border-transparent opacity-70 hover:opacity-100'
+                          : 'border-transparent opacity-75 hover:opacity-100'
                       }`}
                       title={p.label}
                     >

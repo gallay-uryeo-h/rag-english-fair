@@ -328,6 +328,24 @@ export const LiveHomeFeed: React.FC<Props> = ({
     }, 120);
   };
 
+  // 새 피드 작성 완료 후 해당 피드로 스크롤 이동 및 하이라이트
+  const handlePostCreated = useCallback((postId: string) => {
+    setIsCreatePostModalOpen(false);
+    const tryScroll = (attempts = 0) => {
+      const el = document.getElementById(`user_post_${postId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-4', 'ring-purple-500', 'shadow-xl', 'transition-all', 'duration-500');
+        setTimeout(() => {
+          el.classList.remove('ring-4', 'ring-purple-500', 'shadow-xl');
+        }, 2200);
+      } else if (attempts < 12) {
+        setTimeout(() => tryScroll(attempts + 1), 150);
+      }
+    };
+    setTimeout(() => tryScroll(), 200);
+  }, []);
+
   return (
     <div ref={feedRefs.homeRef} className="w-full space-y-4 pb-12">
       {/* 🛡️ 선생님 관리자 모드 활성화 알림 배너 */}
@@ -1512,6 +1530,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           isOpen={isCreatePostModalOpen}
           onClose={() => setIsCreatePostModalOpen(false)}
           currentUser={currentUser}
+          onPostCreated={handlePostCreated}
         />
       )}
 
