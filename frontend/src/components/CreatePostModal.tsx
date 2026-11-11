@@ -85,7 +85,7 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
 
       setCaption('');
       onClose();
-      alert('📸 인스타그램 피드가 성공적으로 공유되었습니다!');
+      alert('📸 피드가 성공적으로 공유되었습니다!');
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('피드 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
@@ -167,11 +167,10 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
                         setSelectedPhoto(p.url);
                         setIsUsingCustom(false);
                       }}
-                      className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                        isSelected
+                      className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${isSelected
                           ? 'border-pink-500 scale-105 shadow-xs ring-2 ring-pink-200'
                           : 'border-transparent opacity-75 hover:opacity-100'
-                      }`}
+                        }`}
                     >
                       <img src={p.url} alt={p.label} className="w-full h-full object-cover" />
                       {isSelected && (
@@ -195,11 +194,10 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
                   key={tag}
                   type="button"
                   onClick={() => setSelectedTag(tag)}
-                  className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer border ${
-                    selectedTag === tag
+                  className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer border ${selectedTag === tag
                       ? 'bg-pink-50 text-pink-600 border-pink-300'
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-                  }`}
+                    }`}
                 >
                   {tag}
                 </button>
@@ -231,7 +229,7 @@ export const CreatePostModal: React.FC<Props> = ({ isOpen, onClose, currentUser 
             className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white text-xs font-bold hover:opacity-95 active:scale-[0.98] disabled:opacity-50 transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>{isSubmitting ? '게시 중...' : '인스타그램 피드 공유하기'}</span>
+            <span>{isSubmitting ? '게시 중...' : '피드 공유하기'}</span>
           </button>
         </form>
       </div>

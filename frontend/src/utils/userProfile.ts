@@ -1,21 +1,36 @@
 /**
  * userProfile.ts
  *
- * 로그인 없이 브라우저(localStorage) 기반으로 나만의 인스타그램 프로필 관리
+ * 로그인 없이 브라우저(localStorage) 기반으로 부스 활동용 1회용 프로필 관리
  */
 
 export interface UserProfile {
   uid: string;           // 기기 고유 난수 ID (작성자 식별 및 본인 글 삭제용)
-  username: string;      // 인스타 아이디 (예: 2반_김민지, ur_english_fan)
+  username: string;      // 부스 활동에 사용할 1회용 아이디(닉네임)
   displayName: string;   // 표시 이름
   avatar: string;        // 아바타 이미지 URL
   createdAt: number;
+  isTeacher?: boolean;   // 선생님 인증 여부
 }
 
 const STORAGE_KEY = 'uryeo_english_fair_user_profile';
 const ADMIN_SESSION_KEY = 'uryeo_english_fair_admin_session';
 
-// 귀여운 인스타 아바타 프리셋 목록
+// ─── 선생님 사전 등록 계정 및 비밀번호 ─────────────────────────────────────────
+export const TEACHER_ACCOUNTS = [
+  'uryeo-lee',
+  'uryeo-kim',
+  'uryeo-sung',
+] as const;
+
+export const TEACHER_PASSWORD = 'uryeo2026';
+
+export function isTeacherAccount(username: string): boolean {
+  const normalized = username.trim().toLowerCase();
+  return (TEACHER_ACCOUNTS as readonly string[]).includes(normalized);
+}
+
+// 부스 활동용 아바타 프리셋 목록
 export const AVATAR_PRESETS = [
   { id: 'av_1', label: '영문 도서', url: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80' },
   { id: 'av_2', label: '헤드폰 리스너', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=200&q=80' },
@@ -27,8 +42,10 @@ export const AVATAR_PRESETS = [
   { id: 'av_8', label: '새내기 학생', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80' },
 ];
 
+export const DEFAULT_GUEST_AVATAR = AVATAR_PRESETS[0].url;
+
 /**
- * 저장된 프로필 가져오기
+ * 저장된 프로필 가져오기 (없으면 null 반환 -> 최초 접근 시 미설정 상태)
  */
 export function getUserProfile(): UserProfile | null {
   try {
@@ -52,32 +69,22 @@ export function saveUserProfile(profile: UserProfile): void {
 }
 
 /**
- * 최초 방문 시 기본 프로필 생성 (또는 기존 프로필 반환)
+ * 프로필 삭제 (로그아웃 / 재설정용)
  */
-export function getOrCreateUserProfile(): UserProfile {
-  const existing = getUserProfile();
-  if (existing) return existing;
-
-  const randomNum = Math.floor(100 + Math.random() * 900);
-  const randomAvatar = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)];
-  const newProfile: UserProfile = {
-    uid: `user_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-    username: `ur_student_${randomNum}`,
-    displayName: `의령여고 학생 #${randomNum}`,
-    avatar: randomAvatar.url,
-    createdAt: Date.now(),
-  };
-
-  saveUserProfile(newProfile);
-  return newProfile;
+export function clearUserProfile(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {
+    console.error('Failed to clear user profile:', e);
+  }
 }
 
 // ─── 선생님 관리자 모드 ───────────────────────────────────────────────────────
 
-export const ADMIN_MASTER_PASSWORD = 'uryeo'; // 선생님 관리자 마스터 키
-
 export function isAdminAuthenticated(): boolean {
   try {
+    const profile = getUserProfile();
+    if (profile?.isTeacher) return true;
     return sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
   } catch {
     return false;

@@ -30,14 +30,14 @@ import { VocabListenTab } from './VocabListenTab';
 import { TextbookBrowse2Layer } from './TextbookBrowse2Layer';
 import { SeteukGeneratorTab } from './SeteukGeneratorTab';
 import {
-  getOrCreateUserProfile,
+  getUserProfile,
   isAdminAuthenticated,
   setAdminAuthenticated,
+  clearUserProfile,
 } from '../utils/userProfile';
 import type { UserProfile } from '../utils/userProfile';
 import { UserProfileModal } from './UserProfileModal';
 import { CreatePostModal } from './CreatePostModal';
-import { AdminAuthModal } from './AdminAuthModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -78,12 +78,19 @@ export const LiveHomeFeed: React.FC<Props> = ({
   onToggleSection,
   onScrollTo,
 }) => {
-  // ─── 👤 사용자 개별 프로필 (localStorage 기반 로그인 없는 계정) ─────────────
-  const [currentUser, setCurrentUser] = useState<UserProfile>(getOrCreateUserProfile);
+  // ─── 👤 사용자 개별 프로필 (최초 방문 시 계정 없음: null) ────────────────
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(getUserProfile);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminAuthenticated);
+
+  // 선생님 계정인 경우 관리자 권한 동기화
+  useEffect(() => {
+    if (currentUser?.isTeacher) {
+      setIsAdmin(true);
+      setAdminAuthenticated(true);
+    }
+  }, [currentUser]);
 
   // ─── 📸 실시간 학생 피드 목록 (Firestore 'user_post' 구독) ─────────────────
   const [userPosts, setUserPosts] = useState<FsUserPost[]>([]);
@@ -96,7 +103,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
   // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
   const handleDeletePost = async (post: FsUserPost) => {
-    const isOwner = post.authorId === currentUser.uid;
+    const isOwner = currentUser && post.authorId === currentUser.uid;
     const canDelete = isOwner || isAdmin;
     if (!canDelete) {
       alert('본인이 작성한 게시물만 삭제할 수 있습니다.');
@@ -152,12 +159,17 @@ export const LiveHomeFeed: React.FC<Props> = ({
   }, []);
 
   const handleAddComment = useCallback(async (postId: string) => {
+    if (!currentUser) {
+      setIsProfileModalOpen(true);
+      alert('댓글을 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
+      return;
+    }
     const text = commentInputs[postId]?.trim();
     if (!text) return;
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
-    // 내 인스타그램 아이디로 댓글 등록
+    // 내 아이디로 댓글 등록
     await addComment(postId, text, currentUser.username);
-  }, [commentInputs, currentUser.username]);
+  }, [commentInputs, currentUser]);
 
   // ─── Firestore 실시간 좋아요 카운트 ──────────────────────────────────────
   // 좋아요 기본 카운트 (초기 디스플레이용 - Firestore에서 덮어씌워짐)
@@ -244,13 +256,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
     const seen = new Set<string>();
     const list: Array<{ authorName: string; avatar: string; postId: string }> = [];
     userPosts.forEach((p) => {
-      if (!seen.has(p.authorName) && p.authorName !== currentUser.username) {
+      if (!seen.has(p.authorName) && (!currentUser || p.authorName !== currentUser.username)) {
         seen.add(p.authorName);
         list.push({ authorName: p.authorName, avatar: p.avatar, postId: p.id });
       }
     });
     return list;
-  }, [userPosts, currentUser.username]);
+  }, [userPosts, currentUser]);
 
   return (
     <div ref={feedRefs.homeRef} className="w-full space-y-4 pb-12">
@@ -259,60 +271,86 @@ export const LiveHomeFeed: React.FC<Props> = ({
         <div className="bg-purple-900 text-purple-100 px-3.5 py-2 text-xs flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-1.5 font-bold">
             <Shield className="w-3.5 h-3.5 text-amber-300" />
-            <span>선생님 관리자 모드 작동 중 (모든 게시물 삭제 권한 활성화)</span>
+            <span>선생님 관리자 모드 작동 중 (게시물 삭제 권한 활성화)</span>
           </div>
           <button
             onClick={() => {
+              clearUserProfile();
               setAdminAuthenticated(false);
               setIsAdmin(false);
-              alert('관리자 모드가 해제되었습니다.');
+              setCurrentUser(null);
+              alert('선생님 계정에서 로그아웃되었습니다.');
             }}
             className="text-[11px] bg-white/20 hover:bg-white/30 px-2 py-0.5 rounded font-medium cursor-pointer"
           >
-            관리자 종료
+            로그아웃
           </button>
         </div>
       )}
 
       {/* =========================================================================
-          📸 1. 인스타그램 스토리 캐러셀 (Instagram Story Bar)
+          📸 1. 부스 활동 스토리 캐러셀 (Story Bar)
           ========================================================================= */}
       <section className="bg-white border-b border-slate-200 py-3 px-3 overflow-hidden shadow-2xs">
         <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar px-1">
-          {/* 🌟 1. 내 스토리 (내 아바타 + 글쓰기/프로필 변경) */}
-          <div
-            onClick={() => setIsProfileModalOpen(true)}
-            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
-          >
-            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.username}
-                  className="w-full h-full rounded-full object-cover"
-                />
+          {/* 🌟 1. 내 스토리 (최초 방문 시 계정 만들기 유도, 설정 후 내 프로필 표시) */}
+          {currentUser ? (
+            <div
+              onClick={() => setIsProfileModalOpen(true)}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+            >
+              <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
+                <div className="w-full h-full rounded-full bg-white p-0.5">
+                  <img
+                    src={currentUser.avatar}
+                    alt={currentUser.username}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+                {/* 내 스토리 플러스 뱃지 */}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCreatePostModalOpen(true);
+                  }}
+                  title="새 피드 올리기"
+                  className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs cursor-pointer"
+                >
+                  +
+                </div>
               </div>
-              {/* 내 스토리 플러스 뱃지 */}
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsCreatePostModalOpen(true);
-                }}
-                title="새 피드 올리기"
-                className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs cursor-pointer"
-              >
-                +
+              <div className="flex flex-col items-center max-w-[70px]">
+                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
+                  {currentUser.isTeacher ? '선생님 계정' : '내 계정'}
+                </span>
+                <span className="text-[9px] text-slate-500 truncate w-full text-center">
+                  @{currentUser.username}
+                </span>
               </div>
             </div>
-            <div className="flex flex-col items-center max-w-[70px]">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
-                내 계정
-              </span>
-              <span className="text-[9px] text-slate-500 truncate w-full text-center">
-                @{currentUser.username}
-              </span>
+          ) : (
+            <div
+              onClick={() => setIsProfileModalOpen(true)}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+            >
+              <div className="relative w-16 h-16 rounded-full p-[2px] border-2 border-dashed border-purple-400 hover:border-purple-600 transition-all flex items-center justify-center bg-purple-50/50 group-hover:scale-105 active:scale-95">
+                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-lg font-bold">
+                  ?
+                </div>
+                <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
+                  +
+                </div>
+              </div>
+              <div className="flex flex-col items-center max-w-[70px]">
+                <span className="text-[11px] font-bold text-purple-700 tracking-tight truncate w-full text-center">
+                  계정 만들기
+                </span>
+                <span className="text-[9px] text-slate-400 truncate w-full text-center">
+                  1회용 아이디
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
           <div
@@ -396,29 +434,60 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
       {/* 🌟 1-1. 내 계정 요약 및 새 글 작성 빠른 액션 바 */}
       <section className="bg-white border-y border-slate-200 px-3.5 py-2.5 flex items-center justify-between shadow-2xs">
-        <div
-          onClick={() => setIsProfileModalOpen(true)}
-          className="flex items-center gap-2 cursor-pointer group"
-        >
-          <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600">
-            <img
-              src={currentUser.avatar}
-              alt={currentUser.username}
-              className="w-full h-full rounded-full object-cover"
-            />
-          </div>
-          <div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                @{currentUser.username}
-              </span>
-              <span className="text-[10px] text-slate-400">· 프로필 수정</span>
+        {currentUser ? (
+          <div
+            onClick={() => setIsProfileModalOpen(true)}
+            className="flex items-center gap-2 cursor-pointer group"
+          >
+            <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600">
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.username}
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                  @{currentUser.username}
+                </span>
+                {currentUser.isTeacher && (
+                  <span className="text-[9px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.2 rounded-full">
+                    선생님 🛡️
+                  </span>
+                )}
+                <span className="text-[10px] text-slate-400">· 프로필 수정</span>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div
+            onClick={() => setIsProfileModalOpen(true)}
+            className="flex items-center gap-2 cursor-pointer group"
+          >
+            <div className="w-7 h-7 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">
+              ?
+            </div>
+            <div>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold text-purple-700 group-hover:underline">
+                  부스 활동용 1회용 아이디 만들기
+                </span>
+                <span className="text-[10px] text-slate-400">➔ 터치</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <button
-          onClick={() => setIsCreatePostModalOpen(true)}
+          onClick={() => {
+            if (!currentUser) {
+              setIsProfileModalOpen(true);
+              alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
+            } else {
+              setIsCreatePostModalOpen(true);
+            }
+          }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white text-xs font-bold shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5 stroke-3" />
@@ -1243,7 +1312,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           </div>
 
           {userPosts.map((post) => {
-            const isOwner = post.authorId === currentUser.uid;
+            const isOwner = currentUser ? post.authorId === currentUser.uid : false;
             const canDelete = isOwner || isAdmin;
             const isLiked = likedUserPosts[post.id] || false;
             const totalLikes = (post.likesCount || 0) + (isLiked ? 1 : 0);
@@ -1364,32 +1433,21 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </p>
       </div>
 
-      {/* ─── 팝업 모달 3종 ─────────────────────────────────────────────────── */}
+      {/* ─── 팝업 모달 ─────────────────────────────────────────────────── */}
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         currentProfile={currentUser}
         onProfileUpdated={(updated) => setCurrentUser(updated)}
-        onOpenAdminAuth={() => setIsAdminModalOpen(true)}
-        isAdmin={isAdmin}
-        onLogoutAdmin={() => {
-          setAdminAuthenticated(false);
-          setIsAdmin(false);
-          alert('관리자 모드가 해제되었습니다.');
-        }}
       />
 
-      <CreatePostModal
-        isOpen={isCreatePostModalOpen}
-        onClose={() => setIsCreatePostModalOpen(false)}
-        currentUser={currentUser}
-      />
-
-      <AdminAuthModal
-        isOpen={isAdminModalOpen}
-        onClose={() => setIsAdminModalOpen(false)}
-        onSuccess={() => setIsAdmin(true)}
-      />
+      {currentUser && (
+        <CreatePostModal
+          isOpen={isCreatePostModalOpen}
+          onClose={() => setIsCreatePostModalOpen(false)}
+          currentUser={currentUser}
+        />
+      )}
     </div>
   );
 };
