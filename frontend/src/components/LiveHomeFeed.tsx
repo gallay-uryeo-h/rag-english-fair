@@ -36,6 +36,7 @@ import {
   setAdminAuthenticated,
   clearUserProfile,
   isTeacherAccount,
+  isOfficialAccount,
 } from '../utils/userProfile';
 import type { UserProfile } from '../utils/userProfile';
 import { UserProfileModal } from './UserProfileModal';
@@ -343,8 +344,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
   // 다른 학생/선생님 참가자 프로필 열기
   const handleOpenParticipantProfile = (authorName: string, avatar: string) => {
-    const norm = authorName.trim().toLowerCase().replace(/-/g, '_');
-    if (norm === 'uryeo_eng') {
+    if (isOfficialAccount(authorName)) {
       handleOpenOfficialProfile();
       return;
     }
@@ -1501,7 +1501,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                         <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
                           @{post.authorName}
                         </span>
-                        {post.authorName.trim().toLowerCase().replace(/-/g, '_') === 'uryeo_eng' ? (
+                        {isOfficialAccount(post.authorName) ? (
                           <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
                             ★ 공식
                           </span>
@@ -1547,7 +1547,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                       post.authorName,
                       post.avatar,
                       post.caption,
-                      post.authorName.trim().toLowerCase().replace(/-/g, '_') === 'uryeo_eng'
+                      isOfficialAccount(post.authorName)
                     )
                   }
                   className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
