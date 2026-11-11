@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   Sparkles,
   CheckCircle2,
@@ -61,9 +61,6 @@ export const VocabTestTab: React.FC = () => {
   // 결과 화면 표시 여부
   const [showResult, setShowResult] = useState<boolean>(false);
 
-  // 자동 스크롤을 위한 참조
-  const bottomRef = useRef<HTMLDivElement>(null);
-
   // 현재 교과서 및 세트 객체
   const currentQuiz =
     VOCAB_QUIZ_DATA.find((q) => q.subjectKey === selectedSubjectKey) || VOCAB_QUIZ_DATA[0];
@@ -74,21 +71,12 @@ export const VocabTestTab: React.FC = () => {
   const currentQ = currentSet.questions[currentQuestionIndex];
   const isAnswered = selectedAnswers[currentQuestionIndex] !== undefined;
 
-  // 최하단으로 부드럽게 스크롤하는 함수
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
   const handleSelectAnswer = (optionIdx: number) => {
     if (isAnswered) return; // 이미 답변했으면 변경 불가
     setSelectedAnswers((prev) => ({
       ...prev,
       [currentQuestionIndex]: optionIdx,
     }));
-    // 선택지 고르면 최하단(해설 및 다음 문제 버튼)으로 자동 스크롤
-    scrollToBottom();
   };
 
   const handleNext = () => {
@@ -96,7 +84,6 @@ export const VocabTestTab: React.FC = () => {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setShowResult(true);
-      scrollToBottom();
     }
   };
 
@@ -111,8 +98,6 @@ export const VocabTestTab: React.FC = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setShowResult(false);
-    // 교과서나 세트 선택 시 문제 카드의 최하단으로 자동 스크롤
-    scrollToBottom();
   };
 
   // 다음 세트 풀어보기 (5세트 완료 시 교과서 내 첫 세트로 순환)
@@ -348,9 +333,6 @@ export const VocabTestTab: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/* 스크롤 기준점 */}
-          <div ref={bottomRef} className="h-1" />
         </div>
       ) : (
         /* 🏆 결과 화면 */
@@ -412,9 +394,6 @@ export const VocabTestTab: React.FC = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-
-          {/* 스크롤 기준점 */}
-          <div ref={bottomRef} className="h-1" />
         </div>
       )}
     </div>

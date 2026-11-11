@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Sparkles,
   CheckCircle2,
@@ -71,8 +71,6 @@ export const VocabListenTab: React.FC = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [ttsSupported, setTtsSupported] = useState<boolean>(true);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     setTtsSupported('speechSynthesis' in window);
   }, []);
@@ -100,16 +98,9 @@ export const VocabListenTab: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex, selectedSetId, selectedSubjectKey]);
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
   const handleSelectAnswer = (optionIdx: number) => {
     if (isAnswered) return;
     setSelectedAnswers((prev) => ({ ...prev, [currentQuestionIndex]: optionIdx }));
-    scrollToBottom();
   };
 
   const handleNext = () => {
@@ -117,7 +108,6 @@ export const VocabListenTab: React.FC = () => {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
       setShowResult(true);
-      scrollToBottom();
     }
   };
 
@@ -131,7 +121,6 @@ export const VocabListenTab: React.FC = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setShowResult(false);
-    scrollToBottom();
   }, []);
 
   const handleNextSet = () => {
@@ -431,8 +420,6 @@ export const VocabListenTab: React.FC = () => {
               </div>
             </div>
           )}
-
-          <div ref={bottomRef} className="h-1" />
         </div>
       ) : (
         /* 🏆 결과 화면 */
@@ -492,8 +479,6 @@ export const VocabListenTab: React.FC = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-
-          <div ref={bottomRef} className="h-1" />
         </div>
       )}
     </div>
