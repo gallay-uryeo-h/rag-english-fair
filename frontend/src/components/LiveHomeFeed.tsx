@@ -34,10 +34,13 @@ import {
   isAdminAuthenticated,
   setAdminAuthenticated,
   clearUserProfile,
+  isTeacherAccount,
 } from '../utils/userProfile';
 import type { UserProfile } from '../utils/userProfile';
 import { UserProfileModal } from './UserProfileModal';
 import { CreatePostModal } from './CreatePostModal';
+import { UserProfileViewModal } from './UserProfileViewModal';
+import type { ProfileViewData, OfficialPostItem } from './UserProfileViewModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -210,6 +213,121 @@ export const LiveHomeFeed: React.FC<Props> = ({
     return list;
   }, [userPosts, currentUser]);
 
+  // ─── 🖼️ 인스타그램 스타일 프로필 모아보기 팝업 모달 상태 ───────────────────
+  const [viewingProfile, setViewingProfile] = useState<ProfileViewData | null>(null);
+  const [isProfileViewModalOpen, setIsProfileViewModalOpen] = useState<boolean>(false);
+
+  // 현재 열람 중인 프로필의 작성 게시물들 필터링
+  const postsForViewingProfile = useMemo(() => {
+    if (!viewingProfile) return [];
+    return userPosts.filter(
+      (p) => p.authorName.toLowerCase() === viewingProfile.username.toLowerCase()
+    );
+  }, [userPosts, viewingProfile]);
+
+  // 공식 4대 부스 포스트 그리드 데이터
+  const officialPostsList: OfficialPostItem[] = useMemo(() => [
+    {
+      id: 'mbti',
+      title: 'MBTI별 본문 추천',
+      imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80',
+      tag: '1부스',
+      likes: remoteLikes.mbti,
+    },
+    {
+      id: 'vocab',
+      title: '소리로 배우는 영단어',
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80',
+      tag: '2부스',
+      likes: remoteLikes.vocab,
+    },
+    {
+      id: 'textbook',
+      title: '3개년 교과서 6권 대공개',
+      imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80',
+      tag: '3부스',
+      likes: remoteLikes.textbook,
+    },
+    {
+      id: 'seteuk',
+      title: '진로별 세특 발전소',
+      imageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80',
+      tag: '4부스',
+      likes: remoteLikes.seteuk,
+    },
+  ], [remoteLikes]);
+
+  // 내 프로필 모아보기 열기
+  const handleOpenMyProfile = () => {
+    if (!currentUser) {
+      setIsProfileModalOpen(true);
+      return;
+    }
+    setViewingProfile({
+      username: currentUser.username,
+      displayName: currentUser.displayName || currentUser.username,
+      avatar: currentUser.avatar,
+      isTeacher: currentUser.isTeacher,
+      isOfficial: false,
+      bio: currentUser.isTeacher
+        ? '👩‍🏫 의령여고 영어과 지도교사 (게시물 관리 권한)'
+        : '🎓 2026 의령여고 영어 교육과정 박람회 참가자 ✨',
+    });
+    setIsProfileViewModalOpen(true);
+  };
+
+  // 의령여고 영어과 공식 프로필 열기
+  const handleOpenOfficialProfile = () => {
+    setViewingProfile({
+      username: 'uryeo_english_fair',
+      displayName: '의령여고 영어과',
+      avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
+      isTeacher: false,
+      isOfficial: true,
+      bio: '🏛️ 2026 의령여자고등학교 영어 교육과정 박람회 공식 피드\n📍 4대 부스 체험 & 학종 맞춤형 교육과정 전시관',
+    });
+    setIsProfileViewModalOpen(true);
+  };
+
+  // 다른 학생/선생님 참가자 프로필 열기
+  const handleOpenParticipantProfile = (authorName: string, avatar: string) => {
+    const isTeacher = isTeacherAccount(authorName);
+    setViewingProfile({
+      username: authorName,
+      displayName: authorName,
+      avatar,
+      isTeacher,
+      isOfficial: false,
+      bio: isTeacher
+        ? '👩‍🏫 의령여고 영어과 지도교사'
+        : '🎓 의령여고 영어 교육과정 박람회 부스 참가자\n✨ 함께 부스를 즐기고 멋진 피드를 공유해요!',
+    });
+    setIsProfileViewModalOpen(true);
+  };
+
+  // 모아보기 팝업에서 특정 피드 클릭 시 스크롤 이동 및 하이라이트
+  const handleSelectPostFromProfile = (postId: string) => {
+    setIsProfileViewModalOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(`user_post_${postId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-4', 'ring-purple-500', 'shadow-xl', 'transition-all', 'duration-500');
+        setTimeout(() => {
+          el.classList.remove('ring-4', 'ring-purple-500', 'shadow-xl');
+        }, 2200);
+      }
+    }, 120);
+  };
+
+  // 공식 부스 선택 시 해당 부스로 이동
+  const handleSelectOfficialPostFromProfile = (boothId: string) => {
+    setIsProfileViewModalOpen(false);
+    setTimeout(() => {
+      onScrollTo(boothId as any);
+    }, 120);
+  };
+
   return (
     <div ref={feedRefs.homeRef} className="w-full space-y-4 pb-12">
       {/* 🛡️ 선생님 관리자 모드 활성화 알림 배너 */}
@@ -242,7 +360,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
           {/* 🌟 1. 내 스토리 (최초 방문 시 계정 만들기 유도, 설정 후 내 프로필 표시) */}
           {currentUser ? (
             <div
-              onClick={() => setIsProfileModalOpen(true)}
+              onClick={handleOpenMyProfile}
               className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
               <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
@@ -266,7 +384,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </div>
               </div>
               <div className="flex flex-col items-center max-w-[70px]">
-                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
+                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-purple-600 transition-colors">
                   {currentUser.isTeacher ? '선생님 계정' : '내 계정'}
                 </span>
                 <span className="text-[9px] text-slate-500 truncate w-full text-center">
@@ -300,7 +418,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
           {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
           <div
-            onClick={() => onScrollTo('home')}
+            onClick={handleOpenOfficialProfile}
             className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
           >
             <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
@@ -316,7 +434,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </div>
             </div>
             <div className="flex flex-col items-center max-w-[70px]">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-pink-600 transition-colors">
                 의령여고 영어과
               </span>
               <span className="text-[9px] text-pink-600 font-medium truncate w-full text-center">
@@ -325,22 +443,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 🌟 3. 실시간으로 피드를 올린 실제 참여자들 스토리 (Mock 계정 완전 삭제) */}
+          {/* 🌟 3. 실시간으로 피드를 올린 실제 참여자들 스토리 (클릭 시 프로필 모아보기 팝업) */}
           {studentStoryList.map((st) => (
             <div
               key={st.postId}
-              onClick={() => {
-                const el = document.getElementById(`user_post_${st.postId}`);
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  el.classList.add('ring-4', 'ring-purple-400');
-                  setTimeout(() => {
-                    el.classList.remove('ring-4', 'ring-purple-400');
-                  }, 1800);
-                } else {
-                  alert(`@${st.authorName} 님이 작성한 피드로 이동합니다.`);
-                }
-              }}
+              onClick={() => handleOpenParticipantProfile(st.authorName, st.avatar)}
               className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
               <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-blue-500 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
@@ -352,7 +459,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate">
+              <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate group-hover:text-purple-600 transition-colors">
                 @{st.authorName}
               </span>
             </div>
@@ -381,10 +488,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
       <section className="bg-white border-y border-slate-200 px-3.5 py-2.5 flex items-center justify-between shadow-2xs">
         {currentUser ? (
           <div
-            onClick={() => setIsProfileModalOpen(true)}
+            onClick={handleOpenMyProfile}
             className="flex items-center gap-2 cursor-pointer group"
           >
-            <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600">
+            <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600 group-hover:scale-105 transition-transform">
               <img
                 src={currentUser.avatar}
                 alt={currentUser.username}
@@ -401,7 +508,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     선생님 🛡️
                   </span>
                 )}
-                <span className="text-[10px] text-slate-400">· 프로필 수정</span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsProfileModalOpen(true);
+                  }}
+                  className="text-[10px] text-slate-400 hover:text-purple-600 hover:underline cursor-pointer"
+                >
+                  · 프로필 수정
+                </span>
               </div>
             </div>
           </div>
@@ -1268,10 +1383,14 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 id={`user_post_${post.id}`}
                 className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
               >
-                {/* 포스트 상단 계정 정보 */}
+                {/* 포스트 상단 계정 정보 (클릭 시 프로필 모아보기 팝업) */}
                 <div className="flex items-center justify-between px-3.5 py-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 to-purple-600">
+                  <div
+                    onClick={() => handleOpenParticipantProfile(post.authorName, post.avatar)}
+                    className="flex items-center gap-2.5 cursor-pointer group"
+                    title={`@${post.authorName} 프로필 보기`}
+                  >
+                    <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 to-purple-600 group-hover:scale-105 transition-transform">
                       <img
                         src={post.avatar}
                         alt={post.authorName}
@@ -1280,7 +1399,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-900">@{post.authorName}</span>
+                        <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
+                          @{post.authorName}
+                        </span>
                         {post.tag && (
                           <span className="text-[10px] font-semibold text-pink-600 bg-pink-50 px-1.5 py-0.2 rounded">
                             {post.tag}
@@ -1393,6 +1514,31 @@ export const LiveHomeFeed: React.FC<Props> = ({
           currentUser={currentUser}
         />
       )}
+
+      {/* 🌟 인스타그램 스타일 프로필 모아보기 팝업 모달 */}
+      <UserProfileViewModal
+        isOpen={isProfileViewModalOpen}
+        onClose={() => setIsProfileViewModalOpen(false)}
+        profile={viewingProfile}
+        posts={postsForViewingProfile}
+        officialPosts={officialPostsList}
+        isOwnProfile={Boolean(
+          currentUser &&
+            viewingProfile &&
+            !viewingProfile.isOfficial &&
+            viewingProfile.username.toLowerCase() === currentUser.username.toLowerCase()
+        )}
+        onSelectPost={handleSelectPostFromProfile}
+        onSelectOfficialPost={handleSelectOfficialPostFromProfile}
+        onEditProfile={() => setIsProfileModalOpen(true)}
+        onCreatePost={() => {
+          if (!currentUser) {
+            setIsProfileModalOpen(true);
+          } else {
+            setIsCreatePostModalOpen(true);
+          }
+        }}
+      />
     </div>
   );
 };

@@ -27,15 +27,13 @@ export const LiveBottomBar: React.FC<Props> = ({ currentTab, onSelectTab }) => {
             <button
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 px-3 transition-transform active:scale-90 cursor-pointer ${
-                isActive ? 'text-slate-900' : 'text-slate-500 hover:text-slate-800'
-              }`}
+              className={`flex flex-col items-center justify-center py-1 px-3 transition-transform active:scale-90 cursor-pointer ${isActive ? 'text-slate-900' : 'text-slate-500 hover:text-slate-800'
+                }`}
             >
               <div className="relative">
                 <Icon
-                  className={`w-6 h-6 ${
-                    isActive ? 'stroke-[2.5] text-slate-900 fill-slate-900' : 'stroke-[1.8]'
-                  }`}
+                  className={`w-6 h-6 ${isActive ? 'stroke-[2.5] text-slate-900 fill-slate-900' : 'stroke-[1.8]'
+                    }`}
                 />
                 {isActive && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-slate-900" />
