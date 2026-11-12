@@ -25,32 +25,32 @@ const POST_PHOTO_PRESETS = [
   {
     id: 'p1',
     label: '부스 페스티벌',
-    url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1080&q=85',
+    url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'p2',
     label: '친구들과 추억',
-    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1080&q=85',
+    url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'p3',
-    label: '오디오 릴스 챌린지',
-    url: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1080&q=85',
+    label: '원어민 오디오 챌린지',
+    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'p4',
     label: '감성 북카페 & 원서',
-    url: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1080&q=85',
+    url: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'p5',
     label: '세특 & 스터디 탐구',
-    url: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1080&q=85',
+    url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85',
   },
   {
     id: 'p6',
     label: '글로벌 캠퍼스 비전',
-    url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1080&q=85',
+    url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=85',
   },
 ];
 
