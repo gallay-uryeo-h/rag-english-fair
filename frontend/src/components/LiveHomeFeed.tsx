@@ -22,7 +22,7 @@ import {
   Sparkles,
   Bot,
   ChevronRight,
-  UserPlus,
+  UserPlus as _UserPlus,
   User,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
@@ -440,6 +440,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
     setIsProfileViewModalOpen(true);
   };
 
+  // 하단 바 계정 아이콘 클릭 이벤트 수신 (LiveBottomBar → open-my-profile)
+  useEffect(() => {
+    const handler = () => handleOpenMyProfile();
+    window.addEventListener('open-my-profile', handler);
+    return () => window.removeEventListener('open-my-profile', handler);
+  });
+
   // 의령여고 영어과 공식 프로필 열기
   const handleOpenOfficialProfile = () => {
     setViewingProfile({
@@ -545,46 +552,27 @@ export const LiveHomeFeed: React.FC<Props> = ({
         {/* 스크롤 컨테이너: pb-2 → 라벨과 스크롤바 사이 여백 확보 */}
         <div className="flex items-start gap-3 overflow-x-auto no-scrollbar px-3 pb-2">
 
-          {/* 🌟 1. 내 스토리 */}
-          {currentUser ? (
-            <div
-              onClick={handleOpenMyProfile}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
-            >
-              <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-purple-600 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
-                <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
-                  <img src={currentUser.avatar} alt={currentUser.username} className="w-full h-full rounded-full object-cover" />
-                </div>
-                <div
-                  onClick={(e) => { e.stopPropagation(); setIsCreatePostModalOpen(true); }}
-                  title="새 피드 올리기"
-                  className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-blue-500 hover:bg-blue-600 border-[1.5px] border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm cursor-pointer transition-colors"
-                >+</div>
-              </div>
-              <div className="flex flex-col items-center w-[60px] text-center">
-                <span className="text-[9.5px] font-semibold leading-tight text-slate-700 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
-                  {currentUser.isTeacher ? '선생님' : '내 계정'}
-                </span>
-                <span className="text-[8.5px] leading-tight text-slate-400 truncate w-full">
-                  @{currentUser.username}
-                </span>
-              </div>
+          {/* 🌟 1. ➕ 새 피드 올리기 버튼 (로그인 전: 로그인 유도 / 후: 바로 작성) */}
+          <div
+            onClick={() => {
+              if (!currentUser) {
+                setProfileModalInitialMode('guest');
+                setIsProfileModalOpen(true);
+              } else {
+                setIsCreatePostModalOpen(true);
+              }
+            }}
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+          >
+            <div className="relative w-[52px] h-[52px] rounded-full bg-gradient-to-br from-slate-100 to-slate-200 border-[1.5px] border-slate-200 group-hover:border-slate-400 flex items-center justify-center transition-all duration-200 group-hover:scale-110 active:scale-95 shadow-sm">
+              <Plus className="w-6 h-6 text-slate-500 group-hover:text-slate-800 transition-colors stroke-[1.8]" />
             </div>
-          ) : (
-            <div
-              onClick={() => { setProfileModalInitialMode('guest'); setIsProfileModalOpen(true); }}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
-            >
-              <div className="relative w-[52px] h-[52px] rounded-full bg-gradient-to-br from-purple-50 to-indigo-100 border-[1.5px] border-dashed border-purple-300 group-hover:border-purple-500 flex items-center justify-center transition-all duration-200 group-hover:scale-110 active:scale-95">
-                <UserPlus className="w-[18px] h-[18px] text-purple-400 group-hover:text-purple-600 transition-colors" />
-                <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-purple-500 border-[1.5px] border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm">+</div>
-              </div>
-              <div className="flex flex-col items-center w-[60px] text-center">
-                <span className="text-[9.5px] font-semibold leading-tight text-purple-600 tracking-tight truncate w-full">1회용 로그인</span>
-                <span className="text-[8.5px] leading-tight text-slate-400 truncate w-full">시작하기</span>
-              </div>
+            <div className="flex flex-col items-center w-[60px] text-center">
+              <span className="text-[9.5px] font-semibold leading-tight text-slate-500 tracking-tight truncate w-full group-hover:text-slate-800 transition-colors">
+                {currentUser ? '피드 올리기' : '로그인'}
+              </span>
             </div>
-          )}
+          </div>
 
           {/* 🌟 2. 의령여고 영어과 공식 계정 */}
           <div
