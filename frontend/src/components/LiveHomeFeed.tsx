@@ -192,6 +192,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
     mbti: [], vocab: [], textbook: [], seteuk: [],
   });
 
+  // 인스타그램 스타일: 댓글 전체 펼침 여부 상태 (기본 false: 최신 2개만 노출)
+  const [expandedComments, setExpandedComments] = useState<Record<string, boolean>>({
+    mbti: false, vocab: false, textbook: false, seteuk: false,
+  });
+
+  const toggleCommentsExpanded = (postId: string) => {
+    setExpandedComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
+  };
+
   const [commentInputs, setCommentInputs] = useState<Record<string, string>>({
     mbti: '', vocab: '', textbook: '', seteuk: '',
   });
@@ -887,10 +896,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               {/* 💬 댓글 목록 미리보기 */}
               {comments.mbti && comments.mbti.length > 0 && (
                 <div className="pt-2 space-y-1">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    댓글 {comments.mbti.length}개 모두 보기
-                  </span>
-                  {comments.mbti.map((c) => (
+                  {comments.mbti.length > 2 && (
+                    <button
+                      onClick={() => toggleCommentsExpanded('mbti')}
+                      className="text-[11px] text-slate-400 font-medium hover:text-slate-600 cursor-pointer block text-left"
+                    >
+                      {expandedComments.mbti
+                        ? '댓글 접기'
+                        : `댓글 ${comments.mbti.length}개 모두 보기`}
+                    </button>
+                  )}
+                  {(expandedComments.mbti
+                    ? comments.mbti
+                    : comments.mbti.slice(-2)
+                  ).map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
                         <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
@@ -1058,10 +1077,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               {/* 💬 댓글 목록 미리보기 */}
               {comments.vocab && comments.vocab.length > 0 && (
                 <div className="pt-2 space-y-1">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    댓글 {comments.vocab.length}개 모두 보기
-                  </span>
-                  {comments.vocab.map((c) => (
+                  {comments.vocab.length > 2 && (
+                    <button
+                      onClick={() => toggleCommentsExpanded('vocab')}
+                      className="text-[11px] text-slate-400 font-medium hover:text-slate-600 cursor-pointer block text-left"
+                    >
+                      {expandedComments.vocab
+                        ? '댓글 접기'
+                        : `댓글 ${comments.vocab.length}개 모두 보기`}
+                    </button>
+                  )}
+                  {(expandedComments.vocab
+                    ? comments.vocab
+                    : comments.vocab.slice(-2)
+                  ).map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
                         <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
@@ -1228,10 +1257,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               {/* 💬 댓글 목록 미리보기 */}
               {comments.textbook && comments.textbook.length > 0 && (
                 <div className="pt-2 space-y-1">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    댓글 {comments.textbook.length}개 모두 보기
-                  </span>
-                  {comments.textbook.map((c) => (
+                  {comments.textbook.length > 2 && (
+                    <button
+                      onClick={() => toggleCommentsExpanded('textbook')}
+                      className="text-[11px] text-slate-400 font-medium hover:text-slate-600 cursor-pointer block text-left"
+                    >
+                      {expandedComments.textbook
+                        ? '댓글 접기'
+                        : `댓글 ${comments.textbook.length}개 모두 보기`}
+                    </button>
+                  )}
+                  {(expandedComments.textbook
+                    ? comments.textbook
+                    : comments.textbook.slice(-2)
+                  ).map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
                         <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
@@ -1398,10 +1437,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               {/* 💬 댓글 목록 미리보기 */}
               {comments.seteuk && comments.seteuk.length > 0 && (
                 <div className="pt-2 space-y-1">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    댓글 {comments.seteuk.length}개 모두 보기
-                  </span>
-                  {comments.seteuk.map((c) => (
+                  {comments.seteuk.length > 2 && (
+                    <button
+                      onClick={() => toggleCommentsExpanded('seteuk')}
+                      className="text-[11px] text-slate-400 font-medium hover:text-slate-600 cursor-pointer block text-left"
+                    >
+                      {expandedComments.seteuk
+                        ? '댓글 접기'
+                        : `댓글 ${comments.seteuk.length}개 모두 보기`}
+                    </button>
+                  )}
+                  {(expandedComments.seteuk
+                    ? comments.seteuk
+                    : comments.seteuk.slice(-2)
+                  ).map((c) => (
                     <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
                       <div>
                         <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
