@@ -22,7 +22,6 @@ import {
   Shield,
   Sparkles,
   Bot,
-  LayoutGrid,
   ChevronRight,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
@@ -322,16 +321,64 @@ export const LiveHomeFeed: React.FC<Props> = ({
     },
   ], [remoteLikes]);
 
-  // ─── 📸 계정별 포스트 그리드 모음 데이터 집계 ─────────────────────────────────
-  const [selectedGridAccount, setSelectedGridAccount] = useState<string>('all');
+  // ─── 🏛️ 1. uryeo_eng 공식 계정 그리드 그룹 (4대 부스) ────────────────────────
+  const officialGridGroup = useMemo(() => ({
+    username: 'uryeo_eng',
+    displayName: '의령여고 영어과 공식',
+    avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
+    isOfficial: true,
+    isTeacher: true,
+    posts: [
+      {
+        id: 'mbti',
+        imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
+        title: 'MBTI별 본문 추천',
+        tag: '#1부스',
+        likes: remoteLikes.mbti,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('mbti') : onScrollTo('mbti')),
+      },
+      {
+        id: 'vocab',
+        imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+        title: '단어 미리보기',
+        tag: '#2부스',
+        likes: remoteLikes.vocab,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('vocab') : onScrollTo('vocab')),
+      },
+      {
+        id: 'textbook',
+        imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
+        title: '교과서 6권 대공개',
+        tag: '#3부스',
+        likes: remoteLikes.textbook,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
+      },
+      {
+        id: 'seteuk',
+        imageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80',
+        title: '세특 발전소',
+        tag: '#4부스',
+        likes: remoteLikes.seteuk,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('seteuk') : onScrollTo('seteuk')),
+      },
+    ],
+  }), [remoteLikes, onSelectGridPost, onScrollTo]);
 
-  const accountGridGroups = useMemo(() => {
+  // ─── 👥 2. 참여자 라이브 피드 - 개인 계정들의 피드 모음 (계정별 그리드) ───────────
+  const participantGridGroups = useMemo(() => {
+    const byAuthor: Record<string, typeof userPosts> = {};
+    userPosts.forEach((p) => {
+      const author = p.authorName || '익명_체험자';
+      if (!byAuthor[author]) byAuthor[author] = [];
+      byAuthor[author].push(p);
+    });
+
     const groups: Array<{
       username: string;
       displayName: string;
       avatar: string;
-      isOfficial?: boolean;
       isTeacher?: boolean;
+      isOfficial?: boolean;
       posts: Array<{
         id: string;
         imageUrl: string;
@@ -341,57 +388,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
         onClick: () => void;
       }>;
     }> = [];
-
-    // 1. 의령여고 영어과 공식 계정 (@uryeo_eng) 4대 부스
-    groups.push({
-      username: 'uryeo_eng',
-      displayName: '의령여고 영어과 공식',
-      avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
-      isOfficial: true,
-      isTeacher: true,
-      posts: [
-        {
-          id: 'mbti',
-          imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
-          title: 'MBTI별 본문 추천',
-          tag: '#1부스',
-          likes: remoteLikes.mbti,
-          onClick: () => (onSelectGridPost ? onSelectGridPost('mbti') : onScrollTo('mbti')),
-        },
-        {
-          id: 'vocab',
-          imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
-          title: '단어 미리보기',
-          tag: '#2부스',
-          likes: remoteLikes.vocab,
-          onClick: () => (onSelectGridPost ? onSelectGridPost('vocab') : onScrollTo('vocab')),
-        },
-        {
-          id: 'textbook',
-          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
-          title: '교과서 6권 대공개',
-          tag: '#3부스',
-          likes: remoteLikes.textbook,
-          onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
-        },
-        {
-          id: 'seteuk',
-          imageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80',
-          title: '세특 발전소',
-          tag: '#4부스',
-          likes: remoteLikes.seteuk,
-          onClick: () => (onSelectGridPost ? onSelectGridPost('seteuk') : onScrollTo('seteuk')),
-        },
-      ],
-    });
-
-    // 2. 학생 및 선생님 참여 계정별 그룹화
-    const byAuthor: Record<string, typeof userPosts> = {};
-    userPosts.forEach((p) => {
-      const author = p.authorName || '익명_체험자';
-      if (!byAuthor[author]) byAuthor[author] = [];
-      byAuthor[author].push(p);
-    });
 
     Object.entries(byAuthor).forEach(([author, posts]) => {
       if (author.toLowerCase() === 'uryeo_eng') return;
@@ -417,13 +413,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
     });
 
     return groups;
-  }, [remoteLikes, userPosts, onSelectGridPost, onScrollTo]);
-
-  // 선택된 필터에 따른 계정 그룹 목록
-  const displayedGridGroups = useMemo(() => {
-    if (selectedGridAccount === 'all') return accountGridGroups;
-    return accountGridGroups.filter((g) => g.username.toLowerCase() === selectedGridAccount.toLowerCase());
-  }, [accountGridGroups, selectedGridAccount]);
+  }, [userPosts]);
 
   // 내 프로필 모아보기 열기
   const handleOpenMyProfile = () => {
@@ -802,107 +792,57 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </button>
       </section>
 
-      {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 (계정별 그리드 모아보기) */}
+      {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 */}
       {viewMode === 'grid' ? (
-        <section className="bg-slate-100/70 border-y border-slate-200 p-2 sm:p-3 space-y-3.5 animate-in fade-in duration-300">
-          {/* 상단 헤더 & 계정 필터 칩 */}
-          <div className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-2xs space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                <LayoutGrid className="w-4 h-4 text-purple-600" />
-                <span>계정별 포스트 그리드 모음</span>
-              </span>
-              <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded-full">
-                {accountGridGroups.length}개 계정 활동 중
+        <section className="bg-slate-100/70 border-y border-slate-200 p-2 sm:p-3 space-y-4 animate-in fade-in duration-300">
+          {/* =========================================================================
+              🏛️ 1. uryeo_eng 피드 모음 (그리드뷰)
+              ========================================================================= */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <h3 className="text-xs font-black text-slate-900 tracking-tight">
+                  uryeo_eng 피드 모음 (그리드뷰)
+                </h3>
+              </div>
+              <span className="text-[10px] text-slate-500 font-semibold bg-white px-2 py-0.5 rounded-full border border-slate-200 shadow-2xs">
+                공식 부스 4개
               </span>
             </div>
 
-            {/* 계정 필터 가로 스크롤 칩 */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
-              <button
-                type="button"
-                onClick={() => setSelectedGridAccount('all')}
-                className={`px-3 py-1 rounded-full font-bold transition-all cursor-pointer shrink-0 ${
-                  selectedGridAccount === 'all'
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                전체 계정 모아보기
-              </button>
-              {accountGridGroups.map((grp) => (
-                <button
-                  key={grp.username}
-                  type="button"
-                  onClick={() => setSelectedGridAccount(grp.username)}
-                  className={`px-3 py-1 rounded-full font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
-                    selectedGridAccount === grp.username
-                      ? 'bg-purple-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  <span>{grp.isOfficial ? '🏛️' : grp.isTeacher ? '🛡️' : '👤'}</span>
-                  <span>@{grp.username}</span>
-                  <span className="text-[9px] opacity-75">({grp.posts.length})</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 각 계정별 카드 & 3열 그리드 */}
-          {displayedGridGroups.map((grp) => (
-            <div
-              key={grp.username}
-              className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs space-y-2.5 p-3.5"
-            >
-              {/* 계정 프로필 헤더 */}
+            {/* uryeo_eng 공식 계정 카드 */}
+            <div className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs space-y-2.5 p-3.5">
               <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                 <div
-                  onClick={() => {
-                    if (grp.isOfficial) handleOpenOfficialProfile();
-                    else handleOpenParticipantProfile(grp.username, grp.avatar);
-                  }}
+                  onClick={handleOpenOfficialProfile}
                   className="flex items-center gap-2.5 cursor-pointer group select-none"
                 >
-                  <div className={`relative w-10 h-10 rounded-full p-[2px] ${
-                    grp.isOfficial
-                      ? 'bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600'
-                      : 'bg-slate-200'
-                  }`}>
+                  <div className="relative w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 shadow-xs">
                     <img
-                      src={grp.avatar}
-                      alt={grp.username}
+                      src={officialGridGroup.avatar}
+                      alt="uryeo_eng"
                       className="w-full h-full rounded-full object-cover"
                     />
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-black text-slate-900 group-hover:text-purple-600 transition-colors">
-                        @{grp.username}
+                        @{officialGridGroup.username}
                       </span>
-                      {grp.isOfficial && (
-                        <span className="text-[9px] bg-blue-100 text-blue-700 font-extrabold px-1.5 py-0.2 rounded-full">
-                          ★ 공식
-                        </span>
-                      )}
-                      {grp.isTeacher && !grp.isOfficial && (
-                        <span className="text-[9px] bg-purple-100 text-purple-700 font-extrabold px-1.5 py-0.2 rounded-full">
-                          🛡️ 교사
-                        </span>
-                      )}
+                      <span className="text-[9px] bg-blue-100 text-blue-700 font-extrabold px-1.5 py-0.2 rounded-full">
+                        ★ 공식
+                      </span>
                     </div>
                     <p className="text-[10.5px] text-slate-500 font-medium">
-                      {grp.displayName} · 게시물 {grp.posts.length}개
+                      {officialGridGroup.displayName} · 4개 부스 코너
                     </p>
                   </div>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => {
-                    if (grp.isOfficial) handleOpenOfficialProfile();
-                    else handleOpenParticipantProfile(grp.username, grp.avatar);
-                  }}
+                  onClick={handleOpenOfficialProfile}
                   className="text-[11px] font-bold text-purple-600 hover:text-purple-800 hover:underline flex items-center gap-0.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
                 >
                   <span>프로필</span>
@@ -910,9 +850,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </button>
               </div>
 
-              {/* 3열 인스타그램 바둑판 그리드 */}
+              {/* 3열 그리드 (4대 공식 부스) */}
               <div className="grid grid-cols-3 gap-1.5">
-                {grp.posts.map((post) => (
+                {officialGridGroup.posts.map((post) => (
                   <div
                     key={post.id}
                     onClick={post.onClick}
@@ -925,7 +865,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
-                    {/* 호버/터치 정보 */}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-1">
                       <span className="text-[10px] font-bold text-center line-clamp-2">
                         {post.title}
@@ -940,16 +879,127 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 ))}
               </div>
             </div>
-          ))}
+          </div>
 
-          {displayedGridGroups.length === 0 && (
-            <div className="bg-white rounded-2xl p-8 text-center text-slate-400 space-y-2 border border-slate-200">
-              <p className="text-xs font-bold">등록된 계정 그리드가 없습니다.</p>
+          {/* =========================================================================
+              👥 2. 참여자 라이브 피드 - 개인 계정들의 피드 모음 (계정별 그리드뷰)
+              ========================================================================= */}
+          <div className="space-y-2.5 pt-1">
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-pink-500" />
+                <div>
+                  <h3 className="text-xs font-black text-slate-900 tracking-tight">
+                    참여자 라이브 피드
+                  </h3>
+                  <p className="text-[10px] text-slate-500 font-medium">개인 계정들의 피드 모음 (계정별 그리드뷰)</p>
+                </div>
+              </div>
+              <span className="text-[10px] text-pink-700 font-semibold bg-pink-50 px-2 py-0.5 rounded-full border border-pink-200">
+                {participantGridGroups.length}개 계정 ({userPosts.length}개 피드)
+              </span>
             </div>
-          )}
+
+            {/* 각 개인 계정별 카드 & 3열 그리드 */}
+            {participantGridGroups.map((grp) => (
+              <div
+                key={grp.username}
+                className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs space-y-2.5 p-3.5"
+              >
+                <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+                  <div
+                    onClick={() => handleOpenParticipantProfile(grp.username, grp.avatar)}
+                    className="flex items-center gap-2.5 cursor-pointer group select-none"
+                  >
+                    <div className="relative w-9 h-9 rounded-full p-[1.5px] bg-slate-200 shadow-2xs">
+                      <img
+                        src={grp.avatar}
+                        alt={grp.username}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900 group-hover:text-purple-600 transition-colors">
+                          @{grp.username}
+                        </span>
+                        {grp.isTeacher && (
+                          <span className="text-[9px] bg-purple-100 text-purple-700 font-extrabold px-1.5 py-0.2 rounded-full">
+                            🛡️ 교사
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        {grp.displayName} · 피드 {grp.posts.length}개
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleOpenParticipantProfile(grp.username, grp.avatar)}
+                    className="text-[11px] font-bold text-purple-600 hover:text-purple-800 hover:underline flex items-center gap-0.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
+                  >
+                    <span>프로필</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-3 gap-1.5">
+                  {grp.posts.map((post) => (
+                    <div
+                      key={post.id}
+                      onClick={post.onClick}
+                      className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer bg-slate-100 shadow-2xs border border-slate-100 hover:opacity-90 active:scale-95 transition-all"
+                      title={post.title}
+                    >
+                      <img
+                        src={post.imageUrl}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-1">
+                        <span className="text-[10px] font-bold text-center line-clamp-2">
+                          {post.title}
+                        </span>
+                      </div>
+                      {post.tag && (
+                        <span className="absolute bottom-1 left-1 bg-black/60 backdrop-blur-2xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">
+                          {post.tag}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {participantGridGroups.length === 0 && (
+              <div className="bg-white rounded-2xl p-6 text-center text-slate-400 space-y-1.5 border border-slate-200">
+                <p className="text-xs font-bold text-slate-600">아직 등록된 참여자 피드가 없습니다.</p>
+                <p className="text-[11px] text-slate-400">부스 체험 후 첫 인증 피드를 남겨보세요! ✨</p>
+              </div>
+            )}
+          </div>
         </section>
       ) : (
         <>
+          {/* =========================================================================
+              🏛️ 1. uryeo_eng 피드 모음 (목록 뷰)
+              ========================================================================= */}
+          <div className="flex items-center justify-between px-3.5 pt-3 pb-1">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-purple-600 animate-pulse" />
+              <h3 className="text-xs font-black text-slate-900 tracking-tight">
+                uryeo_eng 피드 모음
+              </h3>
+            </div>
+            <span className="text-[10px] text-purple-700 font-semibold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
+              공식 4대 부스
+            </span>
+          </div>
+
           {/* =========================================================================
               📸 3. 단일 무한 피드 모드 (인라인 아코디언)
               ========================================================================= */}
@@ -1674,21 +1724,30 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </div>
             </div>
           </article>
-        </>
-      )}
 
-      {/* 🌟 4. 실시간 학생 참여 피드 목록 (User Live Feed Stream) */}
+          {/* 🌟 2. 참여자 라이브 피드 - 개인 계정들의 피드 모음 (User Live Feed Stream) */}
       {userPosts.length > 0 && (
-        <section className="space-y-4 pt-2">
-          <div className="flex items-center justify-between px-3 pt-2">
-            <div className="flex items-center gap-1.5">
+        <section className="space-y-4 pt-3">
+          <div className="flex items-center justify-between px-3.5 pt-1">
+            <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-pink-500" />
-              <span className="text-xs font-extrabold text-slate-800">
-                학생 라이브 피드 ({userPosts.length})
-              </span>
+              <div>
+                <h3 className="text-xs font-black text-slate-800 tracking-tight">
+                  참여자 라이브 피드 ({userPosts.length})
+                </h3>
+                <p className="text-[10px] text-slate-400 font-medium">개인 계정들의 피드 모음</p>
+              </div>
             </div>
             <button
-              onClick={() => setIsCreatePostModalOpen(true)}
+              onClick={() => {
+                if (!currentUser) {
+                  setProfileModalInitialMode('guest');
+                  setIsProfileModalOpen(true);
+                  alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
+                } else {
+                  setIsCreatePostModalOpen(true);
+                }
+              }}
               className="text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
             >
               <Plus className="w-3 h-3 stroke-3" />
@@ -1835,6 +1894,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
           })}
         </section>
       )}
+    </>
+  )}
 
       {/* 피드 최하단 안내 */}
       <div className="text-center py-6 space-y-1.5">
