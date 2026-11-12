@@ -68,11 +68,11 @@ export const UserProfileViewModal: React.FC<Props> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200 cursor-pointer"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] border border-slate-200 animate-in zoom-in-95 duration-200"
+        className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] border border-slate-100 animate-in zoom-in-95 duration-200 cursor-default"
       >
         {/* =========================================================================
             1. 인스타그램 스타일 상단 네비게이션 바

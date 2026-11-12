@@ -133,8 +133,14 @@ export const CreatePostModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh]">
+    <div 
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 cursor-pointer"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] cursor-default animate-in zoom-in-95 duration-200"
+      >
         {/* 📸 공통 숨겨진 카메라/앨범 input 엘리먼트 */}
         {hiddenInputs}
 
@@ -150,8 +156,10 @@ export const CreatePostModal: React.FC<Props> = ({
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            aria-label="닫기"
           >
             <X className="w-5 h-5" />
           </button>
