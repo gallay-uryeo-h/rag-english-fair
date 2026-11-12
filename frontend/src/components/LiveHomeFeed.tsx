@@ -15,9 +15,6 @@ import {
   Send,
   Bookmark,
   MoreHorizontal,
-  Volume2,
-  BookOpen,
-  Lightbulb,
   ChevronDown,
   ChevronUp,
   Plus,
@@ -25,6 +22,8 @@ import {
   Shield,
   Sparkles,
   Bot,
+  LayoutGrid,
+  ChevronRight,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
 import { VocabListenTab } from './VocabListenTab';
@@ -322,6 +321,109 @@ export const LiveHomeFeed: React.FC<Props> = ({
       likes: remoteLikes.seteuk,
     },
   ], [remoteLikes]);
+
+  // ─── 📸 계정별 포스트 그리드 모음 데이터 집계 ─────────────────────────────────
+  const [selectedGridAccount, setSelectedGridAccount] = useState<string>('all');
+
+  const accountGridGroups = useMemo(() => {
+    const groups: Array<{
+      username: string;
+      displayName: string;
+      avatar: string;
+      isOfficial?: boolean;
+      isTeacher?: boolean;
+      posts: Array<{
+        id: string;
+        imageUrl: string;
+        title: string;
+        tag?: string;
+        likes?: number;
+        onClick: () => void;
+      }>;
+    }> = [];
+
+    // 1. 의령여고 영어과 공식 계정 (@uryeo_eng) 4대 부스
+    groups.push({
+      username: 'uryeo_eng',
+      displayName: '의령여고 영어과 공식',
+      avatar: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80',
+      isOfficial: true,
+      isTeacher: true,
+      posts: [
+        {
+          id: 'mbti',
+          imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
+          title: 'MBTI별 본문 추천',
+          tag: '#1부스',
+          likes: remoteLikes.mbti,
+          onClick: () => (onSelectGridPost ? onSelectGridPost('mbti') : onScrollTo('mbti')),
+        },
+        {
+          id: 'vocab',
+          imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+          title: '단어 미리보기',
+          tag: '#2부스',
+          likes: remoteLikes.vocab,
+          onClick: () => (onSelectGridPost ? onSelectGridPost('vocab') : onScrollTo('vocab')),
+        },
+        {
+          id: 'textbook',
+          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
+          title: '교과서 6권 대공개',
+          tag: '#3부스',
+          likes: remoteLikes.textbook,
+          onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
+        },
+        {
+          id: 'seteuk',
+          imageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80',
+          title: '세특 발전소',
+          tag: '#4부스',
+          likes: remoteLikes.seteuk,
+          onClick: () => (onSelectGridPost ? onSelectGridPost('seteuk') : onScrollTo('seteuk')),
+        },
+      ],
+    });
+
+    // 2. 학생 및 선생님 참여 계정별 그룹화
+    const byAuthor: Record<string, typeof userPosts> = {};
+    userPosts.forEach((p) => {
+      const author = p.authorName || '익명_체험자';
+      if (!byAuthor[author]) byAuthor[author] = [];
+      byAuthor[author].push(p);
+    });
+
+    Object.entries(byAuthor).forEach(([author, posts]) => {
+      if (author.toLowerCase() === 'uryeo_eng') return;
+      const firstPost = posts[0];
+      const isTeacher = isTeacherAccount(author);
+      const isOfficial = isOfficialAccount(author);
+
+      groups.push({
+        username: author,
+        displayName: firstPost.displayName || author,
+        avatar: firstPost.avatar,
+        isTeacher,
+        isOfficial,
+        posts: posts.map((post) => ({
+          id: post.id,
+          imageUrl: post.photoUrl,
+          title: post.caption || `${author}님의 부스 인증`,
+          tag: post.tag,
+          likes: post.likesCount,
+          onClick: () => handleOpenPhotoZoom(post.photoUrl, post.authorName, post.avatar, post.caption, isOfficial),
+        })),
+      });
+    });
+
+    return groups;
+  }, [remoteLikes, userPosts, onSelectGridPost, onScrollTo]);
+
+  // 선택된 필터에 따른 계정 그룹 목록
+  const displayedGridGroups = useMemo(() => {
+    if (selectedGridAccount === 'all') return accountGridGroups;
+    return accountGridGroups.filter((g) => g.username.toLowerCase() === selectedGridAccount.toLowerCase());
+  }, [accountGridGroups, selectedGridAccount]);
 
   // 내 프로필 모아보기 열기
   const handleOpenMyProfile = () => {
@@ -700,113 +802,151 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </button>
       </section>
 
-      {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 (Instagram Profile / Explore Grid View) */}
+      {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 (계정별 그리드 모아보기) */}
       {viewMode === 'grid' ? (
-        <section className="bg-white border-y border-slate-200 p-2 sm:p-3 animate-in fade-in duration-300">
-          <div className="flex items-center justify-between px-2 py-2 mb-2 border-b border-slate-100">
-            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-              <span>📸 포스트 탐색 그리드 (4대 코너)</span>
-            </span>
-            <span className="text-[11px] text-slate-400">사진을 터치하면 바로 해당 코너로 이동</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            {/* 그리드 1: MBTI */}
-            <div
-              onClick={() => {
-                if (onSelectGridPost) onSelectGridPost('mbti');
-                else onScrollTo('mbti');
-              }}
-              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80"
-                alt="MBTI 포스트"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-end">
-                  <Heart className="w-4 h-4 text-white fill-white/80" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-extrabold text-white leading-tight">MBTI별 본문 추천</h4>
-                  <p className="text-[11px] text-slate-200 truncate mt-0.5">8문항 성향 정밀 진단</p>
-                </div>
-              </div>
+        <section className="bg-slate-100/70 border-y border-slate-200 p-2 sm:p-3 space-y-3.5 animate-in fade-in duration-300">
+          {/* 상단 헤더 & 계정 필터 칩 */}
+          <div className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-2xs space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                <LayoutGrid className="w-4 h-4 text-purple-600" />
+                <span>계정별 포스트 그리드 모음</span>
+              </span>
+              <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded-full">
+                {accountGridGroups.length}개 계정 활동 중
+              </span>
             </div>
 
-            {/* 그리드 2: 단어 릴스 */}
-            <div
-              onClick={() => {
-                if (onSelectGridPost) onSelectGridPost('vocab');
-                else onScrollTo('vocab');
-              }}
-              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
-                alt="단어 소리 퀴즈 포스트"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-end">
-                  <Volume2 className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-extrabold text-white leading-tight">단어 미리보기</h4>
-                  <p className="text-[11px] text-slate-200 truncate mt-0.5">TTS 소리만 듣기 퀴즈</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 그리드 3: 교과서 6권 */}
-            <div
-              onClick={() => {
-                if (onSelectGridPost) onSelectGridPost('textbook');
-                else onScrollTo('textbook');
-              }}
-              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80"
-                alt="교과서 6권 대공개 포스트"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-end">
-                  <BookOpen className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-extrabold text-white leading-tight">교과서 6권 대공개</h4>
-                  <p className="text-[11px] text-slate-200 truncate mt-0.5">3×2 표지 ➔ 단원 레이어</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 그리드 4: 세특 발전소 */}
-            <div
-              onClick={() => {
-                if (onSelectGridPost) onSelectGridPost('seteuk');
-                else onScrollTo('seteuk');
-              }}
-              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-2xs border border-slate-100"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80"
-                alt="세특 발전소 포스트"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 filter brightness-[0.75]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-end">
-                  <Lightbulb className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-extrabold text-white leading-tight">세특 치트키 발전소</h4>
-                  <p className="text-[11px] text-slate-200 truncate mt-0.5">8대 진로 학생부 가이드</p>
-                </div>
-              </div>
+            {/* 계정 필터 가로 스크롤 칩 */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
+              <button
+                type="button"
+                onClick={() => setSelectedGridAccount('all')}
+                className={`px-3 py-1 rounded-full font-bold transition-all cursor-pointer shrink-0 ${
+                  selectedGridAccount === 'all'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                전체 계정 모아보기
+              </button>
+              {accountGridGroups.map((grp) => (
+                <button
+                  key={grp.username}
+                  type="button"
+                  onClick={() => setSelectedGridAccount(grp.username)}
+                  className={`px-3 py-1 rounded-full font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
+                    selectedGridAccount === grp.username
+                      ? 'bg-purple-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  <span>{grp.isOfficial ? '🏛️' : grp.isTeacher ? '🛡️' : '👤'}</span>
+                  <span>@{grp.username}</span>
+                  <span className="text-[9px] opacity-75">({grp.posts.length})</span>
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* 각 계정별 카드 & 3열 그리드 */}
+          {displayedGridGroups.map((grp) => (
+            <div
+              key={grp.username}
+              className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs space-y-2.5 p-3.5"
+            >
+              {/* 계정 프로필 헤더 */}
+              <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+                <div
+                  onClick={() => {
+                    if (grp.isOfficial) handleOpenOfficialProfile();
+                    else handleOpenParticipantProfile(grp.username, grp.avatar);
+                  }}
+                  className="flex items-center gap-2.5 cursor-pointer group select-none"
+                >
+                  <div className={`relative w-10 h-10 rounded-full p-[2px] ${
+                    grp.isOfficial
+                      ? 'bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600'
+                      : 'bg-slate-200'
+                  }`}>
+                    <img
+                      src={grp.avatar}
+                      alt={grp.username}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-black text-slate-900 group-hover:text-purple-600 transition-colors">
+                        @{grp.username}
+                      </span>
+                      {grp.isOfficial && (
+                        <span className="text-[9px] bg-blue-100 text-blue-700 font-extrabold px-1.5 py-0.2 rounded-full">
+                          ★ 공식
+                        </span>
+                      )}
+                      {grp.isTeacher && !grp.isOfficial && (
+                        <span className="text-[9px] bg-purple-100 text-purple-700 font-extrabold px-1.5 py-0.2 rounded-full">
+                          🛡️ 교사
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10.5px] text-slate-500 font-medium">
+                      {grp.displayName} · 게시물 {grp.posts.length}개
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (grp.isOfficial) handleOpenOfficialProfile();
+                    else handleOpenParticipantProfile(grp.username, grp.avatar);
+                  }}
+                  className="text-[11px] font-bold text-purple-600 hover:text-purple-800 hover:underline flex items-center gap-0.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
+                >
+                  <span>프로필</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* 3열 인스타그램 바둑판 그리드 */}
+              <div className="grid grid-cols-3 gap-1.5">
+                {grp.posts.map((post) => (
+                  <div
+                    key={post.id}
+                    onClick={post.onClick}
+                    className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer bg-slate-100 shadow-2xs border border-slate-100 hover:opacity-90 active:scale-95 transition-all"
+                    title={post.title}
+                  >
+                    <img
+                      src={post.imageUrl}
+                      alt={post.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    {/* 호버/터치 정보 */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-1">
+                      <span className="text-[10px] font-bold text-center line-clamp-2">
+                        {post.title}
+                      </span>
+                    </div>
+                    {post.tag && (
+                      <span className="absolute bottom-1 left-1 bg-black/60 backdrop-blur-2xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">
+                        {post.tag}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {displayedGridGroups.length === 0 && (
+            <div className="bg-white rounded-2xl p-8 text-center text-slate-400 space-y-2 border border-slate-200">
+              <p className="text-xs font-bold">등록된 계정 그리드가 없습니다.</p>
+            </div>
+          )}
         </section>
       ) : (
         <>
