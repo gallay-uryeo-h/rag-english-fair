@@ -18,6 +18,7 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  getDocs,
   increment,
   onSnapshot,
   query,
@@ -233,5 +234,22 @@ export async function toggleUserPostLike(postId: string, incrementVal: number): 
     likesCount: increment(incrementVal),
   });
 }
+
+/**
+ * 🚨 공식 관리자(uryeo_eng) 전용: 계정의 모든 게시물 및 데이터 영구 일괄 삭제
+ */
+export async function deleteUserAccountAndAllPosts(authorName: string): Promise<number> {
+  if (!authorName) return 0;
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'user_post'),
+    where('authorName', '==', authorName)
+  );
+  const snapshot = await getDocs(q);
+  const deletePromises = snapshot.docs.map((d) => deleteDoc(d.ref));
+  await Promise.all(deletePromises);
+  return snapshot.size;
+}
+
 
 

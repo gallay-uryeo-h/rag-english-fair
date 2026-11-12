@@ -12,6 +12,7 @@ import type { UserProfile } from '../utils/userProfile';
 import { addUserPost } from '../services/firestoreService';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
 import { PhotoPickerButtons } from './PhotoPickerButtons';
+import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
 
 interface Props {
   isOpen: boolean;
@@ -104,6 +105,11 @@ export const CreatePostModal: React.FC<Props> = ({
     e.preventDefault();
     if (!caption.trim()) {
       alert('피드 내용을 입력해 주세요!');
+      return;
+    }
+
+    if (containsProfanity(caption)) {
+      alert(PROFANITY_ALERT_MESSAGE);
       return;
     }
 

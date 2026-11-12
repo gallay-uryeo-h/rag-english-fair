@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Camera,
   ExternalLink,
+  Trash2,
 } from 'lucide-react';
 import type { FsUserPost } from '../services/firestoreService';
 
@@ -42,6 +43,8 @@ interface Props {
   onSelectOfficialPost?: (postId: string) => void;
   onEditProfile?: () => void;
   onCreatePost?: () => void;
+  canManageAccounts?: boolean;
+  onDeleteAccount?: (username: string) => void;
 }
 
 export const UserProfileViewModal: React.FC<Props> = ({
@@ -55,6 +58,8 @@ export const UserProfileViewModal: React.FC<Props> = ({
   onSelectOfficialPost,
   onEditProfile,
   onCreatePost,
+  canManageAccounts = false,
+  onDeleteAccount,
 }) => {
   if (!isOpen || !profile) return null;
 
@@ -97,12 +102,25 @@ export const UserProfileViewModal: React.FC<Props> = ({
               </span>
             )}
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            {canManageAccounts && !profile.isOfficial && profile.username !== 'uryeo_eng' && (
+              <button
+                type="button"
+                onClick={() => onDeleteAccount?.(profile.username)}
+                className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-600 transition-colors cursor-pointer"
+                title="공식 관리자 권한: 계정 및 모든 피드 영구 삭제"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+              aria-label="닫기"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* =========================================================================
@@ -239,6 +257,20 @@ export const UserProfileViewModal: React.FC<Props> = ({
               </button>
             )}
           </div>
+
+          {/* 🚨 의령여고 공식 관리자 권한 전용: 계정 및 피드 일괄 영구 삭제 액션 */}
+          {canManageAccounts && !profile.isOfficial && profile.username !== 'uryeo_eng' && (
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => onDeleteAccount?.(profile.username)}
+                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold text-xs transition-colors cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                <span>[공식 관리자 권한] @{profile.username} 계정 및 모든 게시물 영구 삭제</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* =========================================================================

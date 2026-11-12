@@ -13,6 +13,7 @@ import {
 import type { UserProfile } from '../utils/userProfile';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
 import { PhotoPickerButtons } from './PhotoPickerButtons';
+import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
 
 interface Props {
   isOpen: boolean;
@@ -98,6 +99,11 @@ export const UserProfileModal: React.FC<Props> = ({
       return;
     }
 
+    if (!isAdminTab && containsProfanity(trimmed)) {
+      alert(PROFANITY_ALERT_MESSAGE);
+      return;
+    }
+
     let isTeacherAuth = false;
     const isOfficialDept = isOfficialAccount(trimmed);
 
@@ -164,7 +170,7 @@ export const UserProfileModal: React.FC<Props> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900">
-                {currentProfile ? '계정 관리 & 프로필' : (isAdminTab ? '관리자 / 선생님 로그인' : '부스체험 1회용 로그인')}
+                {currentProfile ? '계정 관리 & 프로필' : (isAdminTab ? '관리자 로그인' : '부스체험 1회용 로그인')}
               </h3>
               <p className="text-[11px] text-slate-500">
                 {isAdminTab ? '의령여고 영어과 공식 및 교사 전용 계정' : '부스 활동에 사용할 1회용 닉네임입니다'}

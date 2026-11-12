@@ -6,6 +6,7 @@ import {
   toggleLikeRemote,
   subscribeUserPosts,
   deleteUserPost,
+  deleteUserAccountAndAllPosts,
   toggleUserPostLike,
 } from '../services/firestoreService';
 import type { FsComment, FsUserPost } from '../services/firestoreService';
@@ -36,6 +37,7 @@ import {
   isTeacherAccount,
   isOfficialAccount,
 } from '../utils/userProfile';
+import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
 import type { UserProfile } from '../utils/userProfile';
 import { UserProfileModal } from './UserProfileModal';
 import { CreatePostModal } from './CreatePostModal';
@@ -175,6 +177,38 @@ export const LiveHomeFeed: React.FC<Props> = ({
     }
   };
 
+  // 🏛️ 의령여고 공식 관리자 전용: 특정 참가자 계정 및 모든 게시물 일괄 영구 삭제
+  const isOfficialAdmin = Boolean(currentUser && isOfficialAccount(currentUser.username));
+
+  const handleDeleteUserAccount = async (targetUsername: string) => {
+    if (!isOfficialAdmin) {
+      alert('계정 삭제 권한은 @uryeo_eng 공식 관리자에게만 부여되어 있습니다.');
+      return;
+    }
+    if (isOfficialAccount(targetUsername)) {
+      alert('공식 관리자 계정은 삭제할 수 없습니다.');
+      return;
+    }
+    const count = userPosts.filter((p) => p.authorName === targetUsername).length;
+    const ok = window.confirm(
+      `[🚨 의령여고 영어과 관리자 권한]\n` +
+      `@${targetUsername} 참가자 계정과 해당 계정의 모든 게시물(${count}개)을 영구 삭제하시겠습니까?\n\n` +
+      `※ 삭제된 게시물과 계정 정보는 복구할 수 없습니다.`
+    );
+    if (!ok) return;
+
+    try {
+      const deletedCount = await deleteUserAccountAndAllPosts(targetUsername);
+      alert(`@${targetUsername} 계정과 게시물 ${deletedCount}개가 성공적으로 영구 삭제되었습니다.`);
+      if (isProfileViewModalOpen && viewingProfile?.username === targetUsername) {
+        setIsProfileViewModalOpen(false);
+      }
+    } catch (err) {
+      console.error('계정 삭제 실패:', err);
+      alert('계정 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
   // 학생 피드 좋아요 토글
   const [likedUserPosts, setLikedUserPosts] = useState<Record<string, boolean>>({});
   const toggleUserPostLikeHandler = async (postId: string) => {
@@ -225,6 +259,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
     }
     const text = commentInputs[postId]?.trim();
     if (!text) return;
+
+    // 🛡️ 비속어 및 부적절한 언어 감지 차단
+    if (containsProfanity(text)) {
+      alert(PROFANITY_ALERT_MESSAGE);
+      return;
+    }
+
     setCommentInputs((prev) => ({ ...prev, [postId]: '' }));
     // 내 아이디로 댓글 등록
     await addComment(postId, text, currentUser.username);
@@ -935,14 +976,30 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleOpenParticipantProfile(grp.username, grp.avatar)}
-                    className="text-[11px] font-bold text-purple-600 hover:text-purple-800 hover:underline flex items-center gap-0.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
-                  >
-                    <span>프로필</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    {isOfficialAdmin && !isOfficialAccount(grp.username) && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteUserAccount(grp.username);
+                        }}
+                        className="text-[10px] font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-full flex items-center gap-1 transition-colors cursor-pointer"
+                        title="공식 관리자: 참가자 계정 및 모든 글 영구 삭제"
+                      >
+                        <Trash2 className="w-3 h-3 text-red-500" />
+                        <span>계정삭제</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleOpenParticipantProfile(grp.username, grp.avatar)}
+                      className="text-[11px] font-bold text-purple-600 hover:text-purple-800 hover:underline flex items-center gap-0.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
+                    >
+                      <span>프로필</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-1.5">
@@ -1949,6 +2006,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
             setIsCreatePostModalOpen(true);
           }
         }}
+        canManageAccounts={isOfficialAdmin}
+        onDeleteAccount={handleDeleteUserAccount}
       />
 
       {/* 🤖 인스타그램 1:1 DM 스타일 Q&A 챗봇 모달 */}
