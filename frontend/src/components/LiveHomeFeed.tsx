@@ -22,6 +22,8 @@ import {
   Sparkles,
   Bot,
   ChevronRight,
+  UserPlus,
+  User,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
 import { VocabListenTab } from './VocabListenTab';
@@ -539,16 +541,16 @@ export const LiveHomeFeed: React.FC<Props> = ({
       {/* =========================================================================
           📸 1. 부스 활동 스토리 캐러셀 (Story Bar)
           ========================================================================= */}
-      <section className="bg-white border-b border-slate-200 py-3 px-3 overflow-hidden shadow-2xs">
-        <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar px-1">
-          {/* 🌟 1. 내 스토리 (최초 방문 시 계정 만들기 유도, 설정 후 내 프로필 표시) */}
+      <section className="bg-white border-b border-slate-200/90 py-3 px-3 overflow-hidden shadow-2xs">
+        <div className="flex items-start gap-3.5 overflow-x-auto no-scrollbar px-1">
+          {/* 🌟 1. 내 스토리 (최초 방문 시 1회용 로그인 유도, 로그인 후 내 프로필 표시) */}
           {currentUser ? (
             <div
               onClick={handleOpenMyProfile}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
-                <div className="w-full h-full rounded-full bg-white p-0.5">
+              <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
+                <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.username}
@@ -567,11 +569,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   +
                 </div>
               </div>
-              <div className="flex flex-col items-center max-w-[70px]">
-                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-purple-600 transition-colors">
+              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
                   {currentUser.isTeacher ? '선생님 계정' : '내 계정'}
                 </span>
-                <span className="text-[9px] text-slate-500 truncate w-full text-center">
+                <span className="text-[9.5px] text-slate-500 truncate w-full">
                   @{currentUser.username}
                 </span>
               </div>
@@ -582,21 +584,21 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 setProfileModalInitialMode('guest');
                 setIsProfileModalOpen(true);
               }}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-16 h-16 rounded-full p-[2px] border-2 border-dashed border-purple-400 hover:border-purple-600 transition-all flex items-center justify-center bg-purple-50/50 group-hover:scale-105 active:scale-95">
-                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-lg font-bold">
-                  ?
+              <div className="relative w-[62px] h-[62px] rounded-full p-[2px] border-2 border-dashed border-purple-400 hover:border-purple-600 transition-all duration-200 flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50/50 to-pink-50/40 group-hover:scale-105 active:scale-95 shadow-2xs">
+                <div className="w-11 h-11 rounded-full bg-white/80 shadow-2xs flex items-center justify-center text-purple-600 transition-transform group-hover:scale-110">
+                  <UserPlus className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
                   +
                 </div>
               </div>
-              <div className="flex flex-col items-center max-w-[76px]">
-                <span className="text-[10.5px] font-bold text-purple-700 tracking-tight truncate w-full text-center">
+              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+                <span className="text-[10.5px] font-bold text-purple-700 tracking-tight truncate w-full">
                   부스체험 1회용
                 </span>
-                <span className="text-[9px] text-slate-400 truncate w-full text-center">
+                <span className="text-[9.5px] text-slate-400 font-medium truncate w-full">
                   로그인
                 </span>
               </div>
@@ -606,10 +608,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
           {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
           <div
             onClick={handleOpenOfficialProfile}
-            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
           >
-            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
-              <div className="w-full h-full rounded-full bg-white p-0.5">
+            <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
+              <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
                   alt="의령여고 영어과 공식"
@@ -620,11 +622,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 ★
               </div>
             </div>
-            <div className="flex flex-col items-center max-w-[70px]">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-pink-600 transition-colors">
-                의령여고 영어과
+            <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-pink-600 transition-colors">
+                의령여고 공식
               </span>
-              <span className="text-[9px] text-pink-600 font-bold truncate w-full text-center">
+              <span className="text-[9.5px] text-pink-600 font-bold truncate w-full">
                 @uryeo_eng
               </span>
             </div>
@@ -633,22 +635,22 @@ export const LiveHomeFeed: React.FC<Props> = ({
           {/* 🌟 2-1. 의령여고 Q&A 챗봇 계정 스토리 (@uryeo_qa_bot) */}
           <div
             onClick={handleOpenDmModal}
-            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
             title="의령여고 영어과 Q&A AI 챗봇 1:1 대화"
           >
-            <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
-              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center p-0.5">
-                <Bot className="w-7 h-7 text-cyan-300 group-hover:scale-110 transition-transform" />
+            <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
+              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center p-0.5 overflow-hidden">
+                <Bot className="w-6 h-6 text-cyan-300 group-hover:scale-110 transition-transform" />
               </div>
               <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[8px] font-black shadow-xs">
                 AI
               </div>
             </div>
-            <div className="flex flex-col items-center max-w-[70px]">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full text-center group-hover:text-purple-600 transition-colors flex items-center justify-center gap-0.5">
-                <span>질문 챗봇</span>
+            <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+                질문 챗봇
               </span>
-              <span className="text-[9px] text-purple-600 font-medium truncate w-full text-center">
+              <span className="text-[9.5px] text-purple-600 font-medium truncate w-full">
                 @uryeo_qa_bot
               </span>
             </div>
@@ -659,10 +661,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <div
               key={st.postId}
               onClick={() => handleOpenParticipantProfile(st.authorName, st.avatar)}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-16 h-16 rounded-full p-[2.5px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-blue-500 transition-transform group-hover:scale-105 active:scale-95 shadow-xs">
-                <div className="w-full h-full rounded-full bg-white p-0.5">
+              <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-blue-500 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
+                <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
                   <img
                     src={st.avatar}
                     alt={st.authorName}
@@ -670,9 +672,14 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <span className="text-[11px] font-medium text-slate-700 tracking-tight max-w-[68px] truncate group-hover:text-purple-600 transition-colors">
-                @{st.authorName}
-              </span>
+              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+                <span className="text-[11px] font-bold text-slate-800 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+                  참여자
+                </span>
+                <span className="text-[9.5px] text-slate-500 font-medium truncate w-full">
+                  @{st.authorName.replace(/^@/, '')}
+                </span>
+              </div>
             </div>
           ))}
 
@@ -683,13 +690,16 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 if (!currentUser) setIsProfileModalOpen(true);
                 else setIsCreatePostModalOpen(true);
               }}
-              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer select-none opacity-80 hover:opacity-100 transition-opacity"
+              className="flex flex-col items-center shrink-0 cursor-pointer select-none opacity-80 hover:opacity-100 transition-opacity"
             >
-              <div className="w-16 h-16 rounded-full border border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-slate-400 text-xs">
+              <div className="w-[62px] h-[62px] rounded-full border border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-slate-400 text-xs">
                 <span>✍️</span>
                 <span className="text-[9px] font-bold mt-0.5">첫 피드</span>
               </div>
-              <span className="text-[10px] text-slate-400">참여자 대기</span>
+              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
+                <span className="text-[10.5px] font-bold text-slate-500">참여자 피드</span>
+                <span className="text-[9px] text-slate-400">대기 중</span>
+              </div>
             </div>
           )}
         </div>
@@ -754,10 +764,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 setProfileModalInitialMode('guest');
                 setIsProfileModalOpen(true);
               }}
-              className="flex items-center gap-2 cursor-pointer group"
+              className="flex items-center gap-2 cursor-pointer group select-none"
             >
-              <div className="w-7 h-7 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">
-                ?
+              <div className="w-7 h-7 rounded-full bg-purple-100/80 border border-purple-200 text-purple-600 flex items-center justify-center text-xs font-bold shadow-2xs group-hover:scale-105 transition-transform">
+                <User className="w-3.5 h-3.5 text-purple-600" />
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-bold text-purple-700 group-hover:underline">
