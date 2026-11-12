@@ -496,12 +496,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   +
                 </div>
               </div>
-              <div className="flex flex-col items-center max-w-[70px]">
-                <span className="text-[11px] font-bold text-purple-700 tracking-tight truncate w-full text-center">
-                  1회용 로그인
+              <div className="flex flex-col items-center max-w-[76px]">
+                <span className="text-[10.5px] font-bold text-purple-700 tracking-tight truncate w-full text-center">
+                  부스체험 1회용
                 </span>
                 <span className="text-[9px] text-slate-400 truncate w-full text-center">
-                  부스 닉네임
+                  로그인
                 </span>
               </div>
             </div>
@@ -665,7 +665,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-bold text-purple-700 group-hover:underline">
-                  1회용 로그인
+                  부스체험 1회용 로그인
                 </span>
               </div>
             </div>
