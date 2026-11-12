@@ -141,14 +141,19 @@ export const UserProfileModal: React.FC<Props> = ({
   return (
     <div 
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 cursor-pointer"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 cursor-pointer"
     >
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] cursor-default animate-in zoom-in-95 duration-200"
+        className="bg-white w-full max-w-md rounded-t-[32px] sm:rounded-3xl overflow-hidden shadow-2xl border-t sm:border border-slate-100 flex flex-col max-h-[92vh] sm:max-h-[88vh] cursor-default animate-in slide-in-from-bottom duration-300 ease-out"
       >
+        {/* 📱 모바일 인스타 감성 드래그 핸들 바 */}
+        <div className="w-full flex justify-center pt-2.5 pb-1 bg-white cursor-pointer" onClick={onClose} title="터치하여 닫기">
+          <div className="w-10 h-1 bg-slate-300 hover:bg-slate-400 rounded-full transition-colors" />
+        </div>
+
         {/* 헤더 */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
+        <div className="flex items-center justify-between px-5 py-2.5 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
               isAdminTab 

@@ -143,16 +143,21 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200 cursor-pointer"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center animate-in fade-in duration-200 cursor-pointer"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[90vh] sm:h-[82vh] border border-slate-100 animate-in zoom-in-95 duration-200 cursor-default"
+        className="bg-white w-full max-w-lg rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] sm:h-[85vh] border-t sm:border border-slate-100 animate-in slide-in-from-bottom duration-300 ease-out cursor-default"
       >
+        {/* 📱 모바일 인스타 감성 드래그 핸들 바 */}
+        <div className="w-full flex justify-center pt-2.5 pb-1 bg-white cursor-pointer" onClick={onClose} title="터치하여 닫기">
+          <div className="w-10 h-1 bg-slate-300 hover:bg-slate-400 rounded-full transition-colors" />
+        </div>
+
         {/* =========================================================================
             1. 인스타그램 DM 스타일 헤더 (계정 프로필 + 활동 중 표시)
             ========================================================================= */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-white sticky top-0 z-10 shadow-2xs">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-white sticky top-0 z-10 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
             {/* 봇 아바타 (인스타그램 DM 서클) */}
             <div className="relative shrink-0">

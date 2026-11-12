@@ -68,16 +68,21 @@ export const UserProfileViewModal: React.FC<Props> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200 cursor-pointer"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center animate-in fade-in duration-200 cursor-pointer"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] border border-slate-100 animate-in zoom-in-95 duration-200 cursor-default"
+        className="bg-white w-full max-w-md rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] border-t sm:border border-slate-100 animate-in slide-in-from-bottom duration-300 ease-out cursor-default"
       >
+        {/* 📱 모바일 인스타 감성 드래그 핸들 바 */}
+        <div className="w-full flex justify-center pt-2.5 pb-1 bg-white cursor-pointer" onClick={onClose} title="터치하여 닫기">
+          <div className="w-10 h-1 bg-slate-300 hover:bg-slate-400 rounded-full transition-colors" />
+        </div>
+
         {/* =========================================================================
             1. 인스타그램 스타일 상단 네비게이션 바
             ========================================================================= */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-white sticky top-0 z-10">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-white sticky top-0 z-10">
           <div className="w-8" /> {/* 좌측 밸런서 */}
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-sm font-extrabold text-slate-900 tracking-tight truncate">
