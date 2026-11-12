@@ -657,12 +657,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-purple-600" />
                 <h3 className="text-xs font-black text-slate-900 tracking-tight">
-                  uryeo_eng 피드 모음 (그리드뷰)
+                  uryeo_eng 의령여고 공식 피드
                 </h3>
               </div>
-              <span className="text-[10px] text-slate-500 font-semibold bg-white px-2 py-0.5 rounded-full border border-slate-200 shadow-2xs">
-                공식 부스 4개
-              </span>
             </div>
 
             {/* uryeo_eng 공식 계정 카드 */}
@@ -862,12 +859,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-purple-600 animate-pulse" />
               <h3 className="text-xs font-black text-slate-900 tracking-tight">
-                uryeo_eng 피드 모음
+                uryeo_eng 의령여고 공식 피드
               </h3>
             </div>
-            <span className="text-[10px] text-purple-700 font-semibold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
-              공식 4대 부스
-            </span>
           </div>
 
           {/* =========================================================================
