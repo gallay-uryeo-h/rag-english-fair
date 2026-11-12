@@ -182,6 +182,14 @@ export const LiveHomeFeed: React.FC<Props> = ({
   // 🏛️ 의령여고 공식 최고 관리자(uryeo_eng) 전용: 모든 계정 및 피드/댓글 일괄 영구 삭제 권한
   const isOfficialAdmin = Boolean(currentUser && currentUser.username.trim().toLowerCase() === 'uryeo_eng');
 
+  // 🛡️ uryeo_eng 포함 관리자/교사 모두에게 부여되는 관리 권한 (개별 댓글 삭제, 게시물 관리 등)
+  const isAnyAdmin = Boolean(
+    isOfficialAdmin ||
+    isAdmin ||
+    currentUser?.isTeacher ||
+    (currentUser && isTeacherAccount(currentUser.username))
+  );
+
   const handleDeleteUserAccount = async (targetUsername: string) => {
     if (!isOfficialAdmin) {
       alert('계정 삭제 권한은 @uryeo_eng 최고 관리자에게만 부여되어 있습니다.');
@@ -221,23 +229,27 @@ export const LiveHomeFeed: React.FC<Props> = ({
     }
   };
 
-  // 🗑️ 개별 댓글 삭제 핸들러 (공식 관리자 또는 본인 댓글)
+  // 🗑️ 개별 댓글 삭제 핸들러 (uryeo_eng 포함 관리자 전체 또는 본인 댓글)
   const handleDeleteComment = async (comment: FsComment) => {
-    const isOwner = currentUser && (comment.author === currentUser.username || comment.author === `@${currentUser.username}`);
-    const canDelete = isOfficialAdmin || isOwner;
+    const isOwner = Boolean(
+      currentUser &&
+      (comment.author === currentUser.username || comment.author === `@${currentUser.username}`)
+    );
+    const canDelete = isAnyAdmin || isOwner;
     if (!canDelete) {
-      alert('본인이 작성한 댓글이거나 공식 관리자만 삭제할 수 있습니다.');
+      alert('본인이 작성한 댓글이거나 관리자만 삭제할 수 있습니다.');
       return;
     }
 
-    const confirmMsg = isOfficialAdmin && !isOwner
-      ? `[공식 관리자 권한] @${comment.author} 님의 댓글을 강제 삭제하시겠습니까?\n내용: "${comment.text}"`
+    const confirmMsg = isAnyAdmin && !isOwner
+      ? `[관리자 권한] @${comment.author} 님의 댓글을 강제 삭제하시겠습니까?\n내용: "${comment.text}"`
       : '댓글을 삭제하시겠습니까?';
 
     if (!window.confirm(confirmMsg)) return;
 
     try {
       await deleteComment(comment.id);
+      alert('댓글이 삭제되었습니다.');
     } catch (err) {
       console.error('댓글 삭제 실패:', err);
       alert('댓글 삭제 중 오류가 발생했습니다.');
@@ -250,7 +262,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
       currentUser &&
       (c.author === currentUser.username || c.author === `@${currentUser.username}`)
     );
-    const canDelete = isOfficialAdmin || isOwner;
+    const canDelete = isAnyAdmin || isOwner;
 
     return (
       <div key={c.id} className="text-xs flex items-baseline justify-between gap-2 group/c py-0.5">
@@ -273,10 +285,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => handleDeleteComment(c)}
-              title={isOfficialAdmin && !isOwner ? "선생님/관리자 권한 댓글 삭제" : "내 댓글 삭제"}
-              className="text-slate-300 hover:text-red-500 transition-colors p-0.5 cursor-pointer"
+              title={isAnyAdmin && !isOwner ? "선생님/관리자 권한 댓글 삭제" : "내 댓글 삭제"}
+              className="text-slate-400 hover:text-red-500 transition-colors p-0.5 cursor-pointer"
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
