@@ -22,8 +22,6 @@ import {
   Sparkles,
   Bot,
   ChevronRight,
-  UserPlus as _UserPlus,
-  User,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
 import { VocabListenTab } from './VocabListenTab';
@@ -647,106 +645,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </div>
       </section>
 
-      {/* 🌟 1-1. 내 계정 요약 및 새 글 작성 빠른 액션 바 */}
-      <section className="bg-white border-y border-slate-200 px-3.5 py-2.5 flex items-center justify-between shadow-2xs">
-        {currentUser ? (
-          <div
-            onClick={handleOpenMyProfile}
-            className="flex items-center gap-2 cursor-pointer group"
-          >
-            <div className="w-7 h-7 rounded-full p-0.5 bg-gradient-to-tr from-pink-500 to-purple-600 group-hover:scale-105 transition-transform">
-              <img
-                src={currentUser.avatar}
-                alt={currentUser.username}
-                className="w-full h-full rounded-full object-cover"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                  @{currentUser.username}
-                </span>
-                {currentUser.isTeacher && (
-                  <span className="text-[9px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.2 rounded-full">
-                    선생님 🛡️
-                  </span>
-                )}
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setProfileModalInitialMode(currentUser.isTeacher ? 'admin' : 'guest');
-                    setIsProfileModalOpen(true);
-                  }}
-                  className="text-[10px] text-slate-400 hover:text-purple-600 hover:underline cursor-pointer"
-                >
-                  · 프로필/계정 관리
-                </span>
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (confirm('로그아웃하시겠습니까?')) {
-                      clearUserProfile();
-                      setAdminAuthenticated(false);
-                      setIsAdmin(false);
-                      setCurrentUser(null);
-                      alert('로그아웃되었습니다.');
-                    }
-                  }}
-                  className="text-[10px] text-rose-500 font-bold hover:underline cursor-pointer ml-1"
-                >
-                  [로그아웃]
-                </span>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <div
-              onClick={() => {
-                setProfileModalInitialMode('guest');
-                setIsProfileModalOpen(true);
-              }}
-              className="flex items-center gap-2 cursor-pointer group select-none"
-            >
-              <div className="w-7 h-7 rounded-full bg-purple-100/80 border border-purple-200 text-purple-600 flex items-center justify-center text-xs font-bold shadow-2xs group-hover:scale-105 transition-transform">
-                <User className="w-3.5 h-3.5 text-purple-600" />
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-xs font-bold text-purple-700 group-hover:underline">
-                  부스체험 1회용 로그인
-                </span>
-              </div>
-            </div>
-            <span className="text-slate-300">|</span>
-            <button
-              onClick={() => {
-                setProfileModalInitialMode('admin');
-                setIsProfileModalOpen(true);
-              }}
-              className="text-xs font-bold text-blue-700 hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-1"
-            >
-              <Shield className="w-3.5 h-3.5 text-blue-600" />
-              <span>관리자 로그인</span>
-            </button>
-          </div>
-        )}
-
-        <button
-          onClick={() => {
-            if (!currentUser) {
-              setProfileModalInitialMode('guest');
-              setIsProfileModalOpen(true);
-              alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
-            } else {
-              setIsCreatePostModalOpen(true);
-            }
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 text-white text-xs font-bold shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
-        >
-          <Plus className="w-3.5 h-3.5 stroke-3" />
-          <span>피드 올리기</span>
-        </button>
-      </section>
 
       {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 */}
       {viewMode === 'grid' ? (
