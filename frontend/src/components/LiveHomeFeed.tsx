@@ -98,6 +98,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
   // ─── 👤 사용자 개별 프로필 (최초 방문 시 계정 없음: null) ────────────────
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(getUserProfile);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [profileModalInitialMode, setProfileModalInitialMode] = useState<'guest' | 'admin'>('guest');
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(isAdminAuthenticated);
 
@@ -106,6 +107,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
     if (currentUser?.isTeacher) {
       setIsAdmin(true);
       setAdminAuthenticated(true);
+    } else if (!currentUser) {
+      setIsAdmin(false);
+      setAdminAuthenticated(false);
     }
   }, [currentUser]);
 
@@ -478,7 +482,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           ) : (
             <div
-              onClick={() => setIsProfileModalOpen(true)}
+              onClick={() => {
+                setProfileModalInitialMode('guest');
+                setIsProfileModalOpen(true);
+              }}
               className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
               <div className="relative w-16 h-16 rounded-full p-[2px] border-2 border-dashed border-purple-400 hover:border-purple-600 transition-all flex items-center justify-center bg-purple-50/50 group-hover:scale-105 active:scale-95">
@@ -491,10 +498,10 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </div>
               <div className="flex flex-col items-center max-w-[70px]">
                 <span className="text-[11px] font-bold text-purple-700 tracking-tight truncate w-full text-center">
-                  계정 만들기
+                  1회용 로그인
                 </span>
                 <span className="text-[9px] text-slate-400 truncate w-full text-center">
-                  1회용 아이디
+                  부스 닉네임
                 </span>
               </div>
             </div>
@@ -607,7 +614,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               />
             </div>
             <div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
                   @{currentUser.username}
                 </span>
@@ -619,37 +626,67 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 <span
                   onClick={(e) => {
                     e.stopPropagation();
+                    setProfileModalInitialMode(currentUser.isTeacher ? 'admin' : 'guest');
                     setIsProfileModalOpen(true);
                   }}
                   className="text-[10px] text-slate-400 hover:text-purple-600 hover:underline cursor-pointer"
                 >
-                  · 프로필 수정
+                  · 프로필/계정 관리
+                </span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm('로그아웃하시겠습니까?')) {
+                      clearUserProfile();
+                      setAdminAuthenticated(false);
+                      setIsAdmin(false);
+                      setCurrentUser(null);
+                      alert('로그아웃되었습니다.');
+                    }
+                  }}
+                  className="text-[10px] text-rose-500 font-bold hover:underline cursor-pointer ml-1"
+                >
+                  [로그아웃]
                 </span>
               </div>
             </div>
           </div>
         ) : (
-          <div
-            onClick={() => setIsProfileModalOpen(true)}
-            className="flex items-center gap-2 cursor-pointer group"
-          >
-            <div className="w-7 h-7 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">
-              ?
-            </div>
-            <div>
+          <div className="flex items-center gap-2">
+            <div
+              onClick={() => {
+                setProfileModalInitialMode('guest');
+                setIsProfileModalOpen(true);
+              }}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              <div className="w-7 h-7 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">
+                ?
+              </div>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-bold text-purple-700 group-hover:underline">
-                  부스 활동용 1회용 아이디 만들기
+                  1회용 로그인
                 </span>
-                <span className="text-[10px] text-slate-400">➔ 터치</span>
               </div>
             </div>
+            <span className="text-slate-300">|</span>
+            <button
+              onClick={() => {
+                setProfileModalInitialMode('admin');
+                setIsProfileModalOpen(true);
+              }}
+              className="text-xs font-bold text-blue-700 hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-1"
+            >
+              <Shield className="w-3.5 h-3.5 text-blue-600" />
+              <span>관리자 로그인</span>
+            </button>
           </div>
         )}
 
         <button
           onClick={() => {
             if (!currentUser) {
+              setProfileModalInitialMode('guest');
               setIsProfileModalOpen(true);
               alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
             } else {
@@ -828,7 +865,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
                 </p>
               </div>
-        </div>
+            </div>
 
             {/* 포스트 소셜 바 */}
             <div className="px-3.5 pt-3 pb-2">
@@ -867,31 +904,31 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </span>
               </div>
 
-          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-          <div className="pt-2.5 pb-1">
-            <button
-              onClick={() => onToggleSection('mbti')}
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500" />
-                <span className="text-xs font-bold text-slate-800 group-hover:text-blue-600">
-                  {expandedSections.mbti ? 'MBTI 테스트 뷰어 접기' : 'MBTI 테스트 바로 시작하기'}
-                </span>
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('mbti')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-blue-600">
+                      {expandedSections.mbti ? 'MBTI 테스트 뷰어 접기' : 'MBTI 테스트 바로 시작하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-blue-600">
+                    <span>{expandedSections.mbti ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.mbti ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
               </div>
-              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-blue-600">
-                <span>{expandedSections.mbti ? '닫기' : '펼쳐보기'}</span>
-                {expandedSections.mbti ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
-            </button>
-          </div>
 
-          {/* 🌟 아코디언 인라인 진단창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-          {expandedSections.mbti && (
-            <div className="mt-2.5 border border-blue-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-              <DeepEnglishMbtiTab onOpenImage={onOpenImage} />
-            </div>
-          )}
+              {/* 🌟 아코디언 인라인 진단창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.mbti && (
+                <div className="mt-2.5 border border-blue-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <DeepEnglishMbtiTab onOpenImage={onOpenImage} />
+                </div>
+              )}
 
               {/* 💬 댓글 목록 미리보기 */}
               {comments.mbti && comments.mbti.length > 0 && (
@@ -1010,7 +1047,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
                 </p>
               </div>
-        </div>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1048,31 +1085,31 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </span>
               </div>
 
-          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-          <div className="pt-2.5 pb-1">
-            <button
-              onClick={() => onToggleSection('vocab')}
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-500" />
-                <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600">
-                  {expandedSections.vocab ? '단어 퀴즈 뷰어 접기' : '단어 소리 퀴즈 시작하기'}
-                </span>
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('vocab')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600">
+                      {expandedSections.vocab ? '단어 퀴즈 뷰어 접기' : '단어 소리 퀴즈 시작하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-purple-600">
+                    <span>{expandedSections.vocab ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
               </div>
-              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-purple-600">
-                <span>{expandedSections.vocab ? '닫기' : '펼쳐보기'}</span>
-                {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
-            </button>
-          </div>
 
-          {/* 🌟 아코디언 인라인 단어 퀴즈창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-          {expandedSections.vocab && (
-            <div className="mt-2.5 border border-purple-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-              <VocabListenTab />
-            </div>
-          )}
+              {/* 🌟 아코디언 인라인 단어 퀴즈창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.vocab && (
+                <div className="mt-2.5 border border-purple-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <VocabListenTab />
+                </div>
+              )}
 
               {/* 💬 댓글 목록 미리보기 */}
               {comments.vocab && comments.vocab.length > 0 && (
@@ -1190,7 +1227,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
                 </p>
               </div>
-        </div>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1228,31 +1265,31 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </span>
               </div>
 
-          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-          <div className="pt-2.5 pb-1">
-            <button
-              onClick={() => onToggleSection('textbook')}
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
-                  {expandedSections.textbook ? '6권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
-                </span>
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('textbook')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
+                      {expandedSections.textbook ? '6권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">
+                    <span>{expandedSections.textbook ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
               </div>
-              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">
-                <span>{expandedSections.textbook ? '닫기' : '펼쳐보기'}</span>
-                {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
-            </button>
-          </div>
 
-          {/* 🌟 아코디언 인라인 교과서 뷰어 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-          {expandedSections.textbook && (
-            <div className="mt-2.5 border border-emerald-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-              <TextbookBrowse2Layer onOpenImage={onOpenImage} />
-            </div>
-          )}
+              {/* 🌟 아코디언 인라인 교과서 뷰어 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.textbook && (
+                <div className="mt-2.5 border border-emerald-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <TextbookBrowse2Layer onOpenImage={onOpenImage} />
+                </div>
+              )}
 
               {/* 💬 댓글 목록 미리보기 */}
               {comments.textbook && comments.textbook.length > 0 && (
@@ -1370,7 +1407,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
                 </p>
               </div>
-        </div>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1408,31 +1445,31 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </span>
               </div>
 
-          {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-          <div className="pt-2.5 pb-1">
-            <button
-              onClick={() => onToggleSection('seteuk')}
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-amber-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
-                <span className="text-xs font-bold text-slate-800 group-hover:text-amber-600">
-                  {expandedSections.seteuk ? '세특 발전소 뷰어 접기' : '진로별 세특 보고서 탐색하기'}
-                </span>
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('seteuk')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-amber-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-amber-600">
+                      {expandedSections.seteuk ? '세특 발전소 뷰어 접기' : '진로별 세특 보고서 탐색하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-amber-600">
+                    <span>{expandedSections.seteuk ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.seteuk ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
               </div>
-              <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-amber-600">
-                <span>{expandedSections.seteuk ? '닫기' : '펼쳐보기'}</span>
-                {expandedSections.seteuk ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </div>
-            </button>
-          </div>
 
-          {/* 🌟 아코디언 인라인 세특 발전소창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-          {expandedSections.seteuk && (
-            <div className="mt-2.5 border border-amber-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-              <SeteukGeneratorTab onOpenImage={onOpenImage} />
-            </div>
-          )}
+              {/* 🌟 아코디언 인라인 세특 발전소창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.seteuk && (
+                <div className="mt-2.5 border border-amber-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <SeteukGeneratorTab onOpenImage={onOpenImage} />
+                </div>
+              )}
 
               {/* 💬 댓글 목록 미리보기 */}
               {comments.seteuk && comments.seteuk.length > 0 && (
@@ -1622,9 +1659,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
                         className="transition-transform active:scale-125"
                       >
                         <Heart
-                          className={`w-6 h-6 ${
-                            isLiked ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                          }`}
+                          className={`w-6 h-6 ${isLiked ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                            }`}
                         />
                       </button>
                       <button
@@ -1676,6 +1712,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         currentProfile={currentUser}
+        initialMode={profileModalInitialMode}
         onProfileUpdated={(updated) => setCurrentUser(updated)}
       />
 
@@ -1697,9 +1734,9 @@ export const LiveHomeFeed: React.FC<Props> = ({
         officialPosts={officialPostsList}
         isOwnProfile={Boolean(
           currentUser &&
-            viewingProfile &&
-            !viewingProfile.isOfficial &&
-            viewingProfile.username.toLowerCase() === currentUser.username.toLowerCase()
+          viewingProfile &&
+          !viewingProfile.isOfficial &&
+          viewingProfile.username.toLowerCase() === currentUser.username.toLowerCase()
         )}
         onSelectPost={handleSelectPostFromProfile}
         onSelectOfficialPost={handleSelectOfficialPostFromProfile}

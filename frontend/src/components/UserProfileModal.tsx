@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Sparkles, User, Lock, ShieldCheck, Loader2 } from 'lucide-react';
+import { X, Check, Sparkles, User, Lock, ShieldCheck, Loader2, LogOut, Shield } from 'lucide-react';
 import {
   AVATAR_PRESETS,
   DEFAULT_GUEST_AVATAR,
@@ -8,6 +8,7 @@ import {
   isOfficialAccount,
   TEACHER_PASSWORD,
   setAdminAuthenticated,
+  clearUserProfile,
 } from '../utils/userProfile';
 import type { UserProfile } from '../utils/userProfile';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
@@ -17,7 +18,8 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   currentProfile: UserProfile | null;
-  onProfileUpdated: (updated: UserProfile) => void;
+  onProfileUpdated: (updated: UserProfile | null) => void;
+  initialMode?: 'guest' | 'admin';
 }
 
 export const UserProfileModal: React.FC<Props> = ({
@@ -25,7 +27,10 @@ export const UserProfileModal: React.FC<Props> = ({
   onClose,
   currentProfile,
   onProfileUpdated,
+  initialMode = 'guest',
 }) => {
+  // 모드 탭: 'guest' (1회용 로그인) vs 'admin' (기존/관리자 로그인)
+  const [authMode, setAuthMode] = useState<'guest' | 'admin'>(initialMode);
   const [username, setUsername] = useState(currentProfile?.username || '');
   const [selectedAvatar, setSelectedAvatar] = useState(currentProfile?.avatar || DEFAULT_GUEST_AVATAR);
   const [isCustomPhoto, setIsCustomPhoto] = useState<boolean>(false);
@@ -48,45 +53,59 @@ export const UserProfileModal: React.FC<Props> = ({
     },
   });
 
-  // currentProfile이 변경될 때 상태 동기화
+  // currentProfile 또는 isOpen 변경 시 상태 동기화
   useEffect(() => {
-    if (currentProfile) {
-      setUsername(currentProfile.username);
-      setSelectedAvatar(currentProfile.avatar);
-      // 기존 아바타가 프리셋에 없으면 커스텀 사진으로 간주
-      const isPreset = AVATAR_PRESETS.some((av) => av.url === currentProfile.avatar);
-      setIsCustomPhoto(!isPreset);
-    } else {
-      setUsername('');
-      setSelectedAvatar(DEFAULT_GUEST_AVATAR);
-      setIsCustomPhoto(false);
+    if (isOpen) {
+      if (currentProfile) {
+        setUsername(currentProfile.username);
+        setSelectedAvatar(currentProfile.avatar);
+        const isPreset = AVATAR_PRESETS.some((av) => av.url === currentProfile.avatar);
+        setIsCustomPhoto(!isPreset);
+        setAuthMode(currentProfile.isTeacher ? 'admin' : 'guest');
+      } else {
+        setUsername(initialMode === 'admin' ? 'uryeo_eng' : '');
+        setSelectedAvatar(DEFAULT_GUEST_AVATAR);
+        setIsCustomPhoto(false);
+        setAuthMode(initialMode);
+      }
+      setTeacherPassword('');
+      setPasswordError(false);
     }
-    setTeacherPassword('');
-    setPasswordError(false);
-  }, [currentProfile, isOpen]);
+  }, [currentProfile, isOpen, initialMode]);
 
   if (!isOpen) return null;
 
-  // 입력된 아이디가 사전 등록된 선생님 계정 또는 학교 공식 계정인지 확인
+  // 관리자 모드인지 여부
+  const isAdminTab = authMode === 'admin';
   const isTargetTeacher = isTeacherAccount(username);
   const isTargetOfficial = isOfficialAccount(username);
+
+  const handleLogout = () => {
+    if (confirm('현재 계정에서 로그아웃하시겠습니까?')) {
+      clearUserProfile();
+      setAdminAuthenticated(false);
+      onProfileUpdated(null);
+      onClose();
+      alert('로그아웃되었습니다.');
+    }
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = username.trim().replace(/^@/, '');
     if (!trimmed) {
-      alert('부스 활동에 사용할 1회용 아이디(닉네임)를 입력해 주세요!');
+      alert(isAdminTab ? '관리자 아이디를 선택 또는 입력해 주세요!' : '부스 활동에 사용할 1회용 닉네임을 입력해 주세요!');
       return;
     }
 
-    // 선생님 또는 공식 계정인 경우 비밀번호 검증 필수
     let isTeacherAuth = false;
     const isOfficialDept = isOfficialAccount(trimmed);
 
-    if (isTargetTeacher) {
+    // 관리자 탭이거나 선생님 계정 입력 시 비밀번호 검증
+    if (isAdminTab || isTeacherAccount(trimmed)) {
       if (teacherPassword.trim() !== TEACHER_PASSWORD) {
         setPasswordError(true);
-        alert(isOfficialDept ? '공식 계정 비밀번호가 올바르지 않습니다.' : '선생님 비밀번호가 올바르지 않습니다.');
+        alert(isOfficialDept ? '공식 관리자 비밀번호가 올바르지 않습니다.' : '선생님 비밀번호가 올바르지 않습니다.');
         return;
       }
       isTeacherAuth = true;
@@ -115,7 +134,7 @@ export const UserProfileModal: React.FC<Props> = ({
     } else if (isTeacherAuth) {
       alert(`🛡️ 선생님 계정(@${trimmed})으로 인증되었습니다. 관리자 권한이 활성화됩니다.`);
     } else {
-      alert(`🎉 @${trimmed} 계정이 생성되었습니다! 즐거운 부스 활동 되세요.`);
+      alert(`🎉 @${trimmed} 1회용 계정으로 부스 활동을 시작합니다!`);
     }
   };
 
@@ -126,17 +145,25 @@ export const UserProfileModal: React.FC<Props> = ({
     >
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] cursor-default"
+        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] cursor-default animate-in zoom-in-95 duration-200"
       >
         {/* 헤더 */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 flex items-center justify-center text-white">
-              <User className="w-4 h-4" />
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
+              isAdminTab 
+                ? 'bg-gradient-to-tr from-purple-700 via-indigo-600 to-blue-600'
+                : 'bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500'
+            }`}>
+              {isAdminTab ? <Shield className="w-4 h-4 text-amber-300" /> : <User className="w-4 h-4" />}
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">내 계정 프로필 설정</h3>
-              <p className="text-[11px] text-slate-500">부스 활동에 사용할 1회용 계정입니다</p>
+              <h3 className="text-sm font-bold text-slate-900">
+                {currentProfile ? '계정 관리 & 프로필' : (isAdminTab ? '관리자 / 선생님 로그인' : '1회용 계정 로그인')}
+              </h3>
+              <p className="text-[11px] text-slate-500">
+                {isAdminTab ? '의령여고 영어과 공식 및 교사 전용 계정' : '부스 활동에 사용할 1회용 닉네임입니다'}
+              </p>
             </div>
           </div>
           <button
@@ -149,14 +176,59 @@ export const UserProfileModal: React.FC<Props> = ({
           </button>
         </div>
 
+        {/* 로그인 모드 선택 탭 (1회용 로그인 vs 기존/관리자 로그인) */}
+        <div className="flex border-b border-slate-100 bg-slate-50 p-1 m-3 rounded-2xl gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('guest');
+              if (!currentProfile) {
+                setUsername('');
+                setSelectedAvatar(DEFAULT_GUEST_AVATAR);
+              }
+              setPasswordError(false);
+            }}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+              authMode === 'guest'
+                ? 'bg-white text-purple-700 shadow-xs'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <User className="w-3.5 h-3.5" />
+            <span>1회용 로그인</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('admin');
+              if (!currentProfile || !currentProfile.isTeacher) {
+                setUsername('uryeo_eng');
+              }
+              setPasswordError(false);
+            }}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+              authMode === 'admin'
+                ? 'bg-white text-blue-700 shadow-xs'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Shield className="w-3.5 h-3.5 text-blue-600" />
+            <span>기존/관리자 로그인</span>
+          </button>
+        </div>
+
         {/* 폼 내용 */}
-        <form onSubmit={handleSave} className="p-5 space-y-4 overflow-y-auto">
+        <form onSubmit={handleSave} className="p-4 pt-1 space-y-4 overflow-y-auto">
           {/* 📸 공통 숨겨진 카메라/갤러리 input */}
           {hiddenInputs}
 
           {/* 현재 선택된 아바타 프리뷰 & 직접 촬영/앨범 선택 버튼 */}
           <div className="flex flex-col items-center gap-2.5 py-1">
-            <div className="relative w-22 h-22 rounded-full p-1 bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400 shadow-md">
+            <div className={`relative w-20 h-20 rounded-full p-1 shadow-md ${
+              isAdminTab 
+                ? 'bg-gradient-to-tr from-blue-500 via-indigo-600 to-purple-600'
+                : 'bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-400'
+            }`}>
               <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
                 <img
                   src={selectedAvatar}
@@ -173,37 +245,13 @@ export const UserProfileModal: React.FC<Props> = ({
                 </div>
               )}
 
-              {isTargetTeacher && (
-                <div className="absolute -bottom-1 -right-1 bg-purple-600 text-white rounded-full p-1 shadow-xs" title="선생님 인증">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+              {isAdminTab && (
+                <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white rounded-full p-1 shadow-xs" title="관리자">
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-300" />
                 </div>
               )}
             </div>
 
-            {/* 닉네임 및 상태 안내 */}
-            <div className="text-center space-y-0.5">
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-xs font-bold text-slate-800">
-                  {username ? `@${username}` : '@아이디를 입력하세요'}
-                </span>
-                {isTargetOfficial ? (
-                  <span className="text-[10px] font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded-full">
-                    🏛️ 영어과 공식 계정
-                  </span>
-                ) : isTargetTeacher ? (
-                  <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-full">
-                    선생님
-                  </span>
-                ) : null}
-              </div>
-              {isCustomPhoto && (
-                <p className="text-[10px] text-pink-600 font-bold flex items-center justify-center gap-1">
-                  <span>📸 직접 촬영/선택한 프로필 사진 적용 중</span>
-                </p>
-              )}
-            </div>
-
-            {/* 📸 공통 사진 촬영 & 앨범 선택 버튼 */}
             <PhotoPickerButtons
               onCameraClick={openCamera}
               onGalleryClick={openGallery}
@@ -211,45 +259,70 @@ export const UserProfileModal: React.FC<Props> = ({
               cameraLabel="사진 촬영"
               galleryLabel="앨범에서 선택"
               size="sm"
-              className="w-full max-w-[240px] pt-1"
+              className="w-full max-w-[240px] pt-0.5"
             />
           </div>
 
-          {/* 아이디 입력창 */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
-              <span>부스 활동에 사용할 1회용 아이디(닉네임)</span>
-              <span className="text-pink-500">*</span>
-            </label>
-            <div className="relative flex items-center">
-              <span className="absolute left-3 text-sm font-bold text-slate-400">@</span>
-              <input
-                type="text"
+          {/* 아이디 입력창 / 관리자 선택창 */}
+          {isAdminTab ? (
+            <div className="space-y-1.5 bg-blue-50/70 p-3 rounded-2xl border border-blue-100">
+              <label className="text-xs font-bold text-slate-800 flex items-center justify-between">
+                <span>관리자 / 선생님 계정 선택</span>
+                <span className="text-[10px] text-blue-600 font-semibold">사전 등록 계정</span>
+              </label>
+              <select
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
                   setPasswordError(false);
                 }}
-                placeholder="예: 2반_김민지, english_fan"
-                maxLength={25}
-                className="w-full pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition-all"
-                required
-                autoFocus
-              />
+                className="w-full px-3 py-2.5 rounded-xl border border-blue-200 text-xs font-bold text-slate-800 bg-white focus:outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer"
+              >
+                <option value="uryeo_eng">🏛️ @uryeo_eng (의령여고 영어과 공식)</option>
+                <option value="uryeo_kim">👩‍🏫 @uryeo_kim (김선생님 계정)</option>
+                <option value="uryeo_lee">👨‍🏫 @uryeo_lee (이선생님 계정)</option>
+                <option value="uryeo_sung">👩‍🏫 @uryeo_sung (성선생님 계정)</option>
+              </select>
+              <p className="text-[10px] text-slate-500">
+                선택한 계정으로 로그인하면 피드 관리 및 삭제 권한이 활성화됩니다.
+              </p>
             </div>
-            <p className="text-[10px] text-slate-400">
-              * 로그인 없이 박람회 부스 체험 중에 사용되는 1회용 닉네임입니다.
-            </p>
-          </div>
+          ) : (
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                <span>부스 활동에 사용할 1회용 닉네임</span>
+                <span className="text-pink-500">*</span>
+              </label>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-sm font-bold text-slate-400">@</span>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setPasswordError(false);
+                  }}
+                  placeholder="예: 2반_김민지, english_fan"
+                  maxLength={25}
+                  className="w-full pl-8 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition-all"
+                  required
+                  autoFocus
+                />
+              </div>
+              <p className="text-[10px] text-slate-400">
+                * 로그인 없이 박람회 부스 체험 중에 사용되는 1회용 닉네임입니다.
+              </p>
+            </div>
+          )}
 
-          {/* 🛡️ 선생님 / 공식 계정 감지 시 비밀번호 입력창 동적 등장 */}
-          {isTargetTeacher && (
-            <div className={`p-3.5 rounded-2xl border space-y-2 animate-in slide-in-from-top-2 duration-200 ${
+          {/* 🛡️ 관리자 모드이거나 선생님 계정일 때 비밀번호 입력창 */}
+          {(isAdminTab || isTargetTeacher) && (
+            <div className={`p-3 rounded-2xl border space-y-2 animate-in slide-in-from-top-2 duration-200 ${
               isTargetOfficial ? 'bg-blue-50/80 border-blue-200' : 'bg-purple-50 border-purple-200'
             }`}>
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
                 <Lock className={`w-3.5 h-3.5 ${isTargetOfficial ? 'text-blue-600' : 'text-purple-600'}`} />
-                <span>{isTargetOfficial ? '의령여고 영어과 관리자 비밀번호 확인' : '선생님 전용 비밀번호 확인'}</span>
+                <span>{isTargetOfficial ? '의령여고 영어과 관리자 비밀번호' : '선생님 전용 비밀번호'}</span>
               </div>
               <input
                 type="password"
@@ -258,7 +331,7 @@ export const UserProfileModal: React.FC<Props> = ({
                   setTeacherPassword(e.target.value);
                   setPasswordError(false);
                 }}
-                placeholder={isTargetOfficial ? '영어과 관리자 비밀번호 입력' : '선생님 비밀번호를 입력하세요'}
+                placeholder="비밀번호를 입력하세요"
                 className={`w-full px-3 py-2 rounded-xl border text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-hidden bg-white transition-all ${
                   passwordError
                     ? 'border-red-400 bg-red-50/50'
@@ -275,16 +348,16 @@ export const UserProfileModal: React.FC<Props> = ({
               )}
               <p className={`text-[10px] ${isTargetOfficial ? 'text-blue-700 font-medium' : 'text-purple-600'}`}>
                 {isTargetOfficial
-                  ? '🏛️ 의령여고 영어과 공식 계정(uryeo_eng)은 전체 게시물 관리 및 공식 피드 작성 권한이 부여됩니다.'
-                  : '선생님 계정(uryeo_lee, uryeo_kim, uryeo_sung)은 관리자 권한이 함께 부여됩니다.'}
+                  ? '🏛️ 의령여고 영어과 공식 계정(uryeo_eng)은 전체 게시물 관리 권한이 부여됩니다.'
+                  : '선생님 계정은 게시물 관리 및 삭제 권한이 함께 부여됩니다.'}
               </p>
             </div>
           )}
 
-          {/* 아바타 선택 그리드 */}
-          <div className="space-y-1.5 pt-1">
+          {/* 아바타 선택 그리드 (1회용 로그인 탭일 때 추천) */}
+          <div className="space-y-1.5 pt-0.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-slate-700">또는 기본 캐릭터 아바타 선택</label>
+              <label className="text-xs font-bold text-slate-700">기본 캐릭터 아바타 선택</label>
               {isCustomPhoto && (
                 <button
                   type="button"
@@ -294,7 +367,7 @@ export const UserProfileModal: React.FC<Props> = ({
                   }}
                   className="text-[10px] text-purple-600 hover:underline cursor-pointer"
                 >
-                  기본으로 초기화
+                  기본 아바타로 복귀
                 </button>
               )}
             </div>
@@ -333,14 +406,35 @@ export const UserProfileModal: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 저장 버튼 */}
-          <button
-            type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500 text-white text-xs font-bold hover:opacity-95 active:scale-[0.98] transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>{currentProfile ? '프로필 변경 완료' : '부스 체험 시작하기'}</span>
-          </button>
+          {/* 버튼 영역 (저장/로그인 + 현재 로그인되어 있다면 로그아웃 버튼) */}
+          <div className="space-y-2 pt-1">
+            <button
+              type="submit"
+              className={`w-full py-3 rounded-xl text-white text-xs font-bold hover:opacity-95 active:scale-[0.98] transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 ${
+                isAdminTab
+                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600'
+                  : 'bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>
+                {currentProfile
+                  ? (isAdminTab ? '관리자 계정으로 전환/로그인' : '프로필 저장하기')
+                  : (isAdminTab ? '관리자 로그인' : '부스 체험 시작하기')}
+              </span>
+            </button>
+
+            {currentProfile && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full py-2.5 rounded-xl border border-rose-200 bg-rose-50/60 hover:bg-rose-100/70 text-rose-600 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>계정 로그아웃</span>
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>
