@@ -120,8 +120,14 @@ export const UserProfileModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh]">
+    <div 
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 cursor-pointer"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[92vh] cursor-default"
+      >
         {/* 헤더 */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -133,14 +139,14 @@ export const UserProfileModal: React.FC<Props> = ({
               <p className="text-[11px] text-slate-500">부스 활동에 사용할 1회용 계정입니다</p>
             </div>
           </div>
-          {currentProfile && (
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            aria-label="닫기"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* 폼 내용 */}
