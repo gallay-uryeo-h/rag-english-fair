@@ -541,174 +541,118 @@ export const LiveHomeFeed: React.FC<Props> = ({
       {/* =========================================================================
           📸 1. 부스 활동 스토리 캐러셀 (Story Bar)
           ========================================================================= */}
-      <section className="bg-white border-b border-slate-200/80 py-4 px-4 overflow-hidden shadow-sm">
-        <div className="flex items-start gap-4 overflow-x-auto no-scrollbar">
-          {/* 🌟 1. 내 스토리 (최초 방문 시 1회용 로그인 유도, 로그인 후 내 프로필 표시) */}
+      <section className="bg-white border-b border-slate-200/60 pt-2.5 pb-1 overflow-hidden">
+        {/* 스크롤 컨테이너: pb-2 → 라벨과 스크롤바 사이 여백 확보 */}
+        <div className="flex items-start gap-3 overflow-x-auto no-scrollbar px-3 pb-2">
+
+          {/* 🌟 1. 내 스토리 */}
           {currentUser ? (
             <div
               onClick={handleOpenMyProfile}
-              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
-              {/* 아바타 링 */}
-              <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-purple-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+              <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-purple-600 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
                 <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.username}
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                  <img src={currentUser.avatar} alt={currentUser.username} className="w-full h-full rounded-full object-cover" />
                 </div>
-                {/* 내 스토리 플러스 뱃지 */}
                 <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsCreatePostModalOpen(true);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setIsCreatePostModalOpen(true); }}
                   title="새 피드 올리기"
-                  className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[10px] font-black shadow-sm cursor-pointer transition-colors"
-                >
-                  +
-                </div>
+                  className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-blue-500 hover:bg-blue-600 border-[1.5px] border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm cursor-pointer transition-colors"
+                >+</div>
               </div>
-              {/* 라벨 — 고정 높이 */}
-              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-                <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+              <div className="flex flex-col items-center w-[60px] text-center">
+                <span className="text-[9.5px] font-semibold leading-tight text-slate-700 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
                   {currentUser.isTeacher ? '선생님' : '내 계정'}
                 </span>
-                <span className="text-[9px] leading-tight text-slate-400 truncate w-full">
+                <span className="text-[8.5px] leading-tight text-slate-400 truncate w-full">
                   @{currentUser.username}
                 </span>
               </div>
             </div>
           ) : (
             <div
-              onClick={() => {
-                setProfileModalInitialMode('guest');
-                setIsProfileModalOpen(true);
-              }}
-              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
+              onClick={() => { setProfileModalInitialMode('guest'); setIsProfileModalOpen(true); }}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-[60px] h-[60px] rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 border-2 border-dashed border-purple-400 group-hover:border-purple-600 flex items-center justify-center transition-all duration-200 group-hover:scale-110 active:scale-95 shadow-sm">
-                <div className="flex flex-col items-center justify-center gap-0.5">
-                  <UserPlus className="w-5 h-5 text-purple-500 group-hover:text-purple-700 transition-colors" />
-                </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-black shadow-sm">
-                  +
-                </div>
+              <div className="relative w-[52px] h-[52px] rounded-full bg-gradient-to-br from-purple-50 to-indigo-100 border-[1.5px] border-dashed border-purple-300 group-hover:border-purple-500 flex items-center justify-center transition-all duration-200 group-hover:scale-110 active:scale-95">
+                <UserPlus className="w-[18px] h-[18px] text-purple-400 group-hover:text-purple-600 transition-colors" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-purple-500 border-[1.5px] border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm">+</div>
               </div>
-              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-                <span className="text-[10.5px] font-bold leading-tight text-purple-700 tracking-tight truncate w-full">
-                  1회용 로그인
-                </span>
-                <span className="text-[9px] leading-tight text-slate-400 truncate w-full">
-                  시작하기
-                </span>
+              <div className="flex flex-col items-center w-[60px] text-center">
+                <span className="text-[9.5px] font-semibold leading-tight text-purple-600 tracking-tight truncate w-full">1회용 로그인</span>
+                <span className="text-[8.5px] leading-tight text-slate-400 truncate w-full">시작하기</span>
               </div>
             </div>
           )}
 
-          {/* 구분선 */}
-          <div className="w-px self-stretch bg-slate-100 mx-0.5 my-1 shrink-0" />
-
-          {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
+          {/* 🌟 2. 의령여고 영어과 공식 계정 */}
           <div
             onClick={handleOpenOfficialProfile}
-            className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
           >
-            <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+            <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-500 to-pink-600 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
               <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
-                  alt="의령여고 영어과 공식"
-                  className="w-full h-full rounded-full object-cover"
-                />
+                <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80" alt="의령여고 영어과 공식" className="w-full h-full rounded-full object-cover" />
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-rose-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm">
-                ★
-              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 border-[1.5px] border-white flex items-center justify-center text-white text-[8px] font-black shadow-sm">★</div>
             </div>
-            <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-              <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-rose-600 transition-colors">
-                의령여고 공식
-              </span>
-              <span className="text-[9px] leading-tight text-rose-500 font-semibold truncate w-full">
-                @uryeo_eng
-              </span>
+            <div className="flex flex-col items-center w-[60px] text-center">
+              <span className="text-[9.5px] font-semibold leading-tight text-slate-700 tracking-tight truncate w-full group-hover:text-rose-600 transition-colors">의령여고 공식</span>
+              <span className="text-[8.5px] leading-tight text-rose-500 font-medium truncate w-full">@uryeo_eng</span>
             </div>
           </div>
 
-          {/* 🌟 2-1. 의령여고 Q&A 챗봇 계정 스토리 (@uryeo_qa_bot) */}
+          {/* 🌟 2-1. Q&A 챗봇 */}
           <div
             onClick={handleOpenDmModal}
-            className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             title="의령여고 영어과 Q&A AI 챗봇 1:1 대화"
           >
-            <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-violet-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+            <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-violet-600 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
               <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
-                <Bot className="w-6 h-6 text-cyan-300 group-hover:scale-110 transition-transform" />
+                <Bot className="w-5 h-5 text-cyan-300 group-hover:scale-110 transition-transform" />
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-violet-600 border-2 border-white flex items-center justify-center text-white text-[7px] font-black shadow-sm">
-                AI
-              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-violet-600 border-[1.5px] border-white flex items-center justify-center text-white text-[6.5px] font-black shadow-sm">AI</div>
             </div>
-            <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-              <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-violet-600 transition-colors">
-                질문 챗봇
-              </span>
-              <span className="text-[9px] leading-tight text-violet-500 font-semibold truncate w-full">
-                @uryeo_qa_bot
-              </span>
+            <div className="flex flex-col items-center w-[60px] text-center">
+              <span className="text-[9.5px] font-semibold leading-tight text-slate-700 tracking-tight truncate w-full group-hover:text-violet-600 transition-colors">질문 챗봇</span>
+              <span className="text-[8.5px] leading-tight text-violet-500 font-medium truncate w-full">@uryeo_qa_bot</span>
             </div>
           </div>
 
-          {/* 구분선 (참여자가 있을 때만) */}
-          {studentStoryList.length > 0 && (
-            <div className="w-px self-stretch bg-slate-100 mx-0.5 my-1 shrink-0" />
-          )}
-
-          {/* 🌟 3. 실시간으로 피드를 올린 실제 참여자들 스토리 (클릭 시 프로필 모아보기 팝업) */}
+          {/* 🌟 3. 실시간 참여자 스토리 */}
           {studentStoryList.map((st) => (
             <div
               key={st.postId}
               onClick={() => handleOpenParticipantProfile(st.authorName, st.avatar)}
-              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-500 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+              <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-500 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
                 <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
-                  <img
-                    src={st.avatar}
-                    alt={st.authorName}
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                  <img src={st.avatar} alt={st.authorName} className="w-full h-full rounded-full object-cover" />
                 </div>
               </div>
-              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-                <span className="text-[10.5px] font-bold leading-tight text-slate-800 tracking-tight truncate w-full group-hover:text-teal-600 transition-colors">
-                  참여자
-                </span>
-                <span className="text-[9px] leading-tight text-slate-400 font-medium truncate w-full">
-                  @{st.authorName.replace(/^@/, '')}
-                </span>
+              <div className="flex flex-col items-center w-[60px] text-center">
+                <span className="text-[9.5px] font-semibold leading-tight text-slate-700 tracking-tight truncate w-full group-hover:text-teal-600 transition-colors">참여자</span>
+                <span className="text-[8.5px] leading-tight text-slate-400 font-medium truncate w-full">@{st.authorName.replace(/^@/, '')}</span>
               </div>
             </div>
           ))}
 
-          {/* 🌟 4. 아직 참여자 피드가 없을 때 안내 칩 */}
+          {/* 🌟 4. 참여자 피드 없을 때 안내 */}
           {studentStoryList.length === 0 && (
             <div
-              onClick={() => {
-                if (!currentUser) setIsProfileModalOpen(true);
-                else setIsCreatePostModalOpen(true);
-              }}
-              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer select-none opacity-70 hover:opacity-100 transition-opacity"
+              onClick={() => { if (!currentUser) setIsProfileModalOpen(true); else setIsCreatePostModalOpen(true); }}
+              className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer select-none opacity-60 hover:opacity-90 transition-opacity"
             >
-              <div className="w-[60px] h-[60px] rounded-full border-2 border-dashed border-slate-200 flex flex-col items-center justify-center bg-slate-50 text-slate-400">
-                <span className="text-lg leading-none">✍️</span>
-                <span className="text-[8px] font-bold mt-0.5 text-slate-400">첫 피드</span>
+              <div className="w-[52px] h-[52px] rounded-full border-[1.5px] border-dashed border-slate-200 flex flex-col items-center justify-center bg-slate-50/80">
+                <span className="text-base leading-none">✍️</span>
+                <span className="text-[7.5px] font-bold mt-0.5 text-slate-400">첫 피드</span>
               </div>
-              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
-                <span className="text-[10.5px] font-bold leading-tight text-slate-400">참여자 피드</span>
-                <span className="text-[9px] leading-tight text-slate-300">대기 중</span>
+              <div className="flex flex-col items-center w-[60px] text-center">
+                <span className="text-[9.5px] font-semibold leading-tight text-slate-400">참여자 피드</span>
+                <span className="text-[8.5px] leading-tight text-slate-300">대기 중</span>
               </div>
             </div>
           )}
