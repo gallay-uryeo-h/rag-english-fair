@@ -229,9 +229,23 @@ export function subscribeUserPosts(callback: (posts: FsUserPost[]) => void): () 
 
 /**
  * 피드 삭제 (본인 기기 또는 선생님 관리자 권한)
+ * - 포스트 문서 및 해당 포스트에 달린 모든 댓글 일괄 삭제
  */
 export async function deleteUserPost(postId: string): Promise<void> {
+  if (!postId) return;
   await deleteDoc(doc(db, COLLECTION, postId));
+  try {
+    const q = query(
+      collection(db, COLLECTION),
+      where('type', '==', 'comment'),
+      where('postId', '==', postId)
+    );
+    const snap = await getDocs(q);
+    const delPromises = snap.docs.map((d) => deleteDoc(d.ref));
+    await Promise.all(delPromises);
+  } catch (e) {
+    console.error('포스트 관련 댓글 삭제 중 오류:', e);
+  }
 }
 
 /**
@@ -298,6 +312,24 @@ export async function deleteUserAccountAndAllPosts(authorName: string): Promise<
   const commentDocRefs = new Map<string, any>();
   commentsSnap1.docs.forEach((d) => commentDocRefs.set(d.id, d.ref));
   commentsSnap2.docs.forEach((d) => commentDocRefs.set(d.id, d.ref));
+
+  // 3. 해당 사용자의 피드들에 달린 모든 댓글도 함께 조회하여 일괄 삭제 대상에 추가
+  const postIds = Array.from(postDocRefs.keys());
+  if (postIds.length > 0) {
+    const postCommentsPromises = postIds.map((pId) =>
+      getDocs(
+        query(
+          collection(db, COLLECTION),
+          where('type', '==', 'comment'),
+          where('postId', '==', pId)
+        )
+      )
+    );
+    const postCommentsSnaps = await Promise.all(postCommentsPromises);
+    postCommentsSnaps.forEach((snap) => {
+      snap.docs.forEach((d) => commentDocRefs.set(d.id, d.ref));
+    });
+  }
 
   // 피드 및 댓글 동시 삭제 진행
   const deletePromises: Promise<void>[] = [];
