@@ -54,6 +54,15 @@ export async function addComment(postId: string, text: string, author: string): 
 }
 
 /**
+ * 🗑️ 개별 댓글 삭제 (관리자 또는 본인용)
+ */
+export async function deleteComment(commentId: string): Promise<void> {
+  if (!commentId) return;
+  const ref = doc(db, COLLECTION, commentId);
+  await deleteDoc(ref);
+}
+
+/**
  * 특정 포스트의 댓글을 실시간으로 구독 (오래된 순)
  * 반환값: 구독 해제 함수 (unsubscribe)
  */
@@ -235,20 +244,72 @@ export async function toggleUserPostLike(postId: string, incrementVal: number): 
   });
 }
 
+export interface DeleteAccountResult {
+  postsCount: number;
+  commentsCount: number;
+}
+
 /**
- * 🚨 공식 관리자(uryeo_eng) 전용: 계정의 모든 게시물 및 데이터 영구 일괄 삭제
+ * 🚨 공식 최고 관리자(uryeo_eng) 전용: 계정의 모든 게시물(피드) 및 작성 댓글 일괄 영구 삭제
  */
-export async function deleteUserAccountAndAllPosts(authorName: string): Promise<number> {
-  if (!authorName) return 0;
-  const q = query(
+export async function deleteUserAccountAndAllPosts(authorName: string): Promise<DeleteAccountResult> {
+  if (!authorName) return { postsCount: 0, commentsCount: 0 };
+
+  const rawName = authorName.trim();
+  const cleanName = rawName.replace(/^@/, '');
+  const atName = `@${cleanName}`;
+
+  // 1. 해당 계정의 피드(user_post) 검색 (cleanName 및 @cleanName 모두 커버)
+  const postsQuery1 = query(
     collection(db, COLLECTION),
     where('type', '==', 'user_post'),
-    where('authorName', '==', authorName)
+    where('authorName', '==', cleanName)
   );
-  const snapshot = await getDocs(q);
-  const deletePromises = snapshot.docs.map((d) => deleteDoc(d.ref));
+  const postsQuery2 = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'user_post'),
+    where('authorName', '==', atName)
+  );
+
+  // 2. 해당 계정의 댓글(comment) 검색 (cleanName 및 @cleanName 모두 커버)
+  const commentsQuery1 = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'comment'),
+    where('author', '==', cleanName)
+  );
+  const commentsQuery2 = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'comment'),
+    where('author', '==', atName)
+  );
+
+  const [postsSnap1, postsSnap2, commentsSnap1, commentsSnap2] = await Promise.all([
+    getDocs(postsQuery1),
+    getDocs(postsQuery2),
+    getDocs(commentsQuery1),
+    getDocs(commentsQuery2),
+  ]);
+
+  // 중복 ID 방지를 위해 Set 활용
+  const postDocRefs = new Map<string, any>();
+  postsSnap1.docs.forEach((d) => postDocRefs.set(d.id, d.ref));
+  postsSnap2.docs.forEach((d) => postDocRefs.set(d.id, d.ref));
+
+  const commentDocRefs = new Map<string, any>();
+  commentsSnap1.docs.forEach((d) => commentDocRefs.set(d.id, d.ref));
+  commentsSnap2.docs.forEach((d) => commentDocRefs.set(d.id, d.ref));
+
+  // 피드 및 댓글 동시 삭제 진행
+  const deletePromises: Promise<void>[] = [];
+  postDocRefs.forEach((ref) => deletePromises.push(deleteDoc(ref)));
+  commentDocRefs.forEach((ref) => deletePromises.push(deleteDoc(ref)));
+
   await Promise.all(deletePromises);
-  return snapshot.size;
+
+  return {
+    postsCount: postDocRefs.size,
+    commentsCount: commentDocRefs.size,
+  };
 }
 
 

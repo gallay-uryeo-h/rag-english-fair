@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   addComment,
   subscribeComments,
+  deleteComment,
   subscribeLikes,
   toggleLikeRemote,
   subscribeUserPosts,
@@ -36,6 +37,7 @@ import {
   clearUserProfile,
   isTeacherAccount,
   isOfficialAccount,
+  DEFAULT_GUEST_AVATAR,
 } from '../utils/userProfile';
 import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
 import type { UserProfile } from '../utils/userProfile';
@@ -177,36 +179,109 @@ export const LiveHomeFeed: React.FC<Props> = ({
     }
   };
 
-  // 🏛️ 의령여고 공식 관리자 전용: 특정 참가자 계정 및 모든 게시물 일괄 영구 삭제
-  const isOfficialAdmin = Boolean(currentUser && isOfficialAccount(currentUser.username));
+  // 🏛️ 의령여고 공식 최고 관리자(uryeo_eng) 전용: 모든 계정 및 피드/댓글 일괄 영구 삭제 권한
+  const isOfficialAdmin = Boolean(currentUser && currentUser.username.trim().toLowerCase() === 'uryeo_eng');
 
   const handleDeleteUserAccount = async (targetUsername: string) => {
     if (!isOfficialAdmin) {
-      alert('계정 삭제 권한은 @uryeo_eng 공식 관리자에게만 부여되어 있습니다.');
+      alert('계정 삭제 권한은 @uryeo_eng 최고 관리자에게만 부여되어 있습니다.');
       return;
     }
-    if (isOfficialAccount(targetUsername)) {
-      alert('공식 관리자 계정은 삭제할 수 없습니다.');
+    const cleanTarget = targetUsername.trim().replace(/^@/, '');
+    if (cleanTarget.toLowerCase() === 'uryeo_eng') {
+      alert('공식 마스터 관리자 계정(@uryeo_eng)은 삭제할 수 없습니다.');
       return;
     }
-    const count = userPosts.filter((p) => p.authorName === targetUsername).length;
+
+    const postCount = userPosts.filter(
+      (p) => p.authorName === cleanTarget || p.authorName === `@${cleanTarget}`
+    ).length;
+    const commentCount = Object.values(comments).reduce((acc, list) => {
+      return acc + list.filter((c) => c.author === cleanTarget || c.author === `@${cleanTarget}`).length;
+    }, 0);
+
     const ok = window.confirm(
-      `[🚨 의령여고 영어과 관리자 권한]\n` +
-      `@${targetUsername} 참가자 계정과 해당 계정의 모든 게시물(${count}개)을 영구 삭제하시겠습니까?\n\n` +
-      `※ 삭제된 게시물과 계정 정보는 복구할 수 없습니다.`
+      `[🚨 의령여고 영어과 최고 관리자 권한]\n` +
+      `@${cleanTarget} 계정을 영구 삭제하시겠습니까?\n\n` +
+      `• 삭제 대상 피드: ${postCount}개\n` +
+      `• 삭제 대상 댓글: ${commentCount}개\n\n` +
+      `※ 계정과 해당 계정이 작성한 모든 피드 및 댓글이 데이터베이스에서 즉시 영구 삭제되며 복구할 수 없습니다.`
     );
     if (!ok) return;
 
     try {
-      const deletedCount = await deleteUserAccountAndAllPosts(targetUsername);
-      alert(`@${targetUsername} 계정과 게시물 ${deletedCount}개가 성공적으로 영구 삭제되었습니다.`);
-      if (isProfileViewModalOpen && viewingProfile?.username === targetUsername) {
+      const result = await deleteUserAccountAndAllPosts(cleanTarget);
+      alert(`@${cleanTarget} 계정과 작성 피드 ${result.postsCount}개, 댓글 ${result.commentsCount}개가 성공적으로 영구 삭제되었습니다.`);
+      if (isProfileViewModalOpen && viewingProfile?.username === cleanTarget) {
         setIsProfileViewModalOpen(false);
       }
     } catch (err) {
       console.error('계정 삭제 실패:', err);
       alert('계정 삭제 중 오류가 발생했습니다.');
     }
+  };
+
+  // 🗑️ 개별 댓글 삭제 핸들러 (공식 관리자 또는 본인 댓글)
+  const handleDeleteComment = async (comment: FsComment) => {
+    const isOwner = currentUser && (comment.author === currentUser.username || comment.author === `@${currentUser.username}`);
+    const canDelete = isOfficialAdmin || isOwner;
+    if (!canDelete) {
+      alert('본인이 작성한 댓글이거나 공식 관리자만 삭제할 수 있습니다.');
+      return;
+    }
+
+    const confirmMsg = isOfficialAdmin && !isOwner
+      ? `[공식 관리자 권한] @${comment.author} 님의 댓글을 강제 삭제하시겠습니까?\n내용: "${comment.text}"`
+      : '댓글을 삭제하시겠습니까?';
+
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      await deleteComment(comment.id);
+    } catch (err) {
+      console.error('댓글 삭제 실패:', err);
+      alert('댓글 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 💬 댓글 렌더링 헬퍼 (작성자 클릭 시 프로필 확인/계정삭제, 본인/관리자 댓글 개별 삭제 지원)
+  const renderCommentItem = (c: FsComment) => {
+    const isOwner = Boolean(
+      currentUser &&
+      (c.author === currentUser.username || c.author === `@${currentUser.username}`)
+    );
+    const canDelete = isOfficialAdmin || isOwner;
+
+    return (
+      <div key={c.id} className="text-xs flex items-baseline justify-between gap-2 group/c py-0.5">
+        <div className="flex-1 min-w-0 flex items-baseline flex-wrap">
+          <button
+            type="button"
+            onClick={() => handleOpenParticipantProfile(c.author, DEFAULT_GUEST_AVATAR)}
+            className="font-bold text-slate-900 mr-1.5 hover:text-purple-600 hover:underline cursor-pointer"
+            title={`@${c.author} 프로필 보기 및 관리`}
+          >
+            @{c.author.replace(/^@/, '')}
+          </button>
+          <span className="text-slate-700 break-words">{c.text}</span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-[10px] text-slate-400">
+            {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+          </span>
+          {canDelete && (
+            <button
+              type="button"
+              onClick={() => handleDeleteComment(c)}
+              title={isOfficialAdmin && !isOwner ? "선생님/관리자 권한 댓글 삭제" : "내 댓글 삭제"}
+              className="text-slate-300 hover:text-red-500 transition-colors p-0.5 cursor-pointer"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      </div>
+    );
   };
 
   // 학생 피드 좋아요 토글
@@ -977,7 +1052,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   </div>
 
                   <div className="flex items-center gap-1.5">
-                    {isOfficialAdmin && !isOfficialAccount(grp.username) && (
+                    {isOfficialAdmin && grp.username.toLowerCase() !== 'uryeo_eng' && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -985,7 +1060,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                           handleDeleteUserAccount(grp.username);
                         }}
                         className="text-[10px] font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-full flex items-center gap-1 transition-colors cursor-pointer"
-                        title="공식 관리자: 참가자 계정 및 모든 글 영구 삭제"
+                        title="공식 최고 관리자: 계정 및 모든 글/댓글 영구 삭제"
                       >
                         <Trash2 className="w-3 h-3 text-red-500" />
                         <span>계정삭제</span>
@@ -1193,17 +1268,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {(expandedComments.mbti
                     ? comments.mbti
                     : comments.mbti.slice(-2)
-                  ).map((c) => (
-                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                      <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
-                        <span className="text-slate-700">{c.text}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">
-                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
-                      </span>
-                    </div>
-                  ))}
+                  ).map(renderCommentItem)}
                 </div>
               )}
 
@@ -1374,17 +1439,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {(expandedComments.vocab
                     ? comments.vocab
                     : comments.vocab.slice(-2)
-                  ).map((c) => (
-                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                      <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
-                        <span className="text-slate-700">{c.text}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">
-                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
-                      </span>
-                    </div>
-                  ))}
+                  ).map(renderCommentItem)}
                 </div>
               )}
 
@@ -1554,17 +1609,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {(expandedComments.textbook
                     ? comments.textbook
                     : comments.textbook.slice(-2)
-                  ).map((c) => (
-                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                      <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
-                        <span className="text-slate-700">{c.text}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">
-                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
-                      </span>
-                    </div>
-                  ))}
+                  ).map(renderCommentItem)}
                 </div>
               )}
 
@@ -1734,17 +1779,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   {(expandedComments.seteuk
                     ? comments.seteuk
                     : comments.seteuk.slice(-2)
-                  ).map((c) => (
-                    <div key={c.id} className="text-xs flex items-baseline justify-between gap-2">
-                      <div>
-                        <span className="font-bold text-slate-900 mr-1.5">{c.author}</span>
-                        <span className="text-slate-700">{c.text}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 shrink-0">
-                        {c.timestamp ? new Date(c.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
-                      </span>
-                    </div>
-                  ))}
+                  ).map(renderCommentItem)}
                 </div>
               )}
 
@@ -1864,21 +1899,37 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  {/* 삭제 버튼 (본인 또는 선생님 관리자 권한) */}
-                  {canDelete ? (
-                    <button
-                      onClick={() => handleDeletePost(post)}
-                      title={isAdmin && !isOwner ? "선생님 권한 강제 삭제" : "내 게시물 삭제"}
-                      className="flex items-center gap-1 text-[11px] text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      <span>{isAdmin && !isOwner ? "강제삭제" : "삭제"}</span>
-                    </button>
-                  ) : (
-                    <button className="text-slate-400 p-1">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </button>
-                  )}
+                  <div className="flex items-center gap-1.5">
+                    {/* 최고 관리자(uryeo_eng): 계정 및 피드/댓글 일괄 영구 삭제 */}
+                    {isOfficialAdmin && post.authorName.toLowerCase() !== 'uryeo_eng' && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteUserAccount(post.authorName)}
+                        title="공식 최고 관리자 권한: 작성자 계정 및 모든 글/댓글 영구 삭제"
+                        className="flex items-center gap-1 text-[11px] text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                        <span>계정삭제</span>
+                      </button>
+                    )}
+
+                    {/* 단일 게시물 삭제 버튼 (본인 또는 선생님 관리자 권한) */}
+                    {canDelete ? (
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePost(post)}
+                        title={isAdmin && !isOwner ? "선생님 권한 강제 삭제" : "내 게시물 삭제"}
+                        className="flex items-center gap-1 text-[11px] text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>{isAdmin && !isOwner ? "강제삭제" : "삭제"}</span>
+                      </button>
+                    ) : (
+                      <button className="text-slate-400 p-1">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* 피드 사진: 인스타그램 스타일 (클릭 시 확대 팝업 지원) */}

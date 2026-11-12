@@ -103,12 +103,12 @@ export const UserProfileViewModal: React.FC<Props> = ({
             )}
           </div>
           <div className="flex items-center gap-1">
-            {canManageAccounts && !profile.isOfficial && profile.username !== 'uryeo_eng' && (
+            {canManageAccounts && profile.username.toLowerCase() !== 'uryeo_eng' && (
               <button
                 type="button"
                 onClick={() => onDeleteAccount?.(profile.username)}
                 className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-600 transition-colors cursor-pointer"
-                title="공식 관리자 권한: 계정 및 모든 피드 영구 삭제"
+                title="공식 최고 관리자 권한: 계정 및 모든 피드/댓글 영구 삭제"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -258,8 +258,8 @@ export const UserProfileViewModal: React.FC<Props> = ({
             )}
           </div>
 
-          {/* 🚨 의령여고 공식 관리자 권한 전용: 계정 및 피드 일괄 영구 삭제 액션 */}
-          {canManageAccounts && !profile.isOfficial && profile.username !== 'uryeo_eng' && (
+          {/* 🚨 의령여고 공식 마스터 관리자(uryeo_eng) 권한 전용: 계정 및 피드/댓글 일괄 영구 삭제 액션 */}
+          {canManageAccounts && profile.username.toLowerCase() !== 'uryeo_eng' && (
             <div className="pt-2">
               <button
                 type="button"
@@ -267,7 +267,7 @@ export const UserProfileViewModal: React.FC<Props> = ({
                 className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold text-xs transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5 text-red-600" />
-                <span>[공식 관리자 권한] @{profile.username} 계정 및 모든 게시물 영구 삭제</span>
+                <span>[공식 관리자 권한] @{profile.username} 계정 및 작성 글·댓글 전체 영구 삭제</span>
               </button>
             </div>
           )}
