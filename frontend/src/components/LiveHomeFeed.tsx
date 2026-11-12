@@ -541,16 +541,17 @@ export const LiveHomeFeed: React.FC<Props> = ({
       {/* =========================================================================
           📸 1. 부스 활동 스토리 캐러셀 (Story Bar)
           ========================================================================= */}
-      <section className="bg-white border-b border-slate-200/90 py-3 px-3 overflow-hidden shadow-2xs">
-        <div className="flex items-start gap-3.5 overflow-x-auto no-scrollbar px-1">
+      <section className="bg-white border-b border-slate-200/80 py-4 px-4 overflow-hidden shadow-sm">
+        <div className="flex items-start gap-4 overflow-x-auto no-scrollbar">
           {/* 🌟 1. 내 스토리 (최초 방문 시 1회용 로그인 유도, 로그인 후 내 프로필 표시) */}
           {currentUser ? (
             <div
               onClick={handleOpenMyProfile}
-              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
-                <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
+              {/* 아바타 링 */}
+              <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-purple-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+                <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.username}
@@ -564,16 +565,17 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     setIsCreatePostModalOpen(true);
                   }}
                   title="새 피드 올리기"
-                  className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs cursor-pointer"
+                  className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-blue-600 hover:bg-blue-700 border-2 border-white flex items-center justify-center text-white text-[10px] font-black shadow-sm cursor-pointer transition-colors"
                 >
                   +
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-                <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
-                  {currentUser.isTeacher ? '선생님 계정' : '내 계정'}
+              {/* 라벨 — 고정 높이 */}
+              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+                <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+                  {currentUser.isTeacher ? '선생님' : '내 계정'}
                 </span>
-                <span className="text-[9.5px] text-slate-500 truncate w-full">
+                <span className="text-[9px] leading-tight text-slate-400 truncate w-full">
                   @{currentUser.username}
                 </span>
               </div>
@@ -584,49 +586,52 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 setProfileModalInitialMode('guest');
                 setIsProfileModalOpen(true);
               }}
-              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-[62px] h-[62px] rounded-full p-[2px] border-2 border-dashed border-purple-400 hover:border-purple-600 transition-all duration-200 flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50/50 to-pink-50/40 group-hover:scale-105 active:scale-95 shadow-2xs">
-                <div className="w-11 h-11 rounded-full bg-white/80 shadow-2xs flex items-center justify-center text-purple-600 transition-transform group-hover:scale-110">
-                  <UserPlus className="w-5 h-5 text-purple-600" />
+              <div className="relative w-[60px] h-[60px] rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 border-2 border-dashed border-purple-400 group-hover:border-purple-600 flex items-center justify-center transition-all duration-200 group-hover:scale-110 active:scale-95 shadow-sm">
+                <div className="flex flex-col items-center justify-center gap-0.5">
+                  <UserPlus className="w-5 h-5 text-purple-500 group-hover:text-purple-700 transition-colors" />
                 </div>
-                <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[11px] font-bold shadow-xs">
+                <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-black shadow-sm">
                   +
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-                <span className="text-[10.5px] font-bold text-purple-700 tracking-tight truncate w-full">
-                  부스체험 1회용
+              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+                <span className="text-[10.5px] font-bold leading-tight text-purple-700 tracking-tight truncate w-full">
+                  1회용 로그인
                 </span>
-                <span className="text-[9.5px] text-slate-400 font-medium truncate w-full">
-                  로그인
+                <span className="text-[9px] leading-tight text-slate-400 truncate w-full">
+                  시작하기
                 </span>
               </div>
             </div>
           )}
 
+          {/* 구분선 */}
+          <div className="w-px self-stretch bg-slate-100 mx-0.5 my-1 shrink-0" />
+
           {/* 🌟 2. 의령여고 영어과 공식 계정 스토리 */}
           <div
             onClick={handleOpenOfficialProfile}
-            className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
           >
-            <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
-              <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
+            <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+              <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=200&q=80"
                   alt="의령여고 영어과 공식"
                   className="w-full h-full rounded-full object-cover"
                 />
               </div>
-              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-pink-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-bold shadow-xs">
+              <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-rose-500 border-2 border-white flex items-center justify-center text-white text-[9px] font-black shadow-sm">
                 ★
               </div>
             </div>
-            <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-pink-600 transition-colors">
+            <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+              <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-rose-600 transition-colors">
                 의령여고 공식
               </span>
-              <span className="text-[9.5px] text-pink-600 font-bold truncate w-full">
+              <span className="text-[9px] leading-tight text-rose-500 font-semibold truncate w-full">
                 @uryeo_eng
               </span>
             </div>
@@ -635,36 +640,41 @@ export const LiveHomeFeed: React.FC<Props> = ({
           {/* 🌟 2-1. 의령여고 Q&A 챗봇 계정 스토리 (@uryeo_qa_bot) */}
           <div
             onClick={handleOpenDmModal}
-            className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
+            className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
             title="의령여고 영어과 Q&A AI 챗봇 1:1 대화"
           >
-            <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
-              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center p-0.5 overflow-hidden">
+            <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-violet-600 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
                 <Bot className="w-6 h-6 text-cyan-300 group-hover:scale-110 transition-transform" />
               </div>
-              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-purple-600 border-2 border-white flex items-center justify-center text-white text-[8px] font-black shadow-xs">
+              <div className="absolute -bottom-0.5 -right-0.5 w-[18px] h-[18px] rounded-full bg-violet-600 border-2 border-white flex items-center justify-center text-white text-[7px] font-black shadow-sm">
                 AI
               </div>
             </div>
-            <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-              <span className="text-[11px] font-bold text-slate-900 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+            <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+              <span className="text-[10.5px] font-bold leading-tight text-slate-900 tracking-tight truncate w-full group-hover:text-violet-600 transition-colors">
                 질문 챗봇
               </span>
-              <span className="text-[9.5px] text-purple-600 font-medium truncate w-full">
+              <span className="text-[9px] leading-tight text-violet-500 font-semibold truncate w-full">
                 @uryeo_qa_bot
               </span>
             </div>
           </div>
+
+          {/* 구분선 (참여자가 있을 때만) */}
+          {studentStoryList.length > 0 && (
+            <div className="w-px self-stretch bg-slate-100 mx-0.5 my-1 shrink-0" />
+          )}
 
           {/* 🌟 3. 실시간으로 피드를 올린 실제 참여자들 스토리 (클릭 시 프로필 모아보기 팝업) */}
           {studentStoryList.map((st) => (
             <div
               key={st.postId}
               onClick={() => handleOpenParticipantProfile(st.authorName, st.avatar)}
-              className="flex flex-col items-center shrink-0 cursor-pointer group select-none"
+              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer group select-none"
             >
-              <div className="relative w-[62px] h-[62px] rounded-full p-[2.5px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-blue-500 transition-transform duration-200 group-hover:scale-105 active:scale-95 shadow-xs">
-                <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
+              <div className="relative w-[60px] h-[60px] rounded-full p-[2px] bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-500 shadow-md transition-transform duration-200 group-hover:scale-110 active:scale-95">
+                <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
                   <img
                     src={st.avatar}
                     alt={st.authorName}
@@ -672,11 +682,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-                <span className="text-[11px] font-bold text-slate-800 tracking-tight truncate w-full group-hover:text-purple-600 transition-colors">
+              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+                <span className="text-[10.5px] font-bold leading-tight text-slate-800 tracking-tight truncate w-full group-hover:text-teal-600 transition-colors">
                   참여자
                 </span>
-                <span className="text-[9.5px] text-slate-500 font-medium truncate w-full">
+                <span className="text-[9px] leading-tight text-slate-400 font-medium truncate w-full">
                   @{st.authorName.replace(/^@/, '')}
                 </span>
               </div>
@@ -690,15 +700,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 if (!currentUser) setIsProfileModalOpen(true);
                 else setIsCreatePostModalOpen(true);
               }}
-              className="flex flex-col items-center shrink-0 cursor-pointer select-none opacity-80 hover:opacity-100 transition-opacity"
+              className="flex flex-col items-center gap-2 shrink-0 cursor-pointer select-none opacity-70 hover:opacity-100 transition-opacity"
             >
-              <div className="w-[62px] h-[62px] rounded-full border border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-slate-400 text-xs">
-                <span>✍️</span>
-                <span className="text-[9px] font-bold mt-0.5">첫 피드</span>
+              <div className="w-[60px] h-[60px] rounded-full border-2 border-dashed border-slate-200 flex flex-col items-center justify-center bg-slate-50 text-slate-400">
+                <span className="text-lg leading-none">✍️</span>
+                <span className="text-[8px] font-bold mt-0.5 text-slate-400">첫 피드</span>
               </div>
-              <div className="flex flex-col items-center justify-start w-[72px] min-h-[32px] mt-1.5 text-center">
-                <span className="text-[10.5px] font-bold text-slate-500">참여자 피드</span>
-                <span className="text-[9px] text-slate-400">대기 중</span>
+              <div className="flex flex-col items-center w-[68px] h-[30px] justify-start text-center overflow-hidden">
+                <span className="text-[10.5px] font-bold leading-tight text-slate-400">참여자 피드</span>
+                <span className="text-[9px] leading-tight text-slate-300">대기 중</span>
               </div>
             </div>
           )}
