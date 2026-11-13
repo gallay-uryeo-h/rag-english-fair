@@ -68,7 +68,6 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
-      setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [isOpen, messages, loading]);
 
@@ -83,6 +82,9 @@ export const InstagramDmChatModal: React.FC<Props> = ({
     if (!q || loading) return;
 
     setInput('');
+    // 모바일/태블릿 키패드 자동 닫기 (blur 처리하여 응답 읽기 편하도록 함)
+    inputRef.current?.blur();
+
     const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     const newMessages: ChatMessage[] = [
       ...messages,
