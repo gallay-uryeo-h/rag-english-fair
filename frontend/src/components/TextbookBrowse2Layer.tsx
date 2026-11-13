@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   BookOpen,
   Sparkles,
@@ -603,7 +603,7 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
               <span>교과서 탐색 2-Layer</span>
             </div>
             <h2 className="text-lg md:text-xl font-bold tracking-tight">
-              의령여고 영어 교과서 6권 전체 둘러보기 📚
+              의령여고 영어 교과서 7권 전체 둘러보기 📚
             </h2>
             <p className="text-xs md:text-sm text-blue-100 leading-relaxed">
               원하는 교과서 표지 카드를 클릭하면 교과서 속으로 들어가 단원별 학습 내용과 파트별 원본 페이지를 살펴볼 수 있습니다.
