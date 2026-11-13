@@ -5,9 +5,6 @@ import {
   Sparkles,
   Bot,
   RotateCcw,
-  School,
-  GraduationCap,
-  MessageCircle,
 } from 'lucide-react';
 import { marked } from 'marked';
 import { getUserProfile } from '../utils/userProfile';
@@ -26,34 +23,82 @@ interface Props {
   initialQuestion?: string;
 }
 
-const STUDENT_QUESTIONS = [
-  '2022 개정 고교 영어과는 어떤 과목들을 배우나요?',
-  '고교학점제에서 영어 과목 학점 이수 기준(미이수 제도)은 무엇인가요?',
-  '중학교 영어와 고등학교 1학년 공통영어는 난이도가 얼마나 다른가요?',
-  '일반선택, 진로선택, 융합선택 과목은 어떤 기준으로 골라야 하나요?',
-  '고등학교 영어 수행평가와 세특(세부능력특기사항)은 어떻게 준비하나요?',
-];
+// 🌟 질문별 지능형 후속 질문 매핑 (Follow-up Questions)
+const FOLLOWUP_MAP: Record<string, string[]> = {
+  default: [
+    '2022 개정 고교 영어과는 어떤 과목들을 배우나요?',
+    '고교학점제에서 영어 과목 학점 이수 기준(미이수 제도)은 무엇인가요?',
+    '2028 대입 개편안(내신 5등급제)에서 고교 영어 평가는 어떻게 산출되나요?',
+    '일반선택, 진로선택, 융합선택 과목은 어떤 기준으로 골라야 하나요?',
+  ],
+  과목: [
+    '일반선택과 진로선택 영어 과목의 평가 방식 차이가 궁금해요.',
+    '진로선택 과목(심화 영어 등)을 많이 들으면 대입에 유리한가요?',
+    '영어Ⅰ을 안 듣고 심화 영어나 영어Ⅱ를 바로 들을 수도 있나요?',
+  ],
+  학점: [
+    '만약 영어 과목에서 미이수(I등급) 위기가 오면 어떻게 도와주나요?',
+    '고교 3년 동안 영어는 총 몇 학점까지 필수로 들어야 하나요?',
+    '수업 출석률 2/3 기준은 어떻게 계산하나요?',
+  ],
+  등급: [
+    '사회·과학 융합선택은 절대평가라는데 영어는 왜 5등급이 나오나요?',
+    '내신 5등급제에서 1등급(상위 10%)을 받기 위한 준비 전략은?',
+    '성적표에 표준편차가 빠지고 성취도별 분포비율만 나오는 이유는?',
+  ],
+  수행평가: [
+    '학생부 세특(세부능력특기사항)에는 주로 어떤 내용이 적히나요?',
+    '말하기 발표 수행평가가 두려운 학생은 어떻게 대비하면 좋을까요?',
+    '지필평가와 수행평가 비율은 학교마다 다른가요?',
+  ],
+  공통영어: [
+    '중학교 때 영어 B~C 성취도였어도 고1 영어에서 1~2등급 도약이 가능한가요?',
+    '기본영어1·2는 공통영어1·2와 어떤 점이 다른가요?',
+    '고1 첫 시험 전 겨울방학에는 문법과 단어 중 무엇이 더 급한가요?',
+  ],
+  세특: [
+    '의학/보건 계열 진로를 희망할 때 추천하는 영어 선택과목과 세특 주제는?',
+    'IT/AI/소프트웨어 진로와 영어 교과서를 연결하는 탐구 주제 예시가 있나요?',
+    '수업 중 영어 보고서나 에세이 작성은 어떤 과정으로 진행되나요?',
+  ],
+};
 
-const PARENT_QUESTIONS = [
-  '2028 대입 개편안(내신 5등급제)에서 고교 영어 평가는 어떻게 산출되나요?',
-  '고등학교마다 영어 선택과목 개설과 이수 학년이 다른가요?',
-  '진로선택·융합선택 과목도 상대평가 5등급이 함께 표기되나요?',
-  '학생부종합전형에서 대학은 영어 과목 이수와 세특을 어떻게 평가하나요?',
-  '예비 고1 자녀의 성공적인 고교 영어 적응을 위해 학부모가 도울 점은?',
-];
+function getFollowupSuggestions(lastQuery?: string): string[] {
+  if (!lastQuery) return FOLLOWUP_MAP.default;
+  const q = lastQuery.toLowerCase();
+  if (q.includes('과목') || q.includes('선택') || q.includes('체계') || q.includes('편제')) {
+    return FOLLOWUP_MAP.과목;
+  }
+  if (q.includes('학점') || q.includes('미이수') || q.includes('이수') || q.includes('출석')) {
+    return FOLLOWUP_MAP.학점;
+  }
+  if (q.includes('5등급') || q.includes('등급') || q.includes('상대평가') || q.includes('내신') || q.includes('대입')) {
+    return FOLLOWUP_MAP.등급;
+  }
+  if (q.includes('수행평가') || q.includes('지필') || q.includes('발표') || q.includes('에세이')) {
+    return FOLLOWUP_MAP.수행평가;
+  }
+  if (q.includes('공통영어') || q.includes('중학교') || q.includes('난이도') || q.includes('기초')) {
+    return FOLLOWUP_MAP.공통영어;
+  }
+  if (q.includes('세특') || q.includes('학생부') || q.includes('진로') || q.includes('학종')) {
+    return FOLLOWUP_MAP.세특;
+  }
+  return FOLLOWUP_MAP.default;
+}
 
 export const InstagramDmChatModal: React.FC<Props> = ({
   isOpen,
   onClose,
   initialQuestion,
 }) => {
-  const [targetGroup, setTargetGroup] = useState<'student' | 'parent'>('student');
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentSuggestions, setCurrentSuggestions] = useState<string[]>(FOLLOWUP_MAP.default);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
-      text: '안녕하세요! 2026 고교학점제 박람회 영어과 부스 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n2022 개정 고교 영어 교육과정, 선택과목(일반·진로·융합), 2028 내신 5등급제, 교과서 특성 및 세특 준비 등 무엇이든 편하게 물어보세요! 아래 추천 질문을 누르시면 바로 답변을 확인하실 수 있습니다.\n\n*(ℹ️ **안내**: 본 챗봇의 정보는 2022 개정 국가 교육과정과 일반 검색으로 확인 가능한 공통 기준을 바탕으로 안내되며, 특정 학교의 고유 규정이 아닙니다. 실제 개설 과목과 세부 운영은 진학하시는 각 고등학교의 교육과정 편제표를 확인하시기 바랍니다)*\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
+      text: '안녕하세요! 2026 고교학점제 박람회 영어과 부스 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n2022 개정 고교 영어 교육과정, 선택과목(일반·진로·융합), 2028 내신 5등급제, 교과서 특성 및 세특 준비 등 무엇이든 편하게 물어보세요! 하단 추천 질문을 누르시면 바로 답변을 확인하실 수 있습니다.\n\n*(ℹ️ **안내**: 본 챗봇의 정보는 2022 개정 국가 교육과정과 일반 검색으로 확인 가능한 공통 기준을 바탕으로 안내되며, 특정 학교의 고유 규정이 아닙니다. 실제 개설 과목과 세부 운영은 진학하시는 각 고등학교의 교육과정 편제표를 확인하시기 바랍니다)*\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
       timestamp: '방금',
     },
   ]);
@@ -121,12 +166,15 @@ export const InstagramDmChatModal: React.FC<Props> = ({
         },
       ]);
 
+      // 💡 후속 추천 질문 갱신
+      setCurrentSuggestions(getFollowupSuggestions(q));
+
       // 📊 질문 수집: 4컷사진 부스 및 분석/통계용 로깅
       const user = getUserProfile();
       logChatQuery({
         username: user?.username,
         displayName: user?.displayName,
-        targetGroup,
+        targetGroup: 'student',
         query: q,
         answerSnippet: botReply,
       });
@@ -145,6 +193,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   };
 
   const handleReset = () => {
+    setCurrentSuggestions(FOLLOWUP_MAP.default);
     setMessages([
       {
         role: 'bot',
@@ -248,57 +297,6 @@ export const InstagramDmChatModal: React.FC<Props> = ({
             </p>
           </div>
 
-          {/* 질문 칩 카테고리 탭 (중3 학생 / 학부모) */}
-          <div className="space-y-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-extrabold text-slate-700 flex items-center gap-1">
-                <MessageCircle className="w-3.5 h-3.5 text-purple-600" />
-                <span>원클릭 추천 질문 리스트</span>
-              </span>
-              <div className="flex gap-1 p-0.5 bg-slate-100 rounded-lg text-[10px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setTargetGroup('student')}
-                  className={`px-2 py-0.5 rounded-md transition-all cursor-pointer flex items-center gap-0.5 ${
-                    targetGroup === 'student'
-                      ? 'bg-white text-purple-700 shadow-2xs font-extrabold'
-                      : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                >
-                  <School className="w-3 h-3" />
-                  <span>중3 학생</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTargetGroup('parent')}
-                  className={`px-2 py-0.5 rounded-md transition-all cursor-pointer flex items-center gap-0.5 ${
-                    targetGroup === 'parent'
-                      ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
-                      : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                >
-                  <GraduationCap className="w-3 h-3" />
-                  <span>학부모</span>
-                </button>
-              </div>
-            </div>
-
-            {/* 가로 스크롤 추천 질문 칩 */}
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-              {(targetGroup === 'student' ? STUDENT_QUESTIONS : PARENT_QUESTIONS).map((q, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleSend(q)}
-                  disabled={loading}
-                  className="shrink-0 text-[11px] font-medium text-slate-700 bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200 hover:border-purple-300 px-3 py-1.5 rounded-full transition-all cursor-pointer disabled:opacity-50"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* 대화 메시지 렌더링 */}
           {messages.map((msg, index) => {
             const isUser = msg.role === 'user';
@@ -372,39 +370,60 @@ export const InstagramDmChatModal: React.FC<Props> = ({
         </div>
 
         {/* =========================================================================
-            3. 인스타그램 DM 스타일 하단 입력창
+            3. 하단 추천 후속 질문 칩 & 인스타그램 DM 입력창
             ========================================================================= */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="p-3 bg-white border-t border-slate-100 shrink-0"
-        >
-          <div className="flex items-center gap-2 bg-slate-100 hover:bg-slate-100/90 focus-within:bg-white focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100 rounded-full px-3.5 py-2 border border-slate-200 transition-all">
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="고교 영어 교육과정, 과목 선택, 5등급제 등 질문하기..."
-              className="flex-1 bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
-              disabled={loading}
-            />
-
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 disabled:opacity-30 disabled:from-slate-300 disabled:to-slate-300 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
-              title="메시지 전송"
-            >
-              <Send className="w-3.5 h-3.5" />
-            </button>
+        <div className="border-t border-slate-100 bg-white shrink-0">
+          {/* 가로 스크롤 추천 질문 칩 (답변 기반 지능형 후속 질문) */}
+          <div className="px-3 pt-2 pb-1 overflow-x-auto no-scrollbar flex items-center gap-1.5">
+            <span className="text-[10px] font-extrabold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg shrink-0 flex items-center gap-1 border border-purple-100">
+              <Sparkles className="w-3 h-3 text-purple-500" />
+              <span>추천 질문</span>
+            </span>
+            {currentSuggestions.map((q, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleSend(q)}
+                disabled={loading}
+                className="shrink-0 text-[11px] font-semibold text-slate-700 bg-slate-100/90 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200 border border-slate-200/80 px-3 py-1.5 rounded-full transition-all cursor-pointer disabled:opacity-40 active:scale-95 shadow-3xs"
+              >
+                {q}
+              </button>
+            ))}
           </div>
-          <p className="text-[10px] text-slate-400 text-center mt-1.5 leading-tight">
-            본 정보는 2022 개정 교육과정 공통 기준이며 특정 고교 고유 규정이 아닙니다. (질문은 통계 분석에 활용됩니다)
-          </p>
-        </form>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="p-3 pt-2"
+          >
+            <div className="flex items-center gap-2 bg-slate-100 hover:bg-slate-100/90 focus-within:bg-white focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100 rounded-full px-3.5 py-2 border border-slate-200 transition-all">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="고교 영어 교육과정, 과목 선택, 5등급제 등 질문하기..."
+                className="flex-1 bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
+                disabled={loading}
+              />
+
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 disabled:opacity-30 disabled:from-slate-300 disabled:to-slate-300 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+                title="메시지 전송"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <p className="text-[10px] text-slate-400 text-center mt-1.5 leading-tight">
+              본 정보는 2022 개정 교육과정 공통 기준이며 특정 고교 고유 규정이 아닙니다. (질문은 통계 분석에 활용됩니다)
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
