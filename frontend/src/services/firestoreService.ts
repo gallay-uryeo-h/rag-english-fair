@@ -761,3 +761,83 @@ export function subscribeUserActivity(
     }
   });
 }
+
+// ════════════════════════════════════════════════════════════════════════════════
+// 챗봇 질문 및 대화 수집 (ChatQueryLog) — 부스 통계 & 키워드 분석용
+// 문서 ID: 자동 생성  /  type: 'chat_query_log'
+// ════════════════════════════════════════════════════════════════════════════════
+
+export interface ChatQueryLog {
+  id?: string;
+  type: 'chat_query_log';
+  username?: string;
+  displayName?: string;
+  targetGroup: 'student' | 'parent';
+  query: string;
+  answerSnippet?: string;
+  timestamp: Date;
+}
+
+/**
+ * 챗봇 질문을 Firestore에 실시간 기록
+ */
+export async function logChatQuery(entry: {
+  username?: string;
+  displayName?: string;
+  targetGroup: 'student' | 'parent';
+  query: string;
+  answerSnippet?: string;
+}): Promise<void> {
+  try {
+    await addDoc(collection(db, COLLECTION), {
+      type: 'chat_query_log',
+      username: entry.username || 'anonymous',
+      displayName: entry.displayName || '익명 참여자',
+      targetGroup: entry.targetGroup,
+      query: entry.query.trim(),
+      answerSnippet: (entry.answerSnippet || '').slice(0, 150),
+      timestamp: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Failed to log chat query:', err);
+  }
+}
+
+/**
+ * 교사용: 수집된 모든 챗봇 질문 실시간 구독
+ */
+export function subscribeChatQueries(
+  callback: (logs: ChatQueryLog[]) => void
+): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'chat_query_log')
+  );
+
+  return onSnapshot(
+    q,
+    (snap) => {
+      const logs: ChatQueryLog[] = snap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          type: 'chat_query_log',
+          username: data.username,
+          displayName: data.displayName,
+          targetGroup: data.targetGroup || 'student',
+          query: data.query || '',
+          answerSnippet: data.answerSnippet || '',
+          timestamp: (data.timestamp as Timestamp | null)?.toDate() || new Date(),
+        };
+      });
+
+      // 최신순 정렬
+      logs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      callback(logs);
+    },
+    (err) => {
+      console.error('Failed to subscribe chat queries:', err);
+    }
+  );
+}
+

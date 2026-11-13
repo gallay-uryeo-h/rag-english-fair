@@ -10,6 +10,8 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import { marked } from 'marked';
+import { getUserProfile } from '../utils/userProfile';
+import { logChatQuery } from '../services/firestoreService';
 
 export interface ChatMessage {
   role: 'bot' | 'user';
@@ -51,7 +53,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
-      text: '안녕하세요! 의령여고 영어 교육과정 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n의령여고 3개년 영어 교과서, 2028 내신 5등급제 대비, 수행평가, 세특 보고서, 학교생활 등 무엇이든 편하게 물어보세요! 아래 추천 질문을 누르시면 바로 답변을 들으실 수 있습니다.',
+      text: '안녕하세요! 의령여고 영어 교육과정 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n의령여고 3개년 영어 교과서, 2028 내신 5등급제 대비, 수행평가, 세특 보고서, 학교생활 등 무엇이든 편하게 물어보세요! 아래 추천 질문을 누르시면 바로 답변을 들으실 수 있습니다.\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
       timestamp: '방금',
     },
   ]);
@@ -105,15 +107,27 @@ export const InstagramDmChatModal: React.FC<Props> = ({
             .filter(Boolean)
         : [];
 
+      const botReply = data.answer || data.reply || '답변을 불러오지 못했습니다.';
+
       setMessages([
         ...newMessages,
         {
           role: 'bot',
-          text: data.answer || data.reply || '답변을 불러오지 못했습니다.',
+          text: botReply,
           sources: sourceLabels,
           timestamp: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
+
+      // 📊 질문 수집: 4컷사진 부스 및 분석/통계용 로깅
+      const user = getUserProfile();
+      logChatQuery({
+        username: user?.username,
+        displayName: user?.displayName,
+        targetGroup,
+        query: q,
+        answerSnippet: botReply,
+      });
     } catch {
       setMessages([
         ...newMessages,
@@ -386,7 +400,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
             </button>
           </div>
           <p className="text-[10px] text-slate-400 text-center mt-1.5">
-            의령여고 영어과 FAQ 및 2028 교육과정 자료를 바탕으로 Gemini AI가 실시간 답변합니다.
+            입력하신 질문은 4컷사진 부스 맞춤 추천 및 박람회 통계 분석에 활용됩니다.
           </p>
         </form>
       </div>

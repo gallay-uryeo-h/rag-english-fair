@@ -11,12 +11,15 @@ import {
   Award,
   Search,
   Check,
+  MessageSquare,
+  Download,
 } from 'lucide-react';
 import type {
   MissionSettings,
   PhotoTicket,
   FsUserPost,
   FsComment,
+  ChatQueryLog,
 } from '../services/firestoreService';
 import {
   subscribeMissionSettings,
@@ -25,6 +28,7 @@ import {
   issuePhotoTicket,
   resetPhotoTicket,
   deletePhotoTicket,
+  subscribeChatQueries,
   DEFAULT_MISSION_SETTINGS,
 } from '../services/firestoreService';
 
@@ -42,9 +46,11 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   allPosts,
   allComments,
 }) => {
-  const [activeTab, setActiveTab] = useState<'settings' | 'participants'>('participants');
+  const [activeTab, setActiveTab] = useState<'settings' | 'participants' | 'chatlogs'>('participants');
   const [settings, setSettings] = useState<MissionSettings>(DEFAULT_MISSION_SETTINGS);
   const [tickets, setTickets] = useState<PhotoTicket[]>([]);
+  const [chatLogs, setChatLogs] = useState<ChatQueryLog[]>([]);
+  const [chatSearch, setChatSearch] = useState('');
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,6 +79,14 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   useEffect(() => {
     const unsub = subscribeAllTickets((tList) => {
       setTickets(tList);
+    });
+    return () => unsub();
+  }, []);
+
+  // 챗봇 질문 로그 구독
+  useEffect(() => {
+    const unsub = subscribeChatQueries((logs) => {
+      setChatLogs(logs);
     });
     return () => unsub();
   }, []);
@@ -274,21 +288,32 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="flex items-center border-b border-slate-200 bg-slate-50 px-4">
+        <div className="flex items-center border-b border-slate-200 bg-slate-50 px-4 overflow-x-auto">
           <button
             onClick={() => setActiveTab('participants')}
-            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'participants'
                 ? 'border-slate-900 text-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Users className="w-4 h-4" />
-            <span>참여자 실시간 모니터링 ({participantList.length}명)</span>
+            <span>참여자 모니터링 ({participantList.length}명)</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('chatlogs')}
+            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'chatlogs'
+                ? 'border-indigo-600 text-indigo-700'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <MessageSquare className="w-4 h-4 text-indigo-500" />
+            <span>챗봇 질문 분석 ({chatLogs.length}건)</span>
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'settings'
                 ? 'border-slate-900 text-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -581,6 +606,124 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
                 </button>
               </div>
             </form>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════════════════
+              탭 3: 챗봇 질문 & 관심사 실시간 분석 로그
+              ═════════════════════════════════════════════════════════════════════════ */}
+          {activeTab === 'chatlogs' && (
+            <div className="space-y-3">
+              {/* 상단 검색 및 엑셀/CSV 백업 다운로드 바 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={chatSearch}
+                    onChange={(e) => setChatSearch(e.target.value)}
+                    placeholder="질문 문구, 키워드, 사용자 검색..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-indigo-500"
+                  />
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (chatLogs.length === 0) {
+                      alert('저장할 질문 데이터가 없습니다.');
+                      return;
+                    }
+                    const headers = ['일시', '작성자아이디', '이름', '구분', '질문내용', '답변요약'];
+                    const rows = chatLogs.map((l) => [
+                      `"${l.timestamp.toLocaleString('ko-KR')}"`,
+                      `"${l.username || ''}"`,
+                      `"${l.displayName || ''}"`,
+                      `"${l.targetGroup === 'student' ? '중3/고등학생' : '학부모'}"`,
+                      `"${l.query.replace(/"/g, '""')}"`,
+                      `"${(l.answerSnippet || '').replace(/"/g, '""')}"`,
+                    ]);
+                    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `의령여고_영어과_챗봇질문분석_${new Date().toISOString().slice(0, 10)}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+                  title="수집된 질문 로그를 CSV 엑셀 파일로 백업"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>CSV 백업 다운로드</span>
+                </button>
+              </div>
+
+              {/* 안내 문구 */}
+              <div className="text-[11px] text-slate-500 px-1 flex items-center justify-between">
+                <span>💡 참가자가 질문한 내용과 언급 키워드가 실시간으로 자동 수집됩니다.</span>
+                <span className="font-semibold text-indigo-600">총 {chatLogs.length}건 수집됨</span>
+              </div>
+
+              {/* 질문 리스트 테이블 */}
+              <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+                {chatLogs.length === 0 ? (
+                  <div className="p-12 text-center text-slate-400 text-xs">
+                    아직 수집된 챗봇 질문이 없습니다. 참가자가 질문을 입력하면 이곳에 실시간 누적됩니다.
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+                    {chatLogs
+                      .filter(
+                        (l) =>
+                          !chatSearch ||
+                          l.query.toLowerCase().includes(chatSearch.toLowerCase()) ||
+                          (l.username && l.username.toLowerCase().includes(chatSearch.toLowerCase())) ||
+                          (l.displayName && l.displayName.toLowerCase().includes(chatSearch.toLowerCase()))
+                      )
+                      .map((log) => (
+                        <div key={log.id} className="p-3.5 hover:bg-slate-50/80 transition-colors">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                  log.targetGroup === 'student'
+                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                    : 'bg-purple-50 text-purple-700 border border-purple-200'
+                                }`}
+                              >
+                                {log.targetGroup === 'student' ? '학생' : '학부모'}
+                              </span>
+                              <span className="text-xs font-bold text-slate-800">
+                                {log.displayName || log.username || '익명'}
+                              </span>
+                              {log.username && (
+                                <span className="text-[11px] font-mono text-slate-400">
+                                  @{log.username}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[11px] text-slate-400 font-mono">
+                              {log.timestamp.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+
+                          {/* 질문 내용 */}
+                          <p className="text-xs font-semibold text-slate-900 bg-slate-50 p-2.5 rounded-xl border border-slate-200/70">
+                            💬 {log.query}
+                          </p>
+
+                          {/* 답변 요약 */}
+                          {log.answerSnippet && (
+                            <p className="text-[11px] text-slate-500 mt-1.5 px-1 line-clamp-2">
+                              🤖 {log.answerSnippet}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>
