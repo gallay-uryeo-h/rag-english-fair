@@ -12,6 +12,8 @@ import {
   Search,
   Check,
   MessageSquare,
+  FileText,
+  MessageCircle,
   Download,
 } from 'lucide-react';
 import type {
@@ -46,11 +48,13 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   allPosts,
   allComments,
 }) => {
-  const [activeTab, setActiveTab] = useState<'settings' | 'participants' | 'chatlogs'>('participants');
+  const [activeTab, setActiveTab] = useState<'settings' | 'participants' | 'chatlogs' | 'posts' | 'comments'>('participants');
   const [settings, setSettings] = useState<MissionSettings>(DEFAULT_MISSION_SETTINGS);
   const [tickets, setTickets] = useState<PhotoTicket[]>([]);
   const [chatLogs, setChatLogs] = useState<ChatQueryLog[]>([]);
   const [chatSearch, setChatSearch] = useState('');
+  const [postSearch, setPostSearch] = useState('');
+  const [commentSearch, setCommentSearch] = useState('');
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -291,36 +295,58 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
         <div className="flex items-center border-b border-slate-200 bg-slate-50 px-4 overflow-x-auto">
           <button
             onClick={() => setActiveTab('participants')}
-            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'participants'
                 ? 'border-slate-900 text-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Users className="w-4 h-4" />
-            <span>참여자 모니터링 ({participantList.length}명)</span>
+            <span>참여자 모니터링 ({participantList.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('chatlogs')}
-            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'chatlogs'
                 ? 'border-indigo-600 text-indigo-700'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <MessageSquare className="w-4 h-4 text-indigo-500" />
-            <span>챗봇 질문 분석 ({chatLogs.length}건)</span>
+            <span>챗봇 질문 ({chatLogs.length})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('posts')}
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'posts'
+                ? 'border-pink-600 text-pink-700'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-pink-500" />
+            <span>피드 소감 ({allPosts.length})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('comments')}
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'comments'
+                ? 'border-purple-600 text-purple-700'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <MessageCircle className="w-4 h-4 text-purple-500" />
+            <span>댓글 모음 ({allComments.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`py-3 px-4 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'settings'
                 ? 'border-slate-900 text-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Settings className="w-4 h-4" />
-            <span>미션 조건 & 부스 설정</span>
+            <span>부스 설정</span>
           </button>
         </div>
 
@@ -718,6 +744,224 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
                               🤖 {log.answerSnippet}
                             </p>
                           )}
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {/* ═════════════════════════════════════════════════════════════════════════
+              탭 4: 피드 소감 & 업로드 사진 전체 수집 및 분석
+              ═════════════════════════════════════════════════════════════════════════ */}
+          {activeTab === 'posts' && (
+            <div className="space-y-3">
+              {/* 상단 검색 및 엑셀/CSV 백업 다운로드 바 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={postSearch}
+                    onChange={(e) => setPostSearch(e.target.value)}
+                    placeholder="소감 내용, 태그(#), 작성자 검색..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-pink-500"
+                  />
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (allPosts.length === 0) {
+                      alert('저장할 피드 데이터가 없습니다.');
+                      return;
+                    }
+                    const headers = ['일시', '작성자아이디', '이름', '태그', '소감글', '좋아요수', '사진URL'];
+                    const rows = allPosts.map((p) => [
+                      `"${p.timestamp ? p.timestamp.toLocaleString('ko-KR') : ''}"`,
+                      `"${p.authorName || ''}"`,
+                      `"${p.displayName || ''}"`,
+                      `"${p.tag || ''}"`,
+                      `"${(p.caption || '').replace(/"/g, '""')}"`,
+                      `"${p.likesCount || 0}"`,
+                      `"${p.photoUrl || ''}"`,
+                    ]);
+                    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `의령여고_영어과_피드소감모음_${new Date().toISOString().slice(0, 10)}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="px-3.5 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+                  title="수집된 피드 소감 전체를 CSV 엑셀 파일로 백업"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>피드 CSV 다운로드</span>
+                </button>
+              </div>
+
+              {/* 안내 문구 */}
+              <div className="text-[11px] text-slate-500 px-1 flex items-center justify-between">
+                <span>📸 학생들이 부스 체험 후 직접 올린 소감과 사진 기록입니다.</span>
+                <span className="font-semibold text-pink-600">총 {allPosts.length}개 피드</span>
+              </div>
+
+              {/* 피드 리스트 */}
+              <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+                {allPosts.length === 0 ? (
+                  <div className="p-12 text-center text-slate-400 text-xs">
+                    아직 등록된 피드가 없습니다.
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+                    {allPosts
+                      .filter(
+                        (p) =>
+                          !postSearch ||
+                          (p.caption && p.caption.toLowerCase().includes(postSearch.toLowerCase())) ||
+                          (p.tag && p.tag.toLowerCase().includes(postSearch.toLowerCase())) ||
+                          (p.authorName && p.authorName.toLowerCase().includes(postSearch.toLowerCase())) ||
+                          (p.displayName && p.displayName.toLowerCase().includes(postSearch.toLowerCase()))
+                      )
+                      .map((post) => (
+                        <div key={post.id} className="p-3.5 hover:bg-slate-50/80 transition-colors flex gap-3">
+                          {/* 사진 썸네일 */}
+                          {post.photoUrl && (
+                            <img
+                              src={post.photoUrl}
+                              alt=""
+                              className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200"
+                            />
+                          )}
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-bold text-slate-900 truncate">
+                                  {post.displayName || post.authorName}
+                                </span>
+                                <span className="text-[11px] font-mono text-slate-400">
+                                  @{post.authorName}
+                                </span>
+                                {post.tag && (
+                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-100">
+                                    {post.tag}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[11px] text-slate-400 font-mono shrink-0">
+                                {post.timestamp?.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+
+                            <p className="text-xs text-slate-800 line-clamp-2 leading-relaxed">
+                              {post.caption}
+                            </p>
+
+                            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-slate-400">
+                              <span>❤️ 좋아요 {post.likesCount || 0}</span>
+                              <span className="text-slate-300">·</span>
+                              <span>{post.timestamp?.toLocaleDateString('ko-KR')}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ═════════════════════════════════════════════════════════════════════════
+              탭 5: 댓글 모음 전체 수집 및 분석
+              ═════════════════════════════════════════════════════════════════════════ */}
+          {activeTab === 'comments' && (
+            <div className="space-y-3">
+              {/* 상단 검색 및 엑셀/CSV 백업 다운로드 바 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={commentSearch}
+                    onChange={(e) => setCommentSearch(e.target.value)}
+                    placeholder="댓글 내용, 작성자 검색..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-purple-500"
+                  />
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (allComments.length === 0) {
+                      alert('저장할 댓글 데이터가 없습니다.');
+                      return;
+                    }
+                    const headers = ['일시', '작성자', '피드ID', '댓글내용'];
+                    const rows = allComments.map((c) => [
+                      `"${c.timestamp.toLocaleString('ko-KR')}"`,
+                      `"${c.author || ''}"`,
+                      `"${c.postId || ''}"`,
+                      `"${(c.text || '').replace(/"/g, '""')}"`,
+                    ]);
+                    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `의령여고_영어과_댓글모음_${new Date().toISOString().slice(0, 10)}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-xs"
+                  title="수집된 댓글 전체를 CSV 엑셀 파일로 백업"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>댓글 CSV 다운로드</span>
+                </button>
+              </div>
+
+              {/* 안내 문구 */}
+              <div className="text-[11px] text-slate-500 px-1 flex items-center justify-between">
+                <span>💬 참가자들이 서로 남긴 응원과 소통 댓글 기록입니다.</span>
+                <span className="font-semibold text-purple-600">총 {allComments.length}개 댓글</span>
+              </div>
+
+              {/* 댓글 리스트 테이블 */}
+              <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+                {allComments.length === 0 ? (
+                  <div className="p-12 text-center text-slate-400 text-xs">
+                    아직 등록된 댓글이 없습니다.
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+                    {allComments
+                      .filter(
+                        (c) =>
+                          !commentSearch ||
+                          (c.text && c.text.toLowerCase().includes(commentSearch.toLowerCase())) ||
+                          (c.author && c.author.toLowerCase().includes(commentSearch.toLowerCase()))
+                      )
+                      .map((comment) => (
+                        <div key={comment.id} className="p-3.5 hover:bg-slate-50/80 transition-colors">
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-slate-900">
+                                {comment.author || '익명'}
+                              </span>
+                              <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md">
+                                피드 #{comment.postId.slice(0, 8)}...
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 font-mono">
+                              {comment.timestamp.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-800 bg-purple-50/40 p-2.5 rounded-xl border border-purple-100/70">
+                            💬 {comment.text}
+                          </p>
                         </div>
                       ))}
                   </div>
