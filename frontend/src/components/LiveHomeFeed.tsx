@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   subscribeLikes,
   toggleLikeRemote,
@@ -1116,7 +1116,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                     <span className="text-xs font-bold text-slate-900">ur_textbook_viewer</span>
                     <span className="w-1 h-1 rounded-full bg-slate-400" />
                     <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">
-                      144개 섹션 정밀 검증
+                      171개 섹션 정밀 검증
                     </span>
                   </div>
                   <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 7권 교과서</p>
@@ -1183,7 +1183,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
               <div className="pt-1 text-xs">
                 <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
                 <span className="text-slate-800">
-                  공통영어부터 세계문화와 영어까지, 144개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
+                  공통영어부터 심화영어까지, 171개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
                 </span>
               </div>
 

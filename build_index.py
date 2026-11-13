@@ -179,8 +179,8 @@ def index_all_textbooks():
 
         print(f"  -> 신규 {len(pending_items)}개 청크 생성. 배치 임베딩 시작...", flush=True)
 
-        # 50개씩 배치 전송
-        batch_size = 50
+        # 10개씩 소규모 배치 전송 (Rate Limit 회피 및 토큰 분산)
+        batch_size = 10
         for i in range(0, len(pending_items), batch_size):
             batch = pending_items[i:i + batch_size]
             embed_texts = [item["embed_text"] for item in batch]
@@ -194,7 +194,7 @@ def index_all_textbooks():
                 batch_metas=[item["metadata"] for item in batch]
             )
             print(f"    진행: {min(i + batch_size, len(pending_items))}/{len(pending_items)} 청크 완료", flush=True)
-            time.sleep(2.0)  # Rate Limit 방지를 위한 2초 딜레이
+            time.sleep(3.0)  # Rate Limit 방지를 위한 3초 딜레이
 
 # ── 5. FAQ.txt 처리 및 인덱싱 ─────────────────────────────────
 def index_faq():
