@@ -1654,6 +1654,381 @@ vocab_data = [
       }
     ]
   }
+,
+  # =========================================================================
+  # 7. 심화 영어 (3학년 2학기 · YBM 김명희) - 5개 세트
+  # =========================================================================
+  {
+    "subjectKey": "심화영어",
+    "title": "심화영어",
+    "grade": "3학년 2학기",
+    "publisher": "YBM (김명희)",
+    "difficulty": "심화 (고3 진로선택)",
+    "color": "from-amber-600 to-rose-600",
+    "description": "뇌과학, AI 공존 윤리, 도넛 경제학, 인류 연대 등 고3 진로선택 및 수능 심화 수준의 핵심 어휘를 점검합니다.",
+    "sets": [
+      {
+        "setId": 1,
+        "setName": "세트 1: 문화 다양성과 고정관념 타파",
+        "description": "Lesson 1: 싱가포르의 다문화 사회와 문화적 편견 극복을 다루는 어휘",
+        "questions": [
+          {
+            "id": 1,
+            "word": "cherish",
+            "contextSentence": "On my first day in Singapore, I learned to cherish the cultural differences among my classmates.",
+            "options": [
+              "소중히 여기다, 아끼다",
+              "의심하다, 불신하다",
+              "포기하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'cherish'는 마음속 깊이 소중히 간직하고 아낀다는 뜻의 핵심 동사입니다.",
+            "tip": "Lesson 1 싱가포르 문화 체험 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "multiculturalism",
+            "contextSentence": "Languages and multiculturalism are foundational pillars of a harmonious global society.",
+            "options": [
+              "단일문화주의",
+              "다문화주의, 다문화 공존",
+              "고립주의"
+            ],
+            "correctIndex": 1,
+            "explanation": "'multi-(다양한)' + 'cultural(문화의)' + '-ism'으로 다양한 인종과 문화가 공존하는 이념입니다.",
+            "tip": "Lesson 1 다문화주의 본문 핵심어"
+          },
+          {
+            "id": 3,
+            "word": "harmonious",
+            "contextSentence": "Different ethnic communities collaborate to maintain a peaceful and harmonious community.",
+            "options": [
+              "혼란스러운",
+              "조화로운, 화합하는",
+              "독립적인"
+            ],
+            "correctIndex": 1,
+            "explanation": "'harmony(조화)'의 형용사형으로 갈등 없이 어우러지고 협력하는 상태를 나타냅니다.",
+            "tip": "Lesson 1 문화 화합 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "stereotype",
+            "contextSentence": "Educational campaigns encourage young students to break cultural stereotypes through empathy.",
+            "options": [
+              "고정관념, 편견",
+              "창의적 발상",
+              "공식 규정"
+            ],
+            "correctIndex": 0,
+            "explanation": "'stereotype'은 특정 집단이나 문화에 대해 굳어진 고정관념이나 편견을 뜻합니다.",
+            "tip": "Lesson 1 편견 타파 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "perspective",
+            "contextSentence": "Studying abroad allows you to acquire a much broader perspective on international affairs.",
+            "options": [
+              "원근법",
+              "시각, 관점",
+              "위험 요소"
+            ],
+            "correctIndex": 1,
+            "explanation": "'perspective'는 사물이나 현상을 바라보는 관점 또는 폭넓은 시야를 뜻합니다.",
+            "tip": "Lesson 1 글로벌 시각 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 2,
+        "setName": "세트 2: 행동 심리학과 뇌과학",
+        "description": "Lesson 2: 지연 행동(미루기)의 뇌과학적 원인과 이성적 통제",
+        "questions": [
+          {
+            "id": 1,
+            "word": "procrastinate",
+            "contextSentence": "Studies show that many students procrastinate because of fear of failure rather than laziness.",
+            "options": [
+              "(해야 할 일을) 미루다, 늑장 부리다",
+              "즉시 실행하다",
+              "계획을 취소하다"
+            ],
+            "correctIndex": 0,
+            "explanation": "'procrastinate'는 해야 할 일을 차일피일 미루거나 지연시키는 행동을 뜻하는 고급 어휘입니다.",
+            "tip": "Lesson 2 미루는 습관의 뇌과학 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "impulse",
+            "contextSentence": "The prefrontal cortex plays a key role in controlling our immediate emotional impulses.",
+            "options": [
+              "충동, 자극",
+              "논리적 추론",
+              "기억 저장"
+            ],
+            "correctIndex": 0,
+            "explanation": "'impulse'는 순간적으로 일어나는 충동이나 억누르기 힘든 욕구를 가리킵니다.",
+            "tip": "Lesson 2 뇌의 충동 억제 기제 어휘"
+          },
+          {
+            "id": 3,
+            "word": "temporal",
+            "contextSentence": "Temporal discounting explains why people prefer smaller immediate rewards over larger future gains.",
+            "options": [
+              "시간의, 일시적인",
+              "영원한, 불변의",
+              "공간적인"
+            ],
+            "correctIndex": 0,
+            "explanation": "'temporal'은 '시간의' 또는 '일시적인'을 뜻하며 심리학에서 시간적 가치 평가에 쓰입니다.",
+            "tip": "Lesson 2 시간 할인(Temporal Discounting) 개념어"
+          },
+          {
+            "id": 4,
+            "word": "rational",
+            "contextSentence": "Developing rational decision-making habits helps overcome habitual procrastination.",
+            "options": [
+              "감정적인",
+              "합리적인, 이성적인",
+              "충동적인"
+            ],
+            "correctIndex": 1,
+            "explanation": "'rational'은 감정에 치우치지 않고 논리와 이성에 근거하여 판단하는 태도입니다.",
+            "tip": "Lesson 2 이성적 결정 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "neuroplasticity",
+            "contextSentence": "Recent discoveries in neuroplasticity demonstrate that adult brains continue to rewire themselves.",
+            "options": [
+              "신경 가소성(뇌 적응성)",
+              "신경 마비",
+              "기억 상실"
+            ],
+            "correctIndex": 0,
+            "explanation": "'neuroplasticity'는 학습과 경험을 통해 뇌 신경망이 스스로 구조를 재편하는 능력입니다.",
+            "tip": "Lesson 2 Further Reading 뇌과학 핵심어"
+          }
+        ]
+      },
+      {
+        "setId": 3,
+        "setName": "세트 3: 인간과 인공지능(AI)의 시너지",
+        "description": "Lesson 3: 미래 사회에서 인간의 직관과 AI 기술의 협력",
+        "questions": [
+          {
+            "id": 1,
+            "word": "indispensable",
+            "contextSentence": "Artificial intelligence has become an indispensable collaborator in scientific research.",
+            "options": [
+              "선택적인",
+              "없어서는 안 될, 필수적인",
+              "불필요한"
+            ],
+            "correctIndex": 1,
+            "explanation": "'in-(not)' + 'dispense with(~없이 지내다)' + '-able'로 절대로 없어서는 안 될 필수성을 뜻합니다.",
+            "tip": "Lesson 3 AI의 필수적 역할 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "sophisticated",
+            "contextSentence": "The new model utilizes sophisticated neural networks to generate medical diagnoses.",
+            "options": [
+              "원시적인, 조잡한",
+              "정교한, 고도화된",
+              "위험한"
+            ],
+            "correctIndex": 1,
+            "explanation": "'sophisticated'는 기술이나 시스템이 매우 복잡하고 정교하며 수준 높은 상태를 나타냅니다.",
+            "tip": "Lesson 3 정교한 알고리즘 어휘"
+          },
+          {
+            "id": 3,
+            "word": "synergistic",
+            "contextSentence": "Humans and algorithms create synergistic outcomes that neither could achieve alone.",
+            "options": [
+              "상승적인, 시너지 효과를 내는",
+              "상호 파괴적인",
+              "단독의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'synergistic'은 두 개 이상의 요소가 결합하여 개별 합 이상의 상승효과를 내는 것을 뜻합니다.",
+            "tip": "Lesson 3 인간-AI 시너지 본문 핵심어"
+          },
+          {
+            "id": 4,
+            "word": "empathy",
+            "contextSentence": "Even the most powerful supercomputer cannot replicate genuine human empathy and warmth.",
+            "options": [
+              "공감, 감정 이입",
+              "계산 능력",
+              "적대감"
+            ],
+            "correctIndex": 0,
+            "explanation": "'empathy'는 타인의 감정이나 처지를 깊이 이해하고 함께 느끼는 공감 능력입니다.",
+            "tip": "Lesson 3 인간 고유의 감성 어휘"
+          },
+          {
+            "id": 5,
+            "word": "implication",
+            "contextSentence": "Policymakers are debating the profound social and ethical implications of generative AI.",
+            "options": [
+              "영향, 함의",
+              "직접적인 명령",
+              "단순 요약"
+            ],
+            "correctIndex": 0,
+            "explanation": "'implication'은 어떤 정책이나 기술 발전이 사회에 미치게 될 파급 영향이나 숨은 뜻입니다.",
+            "tip": "Lesson 3 윤리적 함의 본문 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 4,
+        "setName": "세트 4: 생태 위기와 지속 가능한 경제",
+        "description": "Lesson 4: 도넛 경제학과 지구 생태계 임계점 극복",
+        "questions": [
+          {
+            "id": 1,
+            "word": "paradigm",
+            "contextSentence": "Doughnut Economics introduces a transformative paradigm that prioritizes ecological balance.",
+            "options": [
+              "패러다임, 인식 체계",
+              "임시 대책",
+              "세금 제도"
+            ],
+            "correctIndex": 0,
+            "explanation": "'paradigm'은 한 시대나 분야의 지배적인 사고방식이나 인식의 기본 틀을 의미합니다.",
+            "tip": "Lesson 4 경제 패러다임 전환 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "ecological",
+            "contextSentence": "Human activities must operate safely within the planet's ecological boundaries.",
+            "options": [
+              "생태학적인, 환경 친화적인",
+              "상업적인",
+              "가상 공간의"
+            ],
+            "correctIndex": 0,
+            "explanation": "'ecological'은 생물과 자연환경 사이의 유기적 관계나 생태계 보호와 관련된 형용사입니다.",
+            "tip": "Lesson 4 생태계 경계선 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "sustainability",
+            "contextSentence": "Long-term social welfare depends fundamentally on the sustainability of natural ecosystems.",
+            "options": [
+              "지속 가능성",
+              "급격한 팽창",
+              "일시적 유행"
+            ],
+            "correctIndex": 0,
+            "explanation": "'sustainability'는 미래 세대를 해치지 않고 현재의 번영을 지속해 나가는 역량입니다.",
+            "tip": "Lesson 4 지속가능 경제 본문 핵심어"
+          },
+          {
+            "id": 4,
+            "word": "regenerative",
+            "contextSentence": "Instead of extracting resources relentlessly, we should foster a regenerative circular economy.",
+            "options": [
+              "재생하는, 복원력 있는",
+              "소모적인",
+              "오염시키는"
+            ],
+            "correctIndex": 0,
+            "explanation": "'regenerative'는 고갈된 자원이나 파괴된 생태계를 스스로 복원하고 재생시키는 성질입니다.",
+            "tip": "Lesson 4 재생 경제 모델 본문 어휘"
+          },
+          {
+            "id": 5,
+            "word": "threshold",
+            "contextSentence": "Scientists warn that passing critical climate thresholds will trigger irreversible damage.",
+            "options": [
+              "한계점, 문턱, 임계치",
+              "출발점",
+              "중간 과정"
+            ],
+            "correctIndex": 0,
+            "explanation": "'threshold'는 어떤 중대한 변화가 시작되는 경계선, 문턱 또는 한계점을 뜻합니다.",
+            "tip": "Lesson 4 기후 임계점 어휘"
+          }
+        ]
+      },
+      {
+        "setId": 5,
+        "setName": "세트 5: 글로벌 연대와 인류애",
+        "description": "Lesson 5: 수단의 물 부족 위기와 난민 청년들의 극복 실화",
+        "questions": [
+          {
+            "id": 1,
+            "word": "perseverance",
+            "contextSentence": "Through sheer perseverance and hope, Salva walked hundreds of miles across harsh deserts.",
+            "options": [
+              "인내, 끈기",
+              "조급함, 성급함",
+              "체념, 포기"
+            ],
+            "correctIndex": 0,
+            "explanation": "'perseverance'는 극심한 역경과 고난 앞에서도 굴하지 않고 끈기 있게 버텨내는 불굴의 의지입니다.",
+            "tip": "Lesson 5 살바의 여정 본문 어휘"
+          },
+          {
+            "id": 2,
+            "word": "scarce",
+            "contextSentence": "During the dry season in southern Sudan, clean drinking water becomes dangerously scarce.",
+            "options": [
+              "부족한, 드문",
+              "풍부한, 넘치는",
+              "오염되지 않은"
+            ],
+            "correctIndex": 0,
+            "explanation": "'scarce'는 공급이 수요에 미치지 못하여 매우 부족하고 귀한 상태를 나타냅니다.",
+            "tip": "Lesson 5 물 부족 실태 본문 어휘"
+          },
+          {
+            "id": 3,
+            "word": "displacement",
+            "contextSentence": "Violent warfare caused the displacement of countless families from their homeland.",
+            "options": [
+              "강제 이주, 난민 피난",
+              "평화 협정",
+              "도시 재개발"
+            ],
+            "correctIndex": 0,
+            "explanation": "'displacement'는 전쟁이나 재난으로 인해 고향 터전을 잃고 쫓겨나는 강제 이주 상태입니다.",
+            "tip": "Lesson 5 수단 난민 본문 어휘"
+          },
+          {
+            "id": 4,
+            "word": "compassionate",
+            "contextSentence": "The non-profit organization launched a compassionate mission to drill water wells in remote villages.",
+            "options": [
+              "인정 많은, 동정심 어린",
+              "무관심한",
+              "엄격한"
+            ],
+            "correctIndex": 0,
+            "explanation": "'compassion(동정심, 자비)'의 형용사형으로 고통받는 이들을 따뜻하게 보살피는 마음입니다.",
+            "tip": "Lesson 5 인도주의적 지원 어휘"
+          },
+          {
+            "id": 5,
+            "word": "resilience",
+            "contextSentence": "The story highlights the remarkable resilience of local villagers building a brighter future.",
+            "options": [
+              "회복 탄력성, 복원력",
+              "취약성",
+              "고립감"
+            ],
+            "correctIndex": 0,
+            "explanation": "'resilience'는 큰 충격이나 시련을 겪고도 다시 일어서서 원래대로 회복하는 강한 힘입니다.",
+            "tip": "Lesson 5 인류애와 회복력 본문 핵심어"
+          }
+        ]
+      }
+    ]
+  }
 ]
 
 with open('c:/Antigravity/rag-english-fair/frontend/src/utils/vocab_quiz_data.json', 'w', encoding='utf-8') as f:

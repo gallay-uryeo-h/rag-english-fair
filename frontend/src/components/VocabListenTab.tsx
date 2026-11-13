@@ -196,7 +196,7 @@ export const VocabListenTab: React.FC = () => {
           </span>
           <span className="text-[11px] text-slate-400 font-medium">{currentQuiz.grade} · {currentQuiz.publisher}</span>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-1.5">
           {VOCAB_QUIZ_DATA.map((quiz) => {
             const isSelected = selectedSubjectKey === quiz.subjectKey;
             return (

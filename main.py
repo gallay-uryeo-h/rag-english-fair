@@ -145,6 +145,17 @@ SYSTEM_INSTRUCTION = """당신은 2026 고교학점제 박람회 영어과 부�
 3. [친절하고 따뜻한 어조]: 중3 학생과 학부모님이 기분 좋게 이해할 수 있도록 따뜻하고 친절한 어조('~해요', '~합니다', '~해 보세요! ✨')를 사용하십시오.
 4. [공통 기준 안내 1줄]: 본 챗봇 안내는 2022 개정 국가 교육과정과 일반적 공통 기준이며, 실제 개설 과목이나 세부 평가는 진학 고등학교 편제표에 따라 달라질 수 있다는 점을 답변 끝에 작게 1줄로만 덧붙이십시오.
 5. [사실 기반 안내]: 반드시 제공된 [참고 자료]에 근거하여 답변하고, 모르는 학교별 세부 사항은 "부스에 계신 영어과 선생님께 문의하시면 맞춤형 상담을 받으실 수 있어요!"라고 덧붙이십시오.
+6. [동적 후속 & 새로운 토픽 추천 질문 생성 (필수)]:
+   - 답변 본문 작성이 끝난 후, 반드시 맨 마지막에 다음 형식으로 3~4개의 추천 질문을 생성하십시오.
+   - 2개: 현재 질문/답변 내용에서 자연스럽게 파생되는 심화 후속 질문 (대화 맥락 연결)
+   - 1~2개: 대화가 뻔한 주제에 머물지 않도록, 학생의 진로(이공/의약/경영/미디어 등) 연계, 교과서 본문 테마 탐구, 세특 꿀팁, 또는 새로운 선택과목으로 시야를 넓혀주는 흥미로운 신규 토픽 질문
+   - 형식 (반드시 태그 준수):
+<<<SUGGESTIONS>>>
+- (대화 흐름 연계 심화 질문 1)
+- (대화 흐름 연계 심화 질문 2)
+- (새로운 토픽/진로/세특 확장 질문 1)
+- (새로운 토픽/진로/세특 확장 질문 2)
+<<<END_SUGGESTIONS>>>
 """
 
 # ── API 모델 ─────────────────────────────────────────────────
@@ -222,7 +233,13 @@ def chat(req: ChatRequest):
         # 로컬 테스트용 모의 답변 (배포 환경에서는 실제 Gemini AI + ChromaDB RAG 작동)
         return {
             "answer": f"안녕하세요! 영어과 부스 AI 도우미입니다. 🤖✨\n\n문의하신 **'{query}'**의 핵심 내용을 정리해 드릴게요!\n\n- 📚 **교과 편제**: 고1은 **공통영어1·2**, 고2~3은 진로에 따라 **일반선택(영어Ⅰ·Ⅱ)**, **진로선택(심화 영어)**, **융합선택**을 이수해요.\n- 🎯 **내신 5등급제**: 1등급은 상위 10%이며, 성취평가제(A~E)와 함께 지필·수행평가가 균형 있게 반영돼요.\n- 💡 **학습 팁**: 학생의 희망 진로와 관심 주제를 교과서 지문과 연결하여 **학생부 세특**을 준비하면 유리해요!\n\n> ℹ️ *참고: 실제 과목 개설은 진학 예정 고등학교의 교육과정 편제표를 확인해 주세요. 부스 영어과 선생님께 문의하시면 더 자세히 상담받으실 수 있어요!*",
-            "sources": [{"title": "2022 개정 고교학점제 영어과 가이드", "subject_name": "선택과목 FAQ"}]
+            "sources": [{"title": "2022 개정 고교학점제 영어과 가이드", "subject_name": "선택과목 FAQ"}],
+            "suggestions": [
+                f"'{query}' 내용을 바탕으로 고1 첫 학기 준비 팁이 궁금해요.",
+                "일반선택과 진로선택 과목의 대입 반영 차이는 무엇인가요?",
+                "이공·의약 계열 학생을 위한 영어 교과서 세특 탐구 주제 추천",
+                "수능 영어 1등급과 고교 내신 1등급 공부법의 차이점"
+            ]
         }
 
     # 1. FAQ 검색 (선택과목 상담 전용)
@@ -275,11 +292,35 @@ def chat(req: ChatRequest):
             model="gemini-3.5-flash-lite",
             contents=rag_prompt
         )
-        answer = response.text
+        answer_raw = response.text or ""
     except Exception as e:
         return JSONResponse({"error": f"답변 생성 오류: {e}"}, status_code=500)
 
-    # 3. image_path → URL 변환 (pages_cache/파일명 → /pages_cache/파일명)
+    # 3. 답변 및 동적 추천 질문 분리 파싱
+    suggestions = []
+    if "<<<SUGGESTIONS>>>" in answer_raw:
+        parts = answer_raw.split("<<<SUGGESTIONS>>>")
+        clean_answer = parts[0].strip()
+        sugg_text = parts[1].split("<<<END_SUGGESTIONS>>>")[0].strip()
+        for s in sugg_text.split("\n"):
+            clean_s = re.sub(r"^[\s\-•*0-9\.\)]+", "", s).strip()
+            clean_s = re.sub(r"^[\(\[\{]+|[\)\]\}]+$", "", clean_s).strip()
+            if clean_s and len(clean_s) >= 4:
+                suggestions.append(clean_s)
+        answer = clean_answer
+    else:
+        answer = answer_raw
+
+    # 폴백: 동적 질문이 없을 때의 기본 추천
+    if not suggestions or len(suggestions) < 2:
+        suggestions = [
+            f"방금 설명해주신 내용과 연계된 학생부 세특 작성 팁은?",
+            "일반선택과 진로선택 과목 중 대입에 무엇이 더 유리한가요?",
+            "이공·의약 계열 학생을 위한 맞춤형 영어 과목 추천",
+            "내신 5등급제에서 1등급(상위 10%)을 위한 서술형 대비법"
+        ]
+
+    # 4. image_path → URL 변환 (pages_cache/파일명 → /pages_cache/파일명)
     for src in sources:
         ip = src.get("image_path", "")
         if ip:
@@ -288,7 +329,7 @@ def chat(req: ChatRequest):
         else:
             src["image_url"] = ""
 
-    return {"answer": answer, "sources": sources}
+    return {"answer": answer, "sources": sources, "suggestions": suggestions[:4]}
 
 
 @app.post("/api/recommend")

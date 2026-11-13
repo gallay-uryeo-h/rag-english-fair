@@ -22,6 +22,38 @@ interface Props {
   initialQuestion?: string;
 }
 
+// 🌟 다채로운 신규 토픽 탐색 팩 (Topic Exploration Pools)
+const EXPLORE_TOPIC_POOLS: string[][] = [
+  // 팩 1: 진로 & 전공 연계 세특 확장
+  [
+    '의약·간호·생명 계열 진로를 위한 영어 교과서 탐구 주제 추천',
+    'AI·소프트웨어·공학 진로와 영어 세특을 잇는 구체적 탐구 예시',
+    '경영·경제·미디어 진로 희망자에게 유리한 영어 과목 조합은?',
+    '사범·어문 계열 진학 시 심화영어 이수가 필수적인가요?',
+  ],
+  // 팩 2: 2028 대입 & 내신 5등급제 실전 전략
+  [
+    '2028 내신 5등급제에서 1등급(상위 10%)을 위한 지필 서술형 대비법',
+    '수능 영어 1등급과 고교 내신 영어 1등급의 실전 공부법 차이점',
+    '진로선택 과목 성취도(A~E)가 수시 학생부종합전형에 미치는 영향',
+    '고1 첫 3월 모의고사와 중간고사를 함께 준비하는 겨울방학 로드맵',
+  ],
+  // 팩 3: 교과서 & 수행평가 꿀팁
+  [
+    '세계 문화와 영어 과목에서는 주로 어떤 프로젝트 수업을 하나요?',
+    '영어 말하기 발표 및 에세이 수행평가에서 A등급을 받는 팁',
+    '영어 독해와 작문 과목의 실제 지문 난이도는 고1보다 얼마나 높나요?',
+    '교과서 본문 테마를 심화하여 개인 탐구 보고서로 쓰는 방법',
+  ],
+  // 팩 4: 고교학점제 & 학교생활 궁금증
+  [
+    '만약 영어 과목에서 미이수(I등급) 위기가 오면 어떻게 구제받나요?',
+    '고교 3년 동안 영어는 총 몇 학점까지 필수로 들어야 하나요?',
+    '일반고에서 소수 선택 과목이 폐강될 때는 어떻게 하나요?',
+    '고교 입학 전 겨울방학, 문법 총정리와 영단어 암기 중 무엇이 더 급한가요?',
+  ],
+];
+
 // 🌟 질문별 지능형 후속 질문 매핑 (Follow-up Questions)
 const FOLLOWUP_MAP: Record<string, string[]> = {
   default: [
@@ -94,6 +126,13 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>(FOLLOWUP_MAP.default);
+  const [topicPoolIndex, setTopicPoolIndex] = useState(0);
+
+  const handleNextTopicPack = () => {
+    const nextIdx = (topicPoolIndex + 1) % EXPLORE_TOPIC_POOLS.length;
+    setTopicPoolIndex(nextIdx);
+    setCurrentSuggestions(EXPLORE_TOPIC_POOLS[nextIdx]);
+  };
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
@@ -165,8 +204,12 @@ export const InstagramDmChatModal: React.FC<Props> = ({
         },
       ]);
 
-      // 💡 후속 추천 질문 갱신
-      setCurrentSuggestions(getFollowupSuggestions(q));
+      // 💡 후속 추천 질문 갱신: AI가 대화 맥락에 맞추어 생성한 동적 질문 우선 적용
+      if (Array.isArray(data.suggestions) && data.suggestions.length > 0) {
+        setCurrentSuggestions(data.suggestions);
+      } else {
+        setCurrentSuggestions(getFollowupSuggestions(q));
+      }
 
       // 📊 질문 수집: 4컷사진 부스 및 분석/통계용 로깅
       const user = getUserProfile();
@@ -197,6 +240,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
 
   const handleReset = () => {
     setCurrentSuggestions(FOLLOWUP_MAP.default);
+    setTopicPoolIndex(0);
     setMessages([
       {
         role: 'bot',
@@ -392,12 +436,17 @@ export const InstagramDmChatModal: React.FC<Props> = ({
             3. 하단 추천 후속 질문 칩 & 인스타그램 DM 입력창
             ========================================================================= */}
         <div className="border-t border-slate-100 bg-white shrink-0">
-          {/* 가로 스크롤 추천 질문 칩 (답변 기반 지능형 후속 질문) */}
+          {/* 가로 스크롤 추천 질문 칩 (대화 흐름 기반 동적 추천 + 새 토픽 탐색 버튼) */}
           <div className="px-3 pt-2 pb-1 overflow-x-auto no-scrollbar flex items-center gap-1.5">
-            <span className="text-[10px] font-extrabold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg shrink-0 flex items-center gap-1 border border-purple-100">
-              <Sparkles className="w-3 h-3 text-purple-500" />
-              <span>추천 질문</span>
-            </span>
+            <button
+              type="button"
+              onClick={handleNextTopicPack}
+              className="text-[10px] font-extrabold text-purple-700 bg-purple-100/90 hover:bg-purple-200 border border-purple-200 px-2.5 py-1.5 rounded-full shrink-0 flex items-center gap-1 transition-all cursor-pointer active:scale-95 shadow-3xs"
+              title="새로운 주제/토픽 추천 둘러보기"
+            >
+              <Sparkles className="w-3 h-3 text-purple-600 animate-pulse" />
+              <span>새 토픽 탐색 🎲</span>
+            </button>
             {currentSuggestions.map((q, idx) => (
               <button
                 key={idx}
