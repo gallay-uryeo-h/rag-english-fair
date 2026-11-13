@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { X, Sparkles, Compass, Target, Check } from 'lucide-react';
+import { X, Sparkles, Compass, Target } from 'lucide-react';
 import type { UserProfile } from '../utils/userProfile';
 import { getRecommendedStickers } from '../utils/life4cutStickers';
-import { subscribeUserActivity, type UserActivityDoc } from '../services/firestoreService';interface UserQrModalProps {
+import { subscribeUserActivity, type UserActivityDoc } from '../services/firestoreService';
+
+interface UserQrModalProps {
   isOpen: boolean;
   currentUser: UserProfile | null;
   onClose: () => void;
@@ -16,7 +18,6 @@ export const UserQrModal: React.FC<UserQrModalProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [activity, setActivity] = useState<UserActivityDoc | null>(null);
-  const [copiedSticker, setCopiedSticker] = useState<string | null>(null);
 
   // Firestore에서 현재 사용자의 활동 데이터 실시간 구독
   useEffect(() => {
@@ -55,14 +56,8 @@ export const UserQrModal: React.FC<UserQrModalProps> = ({
     );
   }, [isOpen, currentUser]);
 
-  // 추천 스티커 목록 계산
+  // 추천 스티커 목록 자동 계산
   const recommendedStickers = getRecommendedStickers(activity);
-
-  const handleCopySticker = (sticker: string) => {
-    navigator.clipboard?.writeText(sticker);
-    setCopiedSticker(sticker);
-    setTimeout(() => setCopiedSticker(null), 1500);
-  };
 
   if (!isOpen || !currentUser) return null;
 
@@ -157,45 +152,34 @@ export const UserQrModal: React.FC<UserQrModalProps> = ({
           </div>
         </div>
 
-        {/* 인생네컷 추천 스티커 미리보기 */}
+        {/* 인생네컷 맞춤 스티커 자동 추천 (태블릿에서 자동 로드) */}
         <div className="p-5 bg-white">
           <div className="flex items-center justify-between mb-2.5">
             <span className="text-[11px] font-extrabold text-slate-800 flex items-center gap-1">
-              ✨ 인생네컷 추천 스티커 ({recommendedStickers.length}종)
+              ✨ 인생네컷 자동 추천 스티커 ({recommendedStickers.length}종)
             </span>
-            <span className="text-[10px] text-slate-400">클릭 시 복사</span>
+            <span className="text-[10px] text-indigo-600 font-semibold bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+              QR 스캔 시 태블릿 자동 로드
+            </span>
           </div>
 
           <div className="flex flex-wrap gap-1.5">
-            {recommendedStickers.map((sticker, idx) => {
-              const isCopied = copiedSticker === sticker;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => handleCopySticker(sticker)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
-                    isCopied
-                      ? 'bg-emerald-500 text-white border-emerald-500'
-                      : idx === 0
-                      ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {isCopied ? (
-                    <>
-                      <Check className="w-3 h-3 stroke-3" />
-                      <span>복사됨!</span>
-                    </>
-                  ) : (
-                    <span>{sticker}</span>
-                  )}
-                </button>
-              );
-            })}
+            {recommendedStickers.map((sticker, idx) => (
+              <span
+                key={idx}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
+                  idx === 0
+                    ? 'bg-amber-50 text-amber-800 border-amber-200'
+                    : 'bg-slate-50 text-slate-700 border-slate-200'
+                }`}
+              >
+                {sticker}
+              </span>
+            ))}
           </div>
 
           <p className="text-[10px] text-slate-400 mt-3 text-center">
-            부스에서 MBTI와 진로를 선택하면 스티커가 실시간으로 바뀝니다!
+            부스 활동(MBTI·진로)에 따라 스티커 문구가 실시간으로 자동 변경됩니다.
           </p>
         </div>
       </div>
