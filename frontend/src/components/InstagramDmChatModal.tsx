@@ -3,7 +3,6 @@ import {
   X,
   Send,
   Sparkles,
-  Bot,
   RotateCcw,
 } from 'lucide-react';
 import { marked } from 'marked';
@@ -227,8 +226,12 @@ export const InstagramDmChatModal: React.FC<Props> = ({
             {/* 봇 아바타 (인스타그램 DM 서클) */}
             <div className="relative shrink-0">
               <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 shadow-xs">
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-white">
-                  <Bot className="w-5 h-5 text-cyan-300" />
+                <div className="w-full h-full rounded-full bg-slate-900 overflow-hidden">
+                  <img
+                    src="/bot_avatar.jpg"
+                    alt="@uryeo_qa_bot"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               {/* 활동 중 초록불 */}
@@ -278,9 +281,13 @@ export const InstagramDmChatModal: React.FC<Props> = ({
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-slate-50/60 to-white">
           {/* 인스타그램 DM 프로필 인트로 카드 */}
           <div className="flex flex-col items-center justify-center py-6 text-center space-y-2 border-b border-slate-100 mb-2">
-            <div className="w-18 h-18 rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 shadow-md">
-              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-white">
-                <Bot className="w-9 h-9 text-cyan-300" />
+            <div className="w-20 h-20 rounded-full p-[2.5px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-purple-600 shadow-md">
+              <div className="w-full h-full rounded-full bg-slate-900 overflow-hidden">
+                <img
+                  src="/bot_avatar.jpg"
+                  alt="@uryeo_qa_bot"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
             <div>
@@ -306,8 +313,12 @@ export const InstagramDmChatModal: React.FC<Props> = ({
                 className={`flex gap-2.5 items-end ${isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!isUser && (
-                  <div className="w-7 h-7 rounded-full bg-slate-900 flex items-center justify-center text-white shrink-0 mb-1 shadow-2xs">
-                    <Bot className="w-4 h-4 text-cyan-300" />
+                  <div className="w-7 h-7 rounded-full bg-slate-900 overflow-hidden shrink-0 mb-1 shadow-2xs border border-purple-200">
+                    <img
+                      src="/bot_avatar.jpg"
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 )}
 
@@ -352,8 +363,12 @@ export const InstagramDmChatModal: React.FC<Props> = ({
           {/* AI 응답 대기 로딩 인디케이터 (인스타그램 스타일 점 3개 바운스) */}
           {loading && (
             <div className="flex gap-2.5 items-end justify-start">
-              <div className="w-7 h-7 rounded-full bg-slate-900 flex items-center justify-center text-white shrink-0 mb-1">
-                <Bot className="w-4 h-4 text-cyan-300" />
+              <div className="w-7 h-7 rounded-full bg-slate-900 overflow-hidden shrink-0 mb-1 border border-purple-200">
+                <img
+                  src="/bot_avatar.jpg"
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="bg-slate-100 border border-slate-200/60 rounded-2xl rounded-tl-xs px-4 py-3 shadow-2xs flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-purple-500 animate-bounce [animation-delay:-0.3s]"></span>

@@ -21,7 +21,6 @@ import {
   Trash2,
   Shield,
   Sparkles,
-  Bot,
   ChevronRight,
 } from 'lucide-react';
 import { DeepEnglishMbtiTab } from './DeepEnglishMbtiTab';
@@ -609,7 +608,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
           >
             <div className="relative w-[52px] h-[52px] rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-indigo-500 to-violet-600 shadow-sm transition-transform duration-200 group-hover:scale-110 active:scale-95">
               <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
-                <Bot className="w-5 h-5 text-cyan-300 group-hover:scale-110 transition-transform" />
+                <img
+                  src="/bot_avatar.jpg"
+                  alt="@uryeo_qa_bot"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                />
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-violet-600 border-[1.5px] border-white flex items-center justify-center text-white text-[6.5px] font-black shadow-sm">AI</div>
             </div>
