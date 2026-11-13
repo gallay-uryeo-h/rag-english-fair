@@ -266,11 +266,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
   // 공식 4대 부스 포스트 그리드 데이터
   const officialPostsList: OfficialPostItem[] = useMemo(() => [
     {
-      id: 'mbti',
-      title: 'MBTI별 본문 추천',
-      imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80',
+      id: 'textbook',
+      title: '3개년 교과서 7권 대공개',
+      imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80',
       tag: '1부스',
-      likes: remoteLikes.mbti,
+      likes: remoteLikes.textbook,
     },
     {
       id: 'vocab',
@@ -280,11 +280,11 @@ export const LiveHomeFeed: React.FC<Props> = ({
       likes: remoteLikes.vocab,
     },
     {
-      id: 'textbook',
-      title: '3개년 교과서 7권 대공개',
-      imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80',
+      id: 'mbti',
+      title: 'MBTI별 본문 추천',
+      imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80',
       tag: '3부스',
-      likes: remoteLikes.textbook,
+      likes: remoteLikes.mbti,
     },
     {
       id: 'seteuk',
@@ -304,12 +304,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
     isTeacher: true,
     posts: [
       {
-        id: 'mbti',
-        imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
-        title: 'MBTI별 본문 추천',
+        id: 'textbook',
+        imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
+        title: '교과서 7권 대공개',
         tag: '#1부스',
-        likes: remoteLikes.mbti,
-        onClick: () => (onSelectGridPost ? onSelectGridPost('mbti') : onScrollTo('mbti')),
+        likes: remoteLikes.textbook,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
       },
       {
         id: 'vocab',
@@ -320,12 +320,12 @@ export const LiveHomeFeed: React.FC<Props> = ({
         onClick: () => (onSelectGridPost ? onSelectGridPost('vocab') : onScrollTo('vocab')),
       },
       {
-        id: 'textbook',
-        imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
-        title: '교과서 7권 대공개',
+        id: 'mbti',
+        imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80',
+        title: 'MBTI별 본문 추천',
         tag: '#3부스',
-        likes: remoteLikes.textbook,
-        onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
+        likes: remoteLikes.mbti,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('mbti') : onScrollTo('mbti')),
       },
       {
         id: 'seteuk',
@@ -837,6 +837,260 @@ export const LiveHomeFeed: React.FC<Props> = ({
               📸 3. 단일 무한 피드 모드 (인라인 아코디언)
               ========================================================================= */}
           <article
+            ref={feedRefs.textbookRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      📚
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_textbook_viewer</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">
+                      171개 섹션 정밀 검증
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 7권 교과서</p>
+                </div>
+              </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('textbook')} className="cursor-pointer">
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+              alt="도서관 교과서"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
+              onDoubleTap={() => {
+                if (!likedPosts.textbook) toggleLike('textbook');
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+
+              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                  의령여고 3개년 교과서 7권 대공개!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-light">
+                  표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
+                </p>
+              </div>
+            </PinchablePhoto>
+            </div>
+
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('textbook')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.textbook ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('textbook')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('textbook')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.textbook ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {remoteLikes.textbook.toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
+                <span className="text-slate-800">
+                  공통영어부터 심화영어까지, 171개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
+                </span>
+              </div>
+
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('textbook')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
+                      {expandedSections.textbook ? '7권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">
+                    <span>{expandedSections.textbook ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+              </div>
+
+              {/* 🌟 아코디언 인라인 교과서 뷰어 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.textbook && (
+                <div className="mt-2.5 border border-emerald-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <TextbookBrowse2Layer onOpenImage={onOpenImage} />
+                </div>
+              )}
+
+              {/* 💬 단일 공통 댓글 모듈 */}
+              <PostCommentsSection
+                postId="textbook"
+                currentUser={currentUser}
+                isAnyAdmin={isAnyAdmin}
+                onOpenProfile={handleOpenParticipantProfile}
+                onRequireLogin={() => setIsProfileModalOpen(true)}
+                avatarGradient="from-emerald-500 to-teal-500"
+              />
+            </div>
+          </article>
+
+          <article
+            ref={feedRefs.vocabRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-purple-500 via-indigo-600 to-blue-500">
+                  <div className="w-full h-full rounded-full bg-white p-0.5">
+                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
+                      🎧
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_audio_vocab</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">
+                      원어민 TTS 챌린지
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 7권 35세트</p>
+                </div>
+              </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('vocab')} className="cursor-pointer">
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+              alt="영어 듣기와 단어 퀴즈"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
+              onDoubleTap={() => {
+                if (!likedPosts.vocab) toggleLike('vocab');
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+
+              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                  단어 미리보기
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
+                  1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
+                </p>
+              </div>
+            </PinchablePhoto>
+            </div>
+
+            <div className="px-3.5 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4 text-slate-800">
+                  <button onClick={() => toggleLike('vocab')} className="transition-transform active:scale-125">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.vocab ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                        }`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('vocab')} className="hover:text-slate-600">
+                    <MessageCircle className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('링크가 복사되었습니다!');
+                    }}
+                    className="hover:text-slate-600"
+                  >
+                    <Send className="w-6 h-6" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('vocab')}>
+                  <Bookmark className={`w-6 h-6 ${savedPosts.vocab ? 'fill-slate-900 text-slate-900' : ''}`} />
+                </button>
+              </div>
+              <div className="pt-2 text-xs font-bold text-slate-900">
+                좋아요 {remoteLikes.vocab.toLocaleString()}개
+              </div>
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_audio_vocab</span>
+                <span className="text-slate-800">
+                  눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
+                </span>
+              </div>
+
+              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
+              <div className="pt-2.5 pb-1">
+                <button
+                  onClick={() => onToggleSection('vocab')}
+                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600">
+                      {expandedSections.vocab ? '단어 퀴즈 뷰어 접기' : '단어 소리 퀴즈 시작하기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-purple-600">
+                    <span>{expandedSections.vocab ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+              </div>
+
+              {/* 🌟 아코디언 인라인 단어 퀴즈창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
+              {expandedSections.vocab && (
+                <div className="mt-2.5 border border-purple-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <VocabListenTab />
+                </div>
+              )}
+
+              {/* 💬 단일 공통 댓글 모듈 */}
+              <PostCommentsSection
+                postId="vocab"
+                currentUser={currentUser}
+                isAnyAdmin={isAnyAdmin}
+                onOpenProfile={handleOpenParticipantProfile}
+                onRequireLogin={() => setIsProfileModalOpen(true)}
+                avatarGradient="from-purple-500 to-indigo-500"
+              />
+            </div>
+          </article>
+
+          <article
             ref={feedRefs.mbtiRef}
             className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
           >
@@ -965,269 +1219,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
           </article>
 
-          {/* =========================================================================
-          📸 3. 인피드 아코디언 포스트 2: 소리 단어 퀴즈 (Vocab Listen)
-          ========================================================================= */}
-          <article
-            ref={feedRefs.vocabRef}
-            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-          >
-            <div className="flex items-center justify-between px-3.5 py-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-purple-500 via-indigo-600 to-blue-500">
-                  <div className="w-full h-full rounded-full bg-white p-0.5">
-                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                      🎧
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-900">ur_audio_vocab</span>
-                    <span className="w-1 h-1 rounded-full bg-slate-400" />
-                    <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">
-                      원어민 TTS 챌린지
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 7권 35세트</p>
-                </div>
-              </div>
-              <button className="text-slate-400 p-1">
-                <MoreHorizontal className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
-            <div onClick={() => onToggleSection('vocab')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
-              alt="영어 듣기와 단어 퀴즈"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
-              onDoubleTap={() => {
-                if (!likedPosts.vocab) toggleLike('vocab');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
-
-              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-                  단어 미리보기
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
-                  1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
-                </p>
-              </div>
-            </PinchablePhoto>
-            </div>
-
-            <div className="px-3.5 pt-3 pb-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-slate-800">
-                  <button onClick={() => toggleLike('vocab')} className="transition-transform active:scale-125">
-                    <Heart
-                      className={`w-6 h-6 ${likedPosts.vocab ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                        }`}
-                    />
-                  </button>
-                  <button onClick={() => onToggleSection('vocab')} className="hover:text-slate-600">
-                    <MessageCircle className="w-6 h-6" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard?.writeText(window.location.href);
-                      alert('링크가 복사되었습니다!');
-                    }}
-                    className="hover:text-slate-600"
-                  >
-                    <Send className="w-6 h-6" />
-                  </button>
-                </div>
-                <button onClick={() => toggleSave('vocab')}>
-                  <Bookmark className={`w-6 h-6 ${savedPosts.vocab ? 'fill-slate-900 text-slate-900' : ''}`} />
-                </button>
-              </div>
-              <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {remoteLikes.vocab.toLocaleString()}개
-              </div>
-              <div className="pt-1 text-xs">
-                <span className="font-bold text-slate-900 mr-2">ur_audio_vocab</span>
-                <span className="text-slate-800">
-                  눈으로만 외우는 단어는 이제 그만! 원어민 발음을 듣고 만점에 도전해 보세요. 🎧
-                </span>
-              </div>
-
-              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-              <div className="pt-2.5 pb-1">
-                <button
-                  onClick={() => onToggleSection('vocab')}
-                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-purple-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-purple-500" />
-                    <span className="text-xs font-bold text-slate-800 group-hover:text-purple-600">
-                      {expandedSections.vocab ? '단어 퀴즈 뷰어 접기' : '단어 소리 퀴즈 시작하기'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-purple-600">
-                    <span>{expandedSections.vocab ? '닫기' : '펼쳐보기'}</span>
-                    {expandedSections.vocab ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </div>
-                </button>
-              </div>
-
-              {/* 🌟 아코디언 인라인 단어 퀴즈창 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-              {expandedSections.vocab && (
-                <div className="mt-2.5 border border-purple-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-                  <VocabListenTab />
-                </div>
-              )}
-
-              {/* 💬 단일 공통 댓글 모듈 */}
-              <PostCommentsSection
-                postId="vocab"
-                currentUser={currentUser}
-                isAnyAdmin={isAnyAdmin}
-                onOpenProfile={handleOpenParticipantProfile}
-                onRequireLogin={() => setIsProfileModalOpen(true)}
-                avatarGradient="from-purple-500 to-indigo-500"
-              />
-            </div>
-          </article>
-
-          {/* =========================================================================
-          📸 4. 인피드 아코디언 포스트 3: 3×2 교과서 탐색 (Textbook Showcase)
-          ========================================================================= */}
-          <article
-            ref={feedRefs.textbookRef}
-            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-          >
-            <div className="flex items-center justify-between px-3.5 py-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500">
-                  <div className="w-full h-full rounded-full bg-white p-0.5">
-                    <div className="w-full h-full rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold">
-                      📚
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-900">ur_textbook_viewer</span>
-                    <span className="w-1 h-1 rounded-full bg-slate-400" />
-                    <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded">
-                      171개 섹션 정밀 검증
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 7권 교과서</p>
-                </div>
-              </div>
-              <button className="text-slate-400 p-1">
-                <MoreHorizontal className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
-            <div onClick={() => onToggleSection('textbook')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
-              alt="도서관 교과서"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
-              onDoubleTap={() => {
-                if (!likedPosts.textbook) toggleLike('textbook');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
-
-              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-                  의령여고 3개년 교과서 7권 대공개!
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-light">
-                  표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
-                </p>
-              </div>
-            </PinchablePhoto>
-            </div>
-
-            <div className="px-3.5 pt-3 pb-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-slate-800">
-                  <button onClick={() => toggleLike('textbook')} className="transition-transform active:scale-125">
-                    <Heart
-                      className={`w-6 h-6 ${likedPosts.textbook ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                        }`}
-                    />
-                  </button>
-                  <button onClick={() => onToggleSection('textbook')} className="hover:text-slate-600">
-                    <MessageCircle className="w-6 h-6" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard?.writeText(window.location.href);
-                      alert('링크가 복사되었습니다!');
-                    }}
-                    className="hover:text-slate-600"
-                  >
-                    <Send className="w-6 h-6" />
-                  </button>
-                </div>
-                <button onClick={() => toggleSave('textbook')}>
-                  <Bookmark className={`w-6 h-6 ${savedPosts.textbook ? 'fill-slate-900 text-slate-900' : ''}`} />
-                </button>
-              </div>
-              <div className="pt-2 text-xs font-bold text-slate-900">
-                좋아요 {remoteLikes.textbook.toLocaleString()}개
-              </div>
-              <div className="pt-1 text-xs">
-                <span className="font-bold text-slate-900 mr-2">ur_textbook_viewer</span>
-                <span className="text-slate-800">
-                  공통영어부터 심화영어까지, 171개 모든 파트의 학습 내용이 100% 정밀 검증되어 있습니다.
-                </span>
-              </div>
-
-              {/* 🌟 설명 텍스트 아래에 배치된 내용 펼치기(아코디언 토글) 바 */}
-              <div className="pt-2.5 pb-1">
-                <button
-                  onClick={() => onToggleSection('textbook')}
-                  className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 transition-all cursor-pointer group"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
-                      {expandedSections.textbook ? '7권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">
-                    <span>{expandedSections.textbook ? '닫기' : '펼쳐보기'}</span>
-                    {expandedSections.textbook ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </div>
-                </button>
-              </div>
-
-              {/* 🌟 아코디언 인라인 교과서 뷰어 (설명 텍스트 및 토글 버튼 아래에서 열림) */}
-              {expandedSections.textbook && (
-                <div className="mt-2.5 border border-emerald-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
-                  <TextbookBrowse2Layer onOpenImage={onOpenImage} />
-                </div>
-              )}
-
-              {/* 💬 단일 공통 댓글 모듈 */}
-              <PostCommentsSection
-                postId="textbook"
-                currentUser={currentUser}
-                isAnyAdmin={isAnyAdmin}
-                onOpenProfile={handleOpenParticipantProfile}
-                onRequireLogin={() => setIsProfileModalOpen(true)}
-                avatarGradient="from-emerald-500 to-teal-500"
-              />
-            </div>
-          </article>
-
-          {/* =========================================================================
-          📸 5. 인피드 아코디언 포스트 4: 세특 발전소 (Seteuk Generator)
-          ========================================================================= */}
           <article
             ref={feedRefs.seteukRef}
             className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
