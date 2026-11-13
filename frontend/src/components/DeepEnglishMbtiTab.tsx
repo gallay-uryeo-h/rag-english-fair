@@ -893,14 +893,9 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
 
           {/* 질문 본문 */}
           <div className="space-y-1.5 py-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-purple-600 uppercase tracking-wider">
-                Question {currentQ.id}
-              </span>
-              <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
-                {currentQ.axis}
-              </span>
-            </div>
+            <span className="text-[11px] font-bold text-purple-600 uppercase tracking-wider">
+              Question {currentQ.id}
+            </span>
             <h3 className="text-base md:text-lg font-bold text-slate-800 leading-snug">
               {currentQ.question}
             </h3>
@@ -922,9 +917,6 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
               <div className="text-sm font-bold text-slate-800 group-hover:text-purple-950 leading-relaxed">
                 {currentQ.optionA.text}
               </div>
-              <div className="text-xs text-slate-500 font-normal">
-                ↳ {currentQ.optionA.subText}
-              </div>
             </button>
 
             <button
@@ -939,9 +931,6 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
               </div>
               <div className="text-sm font-bold text-slate-800 group-hover:text-purple-950 leading-relaxed">
                 {currentQ.optionB.text}
-              </div>
-              <div className="text-xs text-slate-500 font-normal">
-                ↳ {currentQ.optionB.subText}
               </div>
             </button>
           </div>
