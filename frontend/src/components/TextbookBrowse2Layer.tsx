@@ -382,10 +382,10 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
   {
     id: '심화영어',
     grade: '3학년',
-    semester: '3학기',
+    semester: '2학기',
     title: '심화영어',
     publisher: 'YBM (김명희)',
-    coverImage: '/pages_cache/3학년_3학기_심화영어_YBM_p1.jpg',
+    coverImage: '/pages_cache/3학년_2학기_심화영어_YBM_p1.jpg',
     badgeBg: 'bg-fuchsia-100 text-fuchsia-800',
     accentColor: 'from-fuchsia-600 to-purple-700',
     unitsCount: 5,
@@ -399,7 +399,7 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
         passageTitle: 'My Journey in Singapore',
         passageSummary: '싱가포르 교환학생 경험을 통해 다양한 인종과 문화가 공존하는 사회의 아름다움과 문화적 차이를 이해하는 태도를 배웁니다.',
         startPage: 16,
-        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p16.jpg',
+        imagePath: 'pages_cache/3학년_2학기_심화영어_YBM_p16.jpg',
         careerTag: '국제문화 · 외교 · 글로벌비즈니스',
       },
       {
@@ -409,7 +409,7 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
         passageTitle: 'The Neuroscience of Procrastination',
         passageSummary: '미루는 행동(Procrastination)이 단순한 게으름이 아닌 뇌의 스트레스 반응임을 신경과학으로 풀어내고, 전전두엽 조절 전략을 통해 습관을 바꾸는 법을 배웁니다.',
         startPage: 42,
-        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p42.jpg',
+        imagePath: 'pages_cache/3학년_2학기_심화영어_YBM_p42.jpg',
         careerTag: '뇌과학 · 임상심리 · 행동경제학',
       },
       {
@@ -419,7 +419,7 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
         passageTitle: 'The Future of Humanity: Collaboration between Humans and AI',
         passageSummary: 'AI가 대체가 아닌 창의성 확장 도구임을 논하고, 의료·교육 분야에의 AI 적용 가능성을 탐구합니다.',
         startPage: 68,
-        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p68.jpg',
+        imagePath: 'pages_cache/3학년_2학기_심화영어_YBM_p68.jpg',
         careerTag: 'AI인공지능 · 의료기술 · 창의예술',
       },
       {
@@ -429,7 +429,7 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
         passageTitle: 'A New Economic Paradigm: Doughnut Economics',
         passageSummary: 'Kate Raworth의 도넛 경제 모델을 통해 성장 중심 패러다임을 넘어서는 대안적 경제·생태 시스템을 탐구합니다.',
         startPage: 94,
-        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p94.jpg',
+        imagePath: 'pages_cache/3학년_2학기_심화영어_YBM_p94.jpg',
         careerTag: '환경경제학 · 지속가능발전 · 도시재생',
       },
       {
@@ -439,7 +439,7 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
         passageTitle: 'A Long Walk to Water (소설 발췌)',
         passageSummary: '1985년 남수단 소년 살바(Salva)의 피난 여정과 2008년 소녀 냐(Nya)의 물 부족 문제를 엮은 소설로, 한 사람의 실천이 세상을 바꾸는 국제 협력의 힘을 배웁니다.',
         startPage: 120,
-        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p120.jpg',
+        imagePath: 'pages_cache/3학년_2학기_심화영어_YBM_p120.jpg',
         careerTag: '국제개발 · NGO활동 · 사회적기업',
       },
     ],

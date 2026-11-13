@@ -70,12 +70,12 @@ PURE_READING_PASSAGES = [
     ("세계 문화와 영어 (3학년 1학기 · 비상 권혁승)", 99, "Culture Spectrum", "The World Unites over Coffee: A Cultural Journey", 148, 153),
 
     # 7. 심화영어 (YBM 김명희)
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 1, "Lesson 1: Embracing Diversity", "My Journey in Singapore", 16, 21),
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 2, "Lesson 2: Why We Do What We Do", "The Neuroscience of Procrastination", 42, 47),
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 3, "Lesson 3: Paint the Future with AI", "Collaboration between Humans and AI", 68, 73),
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 4, "Lesson 4: Save the Planet, Save Humans", "A New Economic Paradigm: Doughnut Economics", 94, 99),
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 5, "Lesson 5: Global Efforts, One Step at a Time", "A Long Walk to Water (Salva & Nya in Sudan)", 120, 126),
-    ("심화영어 (3학년 3학기 · YBM 김명희)", 6, "Further Reading: Neuroplasticity & AI", "Neuroplasticity: The Adaptable Brain", 145, 149),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 1, "Lesson 1: Embracing Diversity", "My Journey in Singapore", 16, 21),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 2, "Lesson 2: Why We Do What We Do", "The Neuroscience of Procrastination", 42, 47),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 3, "Lesson 3: Paint the Future with AI", "Collaboration between Humans and AI", 68, 73),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 4, "Lesson 4: Save the Planet, Save Humans", "A New Economic Paradigm: Doughnut Economics", 94, 99),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 5, "Lesson 5: Global Efforts, One Step at a Time", "A Long Walk to Water (Salva & Nya in Sudan)", 120, 126),
+    ("심화영어 (3학년 2학기 · YBM 김명희)", 6, "Further Reading: Neuroplasticity & AI", "Neuroplasticity: The Adaptable Brain", 145, 149),
 ]
 
 print(f"\n정의된 총 순수 본문 수: {len(PURE_READING_PASSAGES)}편")
