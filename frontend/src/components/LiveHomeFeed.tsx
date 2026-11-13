@@ -43,6 +43,7 @@ import type { ProfileViewData, OfficialPostItem } from './UserProfileViewModal';
 import { InstagramDmChatModal } from './InstagramDmChatModal';
 import { FeedPhotoModal } from './FeedPhotoModal';
 import { PostCommentsSection } from './PostCommentsSection';
+import { PinchablePhoto } from './PinchablePhoto';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -897,21 +898,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </button>
             </div>
 
-            {/* 포스트 메인 히어로 카드 (실제 고화질 배경 사진 적용) */}
-            <div
-              onClick={() => onToggleSection('mbti')}
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
+              alt="영어 공부와 성향 탐색"
               className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
+              onDoubleTap={() => {
+                if (!likedPosts.mbti) toggleLike('mbti');
+              }}
+              onClick={() => onToggleSection('mbti')}
             >
-              {/* 고화질 사진 배경 + 어두운 오버레이 */}
-              <img
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
-                alt="영어 공부와 성향 탐색"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1.5 relative z-10 pt-4">
+              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
                 <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
                   MBTI별 본문 추천
                 </h3>
@@ -919,7 +919,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
                 </p>
               </div>
-            </div>
+            </PinchablePhoto>
 
             {/* 포스트 소셜 바 */}
             <div className="px-3.5 pt-3 pb-2">
@@ -1028,20 +1028,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </button>
             </div>
 
-            {/* 포스트 메인 히어로 카드 (헤드폰/오디오 고화질 사진 배경) */}
-            <div
-              onClick={() => onToggleSection('vocab')}
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+              alt="영어 듣기와 단어 퀴즈"
               className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
+              onDoubleTap={() => {
+                if (!likedPosts.vocab) toggleLike('vocab');
+              }}
+              onClick={() => onToggleSection('vocab')}
             >
-              <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
-                alt="영어 듣기와 단어 퀴즈"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1.5 relative z-10 pt-4">
+              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
                 <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
                   단어 미리보기
                 </h3>
@@ -1049,7 +1049,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
                 </p>
               </div>
-            </div>
+            </PinchablePhoto>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1157,19 +1157,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </button>
             </div>
 
-            <div
-              onClick={() => onToggleSection('textbook')}
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+              alt="도서관 교과서"
               className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
+              onDoubleTap={() => {
+                if (!likedPosts.textbook) toggleLike('textbook');
+              }}
+              onClick={() => onToggleSection('textbook')}
             >
-              <img
-                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
-                alt="도서관 교과서"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1 relative z-10 pt-4">
+              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
                 <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
                   의령여고 3개년 교과서 6권 대공개!
                 </h3>
@@ -1177,7 +1178,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
                 </p>
               </div>
-            </div>
+            </PinchablePhoto>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1285,19 +1286,20 @@ export const LiveHomeFeed: React.FC<Props> = ({
               </button>
             </div>
 
-            <div
-              onClick={() => onToggleSection('seteuk')}
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <PinchablePhoto
+              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
+              alt="노트 공부 세특"
               className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
+              onDoubleTap={() => {
+                if (!likedPosts.seteuk) toggleLike('seteuk');
+              }}
+              onClick={() => onToggleSection('seteuk')}
             >
-              <img
-                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
-                alt="노트 공부 세특"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1 relative z-10 pt-4">
+              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
                 <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
                   교과서 지문이 나만의 세특 치트키로 변신!
                 </h3>
@@ -1305,7 +1307,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
                 </p>
               </div>
-            </div>
+            </PinchablePhoto>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1496,29 +1498,35 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   </div>
                 </div>
 
-                {/* 피드 사진: 인스타그램 스타일 (클릭 시 확대 팝업 지원) */}
+                {/* 피드 사진: 인스타그램 2지 핀치 줌 & 더블탭 좋아요 */}
                 <div
-                  onClick={() =>
-                    handleOpenPhotoZoom(
-                      post.photoUrl,
-                      post.authorName,
-                      post.avatar,
-                      post.caption,
-                      isOfficialAccount(post.authorName)
-                    )
-                  }
                   className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
-                  title="클릭하여 확대해서 보기"
+                  style={{ touchAction: 'pan-y' }}
                 >
-                  <img
+                  <PinchablePhoto
                     src={post.photoUrl}
                     alt="게시물 사진"
-                    className="w-full max-h-[580px] object-contain transition-transform duration-300 group-hover:scale-[1.015]"
-                    loading="lazy"
-                  />
-                  <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
-                    <span>🔍 탭하여 확대</span>
-                  </div>
+                    className="w-full max-h-[580px] flex items-center justify-center"
+                    imageClassName="max-h-[580px] object-contain transition-transform duration-300 group-hover:scale-[1.015]"
+                    onDoubleTap={() => {
+                      if (!isLiked) {
+                        toggleUserPostLikeHandler(post.id);
+                      }
+                    }}
+                    onClick={() =>
+                      handleOpenPhotoZoom(
+                        post.photoUrl,
+                        post.authorName,
+                        post.avatar,
+                        post.caption,
+                        isOfficialAccount(post.authorName)
+                      )
+                    }
+                  >
+                    <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+                      <span>🔍 핀치 확대 · 더블탭 ❤️</span>
+                    </div>
+                  </PinchablePhoto>
                 </div>
 
                 {/* 소셜 액션 바 */}
