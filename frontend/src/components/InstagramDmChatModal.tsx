@@ -27,19 +27,19 @@ interface Props {
 }
 
 const STUDENT_QUESTIONS = [
-  '중학교 영어랑 고등학교 영어는 어떻게 다른가요?',
-  '중학교 때 영어를 잘 못했어도 의령여고에서 잘할 수 있을까요?',
-  '수행평가는 주로 어떤 방식으로 진행되나요?',
-  '영어 관련 동아리나 재미있는 학교 행사가 있나요?',
-  '의령여고 영어 교과서 6권은 어떤 과목들인가요?',
+  '2022 개정 고교 영어과는 어떤 과목들을 배우나요?',
+  '고교학점제에서 영어 과목 학점 이수 기준(미이수 제도)은 무엇인가요?',
+  '중학교 영어와 고등학교 1학년 공통영어는 난이도가 얼마나 다른가요?',
+  '일반선택, 진로선택, 융합선택 과목은 어떤 기준으로 골라야 하나요?',
+  '고등학교 영어 수행평가와 세특(세부능력특기사항)은 어떻게 준비하나요?',
 ];
 
 const PARENT_QUESTIONS = [
-  '2028 대입 개편안(내신 5등급제)에서 영어과는 어떻게 대비하나요?',
-  '학생부 세특(세부능력 및 특기사항)은 어떻게 밀착 관리되나요?',
-  '수능 절대평가 1등급을 위한 의령여고의 커리큘럼은 어떤가요?',
-  '일반선택과 진로선택 과목의 평가 방식 차이가 궁금합니다.',
-  '영어 시수가 고교 3개년간 어떻게 배정되나요?',
+  '2028 대입 개편안(내신 5등급제)에서 고교 영어 평가는 어떻게 산출되나요?',
+  '고등학교마다 영어 선택과목 개설과 이수 학년이 다른가요?',
+  '진로선택·융합선택 과목도 상대평가 5등급이 함께 표기되나요?',
+  '학생부종합전형에서 대학은 영어 과목 이수와 세특을 어떻게 평가하나요?',
+  '예비 고1 자녀의 성공적인 고교 영어 적응을 위해 학부모가 도울 점은?',
 ];
 
 export const InstagramDmChatModal: React.FC<Props> = ({
@@ -53,7 +53,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
-      text: '안녕하세요! 의령여고 영어 교육과정 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n의령여고 3개년 영어 교과서, 2028 내신 5등급제 대비, 수행평가, 세특 보고서, 학교생활 등 무엇이든 편하게 물어보세요! 아래 추천 질문을 누르시면 바로 답변을 들으실 수 있습니다.\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
+      text: '안녕하세요! 2026 고교학점제 박람회 영어과 부스 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n2022 개정 고교 영어 교육과정, 선택과목(일반·진로·융합), 2028 내신 5등급제, 교과서 특성 및 세특 준비 등 무엇이든 편하게 물어보세요! 아래 추천 질문을 누르시면 바로 답변을 확인하실 수 있습니다.\n\n*(ℹ️ **안내**: 본 챗봇의 정보는 2022 개정 국가 교육과정과 일반 검색으로 확인 가능한 공통 기준을 바탕으로 안내되며, 특정 학교의 고유 규정이 아닙니다. 실제 개설 과목과 세부 운영은 진학하시는 각 고등학교의 교육과정 편제표를 확인하시기 바랍니다)*\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
       timestamp: '방금',
     },
   ]);
@@ -387,7 +387,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="의령여고 영어과에 대해 메시지 보내기..."
+              placeholder="고교 영어 교육과정, 과목 선택, 5등급제 등 질문하기..."
               className="flex-1 bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
               disabled={loading}
             />
@@ -401,8 +401,8 @@ export const InstagramDmChatModal: React.FC<Props> = ({
               <Send className="w-3.5 h-3.5" />
             </button>
           </div>
-          <p className="text-[10px] text-slate-400 text-center mt-1.5">
-            입력하신 질문은 4컷사진 부스 맞춤 추천 및 박람회 통계 분석에 활용됩니다.
+          <p className="text-[10px] text-slate-400 text-center mt-1.5 leading-tight">
+            본 정보는 2022 개정 교육과정 공통 기준이며 특정 고교 고유 규정이 아닙니다. (질문은 통계 분석에 활용됩니다)
           </p>
         </form>
       </div>
