@@ -15,7 +15,6 @@ interface Props {
   allPosts: FsUserPost[];
   allComments: FsComment[];
   onOpenQr?: () => void;
-  onOpenPhotoboothKiosk?: () => void;
   onOpenAdminManager?: () => void;
   isAnyAdmin?: boolean;
 }
@@ -25,7 +24,6 @@ export const PhotoMissionTracker: React.FC<Props> = ({
   allPosts,
   allComments,
   onOpenQr,
-  onOpenPhotoboothKiosk,
   onOpenAdminManager,
   isAnyAdmin,
 }) => {
@@ -141,18 +139,6 @@ export const PhotoMissionTracker: React.FC<Props> = ({
               </button>
             )}
 
-            {/* 관리자 전용: 부스 태블릿 키오스크 바로가기 */}
-            {isAnyAdmin && onOpenPhotoboothKiosk && (
-              <button
-                onClick={onOpenPhotoboothKiosk}
-                className="text-[11px] font-medium px-2 py-1 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-900 transition-colors cursor-pointer flex items-center gap-1"
-                title="포토부스 촬영 키오스크 모드 열기 (관리자/부스 운영용)"
-              >
-                <Camera className="w-3 h-3 text-pink-400" />
-                <span>촬영기</span>
-              </button>
-            )}
-
             {/* 관리자 설정 열기 */}
             {isAnyAdmin && onOpenAdminManager && (
               <button
@@ -170,11 +156,10 @@ export const PhotoMissionTracker: React.FC<Props> = ({
         <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-amber-200/50">
           {/* 미션 1: 피드 작성 */}
           <div
-            className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition-colors ${
-              isPostComplete
+            className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition-colors ${isPostComplete
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold'
                 : 'bg-white/80 text-slate-700 border border-slate-200/80'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-1.5">
               {isPostComplete ? (
@@ -191,11 +176,10 @@ export const PhotoMissionTracker: React.FC<Props> = ({
 
           {/* 미션 2: 댓글 작성 */}
           <div
-            className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition-colors ${
-              isCommentComplete
+            className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition-colors ${isCommentComplete
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold'
                 : 'bg-white/80 text-slate-700 border border-slate-200/80'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-1.5">
               {isCommentComplete ? (
@@ -216,11 +200,10 @@ export const PhotoMissionTracker: React.FC<Props> = ({
           {userTicket ? (
             <button
               onClick={() => setIsQrModalOpen(true)}
-              className={`w-full py-2 px-3 rounded-xl text-xs font-bold shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition-all ${
-                userTicket.status === 'used'
+              className={`w-full py-2 px-3 rounded-xl text-xs font-bold shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition-all ${userTicket.status === 'used'
                   ? 'bg-slate-100 text-slate-600 border border-slate-200'
                   : 'bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white hover:brightness-105 active:scale-98 animate-pulse'
-              }`}
+                }`}
             >
               <QrCode className="w-4 h-4" />
               {userTicket.status === 'used' ? (

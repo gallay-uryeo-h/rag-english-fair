@@ -33,7 +33,7 @@ interface Props {
   onClose: () => void;
   allPosts: FsUserPost[];
   allComments: FsComment[];
-  onOpenPhotoboothKiosk: () => void;
+  onOpenPhotoboothKiosk?: () => void;
 }
 
 export const AdminMissionManagerModal: React.FC<Props> = ({
@@ -41,7 +41,6 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   onClose,
   allPosts,
   allComments,
-  onOpenPhotoboothKiosk,
 }) => {
   const [activeTab, setActiveTab] = useState<'settings' | 'participants'>('participants');
   const [settings, setSettings] = useState<MissionSettings>(DEFAULT_MISSION_SETTINGS);
@@ -265,13 +264,6 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={onOpenPhotoboothKiosk}
-              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>부스 키오스크 열기</span>
-            </button>
             <button
               onClick={onClose}
               className="p-1.5 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
