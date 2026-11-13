@@ -694,6 +694,70 @@ export async function deletePhotoTicket(ticketDocId: string): Promise<void> {
   await deleteDoc(ref);
 }
 
+// ════════════════════════════════════════════════════════════════════════════════
+// 사용자 활동 (UserActivity) — 인생네컷 스티커 추천용
+// 문서 ID: activity_{username}  /  type: 'user_activity'
+// ════════════════════════════════════════════════════════════════════════════════
 
+export interface UserActivityDoc {
+  type: 'user_activity';
+  username: string;
+  displayName?: string;
+  mbti?: string;
+  careerField?: string;
+  favoriteCourse?: string;
+  lastTag?: string;
+  feedCount?: number;
+  updatedAt?: unknown;
+}
 
+function activityDocId(username: string): string {
+  return `activity_${username.trim().toLowerCase()}`;
+}
 
+/**
+ * 사용자 활동 데이터를 Firestore에 저장(머지)합니다.
+ */
+export async function saveUserActivity(
+  username: string,
+  updates: Partial<Omit<UserActivityDoc, 'type' | 'username'>>
+): Promise<void> {
+  const ref = doc(db, COLLECTION, activityDocId(username));
+  await setDoc(
+    ref,
+    {
+      type: 'user_activity',
+      username: username.trim().toLowerCase(),
+      ...updates,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
+/**
+ * 사용자 활동 데이터를 한 번 읽어옵니다.
+ */
+export async function getUserActivity(username: string): Promise<UserActivityDoc | null> {
+  const ref = doc(db, COLLECTION, activityDocId(username));
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return null;
+  return snap.data() as UserActivityDoc;
+}
+
+/**
+ * 사용자 활동 데이터를 실시간으로 구독합니다.
+ */
+export function subscribeUserActivity(
+  username: string,
+  callback: (data: UserActivityDoc | null) => void
+): () => void {
+  const ref = doc(db, COLLECTION, activityDocId(username));
+  return onSnapshot(ref, (snap) => {
+    if (!snap.exists()) {
+      callback(null);
+    } else {
+      callback(snap.data() as UserActivityDoc);
+    }
+  });
+}

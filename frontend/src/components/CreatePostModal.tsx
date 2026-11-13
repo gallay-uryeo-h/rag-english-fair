@@ -9,7 +9,7 @@ import {
   Check,
 } from 'lucide-react';
 import type { UserProfile } from '../utils/userProfile';
-import { addUserPost } from '../services/firestoreService';
+import { addUserPost, saveUserActivity } from '../services/firestoreService';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
 import { PhotoPickerButtons } from './PhotoPickerButtons';
 import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
@@ -130,6 +130,12 @@ export const CreatePostModal: React.FC<Props> = ({
       // 🌟 alert 팝업 없이 즉시 모달 닫기 & 해당 피드로 부드럽게 스크롤
       onClose();
       onPostCreated?.(newPostId);
+
+      // 활동 기록: 마지막 선택 태그를 Firestore에 저장
+      saveUserActivity(currentUser.username, {
+        lastTag: selectedTag,
+        displayName: currentUser.displayName,
+      }).catch(console.error);
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('피드 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');

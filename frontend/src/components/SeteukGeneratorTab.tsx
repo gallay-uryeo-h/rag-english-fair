@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Lightbulb, BookOpen, FileText, ExternalLink } from 'lucide-react';
+import { getUserProfile } from '../utils/userProfile';
+import { saveUserActivity } from '../services/firestoreService';
 
 interface Props {
   onOpenImage: (title: string, url: string) => void;
@@ -100,6 +102,18 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
 
   const cat = SETEUK_DATA[selectedCategory];
 
+  const handleSelectCategory = (idx: number) => {
+    setSelectedCategory(idx);
+    // 활동 기록: 진로 카테고리 선택을 Firestore에 저장
+    const user = getUserProfile();
+    if (user?.username && SETEUK_DATA[idx]) {
+      saveUserActivity(user.username, {
+        careerField: SETEUK_DATA[idx].name,
+        displayName: user.displayName,
+      }).catch(console.error);
+    }
+  };
+
   return (
     <div className="flex-1 overflow-y-auto space-y-3 w-full">
       {/* 상단 배너 */}
@@ -121,7 +135,7 @@ export const SeteukGeneratorTab: React.FC<Props> = ({ onOpenImage }) => {
         {SETEUK_DATA.map((item, idx) => (
           <button
             key={idx}
-            onClick={() => setSelectedCategory(idx)}
+            onClick={() => handleSelectCategory(idx)}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
               selectedCategory === idx
                 ? 'bg-amber-500 text-white shadow-xs'

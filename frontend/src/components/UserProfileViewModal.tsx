@@ -12,6 +12,7 @@ import {
   Camera,
   ExternalLink,
   Trash2,
+  QrCode,
 } from 'lucide-react';
 import type { FsUserPost } from '../services/firestoreService';
 
@@ -42,6 +43,7 @@ interface Props {
   onSelectPost: (postId: string) => void;
   onSelectOfficialPost?: (postId: string) => void;
   onEditProfile?: () => void;
+  onOpenQr?: () => void;
   onCreatePost?: () => void;
   canManageAccounts?: boolean;
   onDeleteAccount?: (username: string) => void;
@@ -57,6 +59,7 @@ export const UserProfileViewModal: React.FC<Props> = ({
   onSelectPost,
   onSelectOfficialPost,
   onEditProfile,
+  onOpenQr,
   onCreatePost,
   canManageAccounts = false,
   onDeleteAccount,
@@ -217,6 +220,17 @@ export const UserProfileViewModal: React.FC<Props> = ({
                 >
                   <Plus className="w-3.5 h-3.5 stroke-3" />
                   <span>새 피드 올리기</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onClose();
+                    onOpenQr?.();
+                  }}
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs border border-indigo-200 transition-colors cursor-pointer"
+                  title="인생네컷 여권 QR"
+                >
+                  <QrCode className="w-3.5 h-3.5" />
+                  <span>여권 QR</span>
                 </button>
                 <button
                   onClick={() => {

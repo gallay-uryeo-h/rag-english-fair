@@ -49,6 +49,7 @@ import { AiCustomSeteukLab } from './AiCustomSeteukLab';
 import { PhotoMissionTracker } from './PhotoMissionTracker';
 import { AdminMissionManagerModal } from './AdminMissionManagerModal';
 import { PhotoboothKioskModal } from './PhotoboothKioskModal';
+import { UserQrModal } from './UserQrModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -139,6 +140,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
   // ─── 🎫 포토부스 키오스크 & 관리자 미션 모달 상태 ─────────────────────────────
   const [isPhotoboothOpen, setIsPhotoboothOpen] = useState(false);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [isAdminMissionOpen, setIsAdminMissionOpen] = useState(false);
 
   // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
@@ -1785,6 +1787,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
         }}
         canManageAccounts={isOfficialAdmin}
         onDeleteAccount={handleDeleteUserAccount}
+        onOpenQr={() => setIsQrModalOpen(true)}
       />
 
       {/* 🤖 인스타그램 1:1 DM 스타일 Q&A 챗봇 모달 */}
@@ -1797,6 +1800,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
       <PhotoboothKioskModal
         isOpen={isPhotoboothOpen}
         onClose={() => setIsPhotoboothOpen(false)}
+      />
+
+      {/* 🎫 인생네컷 여권 QR 모달 */}
+      <UserQrModal
+        isOpen={isQrModalOpen}
+        currentUser={currentUser}
+        onClose={() => setIsQrModalOpen(false)}
       />
 
       {/* ⚙️ 교사 관리자 미션 조건 설정 & 참여자 실시간 모니터링 모달 */}

@@ -9,6 +9,8 @@ import {
   Brain,
   Sliders
 } from 'lucide-react';
+import { getUserProfile } from '../utils/userProfile';
+import { saveUserActivity } from '../services/firestoreService';
 
 interface Props {
   onOpenImage: (title: string, url: string) => void;
@@ -833,6 +835,15 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
       const mbtiCode = `${letter1}${letter2}${letter3}${letter4}`;
       const matched = MBTI_16_DATABASE[mbtiCode] || MBTI_16_DATABASE.INTJ;
       setFinalResult(matched);
+
+      // 활동 기록: MBTI 결과를 Firestore에 저장
+      const user = getUserProfile();
+      if (user?.username) {
+        saveUserActivity(user.username, {
+          mbti: mbtiCode,
+          displayName: user.displayName,
+        }).catch(console.error);
+      }
     }
   };
 
