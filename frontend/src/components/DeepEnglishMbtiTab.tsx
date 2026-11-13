@@ -850,13 +850,13 @@ export const DeepEnglishMbtiTab: React.FC<Props> = ({ onOpenImage }) => {
       <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-white p-5 shadow-sm space-y-2 border-b border-purple-800">
         <div className="flex items-center gap-2 text-xs font-semibold bg-white/20 backdrop-blur-xs w-fit px-3 py-1 rounded-full">
           <Brain className="w-3.5 h-3.5 text-amber-300" />
-          <span>의령여고 정통 16대 MBTI 독해 성향 분석</span>
+          <span>MBTI 독해 성향 분석</span>
         </div>
         <h2 className="text-lg md:text-xl font-bold tracking-tight">
-          심층 독해 MBTI & 3개년 교과서 본문 정밀 매칭 🔬
+          독해 MBTI & 3개년 교과서 본문 매칭 🔬
         </h2>
         <p className="text-xs md:text-sm text-purple-100 leading-relaxed">
-          E/I (외향/내향), S/N (감각/직관), T/F (사고/감정), J/P (판단/인식) 정통 4대 축 8문항을 통해 나의 16가지 MBTI 독해 유형을 도출하고 찰떡궁합 교과서 본문을 찾아드립니다!
+          나의 MBTI 독해 유형을 도출하고 찰떡궁합 교과서 본문을 찾아드립니다!
         </p>
       </div>
 
