@@ -662,6 +662,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
         currentUser={currentUser}
         allPosts={userPosts}
         allComments={allComments}
+        onOpenQr={() => setIsQrModalOpen(true)}
         onOpenPhotoboothKiosk={() => setIsPhotoboothOpen(true)}
         onOpenAdminManager={() => setIsAdminMissionOpen(true)}
         isAnyAdmin={isAnyAdmin}

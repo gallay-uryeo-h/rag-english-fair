@@ -14,6 +14,7 @@ interface Props {
   currentUser: UserProfile | null;
   allPosts: FsUserPost[];
   allComments: FsComment[];
+  onOpenQr?: () => void;
   onOpenPhotoboothKiosk?: () => void;
   onOpenAdminManager?: () => void;
   isAnyAdmin?: boolean;
@@ -23,6 +24,7 @@ export const PhotoMissionTracker: React.FC<Props> = ({
   currentUser,
   allPosts,
   allComments,
+  onOpenQr,
   onOpenPhotoboothKiosk,
   onOpenAdminManager,
   isAnyAdmin,
@@ -127,15 +129,27 @@ export const PhotoMissionTracker: React.FC<Props> = ({
           </div>
 
           <div className="flex items-center gap-1.5">
-            {/* 부스 태블릿 키오스크 바로가기 (관리자 또는 부스 운영용) */}
-            {onOpenPhotoboothKiosk && (
+            {/* 🎫 학생 본인 여권 QR 열기 */}
+            {onOpenQr && currentUser && (
+              <button
+                onClick={onOpenQr}
+                className="text-xs font-bold px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-xs transition-all cursor-pointer flex items-center gap-1.5 active:scale-95"
+                title="인생네컷 연동용 여권 QR 열기"
+              >
+                <QrCode className="w-3.5 h-3.5 text-amber-300" />
+                <span>여권 QR</span>
+              </button>
+            )}
+
+            {/* 관리자 전용: 부스 태블릿 키오스크 바로가기 */}
+            {isAnyAdmin && onOpenPhotoboothKiosk && (
               <button
                 onClick={onOpenPhotoboothKiosk}
-                className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition-colors cursor-pointer flex items-center gap-1"
-                title="포토부스 촬영 키오스크 모드 열기"
+                className="text-[11px] font-medium px-2 py-1 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-900 transition-colors cursor-pointer flex items-center gap-1"
+                title="포토부스 촬영 키오스크 모드 열기 (관리자/부스 운영용)"
               >
                 <Camera className="w-3 h-3 text-pink-400" />
-                <span className="hidden sm:inline">부스</span>촬영기
+                <span>촬영기</span>
               </button>
             )}
 
