@@ -61,7 +61,7 @@ export const PostCommentsSection: React.FC<Props> = ({
 
     try {
       setIsSubmitting(true);
-      await addComment(postId, text, currentUser.username);
+      await addComment(postId, text, currentUser.username, currentUser.uid);
       setCommentText('');
       // 새 댓글 등록 시 자동으로 펼쳐서 볼 수 있게 처리
       setIsExpanded(true);

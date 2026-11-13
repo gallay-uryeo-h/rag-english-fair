@@ -35,6 +35,7 @@ export interface FsComment {
   postId: string;
   text: string;
   author: string;
+  authorId?: string;
   timestamp: Date;
 }
 
@@ -43,12 +44,18 @@ export interface FsComment {
 /**
  * 댓글 추가
  */
-export async function addComment(postId: string, text: string, author: string): Promise<void> {
+export async function addComment(
+  postId: string,
+  text: string,
+  author: string,
+  authorId?: string
+): Promise<void> {
   await addDoc(collection(db, COLLECTION), {
     type: 'comment',
     postId,
     text,
     author,
+    authorId: authorId || '',
     timestamp: serverTimestamp(),
   });
 }
@@ -88,6 +95,7 @@ export function subscribeComments(
           postId: data.postId as string,
           text: data.text as string,
           author: data.author as string,
+          authorId: (data.authorId as string) || undefined,
           timestamp: ts ? ts.toDate() : new Date(),
         };
       });
@@ -97,6 +105,43 @@ export function subscribeComments(
     },
     (error) => {
       console.error(`Error subscribing to comments for ${postId}:`, error);
+    }
+  );
+}
+
+/**
+ * 모든 댓글 실시간 구독 (전체 참여자 통계 및 사용자별 댓글 집계용)
+ */
+export function subscribeAllComments(callback: (comments: FsComment[]) => void): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'comment')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const comments: FsComment[] = snapshot.docs
+        .filter((d) => {
+          const pId = d.data().postId as string;
+          return pId && !pId.startsWith('photo_ticket_') && pId !== 'system_mission_settings';
+        })
+        .map((d) => {
+          const data = d.data();
+          const ts = data.timestamp as Timestamp | null;
+          return {
+            id: d.id,
+            postId: data.postId as string,
+            text: data.text as string,
+            author: data.author as string,
+            authorId: (data.authorId as string) || undefined,
+            timestamp: ts ? ts.toDate() : new Date(),
+          };
+        });
+      callback(comments);
+    },
+    (error) => {
+      console.error('Error subscribing to all comments:', error);
     }
   );
 }
@@ -343,6 +388,312 @@ export async function deleteUserAccountAndAllPosts(authorName: string): Promise<
     commentsCount: commentDocRefs.size,
   };
 }
+
+// ─── 포토부스 미션 설정 (Mission Settings) ──────────────────────────────────
+
+export interface MissionSettings {
+  requiredPosts: number;       // 필요한 피드 수 (기본 1)
+  requiredComments: number;    // 필요한 댓글 수 (기본 2)
+  isEnabled: boolean;          // 미션 & 포토부스 활성화 여부
+  title: string;               // 이벤트 명칭 / 부스 안내 문구
+  bannerNotice: string;        // 학생들에게 보일 안내 문구
+}
+
+export const DEFAULT_MISSION_SETTINGS: MissionSettings = {
+  requiredPosts: 1,
+  requiredComments: 2,
+  isEnabled: true,
+  title: '의령여고 영어과 인생네컷 포토부스',
+  bannerNotice: '피드 1개 + 댓글 2개 작성 시 포토부스 무료 촬영권 증정! 📸',
+};
+
+const MISSION_SETTINGS_DOC_ID = 'mission_settings_config';
+
+/**
+ * 미션 설정 실시간 구독 (단일 컬렉션 쿼리 기반 안전 구독)
+ */
+export function subscribeMissionSettings(callback: (settings: MissionSettings) => void): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'mission_settings')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      if (!snapshot.empty) {
+        const data = snapshot.docs[0].data();
+        callback({
+          requiredPosts: typeof data.requiredPosts === 'number' ? data.requiredPosts : DEFAULT_MISSION_SETTINGS.requiredPosts,
+          requiredComments: typeof data.requiredComments === 'number' ? data.requiredComments : DEFAULT_MISSION_SETTINGS.requiredComments,
+          isEnabled: typeof data.isEnabled === 'boolean' ? data.isEnabled : DEFAULT_MISSION_SETTINGS.isEnabled,
+          title: data.title || DEFAULT_MISSION_SETTINGS.title,
+          bannerNotice: data.bannerNotice || DEFAULT_MISSION_SETTINGS.bannerNotice,
+        });
+      } else {
+        callback(DEFAULT_MISSION_SETTINGS);
+      }
+    },
+    (err) => {
+      console.warn('Error subscribing to mission settings, fallback to default:', err);
+      callback(DEFAULT_MISSION_SETTINGS);
+    }
+  );
+}
+
+/**
+ * 관리자 미션 설정 업데이트
+ */
+export async function updateMissionSettings(settings: Partial<MissionSettings>): Promise<void> {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'mission_settings')
+  );
+  const snap = await getDocs(q);
+
+  if (!snap.empty) {
+    const docRef = snap.docs[0].ref;
+    await updateDoc(docRef, {
+      ...settings,
+      updatedAt: serverTimestamp(),
+    });
+  } else {
+    await addDoc(collection(db, COLLECTION), {
+      type: 'mission_settings',
+      postId: MISSION_SETTINGS_DOC_ID,
+      ...settings,
+      updatedAt: serverTimestamp(),
+    });
+  }
+}
+
+// ─── 포토부스 촬영권 티켓 (Photo Tickets) ──────────────────────────────────
+
+export interface PhotoTicket {
+  id: string;               // Firestore 문서 ID
+  ticketId: string;         // 고유 QR 검증 토큰 (예: tk_abc123)
+  authorId: string;         // 참여자 기기 고유 UID
+  authorName: string;       // 참여자 익명 아이디 (예: @cherry_99)
+  status: 'issued' | 'used';// 상태: 발급됨 or 사용완료
+  issuedAt: Date;           // 발급 일시
+  usedAt?: Date;            // 촬영 완료 일시
+  isManual?: boolean;       // 관리자 수동 발급 여부
+}
+
+/**
+ * 촬영권 티켓 발급 (중복 발급 방지: 이미 발급된 티켓이 있으면 기존 티켓 반환)
+ */
+export async function issuePhotoTicket(
+  authorId: string,
+  authorName: string,
+  isManual: boolean = false
+): Promise<PhotoTicket> {
+  // 이미 발급된 티켓이 있는지 확인
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'photo_ticket'),
+    where('authorId', '==', authorId)
+  );
+  const snap = await getDocs(q);
+
+  if (!snap.empty) {
+    const d = snap.docs[0];
+    const data = d.data();
+    const ts = data.issuedAt as Timestamp | null;
+    const uTs = data.usedAt as Timestamp | null;
+    return {
+      id: d.id,
+      ticketId: data.ticketId as string,
+      authorId: data.authorId as string,
+      authorName: data.authorName as string,
+      status: data.status as 'issued' | 'used',
+      issuedAt: ts ? ts.toDate() : new Date(),
+      usedAt: uTs ? uTs.toDate() : undefined,
+      isManual: !!data.isManual,
+    };
+  }
+
+  // 신규 티켓 생성
+  const ticketId = `tk_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  const docRef = await addDoc(collection(db, COLLECTION), {
+    type: 'photo_ticket',
+    postId: ticketId,
+    ticketId,
+    authorId,
+    authorName,
+    status: 'issued',
+    issuedAt: serverTimestamp(),
+    isManual,
+  });
+
+  return {
+    id: docRef.id,
+    ticketId,
+    authorId,
+    authorName,
+    status: 'issued',
+    issuedAt: new Date(),
+    isManual,
+  };
+}
+
+/**
+ * 특정 사용자의 티켓 실시간 구독
+ */
+export function subscribeUserTicket(
+  authorId: string,
+  callback: (ticket: PhotoTicket | null) => void
+): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'photo_ticket'),
+    where('authorId', '==', authorId)
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      if (snapshot.empty) {
+        callback(null);
+        return;
+      }
+      const d = snapshot.docs[0];
+      const data = d.data();
+      const ts = data.issuedAt as Timestamp | null;
+      const uTs = data.usedAt as Timestamp | null;
+      callback({
+        id: d.id,
+        ticketId: data.ticketId as string,
+        authorId: data.authorId as string,
+        authorName: data.authorName as string,
+        status: data.status as 'issued' | 'used',
+        issuedAt: ts ? ts.toDate() : new Date(),
+        usedAt: uTs ? uTs.toDate() : undefined,
+        isManual: !!data.isManual,
+      });
+    },
+    (err) => {
+      console.error('Error subscribing to user ticket:', err);
+      callback(null);
+    }
+  );
+}
+
+/**
+ * 모든 티켓 실시간 구독 (관리자 모니터링 및 부스용)
+ */
+export function subscribeAllTickets(callback: (tickets: PhotoTicket[]) => void): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'photo_ticket')
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const tickets: PhotoTicket[] = snapshot.docs.map((d) => {
+        const data = d.data();
+        const ts = data.issuedAt as Timestamp | null;
+        const uTs = data.usedAt as Timestamp | null;
+        return {
+          id: d.id,
+          ticketId: data.ticketId as string,
+          authorId: data.authorId as string,
+          authorName: data.authorName as string,
+          status: data.status as 'issued' | 'used',
+          issuedAt: ts ? ts.toDate() : new Date(),
+          usedAt: uTs ? uTs.toDate() : undefined,
+          isManual: !!data.isManual,
+        };
+      });
+      callback(tickets);
+    },
+    (err) => {
+      console.error('Error subscribing to all tickets:', err);
+    }
+  );
+}
+
+/**
+ * 부스 태블릿에서 QR 검증 및 사용 처리 (Use Ticket)
+ */
+export async function verifyAndUseTicket(ticketToken: string): Promise<{
+  success: boolean;
+  message: string;
+  ticket?: PhotoTicket;
+}> {
+  const cleanToken = ticketToken.trim();
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'photo_ticket'),
+    where('ticketId', '==', cleanToken)
+  );
+
+  const snap = await getDocs(q);
+  if (snap.empty) {
+    return { success: false, message: '존재하지 않는 유효하지 않은 촬영권입니다.' };
+  }
+
+  const docItem = snap.docs[0];
+  const data = docItem.data();
+
+  if (data.status === 'used') {
+    const usedAtDate = (data.usedAt as Timestamp | null)?.toDate()?.toLocaleTimeString() || '';
+    return {
+      success: false,
+      message: `이미 촬영을 완료한 티켓입니다 (${usedAtDate} 사용됨).`,
+      ticket: {
+        id: docItem.id,
+        ticketId: data.ticketId,
+        authorId: data.authorId,
+        authorName: data.authorName,
+        status: 'used',
+        issuedAt: (data.issuedAt as Timestamp | null)?.toDate() || new Date(),
+        usedAt: (data.usedAt as Timestamp | null)?.toDate(),
+      },
+    };
+  }
+
+  // 사용 처리
+  await updateDoc(docItem.ref, {
+    status: 'used',
+    usedAt: serverTimestamp(),
+  });
+
+  return {
+    success: true,
+    message: '촬영권 인증 완료! 포토부스 촬영을 시작합니다.',
+    ticket: {
+      id: docItem.id,
+      ticketId: data.ticketId,
+      authorId: data.authorId,
+      authorName: data.authorName,
+      status: 'used',
+      issuedAt: (data.issuedAt as Timestamp | null)?.toDate() || new Date(),
+      usedAt: new Date(),
+    },
+  };
+}
+
+/**
+ * 관리자용: 티켓 상태 초기화 (재촬영 허용)
+ */
+export async function resetPhotoTicket(ticketDocId: string): Promise<void> {
+  const ref = doc(db, COLLECTION, ticketDocId);
+  await updateDoc(ref, {
+    status: 'issued',
+    usedAt: null,
+  });
+}
+
+/**
+ * 관리자용: 티켓 삭제
+ */
+export async function deletePhotoTicket(ticketDocId: string): Promise<void> {
+  const ref = doc(db, COLLECTION, ticketDocId);
+  await deleteDoc(ref);
+}
+
 
 
 

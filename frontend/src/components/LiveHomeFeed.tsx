@@ -6,8 +6,9 @@ import {
   deleteUserPost,
   deleteUserAccountAndAllPosts,
   toggleUserPostLike,
+  subscribeAllComments,
 } from '../services/firestoreService';
-import type { FsUserPost } from '../services/firestoreService';
+import type { FsUserPost, FsComment } from '../services/firestoreService';
 import {
   Heart,
   MessageCircle,
@@ -45,6 +46,9 @@ import { InstagramDmChatModal } from './InstagramDmChatModal';
 import { PostCommentsSection } from './PostCommentsSection';
 import { PinchablePhoto } from './PinchablePhoto';
 import { AiCustomSeteukLab } from './AiCustomSeteukLab';
+import { PhotoMissionTracker } from './PhotoMissionTracker';
+import { AdminMissionManagerModal } from './AdminMissionManagerModal';
+import { PhotoboothKioskModal } from './PhotoboothKioskModal';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
@@ -123,6 +127,19 @@ export const LiveHomeFeed: React.FC<Props> = ({
       setUserPosts(fetched);
     });
   }, []);
+
+  // ─── 💬 실시간 모든 댓글 목록 (미션 달성 집계 및 관리자 모니터링용) ─────────────
+  const [allComments, setAllComments] = useState<FsComment[]>([]);
+
+  useEffect(() => {
+    return subscribeAllComments((fetched) => {
+      setAllComments(fetched);
+    });
+  }, []);
+
+  // ─── 🎫 포토부스 키오스크 & 관리자 미션 모달 상태 ─────────────────────────────
+  const [isPhotoboothOpen, setIsPhotoboothOpen] = useState(false);
+  const [isAdminMissionOpen, setIsAdminMissionOpen] = useState(false);
 
   // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
   const handleDeletePost = async (post: FsUserPost) => {
@@ -513,7 +530,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
         <div className="bg-purple-900 text-purple-100 px-3.5 py-2 text-xs flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-1.5 font-bold">
             <Shield className="w-3.5 h-3.5 text-amber-300" />
-            <span>선생님 관리자 모드 작동 중 (게시물 삭제 권한 활성화)</span>
+            <span>선생님 관리자 모드</span>
+            <button
+              onClick={() => setIsAdminMissionOpen(true)}
+              className="ml-2 text-[10px] bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-2 py-0.5 rounded-md cursor-pointer transition-colors shadow-xs"
+            >
+              ⚙️ 포토부스 미션 모니터링
+            </button>
           </div>
           <button
             onClick={() => {
@@ -632,6 +655,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
         </div>
       </section>
 
+      {/* 📸 포토부스 미션 트래커 배너 & 학생 QR 티켓 (관리자 설정 및 실시간 연동) */}
+      <PhotoMissionTracker
+        currentUser={currentUser}
+        allPosts={userPosts}
+        allComments={allComments}
+        onOpenPhotoboothKiosk={() => setIsPhotoboothOpen(true)}
+        onOpenAdminManager={() => setIsAdminMissionOpen(true)}
+        isAnyAdmin={isAnyAdmin}
+      />
 
       {/* 🌟 2. 인스타그램 3열 그리드 뷰 모드 */}
       {viewMode === 'grid' ? (
@@ -885,26 +917,26 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
             <div onClick={() => onToggleSection('textbook')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
-              alt="도서관 교과서"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
-              onDoubleTap={() => {
-                if (!likedPosts.textbook) toggleLike('textbook');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+              <PinchablePhoto
+                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+                alt="도서관 교과서"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+                imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
+                onDoubleTap={() => {
+                  if (!likedPosts.textbook) toggleLike('textbook');
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-                  의령여고 3개년 교과서 7권 대공개!
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-light">
-                  표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
-                </p>
-              </div>
-            </PinchablePhoto>
+                <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                    의령여고 3개년 교과서 7권 대공개!
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-200 font-light">
+                    표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
+                  </p>
+                </div>
+              </PinchablePhoto>
             </div>
 
             <div className="px-3.5 pt-3 pb-2">
@@ -1012,26 +1044,26 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
             <div onClick={() => onToggleSection('vocab')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
-              alt="영어 듣기와 단어 퀴즈"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
-              onDoubleTap={() => {
-                if (!likedPosts.vocab) toggleLike('vocab');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+              <PinchablePhoto
+                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
+                alt="영어 듣기와 단어 퀴즈"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+                imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
+                onDoubleTap={() => {
+                  if (!likedPosts.vocab) toggleLike('vocab');
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-                  단어 미리보기
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
-                  1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
-                </p>
-              </div>
-            </PinchablePhoto>
+                <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                    단어 미리보기
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
+                    1~4번 문맥 어휘 확인 + 5번 문제는 단어를 가리고 오직 소리만 듣고 맞추기!
+                  </p>
+                </div>
+              </PinchablePhoto>
             </div>
 
             <div className="px-3.5 pt-3 pb-2">
@@ -1140,26 +1172,26 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
             <div onClick={() => onToggleSection('mbti')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
-              alt="영어 공부와 성향 탐색"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
-              onDoubleTap={() => {
-                if (!likedPosts.mbti) toggleLike('mbti');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+              <PinchablePhoto
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
+                alt="영어 공부와 성향 탐색"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+                imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
+                onDoubleTap={() => {
+                  if (!likedPosts.mbti) toggleLike('mbti');
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
-                  MBTI별 본문 추천
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
-                  나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
-                </p>
-              </div>
-            </PinchablePhoto>
+                <div className="space-y-1.5 relative z-10 pt-4 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight text-white drop-shadow-md">
+                    MBTI별 본문 추천
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed drop-shadow-sm">
+                    나의 성향과 꼭 맞는 의령여고 영어 교과서 본문을 찾아보세요!
+                  </p>
+                </div>
+              </PinchablePhoto>
             </div>
 
             {/* 포스트 소셜 바 */}
@@ -1268,26 +1300,26 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
             <div onClick={() => onToggleSection('seteuk')} className="cursor-pointer">
-            <PinchablePhoto
-              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
-              alt="노트 공부 세특"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
-              imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
-              onDoubleTap={() => {
-                if (!likedPosts.seteuk) toggleLike('seteuk');
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+              <PinchablePhoto
+                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
+                alt="노트 공부 세특"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+                imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
+                onDoubleTap={() => {
+                  if (!likedPosts.seteuk) toggleLike('seteuk');
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
-              <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-                  교과서 지문이 나만의 세특 치트키로 변신!
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-200 font-light">
-                  희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
-                </p>
-              </div>
-            </PinchablePhoto>
+                <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                    교과서 지문이 나만의 세특 치트키로 변신!
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-200 font-light">
+                    희망 진로(의학·AI·미디어·교육) 맞춤형 탐구 주제와 학생부 기재 예시를 확인하세요.
+                  </p>
+                </div>
+              </PinchablePhoto>
             </div>
 
             <div className="px-3.5 pt-3 pb-2">
@@ -1500,204 +1532,204 @@ export const LiveHomeFeed: React.FC<Props> = ({
           </article>
 
           {/* 🌟 2. 참여자 라이브 피드 - 개인 계정들의 피드 모음 (User Live Feed Stream) */}
-      {userPosts.length > 0 && (
-        <section className="space-y-4 pt-3">
-          <div className="flex items-center justify-between px-3.5 pt-1">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-pink-500" />
-              <div>
-                <h3 className="text-xs font-black text-slate-800 tracking-tight">
-                  참여자 라이브 피드 ({userPosts.length})
-                </h3>
-                <p className="text-[10px] text-slate-400 font-medium">개인 계정들의 피드 모음</p>
+          {userPosts.length > 0 && (
+            <section className="space-y-4 pt-3">
+              <div className="flex items-center justify-between px-3.5 pt-1">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-pink-500" />
+                  <div>
+                    <h3 className="text-xs font-black text-slate-800 tracking-tight">
+                      참여자 라이브 피드 ({userPosts.length})
+                    </h3>
+                    <p className="text-[10px] text-slate-400 font-medium">개인 계정들의 피드 모음</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    if (!currentUser) {
+                      setProfileModalInitialMode('guest');
+                      setIsProfileModalOpen(true);
+                      alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
+                    } else {
+                      setIsCreatePostModalOpen(true);
+                    }
+                  }}
+                  className="text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
+                >
+                  <Plus className="w-3 h-3 stroke-3" />
+                  <span>나도 피드 쓰기</span>
+                </button>
               </div>
-            </div>
-            <button
-              onClick={() => {
-                if (!currentUser) {
-                  setProfileModalInitialMode('guest');
-                  setIsProfileModalOpen(true);
-                  alert('피드를 작성하려면 먼저 부스 활동에 사용할 아이디(닉네임)를 설정해 주세요!');
-                } else {
-                  setIsCreatePostModalOpen(true);
-                }
-              }}
-              className="text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 cursor-pointer bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full transition-colors"
-            >
-              <Plus className="w-3 h-3 stroke-3" />
-              <span>나도 피드 쓰기</span>
-            </button>
-          </div>
 
-          {userPosts.map((post) => {
-            const isOwner = currentUser ? post.authorId === currentUser.uid : false;
-            const canDelete = isOwner || isAdmin;
-            const isLiked = likedUserPosts[post.id] || false;
-            const totalLikes = (post.likesCount || 0) + (isLiked ? 1 : 0);
+              {userPosts.map((post) => {
+                const isOwner = currentUser ? post.authorId === currentUser.uid : false;
+                const canDelete = isOwner || isAdmin;
+                const isLiked = likedUserPosts[post.id] || false;
+                const totalLikes = (post.likesCount || 0) + (isLiked ? 1 : 0);
 
-            return (
-              <article
-                key={post.id}
-                id={`user_post_${post.id}`}
-                className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
-              >
-                {/* 포스트 상단 계정 정보 (클릭 시 프로필 모아보기 팝업) */}
-                <div className="flex items-center justify-between px-3.5 py-3">
-                  <div
-                    onClick={() => handleOpenParticipantProfile(post.authorName, post.avatar)}
-                    className="flex items-center gap-2.5 cursor-pointer group"
-                    title={`@${post.authorName} 프로필 보기`}
+                return (
+                  <article
+                    key={post.id}
+                    id={`user_post_${post.id}`}
+                    className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
                   >
-                    <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 to-purple-600 group-hover:scale-105 transition-transform">
-                      <img
-                        src={post.avatar}
-                        alt={post.authorName}
-                        className="w-full h-full rounded-full object-cover bg-white p-0.5"
-                      />
-                    </div>
-                    <div>
+                    {/* 포스트 상단 계정 정보 (클릭 시 프로필 모아보기 팝업) */}
+                    <div className="flex items-center justify-between px-3.5 py-3">
+                      <div
+                        onClick={() => handleOpenParticipantProfile(post.authorName, post.avatar)}
+                        className="flex items-center gap-2.5 cursor-pointer group"
+                        title={`@${post.authorName} 프로필 보기`}
+                      >
+                        <div className="w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-pink-500 to-purple-600 group-hover:scale-105 transition-transform">
+                          <img
+                            src={post.avatar}
+                            alt={post.authorName}
+                            className="w-full h-full rounded-full object-cover bg-white p-0.5"
+                          />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
+                              @{post.authorName}
+                            </span>
+                            {isOfficialAccount(post.authorName) ? (
+                              <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
+                                ★ 공식
+                              </span>
+                            ) : isTeacherAccount(post.authorName) ? (
+                              <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded">
+                                교사
+                              </span>
+                            ) : null}
+                            {post.tag && (
+                              <span className="text-[10px] font-semibold text-pink-600 bg-pink-50 px-1.5 py-0.2 rounded">
+                                {post.tag}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-slate-400">
+                            {post.timestamp ? new Date(post.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
+                          </p>
+                        </div>
+                      </div>
+
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-900 group-hover:text-purple-600 group-hover:underline transition-colors">
-                          @{post.authorName}
-                        </span>
-                        {isOfficialAccount(post.authorName) ? (
-                          <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200">
-                            ★ 공식
-                          </span>
-                        ) : isTeacherAccount(post.authorName) ? (
-                          <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded">
-                            교사
-                          </span>
-                        ) : null}
-                        {post.tag && (
-                          <span className="text-[10px] font-semibold text-pink-600 bg-pink-50 px-1.5 py-0.2 rounded">
-                            {post.tag}
-                          </span>
+                        {/* 최고 관리자(uryeo_eng): 계정 및 피드/댓글 일괄 영구 삭제 */}
+                        {isOfficialAdmin && post.authorName.toLowerCase() !== 'uryeo_eng' && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteUserAccount(post.authorName)}
+                            title="공식 최고 관리자 권한: 작성자 계정 및 모든 글/댓글 영구 삭제"
+                            className="flex items-center gap-1 text-[11px] text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                            <span>계정삭제</span>
+                          </button>
+                        )}
+
+                        {/* 단일 게시물 삭제 버튼 (본인 또는 선생님 관리자 권한) */}
+                        {canDelete ? (
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePost(post)}
+                            title={isAdmin && !isOwner ? "선생님 권한 강제 삭제" : "내 게시물 삭제"}
+                            className="flex items-center gap-1 text-[11px] text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>{isAdmin && !isOwner ? "강제삭제" : "삭제"}</span>
+                          </button>
+                        ) : (
+                          <button className="text-slate-400 p-1">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </button>
                         )}
                       </div>
-                      <p className="text-[10px] text-slate-400">
-                        {post.timestamp ? new Date(post.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : '방금 전'}
-                      </p>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-1.5">
-                    {/* 최고 관리자(uryeo_eng): 계정 및 피드/댓글 일괄 영구 삭제 */}
-                    {isOfficialAdmin && post.authorName.toLowerCase() !== 'uryeo_eng' && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteUserAccount(post.authorName)}
-                        title="공식 최고 관리자 권한: 작성자 계정 및 모든 글/댓글 영구 삭제"
-                        className="flex items-center gap-1 text-[11px] text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
+                    {/* 피드 사진: 인스타그램 2지 핀치 줌 & 더블탭 좋아요 */}
+                    <div
+                      className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden group select-none"
+                      style={{ touchAction: 'pan-y' }}
+                    >
+                      <PinchablePhoto
+                        src={post.photoUrl}
+                        alt="게시물 사진"
+                        className="w-full max-h-[580px] flex items-center justify-center"
+                        imageClassName="max-h-[580px] object-contain"
+                        onDoubleTap={() => {
+                          if (!isLiked) {
+                            toggleUserPostLikeHandler(post.id);
+                          }
+                        }}
                       >
-                        <Trash2 className="w-3.5 h-3.5 text-red-500" />
-                        <span>계정삭제</span>
-                      </button>
-                    )}
-
-                    {/* 단일 게시물 삭제 버튼 (본인 또는 선생님 관리자 권한) */}
-                    {canDelete ? (
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePost(post)}
-                        title={isAdmin && !isOwner ? "선생님 권한 강제 삭제" : "내 게시물 삭제"}
-                        className="flex items-center gap-1 text-[11px] text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-lg font-bold transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        <span>{isAdmin && !isOwner ? "강제삭제" : "삭제"}</span>
-                      </button>
-                    ) : (
-                      <button className="text-slate-400 p-1">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* 피드 사진: 인스타그램 2지 핀치 줌 & 더블탭 좋아요 */}
-                <div
-                  className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden group select-none"
-                  style={{ touchAction: 'pan-y' }}
-                >
-                  <PinchablePhoto
-                    src={post.photoUrl}
-                    alt="게시물 사진"
-                    className="w-full max-h-[580px] flex items-center justify-center"
-                    imageClassName="max-h-[580px] object-contain"
-                    onDoubleTap={() => {
-                      if (!isLiked) {
-                        toggleUserPostLikeHandler(post.id);
-                      }
-                    }}
-                  >
-                    <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
-                      <span>핀치 확대 · 더블탭 ❤️</span>
+                        <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
+                          <span>핀치 확대 · 더블탭 ❤️</span>
+                        </div>
+                      </PinchablePhoto>
                     </div>
-                  </PinchablePhoto>
-                </div>
 
-                {/* 소셜 액션 바 */}
-                <div className="px-3.5 pt-3 pb-3 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-slate-800">
-                      <button
-                        onClick={() => toggleUserPostLikeHandler(post.id)}
-                        className="transition-transform active:scale-125"
-                      >
-                        <Heart
-                          className={`w-6 h-6 ${isLiked ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
-                            }`}
+                    {/* 소셜 액션 바 */}
+                    <div className="px-3.5 pt-3 pb-3 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-slate-800">
+                          <button
+                            onClick={() => toggleUserPostLikeHandler(post.id)}
+                            className="transition-transform active:scale-125"
+                          >
+                            <Heart
+                              className={`w-6 h-6 ${isLiked ? 'text-red-500 fill-red-500 stroke-red-500' : 'hover:text-slate-600'
+                                }`}
+                            />
+                          </button>
+                          <button
+                            onClick={() => {
+                              const inputEl = document.querySelector<HTMLInputElement>(`#user_post_${post.id} input`);
+                              inputEl?.focus();
+                            }}
+                            className="hover:text-slate-600 transition-colors cursor-pointer"
+                            title="댓글 달기"
+                          >
+                            <MessageCircle className="w-6 h-6" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard?.writeText(window.location.href);
+                              alert('링크가 복사되었습니다!');
+                            }}
+                            className="hover:text-slate-600"
+                          >
+                            <Send className="w-6 h-6" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="text-xs font-bold text-slate-900">
+                        좋아요 {totalLikes.toLocaleString()}개
+                      </div>
+
+                      <div className="text-xs">
+                        <span className="font-bold text-slate-900 mr-2">@{post.authorName}</span>
+                        <span className="text-slate-800 whitespace-pre-line">{post.caption}</span>
+                      </div>
+
+                      {/* 💬 참여자 피드 단일 공통 댓글 모듈 */}
+                      <div className="pt-1">
+                        <PostCommentsSection
+                          postId={post.id}
+                          currentUser={currentUser}
+                          isAnyAdmin={isAnyAdmin}
+                          onOpenProfile={handleOpenParticipantProfile}
+                          onRequireLogin={() => setIsProfileModalOpen(true)}
                         />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const inputEl = document.querySelector<HTMLInputElement>(`#user_post_${post.id} input`);
-                          inputEl?.focus();
-                        }}
-                        className="hover:text-slate-600 transition-colors cursor-pointer"
-                        title="댓글 달기"
-                      >
-                        <MessageCircle className="w-6 h-6" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard?.writeText(window.location.href);
-                          alert('링크가 복사되었습니다!');
-                        }}
-                        className="hover:text-slate-600"
-                      >
-                        <Send className="w-6 h-6" />
-                      </button>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="text-xs font-bold text-slate-900">
-                    좋아요 {totalLikes.toLocaleString()}개
-                  </div>
-
-                  <div className="text-xs">
-                    <span className="font-bold text-slate-900 mr-2">@{post.authorName}</span>
-                    <span className="text-slate-800 whitespace-pre-line">{post.caption}</span>
-                  </div>
-
-                  {/* 💬 참여자 피드 단일 공통 댓글 모듈 */}
-                  <div className="pt-1">
-                    <PostCommentsSection
-                      postId={post.id}
-                      currentUser={currentUser}
-                      isAnyAdmin={isAnyAdmin}
-                      onOpenProfile={handleOpenParticipantProfile}
-                      onRequireLogin={() => setIsProfileModalOpen(true)}
-                    />
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </section>
+                  </article>
+                );
+              })}
+            </section>
+          )}
+        </>
       )}
-    </>
-  )}
 
       {/* 피드 최하단 안내 */}
       <div className="text-center py-6 space-y-1.5">
@@ -1759,6 +1791,24 @@ export const LiveHomeFeed: React.FC<Props> = ({
       <InstagramDmChatModal
         isOpen={isDmModalOpen}
         onClose={handleCloseDmModal}
+      />
+
+      {/* 📸 부스 태블릿 전용 포토부스 키오스크 모달 (QR 스캔 & 촬영) */}
+      <PhotoboothKioskModal
+        isOpen={isPhotoboothOpen}
+        onClose={() => setIsPhotoboothOpen(false)}
+      />
+
+      {/* ⚙️ 교사 관리자 미션 조건 설정 & 참여자 실시간 모니터링 모달 */}
+      <AdminMissionManagerModal
+        isOpen={isAdminMissionOpen}
+        onClose={() => setIsAdminMissionOpen(false)}
+        allPosts={userPosts}
+        allComments={allComments}
+        onOpenPhotoboothKiosk={() => {
+          setIsAdminMissionOpen(false);
+          setIsPhotoboothOpen(true);
+        }}
       />
     </div>
   );

@@ -157,7 +157,11 @@ class RecommendRequest(BaseModel):
 # ── 라우트 ───────────────────────────────────────────────────
 @app.get("/")
 def root():
-    return FileResponse("static/index.html")
+    response = FileResponse("static/index.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 from grammar_roadmap_data import GRAMMAR_ROADMAP_DATA, NOTICE_MESSAGE
 

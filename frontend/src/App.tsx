@@ -140,7 +140,9 @@ export function App() {
 
   // 🎯 스마트 북마크 스크롤 (부드럽게 이동하고 해당 아코디언 자동 오픈!)
   const handleScrollTo = (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => {
-    setActiveNavTab(key as any);
+    if (key !== 'aiSeteuk') {
+      setActiveNavTab(key);
+    }
 
     if (key === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -155,7 +157,7 @@ export function App() {
 
     // 약간의 딜레이 후 해당 요소로 스크롤
     setTimeout(() => {
-      const refMap: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      const refMap = {
         mbti: mbtiRef,
         vocab: vocabRef,
         textbook: textbookRef,

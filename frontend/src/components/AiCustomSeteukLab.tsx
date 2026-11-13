@@ -108,11 +108,10 @@ export const AiCustomSeteukLab: React.FC<Props> = ({ onOpenImage }) => {
               key={gr}
               type="button"
               onClick={() => setSelectedGrade(gr)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                selectedGrade === gr
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${selectedGrade === gr
                   ? 'bg-violet-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
-              }`}
+                }`}
             >
               {gr}
             </button>
