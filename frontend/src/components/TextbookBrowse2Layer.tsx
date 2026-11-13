@@ -380,6 +380,71 @@ const TEXTBOOK_OVERVIEW_DATA: TextbookOverview[] = [
     ],
   },
   {
+    id: '심화영어',
+    grade: '3학년',
+    semester: '3학기',
+    title: '심화영어',
+    publisher: 'YBM (김명희)',
+    coverImage: '/pages_cache/3학년_3학기_심화영어_YBM_p1.jpg',
+    badgeBg: 'bg-fuchsia-100 text-fuchsia-800',
+    accentColor: 'from-fuchsia-600 to-purple-700',
+    unitsCount: 5,
+    overviewSentence: '3학년 융합선택 심화 과목으로, 문화 다양성·신경과학·AI·생태경제·국제협력을 주제로 한 수능 초월 수준의 대학 연계 원서 지문을 수록합니다.',
+    features: ['대학 전공 연계 영문 원서 수준', 'AI 활용 협업 에세이 작성', '사회·과학·인문 융합 심화 독해'],
+    units: [
+      {
+        unitNumber: 1,
+        unitTitle: 'Embracing Diversity',
+        topic: '문화 다양성과 세계 시민',
+        passageTitle: 'My Journey in Singapore',
+        passageSummary: '싱가포르 교환학생 경험을 통해 다양한 인종과 문화가 공존하는 사회의 아름다움과 문화적 차이를 이해하는 태도를 배웁니다.',
+        startPage: 16,
+        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p16.jpg',
+        careerTag: '국제문화 · 외교 · 글로벌비즈니스',
+      },
+      {
+        unitNumber: 2,
+        unitTitle: 'Why We Do What We Do',
+        topic: '지연행동의 신경과학',
+        passageTitle: 'The Neuroscience of Procrastination',
+        passageSummary: '미루는 행동(Procrastination)이 단순한 게으름이 아닌 뇌의 스트레스 반응임을 신경과학으로 풀어내고, 전전두엽 조절 전략을 통해 습관을 바꾸는 법을 배웁니다.',
+        startPage: 42,
+        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p42.jpg',
+        careerTag: '뇌과학 · 임상심리 · 행동경제학',
+      },
+      {
+        unitNumber: 3,
+        unitTitle: 'Paint the Future with AI',
+        topic: '인간-AI 협업과 미래',
+        passageTitle: 'The Future of Humanity: Collaboration between Humans and AI',
+        passageSummary: 'AI가 대체가 아닌 창의성 확장 도구임을 논하고, 의료·교육 분야에의 AI 적용 가능성을 탐구합니다.',
+        startPage: 68,
+        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p68.jpg',
+        careerTag: 'AI인공지능 · 의료기술 · 창의예술',
+      },
+      {
+        unitNumber: 4,
+        unitTitle: 'Save the Planet, Save Humans',
+        topic: '도넛 경제학과 생태 위기',
+        passageTitle: 'A New Economic Paradigm: Doughnut Economics',
+        passageSummary: 'Kate Raworth의 도넛 경제 모델을 통해 성장 중심 패러다임을 넘어서는 대안적 경제·생태 시스템을 탐구합니다.',
+        startPage: 94,
+        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p94.jpg',
+        careerTag: '환경경제학 · 지속가능발전 · 도시재생',
+      },
+      {
+        unitNumber: 5,
+        unitTitle: 'Global Efforts, One Step at a Time',
+        topic: '국제 협력과 세계 시민 실천',
+        passageTitle: 'A Long Walk to Water (소설 발췌)',
+        passageSummary: '1985년 남수단 소년 살바(Salva)의 피난 여정과 2008년 소녀 냐(Nya)의 물 부족 문제를 엮은 소설로, 한 사람의 실천이 세상을 바꾸는 국제 협력의 힘을 배웁니다.',
+        startPage: 120,
+        imagePath: 'pages_cache/3학년_3학기_심화영어_YBM_p120.jpg',
+        careerTag: '국제개발 · NGO활동 · 사회적기업',
+      },
+    ],
+  },
+  {
     id: '세계 문화와 영어',
     grade: '3학년',
     semester: '1학기',
@@ -703,11 +768,10 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
               return (
                 <div
                   key={uIdx}
-                  className={`border-y transition-all duration-200 overflow-hidden ${
-                    isOpen
+                  className={`border-y transition-all duration-200 overflow-hidden ${isOpen
                       ? 'border-blue-400 bg-white shadow-2xs'
                       : 'border-slate-200 bg-white hover:bg-slate-50'
-                  }`}
+                    }`}
                 >
                   {/* 단원 아코디언 헤더 */}
                   <div
@@ -716,9 +780,8 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span
-                        className={`w-7 h-7 rounded-xl text-xs font-black flex items-center justify-center shrink-0 transition-colors shadow-2xs ${
-                          isOpen ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'
-                        }`}
+                        className={`w-7 h-7 rounded-xl text-xs font-black flex items-center justify-center shrink-0 transition-colors shadow-2xs ${isOpen ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'
+                          }`}
                       >
                         {unit.unitNumber}
                       </span>
@@ -738,18 +801,16 @@ export const TextbookBrowse2Layer: React.FC<Props> = ({ onOpenImage }) => {
 
                     <div className="shrink-0 p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors">
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-300 ease-in-out ${
-                          isOpen ? 'rotate-180 text-blue-600' : ''
-                        }`}
+                        className={`w-4 h-4 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180 text-blue-600' : ''
+                          }`}
                       />
                     </div>
                   </div>
 
                   {/* 단원 아코디언 바디 */}
                   <div
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-                    }`}
+                    className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
                   >
                     <div className="px-4 pb-4 pt-1 border-t border-slate-100 bg-slate-50/40 space-y-3">
                       {/* 파트별 버튼 및 단원 실제 학습 내용 설명 카드 그리드 */}

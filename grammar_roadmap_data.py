@@ -767,6 +767,142 @@ GRAMMAR_ROADMAP_DATA = [
                 ]
             }
         ]
+    },
+    {
+        "id": "advanced_english",
+        "grade": "3학년",
+        "semester": "3학기",
+        "curriculum_type": "융합선택 과목",
+        "subject": "심화영어",
+        "publisher": "YBM (김명희)",
+        "summary": "수능을 초월한 대학 전공 연계 수준의 영문 지문을 다루는 최상위 융합선택 과목으로, 분사구문·관계사 심화, 신경과학 인과 추론, AI 담론 사실/의견 구분, 생태경제 보고서 작성, 소설 추론 독해까지 대학 에세이 쓰기 역량을 완성합니다.",
+        "units": [
+            {
+                "unit_number": 1,
+                "unit_title": "Embracing Diversity",
+                "theme": "문화 다양성과 세계 시민 의식",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "분사구문의 의미상 주어와 시제 심화 (Moving around / Having visited)",
+                        "tag": "분사",
+                        "page": 25,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p25.jpg",
+                        "key_sentence": "Moving around the museum, I marveled at an array of Peranakan objects.",
+                        "explanation": "분사구문의 의미상 주어가 주절 주어와 같을 때 생략하고, 완료분사(Having p.p.)로 주절보다 앞선 시제의 부대상황을 나타내는 방법을 심화 학습합니다."
+                    },
+                    {
+                        "point_num": 2,
+                        "title": "계속적 용법 관계대명사 which (앞 절 전체를 선행사로 받기)",
+                        "tag": "관계사",
+                        "page": 25,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p25.jpg",
+                        "key_sentence": "I heard many students communicating in languages other than English, which confused me.",
+                        "explanation": "콤마 뒤 which가 앞 절 전체를 가리키는 계속적 용법을 익히고, 한정적 용법과의 의미 차이를 비교하여 고급 영문 독해·작문에 적용합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 2,
+                "unit_title": "Why We Do What We Do",
+                "theme": "지연행동의 신경과학과 습관 변화",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "원인-결과 연결어 심화 (due to, as a result of, lead to, result in)",
+                        "tag": "담화표지",
+                        "page": 51,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p51.jpg",
+                        "key_sentence": "Due to the activation of our stress response system, we may choose to procrastinate as a means of self-protection.",
+                        "explanation": "전치사구(due to / as a result of)와 동사구(lead to / result in)의 차이를 구분하고, 학술적 인과 추론 에세이 작성에 적용하는 고급 담화 연결 전략을 훈련합니다."
+                    },
+                    {
+                        "point_num": 2,
+                        "title": "부정 대명사와 일반화 주어 (we / one / you) 활용",
+                        "tag": "대명사",
+                        "page": 52,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p52.jpg",
+                        "key_sentence": "When one feels overwhelmed, the prefrontal cortex's control over emotional responses may weaken.",
+                        "explanation": "학술 텍스트에서 필자가 독자를 포함하는 일반화 주어(we/one/you)를 선택하는 방식을 익히고, 비인칭 수동태와의 비교를 통해 고급 작문 문체를 완성합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 3,
+                "unit_title": "Paint the Future with AI",
+                "theme": "인간-AI 협업과 미래 사회",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "사실과 의견 구분 담화 표지 (It is a fact that / In my opinion / clearly)",
+                        "tag": "담화분석",
+                        "page": 77,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p77.jpg",
+                        "key_sentence": "It is undeniable that AI enhances human creativity; however, in my view, it cannot replace the unique emotional depth that humans bring to art.",
+                        "explanation": "객관적 사실(It is a fact / clearly / it is evident)과 주관적 의견(I believe / in my view / it seems)을 담화 표지로 구분하고, 균형 잡힌 논증 에세이를 쓰는 전략을 학습합니다."
+                    },
+                    {
+                        "point_num": 2,
+                        "title": "양보·대조 접속사 심화 (although / even though / despite / in spite of)",
+                        "tag": "접속사",
+                        "page": 78,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p78.jpg",
+                        "key_sentence": "Although AI can generate impressive images, it lacks the conscious intention and emotional experience that define true artistic expression.",
+                        "explanation": "절을 이끄는 although/even though와 명사구를 이끄는 despite/in spite of의 용법 차이를 익히고, AI 주제 설득적 에세이에서 반론 인정(concession) 전략으로 활용합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 4,
+                "unit_title": "Save the Planet, Save Humans",
+                "theme": "도넛 경제학과 생태 위기 해결",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "문제-해결 담화 구조와 전환어 (The problem is / One solution is / therefore / in contrast)",
+                        "tag": "에세이구조",
+                        "page": 103,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p103.jpg",
+                        "key_sentence": "The conventional economic model focuses on endless growth; in contrast, Doughnut Economics envisions a world where humanity thrives within planetary limits.",
+                        "explanation": "문제 제시 → 원인 분석 → 해결책 제안 → 결과 예측의 4단계 학술 보고서 구조를 익히고, in contrast / however / therefore 등 전환어를 단락 간 흐름 연결에 전략적으로 배치합니다."
+                    },
+                    {
+                        "point_num": 2,
+                        "title": "관계절 축약: 주격 관계절 → 분사구 (which challenge → challenging)",
+                        "tag": "관계사·분사",
+                        "page": 104,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p104.jpg",
+                        "key_sentence": "The conventional economic paradigm (which focuses on / focusing on) endless growth fails to account for ecological boundaries.",
+                        "explanation": "주격 관계절(which + 동사)을 현재분사구(V-ing)로 축약하는 고급 문체 변환 규칙을 익히고, 대학 보고서 수준의 간결하고 세련된 문체를 완성합니다."
+                    }
+                ]
+            },
+            {
+                "unit_number": 5,
+                "unit_title": "Global Efforts, One Step at a Time",
+                "theme": "국제 협력과 세계 시민 실천",
+                "points": [
+                    {
+                        "point_num": 1,
+                        "title": "함축 의미 추론과 행간 읽기 전략 (Making Inferences)",
+                        "tag": "독해전략",
+                        "page": 129,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p129.jpg",
+                        "key_sentence": "Salva instinctively covered his head — from this action, we can infer that he is deeply frightened and disoriented by the sudden violence.",
+                        "explanation": "소설 속 등장인물의 행동·대화·묘사에서 명시되지 않은 감정·의도·주제 의식을 논리적으로 추론하는 Making Inferences 전략을 학습하고, 문학 비평문 초고 작성에 적용합니다."
+                    },
+                    {
+                        "point_num": 2,
+                        "title": "서사 문체와 시점 전환 (1인칭 → 3인칭 한정적 시점)",
+                        "tag": "문학·문체",
+                        "page": 130,
+                        "image_path": "pages_cache/3학년_3학기_심화영어_YBM_p130.jpg",
+                        "key_sentence": "The story alternates between Salva's third-person limited perspective (1985) and Nya's chapters (2008), creating dramatic dramatic irony.",
+                        "explanation": "소설 A Long Walk to Water의 두 서사 시점(살바·냐)이 교차하며 만들어내는 劇的 아이러니와 주제 연결 방식을 분석하고, 창의적 단편 소설 쓰기에 복수 시점 기법을 적용합니다."
+                    }
+                ]
+            }
+        ]
     }
 ]
 

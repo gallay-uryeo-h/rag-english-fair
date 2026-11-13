@@ -182,7 +182,7 @@ def get_page_image(filename: str):
             p_match_real = re.search(r'p\d+', norm_real)
             if p_match_query and p_match_real and p_match_query.group() == p_match_real.group():
                 # 과목명 키워드 검사
-                keywords = ["공통영어1", "공통영어2", "영어i", "영어1", "영어ii", "영어2", "영어독해와작문", "독해와작문", "세계문화와영어", "세계문화"]
+                keywords = ["공통영어1", "공통영어2", "영어i", "영어1", "영어ii", "영어2", "영어독해와작문", "독해와작문", "세계문화와영어", "세계문화", "심화영어", "advancedenglish"]
                 for kw in keywords:
                     if kw in norm_query and (kw in norm_real or (kw == "영어i" and "영어ⅰ" in norm_real) or (kw == "영어ii" and "영어ⅱ" in norm_real)):
                         matched_path = os.path.join("pages_cache", real_file)

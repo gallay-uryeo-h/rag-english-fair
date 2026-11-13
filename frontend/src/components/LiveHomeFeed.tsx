@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   subscribeLikes,
   toggleLikeRemote,
@@ -281,7 +281,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
     },
     {
       id: 'textbook',
-      title: '3개년 교과서 6권 대공개',
+      title: '3개년 교과서 7권 대공개',
       imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80',
       tag: '3부스',
       likes: remoteLikes.textbook,
@@ -322,7 +322,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
       {
         id: 'textbook',
         imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80',
-        title: '교과서 6권 대공개',
+        title: '교과서 7권 대공개',
         tag: '#3부스',
         likes: remoteLikes.textbook,
         onClick: () => (onSelectGridPost ? onSelectGridPost('textbook') : onScrollTo('textbook')),
@@ -989,7 +989,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                       원어민 TTS 챌린지
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 6권 30세트</p>
+                  <p className="text-[10px] text-slate-500">어휘 레벨 측정 스테이션 · 7권 35세트</p>
                 </div>
               </div>
               <button className="text-slate-400 p-1">
@@ -1119,7 +1119,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                       144개 섹션 정밀 검증
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 6권 교과서</p>
+                  <p className="text-[10px] text-slate-500">3개년 교육과정 전시관 · 7권 교과서</p>
                 </div>
               </div>
               <button className="text-slate-400 p-1">
@@ -1142,7 +1142,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
               <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
                 <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
-                  의령여고 3개년 교과서 6권 대공개!
+                  의령여고 3개년 교과서 7권 대공개!
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-200 font-light">
                   표지를 누르면 단원 안으로 쏙! 듣기·말하기·읽기·문법·쓰기 원본 E-Book을 바로 열람하세요.
@@ -1196,7 +1196,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-600">
-                      {expandedSections.textbook ? '6권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
+                      {expandedSections.textbook ? '7권 교과서 뷰어 접기' : '의령여고 3개년 교과서 열람하기'}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-emerald-600">

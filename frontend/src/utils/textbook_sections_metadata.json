@@ -1274,5 +1274,244 @@
         }
       ]
     }
+  },
+  "심화영어": {
+    "1": {
+      "unitTitle": "Embracing Diversity",
+      "topic": "문화 다양성과 세계 시민",
+      "careerTag": "국제문화 · 외교 · 글로벌비즈니스",
+      "passageSummary": "싱가포르 교환학생 경험을 통해 다양한 인종과 문화가 공존하는 사회의 아름다움과 문화적 차이를 이해하는 태도를 배웁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 12,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p12.jpg",
+          "desc": "국제 문화 행사와 다문화 체험 주제 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 14,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p14.jpg",
+          "desc": "문화 다양성 소원 표현(I'm looking forward to...) 말하기"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 16,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p16.jpg",
+          "desc": "본문: My Journey in Singapore (묘사적 세부 묘사 전략)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 25,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p25.jpg",
+          "desc": "분사구문(Moving around...) / 계속적 용법 관계대명사(which)"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 28,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p28.jpg",
+          "desc": "여행 에세이(Travelogue) 쓰기: 묘사적 세부 표현 전략"
+        }
+      ]
+    },
+    "2": {
+      "unitTitle": "Why We Do What We Do",
+      "topic": "지연행동의 신경과학",
+      "careerTag": "뇌과학 · 임상심리 · 행동경제학",
+      "passageSummary": "미루는 행동(Procrastination)이 단순한 게으름이 아닌 뇌의 스트레스 반응임을 신경과학으로 풀어내고, 전전두엽 조절 전략을 통해 습관을 바꾸는 법을 배웁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 38,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p38.jpg",
+          "desc": "자기조절과 동기부여 주제 인터뷰 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 40,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p40.jpg",
+          "desc": "나쁜 습관 극복 경험 공유 및 의견 제시"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 42,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p42.jpg",
+          "desc": "본문: The Neuroscience of Procrastination: Causes and Breaking Through"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 51,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p51.jpg",
+          "desc": "원인·결과 연결어(due to, as a result of, lead to) 심화"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 54,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p54.jpg",
+          "desc": "인과관계 분석 에세이 작성 전략"
+        }
+      ]
+    },
+    "3": {
+      "unitTitle": "Paint the Future with AI",
+      "topic": "인간-AI 협업과 미래",
+      "careerTag": "AI인공지능 · 의료기술 · 창의예술",
+      "passageSummary": "예술 분야에서 인간과 AI의 협업 사례(Karen X. Cheng 매거진 커버)를 통해 AI가 대체가 아닌 창의성 확장 도구임을 논하고, 의료·교육 분야에의 AI 적용 가능성을 탐구합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 64,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p64.jpg",
+          "desc": "AI 기술 적용 사례 토론 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 66,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p66.jpg",
+          "desc": "AI의 미래 역할에 대한 사실/의견 구분 토론"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 68,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p68.jpg",
+          "desc": "본문: The Future of Humanity: Collaboration between Humans and AI"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 77,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p77.jpg",
+          "desc": "사실과 의견 구분 담화 표지 / 양보·대조 접속사 심화"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 80,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p80.jpg",
+          "desc": "AI 주제 설득적 에세이(논거 전개 & AI 편집 활용)"
+        }
+      ]
+    },
+    "4": {
+      "unitTitle": "Save the Planet, Save Humans",
+      "topic": "도넛 경제학과 생태 위기",
+      "careerTag": "환경경제학 · 지속가능발전 · 도시재생",
+      "passageSummary": "21세기 환경 위기 해법으로 Kate Raworth의 도넛 경제 모델(Doughnut Economics)을 소개하고, 암스테르담의 실제 적용 사례를 통해 성장 중심 패러다임을 넘어서는 대안을 탐구합니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 90,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p90.jpg",
+          "desc": "기후 위기 국제 협약 및 환경 캠페인 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 92,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p92.jpg",
+          "desc": "환경 문제 해결책 제안 및 토론"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 94,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p94.jpg",
+          "desc": "본문: A New Economic Paradigm: A Broader View to Address Ecological Crises"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 103,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p103.jpg",
+          "desc": "문제-해결 담화 구조 & 전환어(however, therefore, in contrast) 심화"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 106,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p106.jpg",
+          "desc": "환경 보고서 형식의 문제·해결 구조 에세이 작성"
+        }
+      ]
+    },
+    "5": {
+      "unitTitle": "Global Efforts, One Step at a Time",
+      "topic": "국제 협력과 세계 시민 실천",
+      "careerTag": "국제개발 · NGO활동 · 사회적기업",
+      "passageSummary": "1985년 남수단 소년 살바(Salva)의 피난 여정과 2008년 소녀 냐(Nya)의 물 부족 문제를 엮은 소설을 통해, 한 사람의 작은 실천이 세상을 바꾸는 국제 협력의 힘을 배웁니다.",
+      "sections": [
+        {
+          "key": "listening",
+          "label": "듣기",
+          "page": 116,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p116.jpg",
+          "desc": "국제 인도주의 활동 및 세계 시민 실천 사례 듣기"
+        },
+        {
+          "key": "speaking",
+          "label": "말하기",
+          "page": 118,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p118.jpg",
+          "desc": "글로벌 문제에 대한 개인적 행동 계획 발표"
+        },
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 120,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p120.jpg",
+          "desc": "본문: 소설 A Long Walk to Water 발췌 (추론 전략)"
+        },
+        {
+          "key": "grammar",
+          "label": "문법",
+          "page": 129,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p129.jpg",
+          "desc": "함축 의미 추론 & 행간 읽기(Making Inferences) 전략"
+        },
+        {
+          "key": "writing",
+          "label": "쓰기",
+          "page": 132,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p132.jpg",
+          "desc": "사회 문제 해결 제안서 / 캠페인 포스터 영문 작성"
+        }
+      ]
+    },
+    "6": {
+      "unitTitle": "Further Reading: Neuroplasticity",
+      "topic": "뇌 신경가소성과 평생 학습",
+      "careerTag": "뇌공학 · 신경과학 · 교육심리학",
+      "passageSummary": "뇌는 경험에 반응해 평생 변화한다는 신경가소성(Neuroplasticity) 이론을 소개하고, fire together wire together 원리를 통해 꾸준한 학습과 습관이 뇌를 물리적으로 변화시키는 과학적 원리를 탐구합니다.",
+      "sections": [
+        {
+          "key": "reading",
+          "label": "읽기",
+          "page": 145,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p145.jpg",
+          "desc": "본문: Neuroplasticity - The Brain's Lifelong Capacity for Change"
+        },
+        {
+          "key": "vocab",
+          "label": "어휘",
+          "page": 160,
+          "imagePath": "pages_cache/3학년_3학기_심화영어_YBM_p160.jpg",
+          "desc": "전체 단원 핵심 어휘 정리 (Glossary)"
+        }
+      ]
+    }
   }
 }
