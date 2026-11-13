@@ -97,7 +97,7 @@ export const InstagramDmChatModal: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'bot',
-      text: '안녕하세요! 2026 고교학점제 박람회 영어과 부스 Q&A AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n2022 개정 고교 영어 교육과정, 선택과목(일반·진로·융합), 2028 내신 5등급제, 교과서 특성 및 세특 준비 등 무엇이든 편하게 물어보세요! 하단 추천 질문을 누르시면 바로 답변을 확인하실 수 있습니다.\n\n*(ℹ️ **안내**: 본 챗봇의 정보는 2022 개정 국가 교육과정과 일반 검색으로 확인 가능한 공통 기준을 바탕으로 안내되며, 특정 학교의 고유 규정이 아닙니다. 실제 개설 과목과 세부 운영은 진학하시는 각 고등학교의 교육과정 편제표를 확인하시기 바랍니다)*\n\n*(💡 입력하신 질문과 관심 키워드는 인생네컷 부스 연동 및 통계 분석에 활용됩니다)*',
+      text: '안녕하세요! 2026 고교학점제 박람회 영어과 부스 AI 도우미 **@uryeo_qa_bot** 입니다. 🤖✨\n\n2022 개정 영어 교육과정과 고교학점제에 대해 무엇이든 편하게 물어보세요!\n\n- 📚 **고교 영어 선택과목**: 일반·진로·융합선택 과목 체계 안내\n- 🎯 **2028 내신 5등급제**: 1등급 산출 및 성취평가·수행평가 대비\n- 💡 **진로 연계 학생부 세특**: 교과서 지문과 진로 탐구 연계 팁\n\n하단의 **추천 질문 칩**을 터치하시면 바로 답변을 확인하실 수 있어요!\n\n> ℹ️ *본 챗봇은 2022 개정 공통 교육과정 기준이며 특정 학교의 고유 규정이 아닙니다. 입력 질문은 통계 및 4컷 부스 연동에 활용됩니다.*',
       timestamp: '방금',
     },
   ]);
@@ -334,9 +334,9 @@ export const InstagramDmChatModal: React.FC<Props> = ({
                       <p className="whitespace-pre-wrap">{msg.text}</p>
                     ) : (
                       <div
-                        className="prose prose-xs sm:prose-sm max-w-none text-slate-800 [&_p]:my-1.5 [&_ul]:my-1.5 [&_li]:my-0.5 [&_strong]:text-purple-900 [&_a]:text-blue-600"
+                        className="dm-markdown"
                         dangerouslySetInnerHTML={{
-                          __html: marked.parse(msg.text, { breaks: true }) as string,
+                          __html: marked.parse(msg.text, { breaks: true, gfm: true }) as string,
                         }}
                       />
                     )}
