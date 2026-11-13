@@ -803,6 +803,300 @@ export async function logChatQuery(entry: {
   }
 }
 
+// ════════════════════════════════════════════════════════════════════════════════
+// 사용자 세션 (UserSession) — 아이디별 활동 집계 & 4컷 부스 연동
+// 문서 ID: session_{username}  /  type: 'user_session'
+//
+// 필드 구조:
+//   username         string        부스 로그인 아이디
+//   displayName      string        표시 이름
+//   uid              string        기기 고유 ID (localStorage uid)
+//   firstSeenAt      Timestamp     최초 방문
+//   lastActiveAt     Timestamp     마지막 활동
+//   chatQueries      string[]      챗봇에 질문한 내용 목록
+//   chatKeywords     string[]      질문에서 추출된 핵심 키워드 (4컷 부스 연동용)
+//   feedPostIds      string[]      등록한 피드 postId 목록
+//   commentedPostIds string[]      댓글 단 postId 목록
+//   feedCount        number        피드 등록 수
+//   commentCount     number        댓글 수
+// ════════════════════════════════════════════════════════════════════════════════
+
+export interface UserSession {
+  id?: string;                 // Firestore 문서 ID
+  type: 'user_session';
+  username: string;
+  displayName?: string;
+  uid?: string;
+  firstSeenAt?: Date;
+  lastActiveAt?: Date;
+  chatQueries: string[];
+  chatKeywords: string[];      // 4컷 부스 스티커/연동용 핵심 키워드
+  feedPostIds: string[];
+  commentedPostIds: string[];
+  feedCount: number;
+  commentCount: number;
+}
+
+/** 세션 문서 ID */
+function sessionDocId(username: string): string {
+  return `session_${username.trim().toLowerCase()}`;
+}
+
+/** 질문 텍스트에서 핵심 키워드 추출 */
+function extractKeywords(query: string): string[] {
+  const KEYWORD_MAP: Record<string, string> = {
+    // 과목
+    '공통영어': '공통영어', '영어Ⅰ': '영어Ⅰ', '영어ⅰ': '영어Ⅰ', '영어1': '영어Ⅰ',
+    '영어Ⅱ': '영어Ⅱ', '영어ⅱ': '영어Ⅱ', '영어2': '영어Ⅱ',
+    '독해': '영어독해', '독해와 작문': '영어독해', '작문': '영어작문',
+    '심화영어': '심화영어', '심화 영어': '심화영어',
+    '세계문화': '세계문화와영어', '세계 문화': '세계문화와영어',
+    '기본영어': '기본영어',
+    // 주제
+    '학점': '고교학점제', '학점제': '고교학점제', '이수': '이수제도', '미이수': '미이수제도',
+    '5등급': '5등급제', '내신': '내신등급', '수행평가': '수행평가', '지필': '지필평가',
+    '세특': '학생부세특', '학생부': '학생부세특', '학종': '학종',
+    '진로': '진로연계', '적성': '적성', '선택': '과목선택',
+    '대입': '대입전략', '수능': '수능영어',
+  };
+  const found = new Set<string>();
+  for (const [key, label] of Object.entries(KEYWORD_MAP)) {
+    if (query.includes(key)) found.add(label);
+  }
+  return Array.from(found).slice(0, 8); // 최대 8개
+}
+
+/**
+ * 사용자 세션 초기화 / 업데이트 (머지)
+ * - 로그인 시 or 첫 활동 시 호출
+ */
+export async function upsertUserSession(params: {
+  username: string;
+  displayName?: string;
+  uid?: string;
+}): Promise<void> {
+  try {
+    const ref = doc(db, COLLECTION, sessionDocId(params.username));
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        type: 'user_session',
+        username: params.username.trim().toLowerCase(),
+        displayName: params.displayName || params.username,
+        uid: params.uid || '',
+        firstSeenAt: serverTimestamp(),
+        lastActiveAt: serverTimestamp(),
+        chatQueries: [],
+        chatKeywords: [],
+        feedPostIds: [],
+        commentedPostIds: [],
+        feedCount: 0,
+        commentCount: 0,
+      });
+    } else {
+      await updateDoc(ref, {
+        lastActiveAt: serverTimestamp(),
+        ...(params.displayName && { displayName: params.displayName }),
+        ...(params.uid && { uid: params.uid }),
+      });
+    }
+  } catch (err) {
+    console.error('Failed to upsert user session:', err);
+  }
+}
+
+/**
+ * 챗봇 질문 세션에 추가 + 키워드 추출
+ */
+export async function appendChatQueryToSession(
+  username: string,
+  query: string
+): Promise<void> {
+  if (!username || username === 'anonymous') return;
+  try {
+    const ref = doc(db, COLLECTION, sessionDocId(username));
+    const snap = await getDoc(ref);
+    const existing = snap.exists() ? (snap.data().chatQueries as string[] || []) : [];
+    const existingKw = snap.exists() ? (snap.data().chatKeywords as string[] || []) : [];
+
+    const newKeywords = extractKeywords(query);
+    const mergedKw = Array.from(new Set([...existingKw, ...newKeywords])).slice(0, 20);
+
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        type: 'user_session',
+        username: username.trim().toLowerCase(),
+        firstSeenAt: serverTimestamp(),
+        lastActiveAt: serverTimestamp(),
+        chatQueries: [query.trim()],
+        chatKeywords: mergedKw,
+        feedPostIds: [],
+        commentedPostIds: [],
+        feedCount: 0,
+        commentCount: 0,
+      });
+    } else {
+      await updateDoc(ref, {
+        chatQueries: [...existing.slice(-49), query.trim()], // 최대 50개
+        chatKeywords: mergedKw,
+        lastActiveAt: serverTimestamp(),
+      });
+    }
+  } catch (err) {
+    console.error('Failed to append chat query to session:', err);
+  }
+}
+
+/**
+ * 피드 등록 시 세션에 postId 추가
+ */
+export async function appendFeedToSession(
+  username: string,
+  postId: string
+): Promise<void> {
+  if (!username || username === 'anonymous') return;
+  try {
+    const ref = doc(db, COLLECTION, sessionDocId(username));
+    const snap = await getDoc(ref);
+    const existing = snap.exists() ? (snap.data().feedPostIds as string[] || []) : [];
+    if (existing.includes(postId)) return;
+
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        type: 'user_session',
+        username: username.trim().toLowerCase(),
+        firstSeenAt: serverTimestamp(),
+        lastActiveAt: serverTimestamp(),
+        chatQueries: [],
+        chatKeywords: [],
+        feedPostIds: [postId],
+        commentedPostIds: [],
+        feedCount: 1,
+        commentCount: 0,
+      });
+    } else {
+      await updateDoc(ref, {
+        feedPostIds: [...existing, postId],
+        feedCount: increment(1),
+        lastActiveAt: serverTimestamp(),
+      });
+    }
+  } catch (err) {
+    console.error('Failed to append feed to session:', err);
+  }
+}
+
+/**
+ * 댓글 등록 시 세션에 postId 추가
+ */
+export async function appendCommentToSession(
+  username: string,
+  postId: string
+): Promise<void> {
+  if (!username || username === 'anonymous') return;
+  try {
+    const ref = doc(db, COLLECTION, sessionDocId(username));
+    const snap = await getDoc(ref);
+    const existing = snap.exists() ? (snap.data().commentedPostIds as string[] || []) : [];
+
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        type: 'user_session',
+        username: username.trim().toLowerCase(),
+        firstSeenAt: serverTimestamp(),
+        lastActiveAt: serverTimestamp(),
+        chatQueries: [],
+        chatKeywords: [],
+        feedPostIds: [],
+        commentedPostIds: [postId],
+        feedCount: 0,
+        commentCount: 1,
+      });
+    } else {
+      await updateDoc(ref, {
+        commentedPostIds: Array.from(new Set([...existing, postId])),
+        commentCount: increment(1),
+        lastActiveAt: serverTimestamp(),
+      });
+    }
+  } catch (err) {
+    console.error('Failed to append comment to session:', err);
+  }
+}
+
+/**
+ * 특정 사용자 세션 1회 조회
+ */
+export async function getUserSession(username: string): Promise<UserSession | null> {
+  try {
+    const ref = doc(db, COLLECTION, sessionDocId(username));
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    const data = snap.data();
+    return {
+      id: snap.id,
+      type: 'user_session',
+      username: data.username,
+      displayName: data.displayName,
+      uid: data.uid,
+      firstSeenAt: (data.firstSeenAt as Timestamp | null)?.toDate(),
+      lastActiveAt: (data.lastActiveAt as Timestamp | null)?.toDate(),
+      chatQueries: (data.chatQueries as string[]) || [],
+      chatKeywords: (data.chatKeywords as string[]) || [],
+      feedPostIds: (data.feedPostIds as string[]) || [],
+      commentedPostIds: (data.commentedPostIds as string[]) || [],
+      feedCount: (data.feedCount as number) || 0,
+      commentCount: (data.commentCount as number) || 0,
+    };
+  } catch (err) {
+    console.error('Failed to get user session:', err);
+    return null;
+  }
+}
+
+/**
+ * 관리자용: 모든 사용자 세션 실시간 구독
+ */
+export function subscribeAllUserSessions(
+  callback: (sessions: UserSession[]) => void
+): () => void {
+  const q = query(
+    collection(db, COLLECTION),
+    where('type', '==', 'user_session')
+  );
+  return onSnapshot(
+    q,
+    (snap) => {
+      const sessions: UserSession[] = snap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          type: 'user_session',
+          username: data.username || '',
+          displayName: data.displayName || '',
+          uid: data.uid || '',
+          firstSeenAt: (data.firstSeenAt as Timestamp | null)?.toDate(),
+          lastActiveAt: (data.lastActiveAt as Timestamp | null)?.toDate(),
+          chatQueries: (data.chatQueries as string[]) || [],
+          chatKeywords: (data.chatKeywords as string[]) || [],
+          feedPostIds: (data.feedPostIds as string[]) || [],
+          commentedPostIds: (data.commentedPostIds as string[]) || [],
+          feedCount: (data.feedCount as number) || 0,
+          commentCount: (data.commentCount as number) || 0,
+        };
+      });
+      // 최근 활동 순
+      sessions.sort((a, b) =>
+        (b.lastActiveAt?.getTime() ?? 0) - (a.lastActiveAt?.getTime() ?? 0)
+      );
+      callback(sessions);
+    },
+    (err) => {
+      console.error('Failed to subscribe all user sessions:', err);
+    }
+  );
+}
+
 /**
  * 교사용: 수집된 모든 챗봇 질문 실시간 구독
  */

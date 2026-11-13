@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { marked } from 'marked';
 import { getUserProfile } from '../utils/userProfile';
-import { logChatQuery } from '../services/firestoreService';
+import { logChatQuery, appendChatQueryToSession } from '../services/firestoreService';
 
 export interface ChatMessage {
   role: 'bot' | 'user';
@@ -177,6 +177,10 @@ export const InstagramDmChatModal: React.FC<Props> = ({
         query: q,
         answerSnippet: botReply,
       });
+      // 📦 user_session 집계: 아이디별 챗봇 질문 & 키워드 기록
+      if (user?.username) {
+        appendChatQueryToSession(user.username, q);
+      }
     } catch {
       setMessages([
         ...newMessages,

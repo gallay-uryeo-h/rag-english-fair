@@ -22,6 +22,7 @@ import type {
   FsUserPost,
   FsComment,
   ChatQueryLog,
+  UserSession,
 } from '../services/firestoreService';
 import {
   subscribeMissionSettings,
@@ -31,6 +32,7 @@ import {
   resetPhotoTicket,
   deletePhotoTicket,
   subscribeChatQueries,
+  subscribeAllUserSessions,
   DEFAULT_MISSION_SETTINGS,
 } from '../services/firestoreService';
 
@@ -48,10 +50,12 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   allPosts,
   allComments,
 }) => {
-  const [activeTab, setActiveTab] = useState<'settings' | 'participants' | 'chatlogs' | 'posts' | 'comments'>('participants');
+  const [activeTab, setActiveTab] = useState<'settings' | 'participants' | 'sessions' | 'chatlogs' | 'posts' | 'comments'>('participants');
   const [settings, setSettings] = useState<MissionSettings>(DEFAULT_MISSION_SETTINGS);
   const [tickets, setTickets] = useState<PhotoTicket[]>([]);
   const [chatLogs, setChatLogs] = useState<ChatQueryLog[]>([]);
+  const [userSessions, setUserSessions] = useState<UserSession[]>([]);
+  const [sessionSearch, setSessionSearch] = useState('');
   const [chatSearch, setChatSearch] = useState('');
   const [postSearch, setPostSearch] = useState('');
   const [commentSearch, setCommentSearch] = useState('');
@@ -91,6 +95,14 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
   useEffect(() => {
     const unsub = subscribeChatQueries((logs) => {
       setChatLogs(logs);
+    });
+    return () => unsub();
+  }, []);
+
+  // 사용자 세션 구독
+  useEffect(() => {
+    const unsub = subscribeAllUserSessions((sessions) => {
+      setUserSessions(sessions);
     });
     return () => unsub();
   }, []);
@@ -314,6 +326,17 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
           >
             <MessageSquare className="w-4 h-4 text-indigo-500" />
             <span>챗봇 질문 ({chatLogs.length})</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('sessions')}
+            className={`py-3 px-3.5 text-xs font-bold border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'sessions'
+                ? 'border-emerald-600 text-emerald-700'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Award className="w-4 h-4 text-emerald-500" />
+            <span>참여자 세션 ({userSessions.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('posts')}
@@ -751,6 +774,140 @@ export const AdminMissionManagerModal: React.FC<Props> = ({
               </div>
             </div>
           )}
+          {/* ═════════════════════════════════════════════════════════════════════════
+              탭 세션: 참여자 아이디별 사용 기록 & 4컷 부스 연동 키워드
+              ═════════════════════════════════════════════════════════════════════════ */}
+          {activeTab === 'sessions' && (
+            <div className="space-y-3">
+              {/* 상단 검색 & CSV 다운로드 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={sessionSearch}
+                    onChange={(e) => setSessionSearch(e.target.value)}
+                    placeholder="아이디, 키워드 검색..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-emerald-500"
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    if (userSessions.length === 0) { alert('세션 데이터가 없습니다.'); return; }
+                    const rows = [
+                      ['아이디', '표시이름', '최초방문', '마지막활동', '피드수', '댓글수', '챗봇질문수', '4컷키워드', '챗봇질문목록'].join(','),
+                      ...userSessions.map((s) => [
+                        s.username,
+                        s.displayName || '',
+                        s.firstSeenAt?.toLocaleString('ko-KR') || '',
+                        s.lastActiveAt?.toLocaleString('ko-KR') || '',
+                        s.feedCount,
+                        s.commentCount,
+                        s.chatQueries.length,
+                        `"${s.chatKeywords.join(' | ')}"`,
+                        `"${s.chatQueries.slice(-10).join(' | ')}"`,
+                      ].join(','))
+                    ];
+                    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = `user_sessions_${new Date().toISOString().slice(0,10)}.csv`;
+                    a.click(); URL.revokeObjectURL(url);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-colors cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  CSV 다운로드
+                </button>
+              </div>
+
+              {/* 세션 목록 */}
+              {userSessions.length === 0 ? (
+                <div className="text-center py-12 text-slate-400">
+                  <Award className="w-10 h-10 mx-auto mb-2 opacity-30" />
+                  <p className="text-sm">아직 세션 기록이 없습니다.</p>
+                  <p className="text-xs mt-1">참여자가 로그인하면 자동으로 기록됩니다.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {userSessions
+                    .filter((s) => {
+                      if (!sessionSearch) return true;
+                      const q = sessionSearch.toLowerCase();
+                      return (
+                        s.username.includes(q) ||
+                        (s.displayName || '').toLowerCase().includes(q) ||
+                        s.chatKeywords.some((k) => k.includes(q)) ||
+                        s.chatQueries.some((q2) => q2.includes(sessionSearch))
+                      );
+                    })
+                    .map((s) => (
+                      <div key={s.id} className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm hover:shadow-md transition-shadow">
+                        {/* 헤더: 아이디 & 활동 시간 */}
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                              {s.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <span className="text-xs font-extrabold text-slate-900">@{s.username}</span>
+                              {s.displayName && s.displayName !== s.username && (
+                                <span className="text-[10px] text-slate-500 ml-1">({s.displayName})</span>
+                              )}
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-slate-400 font-mono">
+                            마지막 활동: {s.lastActiveAt?.toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }) || '-'}
+                          </span>
+                        </div>
+
+                        {/* 활동 수치 뱃지 */}
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <span className="bg-pink-50 text-pink-700 border border-pink-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            📸 피드 {s.feedCount}개
+                          </span>
+                          <span className="bg-purple-50 text-purple-700 border border-purple-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            💬 댓글 {s.commentCount}회
+                          </span>
+                          <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            🤖 챗봇 {s.chatQueries.length}문
+                          </span>
+                        </div>
+
+                        {/* 4컷 부스 연동 키워드 */}
+                        {s.chatKeywords.length > 0 && (
+                          <div className="mb-2">
+                            <p className="text-[10px] text-emerald-700 font-bold mb-1">📸 4컷 부스 연동 키워드</p>
+                            <div className="flex flex-wrap gap-1">
+                              {s.chatKeywords.map((kw) => (
+                                <span key={kw} className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                                  #{kw}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 챗봇 질문 최근 3개 미리보기 */}
+                        {s.chatQueries.length > 0 && (
+                          <div>
+                            <p className="text-[10px] text-slate-500 font-bold mb-1">최근 질문</p>
+                            <ul className="space-y-0.5">
+                              {s.chatQueries.slice(-3).reverse().map((q, i) => (
+                                <li key={i} className="text-[11px] text-slate-700 bg-slate-50 px-2 py-1 rounded-lg truncate">
+                                  · {q}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ═════════════════════════════════════════════════════════════════════════
               탭 4: 피드 소감 & 업로드 사진 전체 수집 및 분석
               ═════════════════════════════════════════════════════════════════════════ */}

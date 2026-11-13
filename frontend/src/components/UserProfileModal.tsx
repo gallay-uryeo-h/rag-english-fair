@@ -14,6 +14,7 @@ import type { UserProfile } from '../utils/userProfile';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
 import { PhotoPickerButtons } from './PhotoPickerButtons';
 import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
+import { upsertUserSession } from '../services/firestoreService';
 
 interface Props {
   isOpen: boolean;
@@ -134,6 +135,15 @@ export const UserProfileModal: React.FC<Props> = ({
     saveUserProfile(updated);
     onProfileUpdated(updated);
     onClose();
+
+    // 📦 user_session: 로그인 시 세션 초기화/갱신 (선생님 계정은 제외)
+    if (!isTeacherAuth) {
+      upsertUserSession({
+        username: updated.username,
+        displayName: updated.displayName,
+        uid: updated.uid,
+      }).catch(console.error);
+    }
 
     if (isOfficialDept) {
       alert(`🏛️ 의령여고 영어과 공식 계정(@${trimmed})으로 로그인되었습니다.\n전체 게시물 관리 권한이 활성화됩니다.`);

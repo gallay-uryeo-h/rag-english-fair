@@ -9,7 +9,7 @@ import {
   Check,
 } from 'lucide-react';
 import type { UserProfile } from '../utils/userProfile';
-import { addUserPost, saveUserActivity } from '../services/firestoreService';
+import { addUserPost, saveUserActivity, appendFeedToSession } from '../services/firestoreService';
 import { usePhotoPicker } from '../hooks/usePhotoPicker';
 import { PhotoPickerButtons } from './PhotoPickerButtons';
 import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
@@ -136,6 +136,8 @@ export const CreatePostModal: React.FC<Props> = ({
         lastTag: selectedTag,
         displayName: currentUser.displayName,
       }).catch(console.error);
+      // 📦 user_session: 피드 등록 기록
+      appendFeedToSession(currentUser.username, newPostId).catch(console.error);
     } catch (error) {
       console.error('Failed to create post:', error);
       alert('피드 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');

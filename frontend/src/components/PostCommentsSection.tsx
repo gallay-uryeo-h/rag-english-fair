@@ -4,6 +4,7 @@ import {
   addComment,
   subscribeComments,
   deleteComment,
+  appendCommentToSession,
 } from '../services/firestoreService';
 import type { FsComment } from '../services/firestoreService';
 import { containsProfanity, PROFANITY_ALERT_MESSAGE } from '../utils/profanityFilter';
@@ -65,6 +66,8 @@ export const PostCommentsSection: React.FC<Props> = ({
       setCommentText('');
       // 새 댓글 등록 시 자동으로 펼쳐서 볼 수 있게 처리
       setIsExpanded(true);
+      // 📦 user_session: 댓글 기록
+      appendCommentToSession(currentUser.username, postId).catch(console.error);
     } catch (err) {
       console.error('댓글 등록 실패:', err);
       alert('댓글 등록 중 오류가 발생했습니다.');
