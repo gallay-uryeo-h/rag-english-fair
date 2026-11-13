@@ -40,6 +40,7 @@ export function App() {
     vocab: false,
     textbook: false,
     seteuk: false,
+    aiSeteuk: false,
   });
 
   // 🌟 피드 내 각 포스트 앵커 참조 (스크롤 점프용)
@@ -48,6 +49,7 @@ export function App() {
   const vocabRef = useRef<HTMLDivElement | null>(null);
   const textbookRef = useRef<HTMLDivElement | null>(null);
   const seteukRef = useRef<HTMLDivElement | null>(null);
+  const aiSeteukRef = useRef<HTMLDivElement | null>(null);
 
   // 브레인스토밍 탭
   const [currentTab, setCurrentTab] = useState<TabType>('recommend');
@@ -129,7 +131,7 @@ export function App() {
   }, [isLiveMode]);
 
   // 아코디언 토글 함수
-  const handleToggleSection = (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
+  const handleToggleSection = (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => {
     setExpandedSections((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -137,8 +139,8 @@ export function App() {
   };
 
   // 🎯 스마트 북마크 스크롤 (부드럽게 이동하고 해당 아코디언 자동 오픈!)
-  const handleScrollTo = (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk') => {
-    setActiveNavTab(key);
+  const handleScrollTo = (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => {
+    setActiveNavTab(key as any);
 
     if (key === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -153,11 +155,12 @@ export function App() {
 
     // 약간의 딜레이 후 해당 요소로 스크롤
     setTimeout(() => {
-      const refMap = {
+      const refMap: Record<string, React.RefObject<HTMLDivElement | null>> = {
         mbti: mbtiRef,
         vocab: vocabRef,
         textbook: textbookRef,
         seteuk: seteukRef,
+        aiSeteuk: aiSeteukRef,
       };
 
       const targetRef = refMap[key];
@@ -197,6 +200,7 @@ export function App() {
                 vocabRef,
                 textbookRef,
                 seteukRef,
+                aiSeteukRef,
               }}
               expandedSections={expandedSections}
               onToggleSection={handleToggleSection}

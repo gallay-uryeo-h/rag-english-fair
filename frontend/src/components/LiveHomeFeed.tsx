@@ -44,11 +44,12 @@ import { InstagramDmChatModal } from './InstagramDmChatModal';
 
 import { PostCommentsSection } from './PostCommentsSection';
 import { PinchablePhoto } from './PinchablePhoto';
+import { AiCustomSeteukLab } from './AiCustomSeteukLab';
 
 interface Props {
   onOpenImage: (title: string, imageUrl: string) => void;
   viewMode?: 'feed' | 'grid';
-  onSelectGridPost?: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
+  onSelectGridPost?: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => void;
   isDmOpen?: boolean;
   onOpenDm?: () => void;
   onCloseDm?: () => void;
@@ -59,15 +60,17 @@ interface Props {
     vocabRef: React.RefObject<HTMLDivElement | null>;
     textbookRef: React.RefObject<HTMLDivElement | null>;
     seteukRef: React.RefObject<HTMLDivElement | null>;
+    aiSeteukRef?: React.RefObject<HTMLDivElement | null>;
   };
   expandedSections: {
     mbti: boolean;
     vocab: boolean;
     textbook: boolean;
     seteuk: boolean;
+    aiSeteuk?: boolean;
   };
-  onToggleSection: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
-  onScrollTo: (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk') => void;
+  onToggleSection: (key: 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => void;
+  onScrollTo: (key: 'home' | 'mbti' | 'vocab' | 'textbook' | 'seteuk' | 'aiSeteuk') => void;
 }
 
 export const LiveHomeFeed: React.FC<Props> = ({
@@ -205,8 +208,8 @@ export const LiveHomeFeed: React.FC<Props> = ({
   };
 
   // ─── Firestore 실시간 좋아요 카운트 ──────────────────────────────────────
-  const POST_IDS = ['mbti', 'vocab', 'textbook', 'seteuk'] as const;
-  const BASE_LIKES: Record<string, number> = { mbti: 384, vocab: 295, textbook: 512, seteuk: 647 };
+  const POST_IDS = ['mbti', 'vocab', 'textbook', 'seteuk', 'aiSeteuk'] as const;
+  const BASE_LIKES: Record<string, number> = { mbti: 384, vocab: 295, textbook: 512, seteuk: 647, aiSeteuk: 729 };
   const [remoteLikes, setRemoteLikes] = useState<Record<string, number>>(BASE_LIKES);
 
   useEffect(() => {
@@ -220,7 +223,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
   // ─── 로컬 좋아요 토글 (낙관적 UI + Firestore 카운터 동기화) ─────────────
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({
-    mbti: false, vocab: false, textbook: false, seteuk: false,
+    mbti: false, vocab: false, textbook: false, seteuk: false, aiSeteuk: false,
   });
 
   const [savedPosts, setSavedPosts] = useState<Record<string, boolean>>({
@@ -293,6 +296,13 @@ export const LiveHomeFeed: React.FC<Props> = ({
       tag: '4부스',
       likes: remoteLikes.seteuk,
     },
+    {
+      id: 'aiSeteuk',
+      title: 'AI 자유 탐구 세특 스튜디오',
+      imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80',
+      tag: 'AI연구소',
+      likes: remoteLikes.aiSeteuk,
+    },
   ], [remoteLikes]);
 
   // ─── 🏛️ 1. uryeo_eng 공식 계정 그리드 그룹 (4대 부스) ────────────────────────
@@ -334,6 +344,14 @@ export const LiveHomeFeed: React.FC<Props> = ({
         tag: '#4부스',
         likes: remoteLikes.seteuk,
         onClick: () => (onSelectGridPost ? onSelectGridPost('seteuk') : onScrollTo('seteuk')),
+      },
+      {
+        id: 'aiSeteuk',
+        imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+        title: 'AI 자유 세특',
+        tag: '#AI랩',
+        likes: remoteLikes.aiSeteuk,
+        onClick: () => (onSelectGridPost ? onSelectGridPost('aiSeteuk') : onScrollTo('aiSeteuk')),
       },
     ],
   }), [remoteLikes, onSelectGridPost, onScrollTo]);
@@ -1342,6 +1360,141 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 onOpenProfile={handleOpenParticipantProfile}
                 onRequireLogin={() => setIsProfileModalOpen(true)}
                 avatarGradient="from-amber-500 to-orange-500"
+              />
+            </div>
+          </article>
+
+          {/* =========================================================================
+          📸 6. 인피드 아코디언 포스트 5: AI 자유 탐구 세특 스튜디오 (AI Custom Seteuk Lab)
+          ========================================================================= */}
+          <article
+            ref={feedRefs.aiSeteukRef}
+            className="bg-white border-y border-slate-200/90 overflow-hidden shadow-2xs scroll-mt-14"
+          >
+            <div className="flex items-center justify-between px-3.5 py-3">
+              <div className="flex items-center gap-2.5">
+                <div className="relative w-8 h-8 rounded-full p-[1.5px] bg-gradient-to-tr from-violet-500 via-indigo-500 to-purple-600">
+                  <div className="w-full h-full rounded-full bg-white p-0.5 flex items-center justify-center">
+                    <span className="text-xs">🤖</span>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">ur_ai_seteuk_lab</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-400" />
+                    <span className="text-[10px] font-semibold text-violet-600 bg-violet-50 px-1.5 py-0.2 rounded">
+                      ✨ 생성형 AI 세특
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">자유 진로 RAG 스튜디오 · 7권 교과서 실시간 연계</p>
+                </div>
+              </div>
+              <button className="text-slate-400 p-1">
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('aiSeteuk')} className="cursor-pointer">
+              <PinchablePhoto
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80"
+                alt="AI 맞춤형 세특 연구소"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
+                imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.7]"
+                onDoubleTap={() => {
+                  if (!likedPosts.aiSeteuk) toggleLike('aiSeteuk');
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
+
+                <div className="space-y-1 relative z-10 pt-4 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight">
+                    어떤 꿈이든 100% 매칭! 나만의 AI 자유 탐구 세특 🚀
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-200 font-light">
+                    나만의 관심 키워드(우주항공·뇌과학·웹툰 등)를 입력하면, 7권 교과서에서 딱 맞는 지문을 찾아 세특 초안을 완성합니다.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between text-xs sm:text-sm text-slate-300 relative z-10 pointer-events-none">
+                  <span className="flex items-center gap-1.5 text-violet-300 font-bold text-xs">
+                    <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
+                    Gemini 3.5 AI × 7권 교과서 RAG
+                  </span>
+                  <span className="text-[11px] bg-white/20 backdrop-blur-xs px-2.5 py-1 rounded-full font-bold">
+                    터치하여 AI 세특 생성 ▾
+                  </span>
+                </div>
+              </PinchablePhoto>
+            </div>
+
+            {/* 인스타그램 액션 바 */}
+            <div className="p-3.5 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <button onClick={() => toggleLike('aiSeteuk')} className="transition-transform active:scale-125 cursor-pointer">
+                    <Heart
+                      className={`w-6 h-6 ${likedPosts.aiSeteuk ? 'text-red-500 fill-red-500 stroke-red-500' : 'text-slate-800'}`}
+                    />
+                  </button>
+                  <button onClick={() => onToggleSection('aiSeteuk')} className="cursor-pointer">
+                    <MessageCircle className="w-6 h-6 text-slate-800" />
+                  </button>
+                  <button className="cursor-pointer">
+                    <Send className="w-6 h-6 text-slate-800" />
+                  </button>
+                </div>
+                <button onClick={() => toggleSave('aiSeteuk')} className="cursor-pointer">
+                  <Bookmark
+                    className={`w-6 h-6 ${savedPosts.aiSeteuk ? 'text-slate-900 fill-slate-900' : 'text-slate-800'}`}
+                  />
+                </button>
+              </div>
+
+              {/* 좋아요 카운트 */}
+              <div className="text-xs font-bold text-slate-900">
+                좋아요 {remoteLikes.aiSeteuk.toLocaleString()}개
+              </div>
+
+              {/* 본문 캡션 & 인라인 열람 버튼 */}
+              <div className="pt-1 text-xs">
+                <span className="font-bold text-slate-900 mr-2">ur_ai_seteuk_lab</span>
+                <span className="text-slate-800">
+                  정형화된 8대 진로를 넘어, 학생 한 명 한 명의 고유한 꿈과 호기심을 의령여고 영어 교육과정과 1:1로 실시간 융합합니다. ✨
+                </span>
+
+                <button
+                  onClick={() => onToggleSection('aiSeteuk')}
+                  className="w-full mt-2.5 flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-violet-50/60 border border-slate-200/80 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-violet-500" />
+                    <span className="text-xs font-bold text-slate-800 group-hover:text-violet-600">
+                      {expandedSections.aiSeteuk ? 'AI 세특 스튜디오 접기' : 'AI 자유 탐구 세특 생성기 열기'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 group-hover:text-violet-600">
+                    <span>{expandedSections.aiSeteuk ? '닫기' : '펼쳐보기'}</span>
+                    {expandedSections.aiSeteuk ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+              </div>
+
+              {/* 🌟 아코디언 인라인 AI 세특 스튜디오창 */}
+              {expandedSections.aiSeteuk && (
+                <div className="mt-2.5 border border-violet-200 rounded-2xl overflow-hidden bg-slate-50 animate-in slide-in-from-top-2 duration-300">
+                  <AiCustomSeteukLab onOpenImage={onOpenImage} />
+                </div>
+              )}
+
+              {/* 💬 단일 공통 댓글 모듈 */}
+              <PostCommentsSection
+                postId="aiSeteuk"
+                currentUser={currentUser}
+                isAnyAdmin={isAnyAdmin}
+                onOpenProfile={handleOpenParticipantProfile}
+                onRequireLogin={() => setIsProfileModalOpen(true)}
+                avatarGradient="from-violet-500 to-purple-600"
               />
             </div>
           </article>
