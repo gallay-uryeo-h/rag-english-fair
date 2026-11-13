@@ -41,7 +41,7 @@ import { CreatePostModal } from './CreatePostModal';
 import { UserProfileViewModal } from './UserProfileViewModal';
 import type { ProfileViewData, OfficialPostItem } from './UserProfileViewModal';
 import { InstagramDmChatModal } from './InstagramDmChatModal';
-import { FeedPhotoModal } from './FeedPhotoModal';
+
 import { PostCommentsSection } from './PostCommentsSection';
 import { PinchablePhoto } from './PinchablePhoto';
 
@@ -120,37 +120,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
       setUserPosts(fetched);
     });
   }, []);
-
-  // ─── 🔍 피드 사진 확대 모달 상태 ──────────────────────────────────────────
-  const [photoZoom, setPhotoZoom] = useState<{
-    isOpen: boolean;
-    imageUrl: string;
-    authorName?: string;
-    authorAvatar?: string;
-    caption?: string;
-    isOfficial?: boolean;
-  }>({
-    isOpen: false,
-    imageUrl: '',
-  });
-
-  const handleOpenPhotoZoom = (
-    imageUrl: string,
-    authorName?: string,
-    authorAvatar?: string,
-    caption?: string,
-    isOfficial?: boolean
-  ) => {
-    if (!imageUrl) return;
-    setPhotoZoom({
-      isOpen: true,
-      imageUrl,
-      authorName,
-      authorAvatar,
-      caption,
-      isOfficial,
-    });
-  };
 
   // 피드 삭제 핸들러 (본인 글이거나 선생님 관리자일 때)
   const handleDeletePost = async (post: FsUserPost) => {
@@ -390,7 +359,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
         title: string;
         tag?: string;
         likes?: number;
-        onClick: () => void;
+        onClick?: () => void;
       }>;
     }> = [];
 
@@ -412,7 +381,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
           title: post.caption || `${author}님의 부스 인증`,
           tag: post.tag,
           likes: post.likesCount,
-          onClick: () => handleOpenPhotoZoom(post.photoUrl, post.authorName, post.avatar, post.caption, isOfficial),
         })),
       });
     });
@@ -899,15 +867,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('mbti')} className="cursor-pointer">
             <PinchablePhoto
               src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=80"
               alt="영어 공부와 성향 탐색"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
               imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.72]"
               onDoubleTap={() => {
                 if (!likedPosts.mbti) toggleLike('mbti');
               }}
-              onClick={() => onToggleSection('mbti')}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
@@ -920,6 +888,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </p>
               </div>
             </PinchablePhoto>
+            </div>
 
             {/* 포스트 소셜 바 */}
             <div className="px-3.5 pt-3 pb-2">
@@ -1029,15 +998,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('vocab')} className="cursor-pointer">
             <PinchablePhoto
               src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80"
               alt="영어 듣기와 단어 퀴즈"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
               imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-[0.68]"
               onDoubleTap={() => {
                 if (!likedPosts.vocab) toggleLike('vocab');
               }}
-              onClick={() => onToggleSection('vocab')}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
@@ -1050,6 +1019,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </p>
               </div>
             </PinchablePhoto>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1158,15 +1128,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('textbook')} className="cursor-pointer">
             <PinchablePhoto
               src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
               alt="도서관 교과서"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
               imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.65]"
               onDoubleTap={() => {
                 if (!likedPosts.textbook) toggleLike('textbook');
               }}
-              onClick={() => onToggleSection('textbook')}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
@@ -1179,6 +1149,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </p>
               </div>
             </PinchablePhoto>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1287,15 +1258,15 @@ export const LiveHomeFeed: React.FC<Props> = ({
             </div>
 
             {/* 포스트 메인 히어로 카드 (2지 핀치 줌 & 더블탭 좋아요) */}
+            <div onClick={() => onToggleSection('seteuk')} className="cursor-pointer">
             <PinchablePhoto
               src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80"
               alt="노트 공부 세특"
-              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between cursor-pointer group select-none overflow-hidden"
+              className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-slate-900 text-white p-5 sm:p-7 flex flex-col justify-between group select-none overflow-hidden"
               imageClassName="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.60]"
               onDoubleTap={() => {
                 if (!likedPosts.seteuk) toggleLike('seteuk');
               }}
-              onClick={() => onToggleSection('seteuk')}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40 pointer-events-none" />
 
@@ -1308,6 +1279,7 @@ export const LiveHomeFeed: React.FC<Props> = ({
                 </p>
               </div>
             </PinchablePhoto>
+            </div>
 
             <div className="px-3.5 pt-3 pb-2">
               <div className="flex items-center justify-between">
@@ -1500,31 +1472,22 @@ export const LiveHomeFeed: React.FC<Props> = ({
 
                 {/* 피드 사진: 인스타그램 2지 핀치 줌 & 더블탭 좋아요 */}
                 <div
-                  className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
+                  className="relative w-full max-h-[580px] min-h-[220px] bg-slate-950 flex items-center justify-center overflow-hidden group select-none"
                   style={{ touchAction: 'pan-y' }}
                 >
                   <PinchablePhoto
                     src={post.photoUrl}
                     alt="게시물 사진"
                     className="w-full max-h-[580px] flex items-center justify-center"
-                    imageClassName="max-h-[580px] object-contain transition-transform duration-300 group-hover:scale-[1.015]"
+                    imageClassName="max-h-[580px] object-contain"
                     onDoubleTap={() => {
                       if (!isLiked) {
                         toggleUserPostLikeHandler(post.id);
                       }
                     }}
-                    onClick={() =>
-                      handleOpenPhotoZoom(
-                        post.photoUrl,
-                        post.authorName,
-                        post.avatar,
-                        post.caption,
-                        isOfficialAccount(post.authorName)
-                      )
-                    }
                   >
                     <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black/60 backdrop-blur-xs text-white/95 text-[10px] rounded-full font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-md">
-                      <span>🔍 핀치 확대 · 더블탭 ❤️</span>
+                      <span>핀치 확대 · 더블탭 ❤️</span>
                     </div>
                   </PinchablePhoto>
                 </div>
@@ -1652,17 +1615,6 @@ export const LiveHomeFeed: React.FC<Props> = ({
       <InstagramDmChatModal
         isOpen={isDmModalOpen}
         onClose={handleCloseDmModal}
-      />
-
-      {/* 🔍 피드 사진 탭 시 풀스크린 확대 뷰어 모달 */}
-      <FeedPhotoModal
-        isOpen={photoZoom.isOpen}
-        imageUrl={photoZoom.imageUrl}
-        authorName={photoZoom.authorName}
-        authorAvatar={photoZoom.authorAvatar}
-        caption={photoZoom.caption}
-        isOfficial={photoZoom.isOfficial}
-        onClose={() => setPhotoZoom((prev) => ({ ...prev, isOpen: false }))}
       />
     </div>
   );
